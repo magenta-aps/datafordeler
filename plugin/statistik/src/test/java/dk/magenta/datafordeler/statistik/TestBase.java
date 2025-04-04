@@ -7,13 +7,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
+import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
+import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
-import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntity;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
@@ -29,28 +30,32 @@ import dk.magenta.datafordeler.geo.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntityManager;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
-import dk.magenta.datafordeler.statistik.services.AddressDataService;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+import static org.mockito.Mockito.when;
+
 public abstract class TestBase {
 
     @Autowired
@@ -83,10 +88,21 @@ public abstract class TestBase {
     @Autowired
     protected TestRestTemplate restTemplate;
 
-    @Autowired
-    protected TestUtils testsUtils;
+    @MockitoSpyBean
+    protected DafoUserManager dafoUserManager;
 
-    protected void loadAllGeoAdress(SessionManager sessionManager) throws IOException {
+    @Autowired
+    private PersonEntityManager personEntityManager;
+
+    @Autowired
+    private dk.magenta.datafordeler.cpr.data.road.RoadEntityManager cprRoadEntityManager;
+
+
+    public void applyAccess(TestUserDetails testUserDetails) {
+        when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
+    }
+
+    protected void loadAllGeoAdress() throws IOException {
         this.loadGeoData(sessionManager, localityEntityManager, "/locality.json");
         this.loadGeoData(sessionManager, roadEntityManager, "/road.json");
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
@@ -107,7 +123,7 @@ public abstract class TestBase {
         }
     }
 
-    @After
+    @AfterEach
     public void clearPath() {
         if (this.oldPath != null && !Objects.equals(StatisticsService.PATH_FILE, this.oldPath)) {
             this.deleteFiles(StatisticsService.PATH_FILE);
@@ -121,7 +137,7 @@ public abstract class TestBase {
         try {
             tempDir = new File(path_file);
             boolean exists = tempDir.exists();
-            Assert.assertEquals(true, exists);
+            Assertions.assertEquals(true, exists);
         } catch (Exception e) {
             // if any error occurs
             e.printStackTrace();
@@ -143,8 +159,8 @@ public abstract class TestBase {
         }
     }
 
-    @Before
-    @After
+    @BeforeEach
+    @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
@@ -163,7 +179,7 @@ public abstract class TestBase {
             for (Class cls : classes) {
                 List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
-                    session.delete(e);
+                    session.remove(e);
                 }
             }
             transaction.commit();
@@ -203,14 +219,14 @@ public abstract class TestBase {
     public void compareJSONARRAYWithIgnoredValues(String expected, String actual, String ignoreValue) throws JsonProcessingException {
         ArrayNode expectedJsonArray = (ArrayNode) objectMapper.readTree(expected);
         ArrayNode actualJsonArray = (ArrayNode) objectMapper.readTree(actual);
-        Assert.assertEquals(expectedJsonArray.size(), actualJsonArray.size());
+        Assertions.assertEquals(expectedJsonArray.size(), actualJsonArray.size());
         for (int index = 0; index < expectedJsonArray.size(); index++) {
             ((ObjectNode) expectedJsonArray.get(index)).put(ignoreValue, "*");
             ((ObjectNode) actualJsonArray.get(index)).put(ignoreValue, "*");
         }
-        Assert.assertTrue(
-                objectMapper.writeValueAsString(expectedJsonArray) + " != " + objectMapper.writeValueAsString(actualJsonArray),
-                new UnorderedJsonListComparator().compare(expectedJsonArray, actualJsonArray) == 0
+        Assertions.assertEquals(
+                0, new UnorderedJsonListComparator().compare(expectedJsonArray, actualJsonArray),
+                objectMapper.writeValueAsString(expectedJsonArray) + " != " + objectMapper.writeValueAsString(actualJsonArray)
         );
     }
 
@@ -239,5 +255,220 @@ public abstract class TestBase {
     private static String strip(String subject) {
         return subject.replaceAll("^\"|\"$", "");
     }
+
+
+
+    public void loadPersonData(File source) throws Exception {
+        loadPersonData(new FileInputStream(source));
+    }
+
+    public void loadPersonData(String resource) throws Exception {
+        loadPersonData(
+                new ImportInputStream(
+                        new LabeledSequenceInputStream(
+                                Collections.singletonList(
+                                        Pair.of(
+                                                resource,
+                                                TestBase.class.getResourceAsStream("/" + resource)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+
+    public void loadRoadData(String resource) throws Exception {
+        loadRoadData(
+                new ImportInputStream(
+                        new LabeledSequenceInputStream(
+                                Collections.singletonList(
+                                        Pair.of(
+                                                resource,
+                                                TestBase.class.getResourceAsStream("/" + resource)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+
+    public void loadRoadData(InputStream testData) throws Exception {
+        ImportMetadata importMetadata = new ImportMetadata();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            cprRoadEntityManager.parseData(testData, importMetadata);
+        }
+        testData.close();
+    }
+
+    public void loadGeoRoadData(String resource) throws DataFordelerException {
+        loadGeoRoadData(
+                new ImportInputStream(
+                        new LabeledSequenceInputStream(
+                                Collections.singletonList(
+                                        Pair.of(
+                                                resource,
+                                                TestBase.class.getResourceAsStream("/" + resource)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+
+    public void loadGeoRoadData(InputStream testData) throws DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                roadEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+    public void loadGeoLocalityData(String resource) throws DataFordelerException {
+        loadGeoLocalityData(
+                new ImportInputStream(
+                        new LabeledSequenceInputStream(
+                                Collections.singletonList(
+                                        Pair.of(
+                                                resource,
+                                                TestBase.class.getResourceAsStream("/" + resource)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+
+    public void loadGeoLocalityData(InputStream testData) throws DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                localityEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+
+    public void loadAccessLocalityData(String resource) throws DataFordelerException {
+        loadAccessLocalityData(
+                new ImportInputStream(
+                        new LabeledSequenceInputStream(
+                                Collections.singletonList(
+                                        Pair.of(
+                                                resource,
+                                                TestBase.class.getResourceAsStream("/" + resource)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+
+    public void loadAccessLocalityData(InputStream testData) throws DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                accessAddressEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+
+    public void loadPostalLocalityData(String resource) throws DataFordelerException {
+        loadPostalLocalityData(
+                new ImportInputStream(
+                        new LabeledSequenceInputStream(
+                                Collections.singletonList(
+                                        Pair.of(
+                                                resource,
+                                                TestBase.class.getResourceAsStream("/" + resource)
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+
+    public void loadPostalLocalityData(InputStream testData) throws DataFordelerException {
+        ImportMetadata importMetadata = new ImportMetadata();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            try {
+                importMetadata.setTransactionInProgress(true);
+                postcodeEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+
+    public void loadPersonData(InputStream testData) throws Exception {
+        ImportMetadata importMetadata = new ImportMetadata();
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            importMetadata.setSession(session);
+            Transaction transaction = session.beginTransaction();
+            importMetadata.setTransactionInProgress(true);
+            try {
+                personEntityManager.parseData(testData, importMetadata);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+    public <E extends DatabaseEntry> void deleteAll(Class<E> eClass) {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            try {
+                Collection<E> entities = QueryManager.getAllEntities(session, eClass);
+                for (E entity : entities) {
+                    session.remove(entity);
+                }
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+    public void deleteAll() {
+        this.deleteAll(PersonEntity.class);
+    }
+
 
 }

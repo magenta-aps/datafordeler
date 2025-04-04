@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import it.sauronsoftware.ftp4j.*;
 import it.sauronsoftware.ftp4j.connectors.HTTPTunnelConnector;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.http.StatusLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
@@ -24,9 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A class to fetch files by FTP. Files are fetched to a local folder, and an ImportInputStream is returned
@@ -96,6 +92,10 @@ public abstract class FtpCommunicator implements Communicator {
         temp.delete();
         temp.mkdir();
         return Paths.get(temp.getAbsolutePath());
+    }
+
+    public void setKeepFiles(boolean keepFiles) {
+        this.keepFiles = keepFiles;
     }
 
     protected void setupProxy(FTPClient ftpClient) throws DataStreamException {
@@ -236,11 +236,6 @@ public abstract class FtpCommunicator implements Communicator {
         this.markRemoteFilesDone(ftpClient, uri, remoteFiles);
         this.markLocalFilesDone(localFiles);
         this.deleteLocalFiles(localFiles);
-    }
-
-    @Override
-    public StatusLine send(URI endpoint, String payload) throws IOException {
-        throw new UnsupportedOperationException();
     }
 
     public void send(URI endpoint, File payload) throws IOException, DataStreamException {

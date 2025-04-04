@@ -25,6 +25,8 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.company.CompanyQuery;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -35,8 +37,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -79,7 +79,7 @@ public class EboksRecieveLookupService {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{lookup}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{lookup}","/{lookup}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@RequestParam(value = "cpr", required = false, defaultValue = "") List<String> cprs, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 

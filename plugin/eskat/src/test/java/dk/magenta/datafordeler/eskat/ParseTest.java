@@ -17,25 +17,18 @@ import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ParseTest {
 
     @Autowired
@@ -71,7 +64,7 @@ public class ParseTest {
             InputStream input = ParseTest.class.getResourceAsStream("/unit.json");
             JsonNode root = objectMapper.readTree(input);
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
                 CompanyUnitEntityManager entityManager = (CompanyUnitEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
@@ -94,8 +87,8 @@ public class ParseTest {
             InputStream input = ParseTest.class.getResourceAsStream("/person.json");
             JsonNode root = objectMapper.readTree(input);
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
-            Assert.assertEquals(1, itemList.size());
+            Assertions.assertTrue(itemList.isArray());
+            Assertions.assertEquals(1, itemList.size());
             for (JsonNode item : itemList) {
                 String type = item.get("_type").asText();
                 ParticipantEntityManager entityManager = (ParticipantEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));

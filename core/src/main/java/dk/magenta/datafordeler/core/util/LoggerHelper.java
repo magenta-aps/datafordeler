@@ -3,10 +3,10 @@ package dk.magenta.datafordeler.core.util;
 import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.fapi.Envelope;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
 /**

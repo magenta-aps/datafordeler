@@ -23,6 +23,8 @@ import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -34,8 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,7 +88,7 @@ public class CvrRecordCombinedService {
     //{09249B0A-02F9-40A9-9DBF-99F37134AE81}
     public static final String PARAM_INCLUDE_GLOBAL_IDS = "includeGlobalIds";
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cvrNummer}", "/{cvrNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
@@ -133,7 +133,7 @@ public class CvrRecordCombinedService {
         return QueryManager.getAllEntities(session, query, CompanyRecord.class);
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"","/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getBulk(HttpServletRequest request)
             throws DataFordelerException, IOException {
         JsonNode requestBody;

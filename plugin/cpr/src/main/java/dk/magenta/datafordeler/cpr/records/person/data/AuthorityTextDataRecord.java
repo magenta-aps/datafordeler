@@ -3,9 +3,9 @@ package dk.magenta.datafordeler.cpr.records.person.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 

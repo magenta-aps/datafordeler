@@ -9,15 +9,15 @@ import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "cpr_config")
 public class CprConfiguration implements Configuration {
 
@@ -563,6 +563,10 @@ public class CprConfiguration implements Configuration {
         this.personRegisterFtpAddress = personRegisterFtpAddress;
     }
 
+    public void setPersonRegisterFtpDownloadFolder(String personRegisterFtpDownloadFolder) {
+        this.personRegisterFtpDownloadFolder = personRegisterFtpDownloadFolder;
+    }
+
     public void setPersonRegisterFtpUsername(String personRegisterFtpUsername) {
         this.personRegisterFtpUsername = personRegisterFtpUsername;
     }
@@ -601,6 +605,10 @@ public class CprConfiguration implements Configuration {
 
     public void setRoadRegisterLocalFile(String roadRegisterLocalFile) {
         this.roadRegisterLocalFile = roadRegisterLocalFile;
+    }
+
+    public void setRoadRegisterFtpDownloadFolder(String roadRegisterFtpDownloadFolder) {
+        this.roadRegisterFtpDownloadFolder = roadRegisterFtpDownloadFolder;
     }
 
     public void setRoadRegisterDataCharset(Charset roadRegisterDataCharset) {

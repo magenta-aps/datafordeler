@@ -3,14 +3,17 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
+import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Record for one participant on a Company or CompanyUnit
@@ -84,11 +87,11 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_NAME = "navne";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_OFFICE_UNIT, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_NAME)
+    @JsonProperty(value = IO_FIELD_NAME)
     private Set<BaseNameRecord> names = new HashSet<>();
 
-    public Set<BaseNameRecord> getNames() {
-        return this.names;
+    public BitemporalSet<BaseNameRecord> getNames() {
+        return new BitemporalSet<>(this.names);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -129,8 +132,8 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         }
     }
 
-    public Set<AddressRecord> getLocationAddress() {
-        return this.locationAddress;
+    public BitemporalSet<AddressRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress);
     }
 
     public void wire(Session session) {
@@ -156,5 +159,12 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         subs.addAll(this.names);
         subs.addAll(this.locationAddress);
         return subs;
+    }
+
+    @Override
+    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
+        this.getNames().traverse(setCallback, itemCallback);
+        this.getLocationAddress().traverse(setCallback, itemCallback);
     }
 }

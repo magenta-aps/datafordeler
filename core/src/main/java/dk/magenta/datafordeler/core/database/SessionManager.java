@@ -1,18 +1,18 @@
 package dk.magenta.datafordeler.core.database;
 
-import com.fasterxml.classmate.AnnotationConfiguration;
+import jakarta.annotation.PreDestroy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.HashSet;
@@ -23,6 +23,7 @@ import java.util.Set;
  * A bean to obtain Sessions with. This should be autowired in, and sessions obtained with
  * sessionManager.getSessionFactory().openSession();
  */
+@Primary
 @Component
 public class SessionManager {
     
@@ -31,12 +32,18 @@ public class SessionManager {
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     public SessionManager() throws IOException {
-        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-        sessionFactoryBean.setDataSource(this.dataSource());
-        sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-        sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
-        sessionFactoryBean.afterPropertiesSet();
-        this.sessionFactory = sessionFactoryBean.getObject();
+        try {
+            LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+            sessionFactoryBean.setDataSource(this.dataSource());
+            sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
+            sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
+            sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
+            sessionFactoryBean.afterPropertiesSet();
+            this.sessionFactory = sessionFactoryBean.getObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public SessionFactory getSessionFactory() {
@@ -61,7 +68,7 @@ public class SessionManager {
         managedClasses.add(dk.magenta.datafordeler.core.database.LastUpdated.class);
 
         ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
-        componentProvider.addIncludeFilter(new AnnotationTypeFilter(javax.persistence.Entity.class));
+        componentProvider.addIncludeFilter(new AnnotationTypeFilter(jakarta.persistence.Entity.class));
         componentProvider.addExcludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
         for (Class cls : managedClasses) {
@@ -84,7 +91,7 @@ public class SessionManager {
         return managedClasses;
     }
 
-    protected DataSource dataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(System.getenv("DATABASE_CLASS"));
         dataSource.setUrl(System.getenv("DATABASE_URL"));
@@ -109,13 +116,16 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.connection.username", System.getenv("DATABASE_USERNAME"));
         hibernateProperties.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
 
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
+        hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
+        hibernateProperties.setProperty("hibernate.globally_quoted_identifiers_skip_column_definitions", "true");
+
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
         hibernateProperties.setProperty("hibernate.c3p0.max_size", "200");
         hibernateProperties.setProperty("hibernate.c3p0.timeout", "300");
         hibernateProperties.setProperty("hibernate.c3p0.max_statements", "50");
         hibernateProperties.setProperty("hibernate.c3p0.idle_test_period", "3000");
+        System.out.println("SessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
     }
 

@@ -1,13 +1,11 @@
 package dk.magenta.datafordeler.core.util;
 
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 public class EqualityTest {
 
@@ -20,18 +18,18 @@ public class EqualityTest {
 
     @Test
     public void testEqual() {
-        Assert.assertFalse(Equality.equal("abc", null));
-        Assert.assertFalse(Equality.equal(null, "abc"));
-        Assert.assertFalse(Equality.equal("abc", "bce"));
-        Assert.assertFalse(Equality.equal("a", "A"));
-        Assert.assertFalse(Equality.equal("1", "2"));
-        Assert.assertFalse(Equality.equal("a", "1"));
-        Assert.assertFalse(Equality.equal("abc", "æøå"));
-        Assert.assertTrue(Equality.equal("a", "a"));
-        Assert.assertTrue(Equality.equal("A", "A"));
-        Assert.assertTrue(Equality.equal("ø", "ø"));
-        Assert.assertTrue(Equality.equal("abc", "abc"));
-        Assert.assertTrue(Equality.equal("æøå", "æøå"));
+        Assertions.assertFalse(Equality.equal("abc", null));
+        Assertions.assertFalse(Equality.equal(null, "abc"));
+        Assertions.assertFalse(Equality.equal("abc", "bce"));
+        Assertions.assertFalse(Equality.equal("a", "A"));
+        Assertions.assertFalse(Equality.equal("1", "2"));
+        Assertions.assertFalse(Equality.equal("a", "1"));
+        Assertions.assertFalse(Equality.equal("abc", "æøå"));
+        Assertions.assertTrue(Equality.equal("a", "a"));
+        Assertions.assertTrue(Equality.equal("A", "A"));
+        Assertions.assertTrue(Equality.equal("ø", "ø"));
+        Assertions.assertTrue(Equality.equal("abc", "abc"));
+        Assertions.assertTrue(Equality.equal("æøå", "æøå"));
     }
 
 }

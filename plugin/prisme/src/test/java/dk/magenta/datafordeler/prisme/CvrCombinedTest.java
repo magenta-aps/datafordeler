@@ -1,33 +1,19 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrAreaRestrictionDefinition;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
-import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
-import dk.magenta.datafordeler.ger.GerPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -42,10 +28,8 @@ import static org.mockito.Mockito.when;
  * This is becrause we do not want the unittest to access outside webservices and use passwords etc.
  * The unittest could be expanded with a mockup of the external cvr-server
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CvrCombinedTest extends TestBase {
     protected final Logger log = LogManager.getLogger(CvrCombinedTest.class.getCanonicalName());
 
@@ -67,7 +51,7 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
 
         testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
@@ -78,7 +62,7 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
         testUserDetails.giveAccess(
@@ -95,7 +79,7 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
         testUserDetails.giveAccess(
@@ -113,7 +97,7 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/prisme/cvr/3/" + 1234,
@@ -121,7 +105,7 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
 
@@ -183,8 +167,8 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(1, objectMapper.readTree(response.getBody()).size());
 
         body = objectMapper.createObjectNode();
         ArrayNode cvrList = objectMapper.createArrayNode();
@@ -198,8 +182,8 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(2, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(2, objectMapper.readTree(response.getBody()).size());
 
 
         body = objectMapper.createObjectNode();
@@ -223,8 +207,8 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(10, objectMapper.readTree(response.getBody()).size());
 
 
         body = objectMapper.createObjectNode();
@@ -249,8 +233,8 @@ public class CvrCombinedTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(10, objectMapper.readTree(response.getBody()).size());
 
 
         body = objectMapper.createObjectNode();
@@ -276,8 +260,8 @@ public class CvrCombinedTest extends TestBase {
                 String.class
         );
         log.debug(response.getBody());
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(0, objectMapper.readTree(response.getBody()).size());
     }
 
     private void applyAccess(TestUserDetails testUserDetails) {

@@ -21,16 +21,17 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.output.CompanyRecordOutputWrapper;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Primary
 @RestController
 @RequestMapping("/cvr/company/1/rest")
 public class CompanyRecordService extends FapiBaseService<CompanyRecord, CompanyRecordQuery> {
@@ -105,12 +107,16 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
     @Override
     protected CompanyRecordQuery getEmptyQuery() {
         CompanyRecordQuery query = new CompanyRecordQuery();
-        Plugin geoPlugin = pluginManager.getPluginByName("geo");
+
+
+        /*Plugin geoPlugin = pluginManager.getPluginByName("geo");
 
         EntityManager accessAddressManager = geoPlugin.getEntityManager("AccessAddress");
         query.addExtraJoin("LEFT JOIN cvr_company.locationAddress cvr_company__locationAddress");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress.municipality cvr_company__locationAddress__municipality");
         query.addExtraJoin("LEFT JOIN cvr_company__locationAddress__municipality.municipality cvr_company__locationAddress__municipality__municipality");
+*/
+
 
         /*Plugin geoPlugin = pluginManager.getPluginByName("geo");
         if (geoPlugin != null) {

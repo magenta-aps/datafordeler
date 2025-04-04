@@ -16,8 +16,10 @@ import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
 import dk.magenta.datafordeler.statistik.utils.Filter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -25,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -206,7 +206,7 @@ public abstract class StatisticsService {
     protected abstract Logger getLogger();
 
     protected Filter getFilter(HttpServletRequest request) throws Exception {
-        return new Filter(request, timeintervallimit);
+        return new Filter(request, this.getTimeintervallimit());
     }
 
 
@@ -250,6 +250,10 @@ public abstract class StatisticsService {
 
     public void setUseTimeintervallimit(boolean timeintervallimit) {
         this.timeintervallimit = timeintervallimit;
+    }
+
+    public boolean getTimeintervallimit() {
+        return this.timeintervallimit;
     }
 
     public boolean getWriteToLocalFile() {

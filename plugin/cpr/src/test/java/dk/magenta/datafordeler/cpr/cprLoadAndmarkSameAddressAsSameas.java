@@ -1,33 +1,23 @@
 package dk.magenta.datafordeler.cpr;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.Query;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord;
 import org.hibernate.Session;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,12 +27,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.mockito.Mockito.when;
-
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class cprLoadAndmarkSameAddressAsSameas extends TestBase {
 
     @Autowired
@@ -63,7 +49,7 @@ public class cprLoadAndmarkSameAddressAsSameas extends TestBase {
         testData.close();
     }
 
-    @After
+    @AfterEach
     public void clean() {
         Session session = sessionManager.getSessionFactory().openSession();
         session.close();
@@ -85,9 +71,9 @@ public class cprLoadAndmarkSameAddressAsSameas extends TestBase {
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
 
         List<AddressDataRecord> addresslist = new ArrayList<AddressDataRecord>(entities.get(0).getAddress());
-        Assert.assertEquals(2, addresslist.size());
+        Assertions.assertEquals(2, addresslist.size());
         List<AddressDataRecord> addresslistRemovedSameas = addresslist.stream().filter(add -> add.getSameAs() == null).collect(Collectors.toList());
-        Assert.assertEquals(1, addresslistRemovedSameas.size());
+        Assertions.assertEquals(1, addresslistRemovedSameas.size());
     }
 
     /**
@@ -112,9 +98,9 @@ public class cprLoadAndmarkSameAddressAsSameas extends TestBase {
         List<PersonEntity> entities = QueryManager.getAllEntities(session, query, PersonEntity.class);
 
         List<AddressDataRecord> targetList = new ArrayList<AddressDataRecord>(entities.get(0).getAddress());
-        Assert.assertEquals(4, targetList.size());
+        Assertions.assertEquals(4, targetList.size());
         List<AddressDataRecord> target2List = targetList.stream().filter(add -> add.getSameAs() == null).collect(Collectors.toList());
-        Assert.assertEquals(2, target2List.size());
+        Assertions.assertEquals(2, target2List.size());
 
         session.close();
         session = sessionManager.getSessionFactory().openSession();
@@ -127,16 +113,16 @@ public class cprLoadAndmarkSameAddressAsSameas extends TestBase {
 
 
         List<AddressDataRecord> addresslist = new ArrayList<AddressDataRecord>(entities.get(0).getAddress());
-        Assert.assertEquals(true, addresslist.size() > 2);
+        Assertions.assertEquals(true, addresslist.size() > 2);
 
         List<AddressDataRecord> emplList = addresslist.stream().filter(add -> add.getSameAs() == null).collect(Collectors.toList());
-        Assert.assertEquals(true, emplList.size() >= 2);
+        Assertions.assertEquals(true, emplList.size() >= 2);
 
         Set<PersonEventDataRecord> eventList = entities3.get(0).getEvent();
         List<PersonEventDataRecord> eventListMove = eventList.stream().filter(event -> "A01".equals(event.getEventId())).collect(Collectors.toList());
-        Assert.assertEquals(2, eventListMove.size());
+        Assertions.assertEquals(2, eventListMove.size());
 
         List<AddressDataRecord> filteredList = emplList.stream().filter(empl -> eventListMove.stream().anyMatch(dept -> empl.getRegistrationFrom().equals(dept.getTimestamp()))).collect(Collectors.toList());
-        Assert.assertEquals(2, filteredList.size());
+        Assertions.assertEquals(2, filteredList.size());
     }
 }

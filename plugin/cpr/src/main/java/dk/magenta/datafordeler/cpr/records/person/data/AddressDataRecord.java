@@ -10,8 +10,8 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
 

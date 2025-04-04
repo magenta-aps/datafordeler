@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 import org.hibernate.Session;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +44,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     }
 
     public void save(Session session) {
-        session.save(this);
+        session.persist(this);
     }
 
     protected static OffsetDateTime roundTime(OffsetDateTime in) {
@@ -82,5 +82,4 @@ public abstract class CvrRecord extends DatabaseEntry {
             itemCallback.accept(this);
         }
     }
-
 }

@@ -12,14 +12,14 @@ import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
 import dk.magenta.datafordeler.eskat.output.EskatRecordOutputWrapper;
 import dk.magenta.datafordeler.eskat.query.EskatCompanyRecordQuery;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,19 +76,14 @@ public class CompanyRecordListService extends CompanyRecordService {
     protected void sendAsCSV(Stream<CompanyRecord> entities, HttpServletRequest request, HttpServletResponse response) throws IOException, HttpNotFoundException {
     }
 
-
     @Override
     public List<ResultSet<CompanyRecord>> searchByQuery(CompanyRecordQuery query, Session session) {
         List<ResultSet<CompanyRecord>> allRecords = new ArrayList<>();
-
         query.setEffectToAfter(BaseQuery.ALWAYSTIMEINTERVAL);
-
         List<ResultSet<CompanyRecord>> localResults = super.searchByQuery(query, session);
         if (!localResults.isEmpty()) {
-            //log.info("There are "+localResults.size()+" local results");
             allRecords.addAll(localResults);
         }
-
         HashSet<String> cvrNumbers = new HashSet<>(query.getParameter(CompanyRecordQuery.CVRNUMMER));
         if (!cvrNumbers.isEmpty()) {
             cvrNumbers.removeAll(allRecords.stream().map(resultset -> Integer.toString(resultset.getPrimaryEntity().getCvrNumber())).collect(Collectors.toSet()));

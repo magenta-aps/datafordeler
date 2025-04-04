@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Record for Company and CompanyUnit lifecycle data.
@@ -33,7 +32,7 @@ public class LifecycleRecord extends CvrBitemporalDataRecord {
 
     public static final String DB_FIELD_PARTICIPANT_COMPANY_RELATION = "relationCompanyRecord";
 
-    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = RelationCompanyRecord.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_PARTICIPANT_COMPANY_RELATION + DatabaseEntry.REF)
     @JsonIgnore
     private RelationCompanyRecord relationCompanyRecord;

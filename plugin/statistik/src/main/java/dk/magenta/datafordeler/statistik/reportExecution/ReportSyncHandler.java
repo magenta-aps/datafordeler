@@ -1,14 +1,14 @@
 package dk.magenta.datafordeler.statistik.reportExecution;
 
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.jpa.QueryHints;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class ReportSyncHandler {
         }
 
         session.beginTransaction();
-        session.save(reportStatusObject);
+        session.persist(reportStatusObject);
         session.getTransaction().commit();
         return true;
     }
@@ -106,7 +106,7 @@ public class ReportSyncHandler {
 
         if (query.getResultList().size() > 0) {
             query.getResultList().get(0).setReportStatus(status);
-            session.save(query.getResultList().get(0));
+            session.persist(query.getResultList().get(0));
         }
         session.getTransaction().commit();
     }

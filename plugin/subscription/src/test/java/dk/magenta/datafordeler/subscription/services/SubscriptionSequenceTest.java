@@ -1,32 +1,19 @@
 package dk.magenta.datafordeler.subscription.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SubscriptionSequenceTest extends TestBase {
-
-    MockMvc mvc;
 
 
     private void applyAccess(TestUserDetails testUserDetails) {
@@ -34,13 +21,12 @@ public class SubscriptionSequenceTest extends TestBase {
     }
 
 
+
     /**
      * Test that it is possible to create a new subscription
-     *
-     * @throws Exception
      */
     @Test
-    public void testSequenceToBePerformedWithCustomer() throws Exception {
+    public void testSequenceToBePerformedWithCustomer() {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services".replaceAll("/", "_"));
@@ -67,7 +53,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Try fetching with no cpr access rights
         response = restTemplate.exchange(
@@ -76,7 +62,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber",
@@ -94,7 +80,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[]", response.getBody(), false);
 
@@ -105,7 +91,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -115,7 +101,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 String.class
         );
 
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[]", response.getBody(), false);
 
 
@@ -127,7 +113,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
@@ -137,7 +123,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -147,7 +133,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 String.class
         );
 
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[" +
                 "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
 
@@ -159,7 +145,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //ADD an element to the CPR-list
         httpEntity = new HttpEntity<String>("", httpHeaders);
@@ -169,7 +155,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -179,7 +165,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 String.class
         );
 
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[" +
                 "{\"listId\":\"list01\"},{\"listId\":\"list02\"}]", response.getBody(), false);
 
@@ -190,7 +176,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
         response = restTemplate.exchange(
@@ -199,7 +185,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list01\"},\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A04\"}]", response.getBody(), false);
@@ -211,7 +197,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/businesseventSubscription",
@@ -219,7 +205,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list02\"},\"businessEventId\":\"newBusinessEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
@@ -231,7 +217,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
 
         response = restTemplate.exchange(
@@ -240,7 +226,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list01\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A04\"}]", response.getBody(), false);
@@ -252,7 +238,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
@@ -260,7 +246,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list02\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);
@@ -271,7 +257,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/subscription/dataeventSubscription",
@@ -279,7 +265,7 @@ public class SubscriptionSequenceTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         JSONAssert.assertEquals("[" +
                 "{\"cprList\":{\"listId\":\"list02\"},\"cvrList\":{\"listId\":\"list02\"},\"dataEventId\":\"newDataEventId\",\"kodeId\":\"A05\"}]", response.getBody(), false);

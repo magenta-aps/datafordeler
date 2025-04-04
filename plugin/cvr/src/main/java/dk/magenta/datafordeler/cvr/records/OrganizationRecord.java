@@ -8,9 +8,9 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -73,7 +73,7 @@ public class OrganizationRecord extends CvrRecord {
     public static final String IO_FIELD_NAME = "organisationsNavn";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_ORGANIZATION, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL)
-        @JsonProperty(value = IO_FIELD_NAME)
+    @JsonProperty(value = IO_FIELD_NAME)
     public Set<BaseNameRecord> names;
 
     public BitemporalSet<BaseNameRecord> getNames() {
@@ -168,7 +168,7 @@ public class OrganizationRecord extends CvrRecord {
 
 
     public void save(Session session) {
-        session.save(this);
+        session.persist(this);
     }
 
     @Override
@@ -225,8 +225,8 @@ public class OrganizationRecord extends CvrRecord {
 
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getMemberData().traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
-        super.traverse(setCallback, itemCallback);
     }
 }

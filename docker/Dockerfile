@@ -1,7 +1,10 @@
-FROM maven:3-jdk-11
-#FROM maven:3.8.3-openjdk-16
+FROM jelastic/maven:3.9.5-openjdk-21
 ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 COPY pom.xml /code/pom.xml
+COPY parent/pom.xml /code/parent/pom.xml
+COPY core/pom.xml /code/core/pom.xml
+WORKDIR /code/core/
+RUN mvn dependency:resolve
 COPY core /code/core
 COPY plugin /code/plugin
 WORKDIR /code/
@@ -23,4 +26,4 @@ EXPOSE 8000
 WORKDIR /app/core
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["java", "-Dloader.path=/app/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.PropertiesLauncher"]
+CMD ["java", "-Dloader.path=/app/plugin/jar/", "-cp", "datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -26,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -52,15 +54,16 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             ZoneOffset.UTC
     );
 
-    @Autowired
-    private CompanyRecordService companyRecordService;
+    private final CompanyRecordService companyRecordService;
 
-    @Autowired
-    private SessionManager sessionManager;
+    private final SessionManager sessionManager;
 
     private final Logger log = LogManager.getLogger(CompanyEntityManager.class.getCanonicalName());
 
-    public CompanyEntityManager() {
+    @Autowired
+    public CompanyEntityManager(@Lazy CompanyRecordService companyRecordService, @Lazy SessionManager sessionManager) {
+        this.companyRecordService = companyRecordService;
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -298,5 +301,24 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             return false;
         });
         transaction.commit();
+    }
+
+    /**
+     * Clean democompanys which has been initiated in the database.
+     * democompanys is used on the demoenvironment for demo and education purposes
+     */
+    @Override
+    public void cleanDemoData(Session session) {
+        CompanyRecordQuery personQuery = new CompanyRecordQuery();
+        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
+        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
+        session.beginTransaction();
+        personQuery.setPageSize(1000);
+        personQuery.applyFilters(session);
+        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
+        for (CompanyRecord companyForDeletion : companyEntities) {
+            session.remove(companyForDeletion);
+        }
+        session.getTransaction().commit();
     }
 }

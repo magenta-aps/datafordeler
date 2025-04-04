@@ -3,44 +3,29 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>dk.magenta.datafordeler</groupId>
-    <artifactId>datafordeler-plugin-cpr</artifactId>
-    <version>1.2</version>
-    <packaging>jar</packaging>
-    <name>datafordeler-plugin-cpr</name>
-    <description>People (CPR) plugin for Magenta&#39;s Greenlandic System</description>
-
     <!--The identifier of the parent POM-->
     <parent>
         <groupId>dk.magenta.datafordeler</groupId>
-        <artifactId>datafordeler-plugin-parent</artifactId>
-        <relativePath>../parent/pom.xml</relativePath>
-        <version>1.2</version>
+        <artifactId>parent</artifactId>
+        <relativePath>../../parent/pom.xml</relativePath>
+        <version>2.0.0</version>
     </parent>
 
-    <properties>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cpr</artifactId>
+    <version>2.0.0</version>
+    <packaging>jar</packaging>
+    <name>datafordeler-plugin-cpr</name>
+    <description>People (CPR) plugin for Magenta's Greenlandic System</description>
 
     <dependencies>
+
+        <!--Magenta's specific dependencies -->
         <dependency>
             <groupId>dk.magenta.datafordeler</groupId>
             <artifactId>datafordeler-core</artifactId>
-            <version>1.2</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${hibernate.jpa.version}</version>
         </dependency>
 
         <dependency>
@@ -49,19 +34,11 @@
             <version>${jackson.version}</version>
         </dependency>
 
-
-        <!-- OpenSAML library -->
-        <!-- https://mvnrepository.com/artifact/org.opensaml/opensaml -->
+        <!-- SQL server connection -->
         <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
-            <version>2.6.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>${com.microsoft.sqlserver.version}</version>
         </dependency>
 
         <!-- Unit testing -->
@@ -72,9 +49,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -120,6 +97,11 @@
                     <outputDirectory>../jar</outputDirectory>
                 </configuration>
                 <version>3.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
             </plugin>
         </plugins>
     </build>

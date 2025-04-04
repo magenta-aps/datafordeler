@@ -2,23 +2,18 @@ package dk.magenta.datafordeler.prisme;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.core.util.UnorderedJsonListComparator;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
-import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscriptionAssignmentStatus;
 import dk.magenta.datafordeler.cpr.direct.CprDirectLookup;
@@ -26,25 +21,21 @@ import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.AddressDataRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.PersonStatusDataRecord;
 import dk.magenta.datafordeler.geo.GeoLookupService;
-import org.hamcrest.CoreMatchers;
+import jakarta.persistence.FlushModeType;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-import javax.persistence.FlushModeType;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,10 +50,8 @@ import java.util.UUID;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CprTest extends TestBase {
 
     public void loadPerson(String personfile) throws Exception {
@@ -142,7 +131,7 @@ public class CprTest extends TestBase {
     }
 
 
-    @Before
+    @BeforeEach
     public void load() throws IOException, DataFordelerException {
         this.loadAllGeoAdress(sessionManager);
     }
@@ -171,13 +160,13 @@ public class CprTest extends TestBase {
 
             for (PersonEntity entity : databaseQuery.getResultList()) {
                 ObjectNode newOutput = (ObjectNode) personOutputWrapper.wrapRecordResult(entity, null);
-                Assert.assertEquals(955, newOutput.get("myndighedskode").intValue());
+                Assertions.assertEquals(955, newOutput.get("myndighedskode").intValue());
 
                 //Postnummer does not work when running the unittest with maven, it works when running manually.
                 //Since it is gladdreg and is on its way out, this test is disabled
-                //Assert.assertEquals(3982, newOutput.get("postnummer").intValue() );
-                Assert.assertEquals(1, newOutput.get("vejkode").intValue());
-                Assert.assertEquals("GL", newOutput.get("landekode").textValue());
+                //Assertions.assertEquals(3982, newOutput.get("postnummer").intValue() );
+                Assertions.assertEquals(1, newOutput.get("vejkode").intValue());
+                Assertions.assertEquals("GL", newOutput.get("landekode").textValue());
             }
         } finally {
             session.close();
@@ -195,7 +184,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
 
 
@@ -215,8 +204,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
 
         testUserDetails.giveAccess(
@@ -233,7 +222,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         testUserDetails.giveAccess(
                 cprPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
@@ -249,13 +238,13 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
         JsonNode responseContent = objectMapper.readTree(response.getBody());
-        //Assert.assertFalse(responseContent.get("adminadresse").asBoolean());
+        //Assertions.assertFalse(responseContent.get("adminadresse").asBoolean());
 
-        Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"far\":\"0101641234\""));
-        Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"mor\":\"2903641234\""));
+        Assertions.assertTrue(response.getBody().contains("\"far\":\"0101641234\""));
+        Assertions.assertTrue(response.getBody().contains("\"mor\":\"2903641234\""));
 
     }
 
@@ -282,7 +271,7 @@ public class CprTest extends TestBase {
                 String.class
         );
         JsonNode responseContent = objectMapper.readTree(response.getBody());
-        //Assert.assertTrue(responseContent.get("adminadresse").asBoolean());
+        //Assertions.assertTrue(responseContent.get("adminadresse").asBoolean());
     }
 
     /**
@@ -307,11 +296,11 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
-        Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"far\":\"0101641234\""));
-        Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"mor\":\"2903641234\""));
+        Assertions.assertTrue(response.getBody().contains("\"far\":\"0101641234\""));
+        Assertions.assertTrue(response.getBody().contains("\"mor\":\"2903641234\""));
 
         testUserDetails.giveAccess(
                 cprPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
@@ -327,7 +316,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
     }
 
@@ -349,7 +338,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -359,7 +348,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cprNummer\":\"1111111110\",\"borIGL\":true,\"dato\":\"2020-10-28\"}", response.getBody(), false);
 
 
@@ -369,7 +358,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cprNummer\":\"1211111111\",\"borIGL\":true,\"dato\":\"2020-10-28\"}", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -378,7 +367,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cprNummer\":\"1311111111\",\"borIGL\":true,\"dato\":\"2020-07-17\"}", response.getBody(), false);
     }
 
@@ -394,7 +383,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -406,8 +395,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
 
         response = restTemplate.exchange(
                 "/prisme/cpr/under18years/1/search/?municipalitycode=956&pageSize=10000&updatedSince=" + "2010-01-01",
@@ -415,7 +404,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/prisme/cpr/under18years/1/search/?municipalitycode=956&updatedSince=" + "2030-01-01",
@@ -423,8 +412,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
 
         this.cleanup();
         this.loadSpecificAgePersons(19);
@@ -434,8 +423,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
 
         this.cleanup();
         this.loadSpecificAgePersons(16);
@@ -446,8 +435,8 @@ public class CprTest extends TestBase {
                 String.class
         );
 
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(1, objectMapper.readTree(response.getBody()).get("results").size());
 
         response = restTemplate.exchange(
                 "/prisme/cpr/under18years/1/search/?municipalitycode=957&updatedSince=" + "2010-01-01",
@@ -455,8 +444,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
     }
 
 
@@ -485,8 +474,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(1, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(1, objectMapper.readTree(response.getBody()).size());
 
 
         body = objectMapper.createObjectNode();
@@ -501,8 +490,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(2, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(2, objectMapper.readTree(response.getBody()).size());
 
 
         body = objectMapper.createObjectNode();
@@ -525,8 +514,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(10, objectMapper.readTree(response.getBody()).size());
 
 
         body = objectMapper.createObjectNode();
@@ -550,8 +539,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(10, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(10, objectMapper.readTree(response.getBody()).size());
 
         body = objectMapper.createObjectNode();
         cprList = objectMapper.createArrayNode();
@@ -574,8 +563,8 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assert.assertEquals(5, objectMapper.readTree(response.getBody()).size());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(5, objectMapper.readTree(response.getBody()).size());
 
     }
 
@@ -583,7 +572,7 @@ public class CprTest extends TestBase {
         when(dafoUserManager.getFallbackUser()).thenReturn(testUserDetails);
     }
 
-    @SpyBean
+    @MockitoSpyBean
     private CprDirectLookup cprDirectLookup;
 
     @Test
@@ -606,34 +595,31 @@ public class CprTest extends TestBase {
         );
         ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
 
-        Assert.assertEquals("0707611234", responseObject.get("cprNummer").asText());
-        Assert.assertEquals("Jens", responseObject.get("fornavn").asText());
-        Assert.assertEquals("Mortensen", responseObject.get("efternavn").asText());
-        Assert.assertEquals("F", responseObject.get("civilstand").asText());
-        Assert.assertEquals("1980-10-01", responseObject.get("civilstandsdato").asText());
-        Assert.assertEquals("0706611234", responseObject.get("ægtefælleCprNummer").asText());
-        Assert.assertEquals(false, responseObject.get("adressebeskyttelse").asBoolean());
-        Assert.assertEquals("M", responseObject.get("køn").asText());
-        Assert.assertEquals("0909414385", responseObject.get("far").asText());
-        Assert.assertEquals("0912414434", responseObject.get("mor").asText());
-        Assert.assertEquals(1, responseObject.get("statuskode").asInt());
-        Assert.assertEquals("1980-10-10", responseObject.get("tilflytningsdato").asText());
-        Assert.assertEquals("Kommuneqarfik Sermersooq", responseObject.get("kommune").asText());
-        Assert.assertEquals(956, responseObject.get("myndighedskode").asInt());
-        Assert.assertEquals(254, responseObject.get("vejkode").asInt());
-        Assert.assertEquals(3900, responseObject.get("postnummer").asInt());
-        Assert.assertEquals(600, responseObject.get("stedkode").asInt());
-        Assert.assertEquals("GL", responseObject.get("landekode").asText());
+        Assertions.assertEquals("0707611234", responseObject.get("cprNummer").asText());
+        Assertions.assertEquals("Jens", responseObject.get("fornavn").asText());
+        Assertions.assertEquals("Mortensen", responseObject.get("efternavn").asText());
+        Assertions.assertEquals("F", responseObject.get("civilstand").asText());
+        Assertions.assertEquals("1980-10-01", responseObject.get("civilstandsdato").asText());
+        Assertions.assertEquals("0706611234", responseObject.get("ægtefælleCprNummer").asText());
+        Assertions.assertEquals(false, responseObject.get("adressebeskyttelse").asBoolean());
+        Assertions.assertEquals("M", responseObject.get("køn").asText());
+        Assertions.assertEquals("0909414385", responseObject.get("far").asText());
+        Assertions.assertEquals("0912414434", responseObject.get("mor").asText());
+        Assertions.assertEquals(1, responseObject.get("statuskode").asInt());
+        Assertions.assertEquals("1980-10-10", responseObject.get("tilflytningsdato").asText());
+        Assertions.assertEquals("Kommuneqarfik Sermersooq", responseObject.get("kommune").asText());
+        Assertions.assertEquals(956, responseObject.get("myndighedskode").asInt());
+        Assertions.assertEquals(254, responseObject.get("vejkode").asInt());
+        Assertions.assertEquals(3900, responseObject.get("postnummer").asInt());
+        Assertions.assertEquals(600, responseObject.get("stedkode").asInt());
+        Assertions.assertEquals("GL", responseObject.get("landekode").asText());
 
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(1, existingSubscriptions.size());
+            Assertions.assertEquals(1, existingSubscriptions.size());
             PersonSubscription subscription = existingSubscriptions.get(0);
-            Assert.assertEquals("0707611234", subscription.getPersonNumber());
-            Assert.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
-        } finally {
-            session.close();
+            Assertions.assertEquals("0707611234", subscription.getPersonNumber());
+            Assertions.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
         }
     }
 
@@ -660,31 +646,31 @@ public class CprTest extends TestBase {
 
         ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
 
-        Assert.assertEquals("0607621234", responseObject.get("cprNummer").asText());
-        Assert.assertEquals("Mads Munk", responseObject.get("fornavn").asText());
-        Assert.assertEquals("Petersen", responseObject.get("efternavn").asText());
-        Assert.assertEquals("D", responseObject.get("civilstand").asText());
-        Assert.assertEquals("2005-02-05", responseObject.get("civilstandsdato").asText());
-        Assert.assertEquals("0506650038", responseObject.get("ægtefælleCprNummer").asText());
-        Assert.assertEquals(false, responseObject.get("adressebeskyttelse").asBoolean());
-        Assert.assertEquals("M", responseObject.get("køn").asText());
-        Assert.assertEquals(90, responseObject.get("statuskode").asInt());
-        Assert.assertNull(responseObject.get("far"));
-        Assert.assertNull(responseObject.get("mor"));
-        Assert.assertNull(responseObject.get("tilflytningsdato"));
-        Assert.assertNull(responseObject.get("myndighedskode"));
-        Assert.assertNull(responseObject.get("vejkode"));
-        Assert.assertNull(responseObject.get("postnummer"));
-        Assert.assertNull(responseObject.get("stedkode"));
-        Assert.assertNull(responseObject.get("landekode"));
+        Assertions.assertEquals("0607621234", responseObject.get("cprNummer").asText());
+        Assertions.assertEquals("Mads Munk", responseObject.get("fornavn").asText());
+        Assertions.assertEquals("Petersen", responseObject.get("efternavn").asText());
+        Assertions.assertEquals("D", responseObject.get("civilstand").asText());
+        Assertions.assertEquals("2005-02-05", responseObject.get("civilstandsdato").asText());
+        Assertions.assertEquals("0506650038", responseObject.get("ægtefælleCprNummer").asText());
+        Assertions.assertEquals(false, responseObject.get("adressebeskyttelse").asBoolean());
+        Assertions.assertEquals("M", responseObject.get("køn").asText());
+        Assertions.assertEquals(90, responseObject.get("statuskode").asInt());
+        Assertions.assertNull(responseObject.get("far"));
+        Assertions.assertNull(responseObject.get("mor"));
+        Assertions.assertNull(responseObject.get("tilflytningsdato"));
+        Assertions.assertNull(responseObject.get("myndighedskode"));
+        Assertions.assertNull(responseObject.get("vejkode"));
+        Assertions.assertNull(responseObject.get("postnummer"));
+        Assertions.assertNull(responseObject.get("stedkode"));
+        Assertions.assertNull(responseObject.get("landekode"));
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(1, existingSubscriptions.size());
+            Assertions.assertEquals(1, existingSubscriptions.size());
             PersonSubscription subscription = existingSubscriptions.get(0);
-            Assert.assertEquals("0607621234", subscription.getPersonNumber());
-            Assert.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
+            Assertions.assertEquals("0607621234", subscription.getPersonNumber());
+            Assertions.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
         } finally {
             session.close();
         }
@@ -695,7 +681,7 @@ public class CprTest extends TestBase {
     public void testDirectLookup3() throws Exception {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(0, existingSubscriptions.size());
+            Assertions.assertEquals(0, existingSubscriptions.size());
         }
 
         String data = "038406uKBKxWLcWUDI0178001104000000000000003840120190815000000000010607621234          90200502051034 M1962-07-06 2005-10-20                                              0030607621234Petersen,Mads Munk                                                                                                                                                                                                                          0080607621234Mads                                               Munk                                     Petersen                                 196207061029 Petersen,Mads Munk                00906076212345180                    01006076212345180196207061029*0110607621234U1962-07-06 0120607621234D0506650038                                              200502051034             01406076212340506871018014060762123405089210040140607621234060794106801406076212340705901007014060762123407059600110140607621234080789104901506076212341962-07-06*0000000000                                              1962-07-06*0000000000                                              999999999999900000014";
@@ -716,55 +702,55 @@ public class CprTest extends TestBase {
         );
 
         ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals(2, responseObject.size());
+        Assertions.assertEquals(2, responseObject.size());
 
-        Assert.assertTrue(responseObject.has("0607621234"));
+        Assertions.assertTrue(responseObject.has("0607621234"));
         ObjectNode personObject = (ObjectNode) responseObject.get("0607621234");
-        Assert.assertEquals("0607621234", personObject.get("cprNummer").asText());
-        Assert.assertEquals("Mads Munk", personObject.get("fornavn").asText());
-        Assert.assertEquals("Petersen", personObject.get("efternavn").asText());
-        Assert.assertEquals("D", personObject.get("civilstand").asText());
-        Assert.assertEquals("2005-02-05", personObject.get("civilstandsdato").asText());
-        Assert.assertEquals("0506650038", personObject.get("ægtefælleCprNummer").asText());
-        Assert.assertEquals(false, personObject.get("adressebeskyttelse").asBoolean());
-        Assert.assertEquals("M", personObject.get("køn").asText());
-        Assert.assertEquals(90, personObject.get("statuskode").asInt());
-        Assert.assertNull(personObject.get("far"));
-        Assert.assertNull(personObject.get("mor"));
-        Assert.assertNull(personObject.get("tilflytningsdato"));
-        Assert.assertNull(personObject.get("myndighedskode"));
-        Assert.assertNull(personObject.get("vejkode"));
-        Assert.assertNull(personObject.get("postnummer"));
-        Assert.assertNull(personObject.get("stedkode"));
-        Assert.assertNull(personObject.get("landekode"));
+        Assertions.assertEquals("0607621234", personObject.get("cprNummer").asText());
+        Assertions.assertEquals("Mads Munk", personObject.get("fornavn").asText());
+        Assertions.assertEquals("Petersen", personObject.get("efternavn").asText());
+        Assertions.assertEquals("D", personObject.get("civilstand").asText());
+        Assertions.assertEquals("2005-02-05", personObject.get("civilstandsdato").asText());
+        Assertions.assertEquals("0506650038", personObject.get("ægtefælleCprNummer").asText());
+        Assertions.assertEquals(false, personObject.get("adressebeskyttelse").asBoolean());
+        Assertions.assertEquals("M", personObject.get("køn").asText());
+        Assertions.assertEquals(90, personObject.get("statuskode").asInt());
+        Assertions.assertNull(personObject.get("far"));
+        Assertions.assertNull(personObject.get("mor"));
+        Assertions.assertNull(personObject.get("tilflytningsdato"));
+        Assertions.assertNull(personObject.get("myndighedskode"));
+        Assertions.assertNull(personObject.get("vejkode"));
+        Assertions.assertNull(personObject.get("postnummer"));
+        Assertions.assertNull(personObject.get("stedkode"));
+        Assertions.assertNull(personObject.get("landekode"));
 
-        Assert.assertTrue(responseObject.has("0101001234"));
+        Assertions.assertTrue(responseObject.has("0101001234"));
         personObject = (ObjectNode) responseObject.get("0101001234");
-        Assert.assertEquals("0101001234", personObject.get("cprNummer").asText());
-        Assert.assertEquals("Tester Testmember", personObject.get("fornavn").asText());
-        Assert.assertEquals("Testersen", personObject.get("efternavn").asText());
-        Assert.assertEquals("G", personObject.get("civilstand").asText());
-        Assert.assertEquals("2017-10-12", personObject.get("civilstandsdato").asText());
-        Assert.assertEquals("0202994321", personObject.get("ægtefælleCprNummer").asText());
-        Assert.assertEquals(true, personObject.get("adressebeskyttelse").asBoolean());
-        Assert.assertEquals("K", personObject.get("køn").asText());
-        Assert.assertEquals(5, personObject.get("statuskode").asInt());
-        Assert.assertEquals("0101641234", personObject.get("far").asText());
-        Assert.assertEquals("2903641234", personObject.get("mor").asText());
-        Assert.assertEquals("2016-08-31", personObject.get("tilflytningsdato").asText());
-        Assert.assertEquals(956, personObject.get("myndighedskode").asInt());
-        Assert.assertEquals(254, personObject.get("vejkode").asInt());
-        Assert.assertEquals("Kommuneqarfik Sermersooq", personObject.get("kommune").asText());
-        Assert.assertEquals(3900, personObject.get("postnummer").asInt());
-        Assert.assertEquals(600, personObject.get("stedkode").asInt());
-        Assert.assertEquals("GL", personObject.get("landekode").asText());
+        Assertions.assertEquals("0101001234", personObject.get("cprNummer").asText());
+        Assertions.assertEquals("Tester Testmember", personObject.get("fornavn").asText());
+        Assertions.assertEquals("Testersen", personObject.get("efternavn").asText());
+        Assertions.assertEquals("G", personObject.get("civilstand").asText());
+        Assertions.assertEquals("2017-10-12", personObject.get("civilstandsdato").asText());
+        Assertions.assertEquals("0202994321", personObject.get("ægtefælleCprNummer").asText());
+        Assertions.assertEquals(true, personObject.get("adressebeskyttelse").asBoolean());
+        Assertions.assertEquals("K", personObject.get("køn").asText());
+        Assertions.assertEquals(5, personObject.get("statuskode").asInt());
+        Assertions.assertEquals("0101641234", personObject.get("far").asText());
+        Assertions.assertEquals("2903641234", personObject.get("mor").asText());
+        Assertions.assertEquals("2016-08-31", personObject.get("tilflytningsdato").asText());
+        Assertions.assertEquals(956, personObject.get("myndighedskode").asInt());
+        Assertions.assertEquals(254, personObject.get("vejkode").asInt());
+        Assertions.assertEquals("Kommuneqarfik Sermersooq", personObject.get("kommune").asText());
+        Assertions.assertEquals(3900, personObject.get("postnummer").asInt());
+        Assertions.assertEquals(600, personObject.get("stedkode").asInt());
+        Assertions.assertEquals("GL", personObject.get("landekode").asText());
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(1, existingSubscriptions.size());
+            Assertions.assertEquals(1, existingSubscriptions.size());
             PersonSubscription subscription = existingSubscriptions.get(0);
-            Assert.assertEquals("0607621234", subscription.getPersonNumber());
-            Assert.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
+            Assertions.assertEquals("0607621234", subscription.getPersonNumber());
+            Assertions.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
         }
     }
 
@@ -795,7 +781,7 @@ public class CprTest extends TestBase {
                 String.class
         );
         ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals("0607621234", responseObject.get("cprNummer").asText());
+        Assertions.assertEquals("0607621234", responseObject.get("cprNummer").asText());
 
         cpr = "0101001236";
         Mockito.doReturn(data).when(cprDirectLookup).lookup(ArgumentMatchers.eq(cpr));
@@ -809,7 +795,7 @@ public class CprTest extends TestBase {
                 String.class
         );
         responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals("0607621234", responseObject.get("cprNummer").asText());
+        Assertions.assertEquals("0607621234", responseObject.get("cprNummer").asText());
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -820,16 +806,16 @@ public class CprTest extends TestBase {
                 String.class
         );
         responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals("0607621234", responseObject.get("cprNummer").asText());
+        Assertions.assertEquals("0607621234", responseObject.get("cprNummer").asText());
 
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(1, existingSubscriptions.size());
+            Assertions.assertEquals(1, existingSubscriptions.size());
             PersonSubscription subscription = existingSubscriptions.get(0);
-            Assert.assertEquals("0101001235", subscription.getPersonNumber());
-            Assert.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
+            Assertions.assertEquals("0101001235", subscription.getPersonNumber());
+            Assertions.assertEquals(PersonSubscriptionAssignmentStatus.CreatedInTable, subscription.getAssignment());
 
         } finally {
             session.close();
@@ -864,13 +850,13 @@ public class CprTest extends TestBase {
                 String.class
         );
         ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals("404", responseObject.get("status").asText());
+        Assertions.assertEquals("404", responseObject.get("status").asText());
 
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> existingSubscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(0, existingSubscriptions.size());
+            Assertions.assertEquals(0, existingSubscriptions.size());
         } finally {
             session.close();
         }
@@ -890,11 +876,11 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseObject = (ObjectNode) objectMapper.readTree(response.getBody());
-        Assert.assertEquals("0101011234", responseObject.get("cprNummer").asText());
+        Assertions.assertEquals("0101011234", responseObject.get("cprNummer").asText());
         JsonNode adressList = responseObject.get("addresses");
-        Assert.assertEquals(18, adressList.size());
+        Assertions.assertEquals(18, adressList.size());
     }
 
 
@@ -949,27 +935,27 @@ public class CprTest extends TestBase {
         deadStatusPresent.setBitemporality(afterDeathPresent);
         records.add(deadStatusPresent);
 
-        session.save(personEntity);
-        session.save(personEntity.getIdentification());
+        session.persist(personEntity);
+        session.persist(personEntity.getIdentification());
         for (CprBitemporalPersonRecord record : records) {
             record.setDafoUpdated(OffsetDateTime.now());
             record.setEntity(personEntity);
             personEntity.addBitemporalRecord(record, session, false);
-            session.save(record);
+            session.persist(record);
         }
         session.flush();
         transaction.commit();
 
         ObjectNode output = (ObjectNode) personOutputWrapperPrisme.wrapRecordResult(personEntity, null);
 
-        Assert.assertEquals(90, output.get("statuskode").asInt());
-        Assert.assertEquals("1920-01-01", output.get("tilflytningsdato").asText());
-        Assert.assertEquals(956, output.get("myndighedskode").asInt());
-        Assert.assertEquals(254, output.get("vejkode").asInt());
-        Assert.assertEquals("Kommuneqarfik Sermersooq", output.get("kommune").asText());
-        Assert.assertEquals(3900, output.get("postnummer").asInt());
-        Assert.assertEquals(600, output.get("stedkode").asInt());
-        Assert.assertEquals("GL", output.get("landekode").asText());
+        Assertions.assertEquals(90, output.get("statuskode").asInt());
+        Assertions.assertEquals("1920-01-01", output.get("tilflytningsdato").asText());
+        Assertions.assertEquals(956, output.get("myndighedskode").asInt());
+        Assertions.assertEquals(254, output.get("vejkode").asInt());
+        Assertions.assertEquals("Kommuneqarfik Sermersooq", output.get("kommune").asText());
+        Assertions.assertEquals(3900, output.get("postnummer").asInt());
+        Assertions.assertEquals(600, output.get("stedkode").asInt());
+        Assertions.assertEquals("GL", output.get("landekode").asText());
 
         session.close();
 
@@ -984,7 +970,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         String jsonExpected = "{\"cprNummer\":\"1234567890\"," +
                 "\"adressebeskyttelse\":false," +
@@ -1000,7 +986,7 @@ public class CprTest extends TestBase {
                 "\"stedkode\":600," +
                 "\"landekode\":\"GL\"}";
         try {
-            Assert.assertTrue(
+            Assertions.assertTrue(
                    new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(response.getBody())) == 0
             );
         } catch (JsonProcessingException e) {
@@ -1072,26 +1058,26 @@ public class CprTest extends TestBase {
         deadStatusPresent.setBitemporality(afterDeathPresent);
         records.add(deadStatusPresent);
 
-        session.save(personEntity);
-        session.save(personEntity.getIdentification());
+        session.persist(personEntity);
+        session.persist(personEntity.getIdentification());
         for (CprBitemporalPersonRecord record : records) {
             record.setDafoUpdated(OffsetDateTime.now());
             personEntity.addBitemporalRecord(record, session, false);
-            session.save(record);
+            session.persist(record);
         }
         session.flush();
         transaction.commit();
 
         ObjectNode output = (ObjectNode) personOutputWrapperPrisme.wrapRecordResult(personEntity, null);
 
-        Assert.assertEquals(90, output.get("statuskode").asInt());
-        Assert.assertEquals("1920-01-01", output.get("tilflytningsdato").asText());
-        Assert.assertEquals(956, output.get("myndighedskode").asInt());
-        Assert.assertEquals(254, output.get("vejkode").asInt());
-        Assert.assertEquals("Kommuneqarfik Sermersooq", output.get("kommune").asText());
-        Assert.assertEquals(3900, output.get("postnummer").asInt());
-        Assert.assertEquals(600, output.get("stedkode").asInt());
-        Assert.assertEquals("GL", output.get("landekode").asText());
+        Assertions.assertEquals(90, output.get("statuskode").asInt());
+        Assertions.assertEquals("1920-01-01", output.get("tilflytningsdato").asText());
+        Assertions.assertEquals(956, output.get("myndighedskode").asInt());
+        Assertions.assertEquals(254, output.get("vejkode").asInt());
+        Assertions.assertEquals("Kommuneqarfik Sermersooq", output.get("kommune").asText());
+        Assertions.assertEquals(3900, output.get("postnummer").asInt());
+        Assertions.assertEquals(600, output.get("stedkode").asInt());
+        Assertions.assertEquals("GL", output.get("landekode").asText());
 
         session.close();
 
@@ -1106,7 +1092,7 @@ public class CprTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         String jsonExpected = "{\"cprNummer\":\"1234567890\"," +
                 "\"adressebeskyttelse\":false," +
@@ -1122,7 +1108,7 @@ public class CprTest extends TestBase {
                 "\"stedkode\":600," +
                 "\"landekode\":\"GL\"}";
         try {
-            Assert.assertTrue(
+            Assertions.assertTrue(
                     new UnorderedJsonListComparator().compare(objectMapper.readTree(jsonExpected), objectMapper.readTree(response.getBody())) == 0
             );
         } catch (JsonProcessingException e) {

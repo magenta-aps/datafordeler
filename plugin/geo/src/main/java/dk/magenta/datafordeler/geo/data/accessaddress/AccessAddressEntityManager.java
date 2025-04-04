@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.geo.data.GeoEntityManager;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -12,10 +13,11 @@ import java.util.UUID;
 @Component("GeoAccessAddressEntityManager")
 public class AccessAddressEntityManager extends GeoEntityManager<AccessAddressEntity, AccessAddressRawData> {
 
-    @Autowired
-    private AccessAddressService accessAddressService;
+    private final AccessAddressService accessAddressService;
 
-    public AccessAddressEntityManager() {
+    @Autowired
+    public AccessAddressEntityManager(@Lazy AccessAddressService accessAddressService) {
+        this.accessAddressService = accessAddressService;
     }
 
     @Override

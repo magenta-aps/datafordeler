@@ -2,41 +2,36 @@ package dk.magenta.datafordeler.statistik;
 
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
 import dk.magenta.datafordeler.statistik.services.BirthDataService;
 import dk.magenta.datafordeler.statistik.services.StatisticsService;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.jpa.QueryHints;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReportProgressServiceTest extends TestBase {
 
-    @Autowired
+    @MockitoSpyBean
     private BirthDataService birthDataService;//Just one of the reportservices to use in test
 
     @Test
@@ -44,7 +39,7 @@ public class ReportProgressServiceTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<ReportAssignment> existingSubscriptions = QueryManager.getAllItems(session, ReportAssignment.class);
-            Assert.assertEquals(0, existingSubscriptions.size());
+            Assertions.assertEquals(0, existingSubscriptions.size());
         }
 
         String reportUuid;
@@ -56,7 +51,7 @@ public class ReportProgressServiceTest extends TestBase {
             reportUuid = report.getReportUuid();
             reportCollectionUuid = report.getCollectionUuid();
             report.setTemplateName("REPORT1");
-            Assert.assertTrue(repSync.createReportStatusObject(report));
+            Assertions.assertTrue(repSync.createReportStatusObject(report));
         }
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
@@ -75,20 +70,20 @@ public class ReportProgressServiceTest extends TestBase {
             TypedQuery<ReportAssignment> query = sessionSync.createQuery(criteria);
             query.setHint(QueryHints.HINT_CACHEABLE, true);
 
-            Assert.assertEquals(1, repSync.getReportList(reportCollectionUuid, ReportProgressStatus.started).size());
+            Assertions.assertEquals(1, repSync.getReportList(reportCollectionUuid, ReportProgressStatus.started).size());
         }
 
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<ReportAssignment> existingSubscriptions = QueryManager.getAllItems(session, ReportAssignment.class);
-            Assert.assertEquals(1, existingSubscriptions.size());
+            Assertions.assertEquals(1, existingSubscriptions.size());
         }
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName("REPORT2");
-            Assert.assertFalse(repSync.createReportStatusObject(report));
+            Assertions.assertFalse(repSync.createReportStatusObject(report));
         }
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
@@ -100,14 +95,14 @@ public class ReportProgressServiceTest extends TestBase {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName("REPORT2");
-            Assert.assertTrue(repSync.createReportStatusObject(report));
+            Assertions.assertTrue(repSync.createReportStatusObject(report));
         }
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName("REPORT1");
-            Assert.assertFalse(repSync.createReportStatusObject(report));
+            Assertions.assertFalse(repSync.createReportStatusObject(report));
         }
     }
 
@@ -121,16 +116,16 @@ public class ReportProgressServiceTest extends TestBase {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName(StatisticsService.ServiceName.BIRTH.getIdentifier());
-            Assert.assertTrue(repSync.createReportStatusObject(report));
+            Assertions.assertTrue(repSync.createReportStatusObject(report));
         }
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01&afterDate=1999-01-01", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(409, response.getStatusCodeValue());
+        Assertions.assertEquals(409, response.getStatusCodeValue());
     }
 
     @Test
@@ -142,16 +137,16 @@ public class ReportProgressServiceTest extends TestBase {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName(StatisticsService.ServiceName.BIRTH.getIdentifier());
-            Assert.assertTrue(repSync.createReportStatusObject(report));
+            Assertions.assertTrue(repSync.createReportStatusObject(report));
         }
 
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange("/statistik/birth_data/?registrationAfter=2000-01-01", HttpMethod.POST, new HttpEntity<>("", new HttpHeaders()), String.class);
-        Assert.assertEquals(409, response.getStatusCodeValue());
+        Assertions.assertEquals(409, response.getStatusCodeValue());
 
     }
 
@@ -163,16 +158,16 @@ public class ReportProgressServiceTest extends TestBase {
         TestUserDetails testUserDetails = new TestUserDetails();
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
-        testsUtils.applyAccess(testUserDetails);
+        this.applyAccess(testUserDetails);
 
         try (Session sessionSync = sessionManager.getSessionFactory().openSession()) {
             ReportSyncHandler repSync = new ReportSyncHandler(sessionSync);
             ReportAssignment report = new ReportAssignment();
             report.setTemplateName(StatisticsService.ServiceName.BIRTH.getIdentifier());
-            Assert.assertTrue(repSync.createReportStatusObject(report));
+            Assertions.assertTrue(repSync.createReportStatusObject(report));
 
             ResponseEntity<String> response = restTemplate.exchange("/statistik/collective_report/reportstatus/?collectionUuid=" + report.getCollectionUuid(), HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
-            Assert.assertEquals("started,\n", response.getBody());
+            Assertions.assertEquals("started,\n", response.getBody());
         }
     }
 

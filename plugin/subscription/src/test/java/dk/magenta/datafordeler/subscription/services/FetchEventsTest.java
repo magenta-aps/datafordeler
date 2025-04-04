@@ -1,20 +1,15 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.QueryManager;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
-import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -23,18 +18,12 @@ import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +35,6 @@ import java.util.*;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FetchEventsTest extends TestBase {
@@ -61,7 +49,7 @@ public class FetchEventsTest extends TestBase {
         schemaMap.put("deltager", ParticipantRecord.schema);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             ImportMetadata importMetadata = new ImportMetadata();
@@ -116,11 +104,11 @@ public class FetchEventsTest extends TestBase {
             cprList.addCprString("0101011248");
             cprList.addCprString("0101011249");
             cprList.addCprString("0101011250");
-            session.save(cprList);
+            session.persist(cprList);
 
             CvrList cvrList = new CvrList("L2");
             cvrList.addCvrString("25052943");
-            session.save(cvrList);
+            session.persist(cvrList);
 
             subscriptionT1.setCprList(cprList);
             subscriptionT2.setCprList(cprList);
@@ -148,7 +136,7 @@ public class FetchEventsTest extends TestBase {
             subscriber.addDataEventSubscription(subscriptionDE6);
             subscriber.addDataEventSubscription(subscriptionDE7);
             subscriber.addDataEventSubscription(subscriptionDE8);
-            session.save(subscriber);
+            session.persist(subscriber);
             tx.commit();
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,10 +171,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&pageSize=100",
@@ -194,10 +182,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE2&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
@@ -205,10 +193,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(4, results.size());
+        Assertions.assertEquals(4, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE3&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
@@ -216,10 +204,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE4&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
@@ -227,7 +215,7 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2016-10-26T12:00-06:00&pageSize=100",
@@ -235,10 +223,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020-09-01T12:00-06:00&pageSize=100",
@@ -246,10 +234,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(2, results.size());
+        Assertions.assertEquals(2, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020-09-05T12:00-06:00&pageSize=100",
@@ -257,10 +245,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020-09-10T12:00-06:00&pageSize=100",
@@ -268,10 +256,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=2020091&pageSize=100",
@@ -279,28 +267,28 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.GTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.LTE=2020091&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprBusinessEvent/fetchEvents?subscription=BE1&timestamp.LTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
     }
 
@@ -331,12 +319,11 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        System.out.println(results);
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
@@ -344,11 +331,11 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&pageSize=100",
@@ -356,10 +343,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2020-01-26T12:00-06:00&pageSize=100",
@@ -367,10 +354,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(2, results.size());
+        Assertions.assertEquals(2, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=2020-10-26T12:00-06:00&pageSize=100",
@@ -378,10 +365,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
 
         response = restTemplate.exchange(
@@ -390,28 +377,28 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.GTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.LTE=2020102&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE1&timestamp.LTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     /**
@@ -441,10 +428,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(9, results.size());
+        Assertions.assertEquals(9, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&pageSize=100",
@@ -452,10 +439,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(9, results.size());
+        Assertions.assertEquals(9, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=" + timestamp + "&pageSize=100",
@@ -463,10 +450,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 
@@ -485,10 +472,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(4, results.size());
+        Assertions.assertEquals(4, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=2020012&pageSize=100",
@@ -496,28 +483,28 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.GTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.LTE=2020012&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE2&timestamp.LTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
     }
 
@@ -558,11 +545,11 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
 
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE4&includeMeta=true&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
@@ -570,15 +557,15 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        Assert.assertEquals(3, results.size());
+        Assertions.assertEquals(3, results.size());
         List pnrs = Arrays.asList("0101011238", "0101011237", "0101011240");
-        Assert.assertTrue(pnrs.contains(results.get(0).get("pnr").asText()));
-        Assert.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
-        Assert.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
+        Assertions.assertTrue(pnrs.contains(results.get(0).get("pnr").asText()));
+        Assertions.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
+        Assertions.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
 
 
         response = restTemplate.exchange(
@@ -587,15 +574,15 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
 
-        Assert.assertEquals(5, results.size());
+        Assertions.assertEquals(5, results.size());
         pnrs = Arrays.asList("0101011239", "0101011238", "0101011237", "0101011236", "0101011235");
-        Assert.assertTrue(pnrs.contains(results.get(0).get("pnr").asText()));
-        Assert.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
-        Assert.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
+        Assertions.assertTrue(pnrs.contains(results.get(0).get("pnr").asText()));
+        Assertions.assertTrue(pnrs.contains(results.get(1).get("pnr").asText()));
+        Assertions.assertTrue(pnrs.contains(results.get(2).get("pnr").asText()));
 
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.GTE=2010112&pageSize=100",
@@ -603,28 +590,28 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.GTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.LTE=2010112&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE5&includeMeta=true&timestamp.LTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
     }
 
@@ -654,10 +641,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&pageSize=100",
@@ -665,10 +652,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=2010-01-20T12:00-06:00&pageSize=100",
@@ -676,10 +663,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=2020-10-26T12:00-06:00&pageSize=100",
@@ -687,10 +674,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(0, results.size());
+        Assertions.assertEquals(0, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE6&includeMeta=true&pageSize=100",
@@ -698,10 +685,10 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(1, results.size());
+        Assertions.assertEquals(1, results.size());
 
 
         response = restTemplate.exchange(
@@ -710,28 +697,28 @@ public class FetchEventsTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.GTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.LTE=2020102&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         response = restTemplate.exchange(
                 "/subscription/1/findCvrDataEvent/fetchEvents?subscription=DE3&timestamp.LTE=FOOBAR&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
 
     }
@@ -761,7 +748,7 @@ public class FetchEventsTest extends TestBase {
 
                     JsonNode root = objectMapper.readTree(data);
                     JsonNode itemList = root.get("hits").get("hits");
-                    Assert.assertTrue(itemList.isArray());
+                    Assertions.assertTrue(itemList.isArray());
                     for (JsonNode item : itemList) {
                         String type = item.get("_type").asText();
                         CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));
@@ -777,7 +764,7 @@ public class FetchEventsTest extends TestBase {
             } else {
                 JsonNode root = objectMapper.readTree(input);
                 JsonNode itemList = root.get("hits").get("hits");
-                Assert.assertTrue(itemList.isArray());
+                Assertions.assertTrue(itemList.isArray());
                 for (JsonNode item : itemList) {
                     String type = item.get("_type").asText();
                     CompanyEntityManager entityManager = (CompanyEntityManager) plugin.getRegisterManager().getEntityManager(schemaMap.get(type));

@@ -11,7 +11,6 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.testutil.Order;
-import dk.magenta.datafordeler.core.testutil.OrderedRunner;
 import dk.magenta.datafordeler.core.testutil.TestUserDetails;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.user.UserProfile;
@@ -23,16 +22,15 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.IOException;
 import java.net.URI;
@@ -48,18 +46,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.mockito.Mockito.when;
-
-@RunWith(OrderedRunner.class)
 @ContextConfiguration(classes = Application.class)
-@TestPropertySource(
-        properties = {
-                "dafo.testing=true",
-        }
-)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FapiTest {
 
-    @SpyBean
+    @MockitoSpyBean
     private DafoUserManager dafoUserManager;
 
     @Autowired
@@ -76,15 +67,14 @@ public class FapiTest {
 
     private static String veryEarly = "1800-01-01T00:00:00Z";
     private static String veryLate = "2200-12-31T23:59:59Z";
-
-    private static ZoneId systemZone = ZoneOffset.systemDefault();
+    private static ZoneId systemZone = ZoneOffset.ofHours(1);
 
     @Test
     @Order(order = 1)
     public void findDemoPluginTest() {
         String testSchema = DemoEntityRecord.schema;
         Plugin foundPlugin = this.pluginManager.getPluginForSchema(testSchema);
-        Assert.assertEquals(DemoPlugin.class, foundPlugin.getClass());
+        Assertions.assertEquals(DemoPlugin.class, foundPlugin.getClass());
     }
 
     @Test
@@ -93,7 +83,7 @@ public class FapiTest {
         this.setupUser();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/rest/search", HttpMethod.GET, httpEntity, String.class);
-        Assert.assertEquals(400, resp.getStatusCode().value());
+        Assertions.assertEquals(400, resp.getStatusCode().value());
     }
 
 
@@ -104,7 +94,7 @@ public class FapiTest {
         this.setupUser();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/rest/invalid-uuid", HttpMethod.GET, httpEntity, String.class);
-        Assert.assertEquals(400, resp.getStatusCode().value());
+        Assertions.assertEquals(400, resp.getStatusCode().value());
     }
 
     @Test
@@ -113,7 +103,7 @@ public class FapiTest {
         this.setupUser();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/rest/search?postnr=8000&registrationFromBefore=2000-02-31", HttpMethod.GET, httpEntity, String.class);
-        Assert.assertEquals(400, resp.getStatusCode().value());
+        Assertions.assertEquals(400, resp.getStatusCode().value());
     }
 
     @Test
@@ -132,7 +122,7 @@ public class FapiTest {
                     "/demo/postnummer/1/rest/search?postnr=*",
                     HttpMethod.GET, httpEntity, String.class
             );
-            Assert.assertEquals(200, resp.getStatusCode().value());
+            Assertions.assertEquals(200, resp.getStatusCode().value());
             JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
 
@@ -144,32 +134,32 @@ public class FapiTest {
                     "/demo/postnummer/1/rest/" + uuid.toString()+"?registreringFra="+veryEarly,
                     HttpMethod.GET, httpEntity, String.class
             );
-            Assert.assertEquals(200, resp.getStatusCode().value());
+            Assertions.assertEquals(200, resp.getStatusCode().value());
             JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
 
 
-            Assert.assertNotNull(jsonBody);
+            Assertions.assertNotNull(jsonBody);
 
             JsonNode firstResult = jsonBody.get("results").get(0);
             System.out.println(firstResult);
-            Assert.assertEquals(uuid.toString(), firstResult.findValue("uuid").asText());
+            Assertions.assertEquals(uuid.toString(), firstResult.findValue("uuid").asText());
             JsonNode registrations = jsonBody.get("results").get(0).get("registreringer");
 
             System.out.println("registrations: " + registrations);
 
-            Assert.assertTrue(registrations.isArray());
-            Assert.assertEquals(2, registrations.size());
+            Assertions.assertTrue(registrations.isArray());
+            Assertions.assertEquals(2, registrations.size());
 
             JsonNode registration1 = registrations.get(0);
-            Assert.assertNotNull(registration1);
+            Assertions.assertNotNull(registration1);
 
-            Assert.assertTrue(OffsetDateTime.parse("2017-02-21T16:02:50+01:00").isEqual(OffsetDateTime.parse(registration1.get("registreringFra").asText())));
+            Assertions.assertTrue(OffsetDateTime.parse("2017-02-21T16:02:50+01:00").isEqual(OffsetDateTime.parse(registration1.get("registreringFra").asText())));
 
             JsonNode registration2 = registrations.get(1);
-            Assert.assertNotNull(registration2);
-            Assert.assertTrue(OffsetDateTime.parse("2017-05-01T16:06:22+02:00").isEqual(OffsetDateTime.parse(registration2.get("registreringFra").asText())));
-            Assert.assertTrue(registration2.get("registreringTil").isNull());
+            Assertions.assertNotNull(registration2);
+            Assertions.assertTrue(OffsetDateTime.parse("2017-05-01T16:06:22+02:00").isEqual(OffsetDateTime.parse(registration2.get("registreringFra").asText())));
+            Assertions.assertTrue(registration2.get("registreringTil").isNull());
 
             // Restrict on registrationFromBefore
             this.testRegistrationFilter("/demo/postnummer/1/rest/" + uuid, new int[][]{{2}}, "2017-06-01T00:00:00+00:00", veryLate, veryEarly, veryLate);
@@ -209,8 +199,8 @@ public class FapiTest {
                                     + "effectFromBefore=ALWAYS&"
                                     + "effectToAfter=ALWAYS&",
                             HttpMethod.GET, httpEntity, String.class);
-            Assert.assertEquals(200, resp.getStatusCode().value());
-            Assert.assertEquals(new MediaType("text", "csv"),
+            Assertions.assertEquals(200, resp.getStatusCode().value());
+            Assertions.assertEquals(new MediaType("text", "csv"),
                     resp.getHeaders().getContentType());
             String expected = unifyNewlines(
                     updateTimestamps(
@@ -221,7 +211,7 @@ public class FapiTest {
                     resp.getBody().replaceAll(uuid.toString(), "UUID")
             );
             actual = sortCsvColumns(actual, getCsvHeaders(expected, ","), ",");
-            Assert.assertEquals(expected, actual);
+            Assertions.assertEquals(expected, actual);
 
         } finally {
             this.removeTestObject(uuid);
@@ -246,7 +236,7 @@ public class FapiTest {
                     + "effectToAfter=ALWAYS&",
                     HttpMethod.GET, httpEntity, String.class
             );
-            Assert.assertEquals(200, resp.getStatusCode().value());
+            Assertions.assertEquals(200, resp.getStatusCode().value());
             String expected = unifyNewlines(
                     updateTimestamps(
                             getResourceAsString("/rest-get-1.csv")
@@ -256,7 +246,7 @@ public class FapiTest {
                     resp.getBody().replaceAll(uuid.toString(), "UUID")
             );
             actual = sortCsvColumns(actual, getCsvHeaders(expected, "\t"), "\t");
-            Assert.assertEquals(expected, actual);
+            Assertions.assertEquals(expected, actual);
 
         } finally {
             this.removeTestObject(uuid);
@@ -331,7 +321,7 @@ public class FapiTest {
             MediaType mediaType =
                     new MediaType("text", "csv", Charsets.UTF_8);
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-1.csv")
@@ -349,7 +339,7 @@ public class FapiTest {
                     )
             );
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-2.csv")
@@ -366,7 +356,7 @@ public class FapiTest {
                                     .replaceAll(uuid2.toString(), "UUID#2"))
             );
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-3.csv")
@@ -383,7 +373,7 @@ public class FapiTest {
                                     .replaceAll(uuid2.toString(), "UUID#2"))
             );
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-4.csv")
@@ -420,7 +410,7 @@ public class FapiTest {
             MediaType mediaType =
                     new MediaType("text", "tsv");
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-1.csv")
@@ -440,7 +430,7 @@ public class FapiTest {
                     )
             );
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-2.csv")
@@ -459,7 +449,7 @@ public class FapiTest {
                     )
             );
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-3.csv")
@@ -477,7 +467,7 @@ public class FapiTest {
                     )
             );
 
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     unifyNewlines(
                             updateTimestamps(
                                     getResourceAsString("/rest-search-4.csv")
@@ -513,11 +503,11 @@ public class FapiTest {
             headers.set("Accept", "application/xml");
             HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
             ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/rest/" + uuid.toString(), HttpMethod.GET, httpEntity, String.class);
-            Assert.assertEquals(200, resp.getStatusCode().value());
+            Assertions.assertEquals(200, resp.getStatusCode().value());
 
             String xmlBody = resp.getBody();
-            Assert.assertTrue(xmlBody.contains(uuid.toString()));
-            Assert.assertTrue(xmlBody.contains("fapitest"));
+            Assertions.assertTrue(xmlBody.contains(uuid.toString()));
+            Assertions.assertTrue(xmlBody.contains("fapitest"));
         } finally {
             this.removeTestObject(uuid);
         }
@@ -531,13 +521,13 @@ public class FapiTest {
         JsonNode jsonBody = objectMapper.readTree(resp.getBody());
 
         ArrayNode list = (ArrayNode) jsonBody.get("results");
-        Assert.assertEquals(expected.length, list.size());
+        Assertions.assertEquals(expected.length, list.size());
         int i = 0;
         for (JsonNode entity : list) {
             JsonNode registrations = entity.get("registreringer");
-            Assert.assertEquals(expected[i].length, registrations.size());
+            Assertions.assertEquals(expected[i].length, registrations.size());
             for (int j = 0; j < expected[i].length; j++) {
-                Assert.assertEquals(expected[i][j], registrations.get(j).get("virkninger").size());
+                Assertions.assertEquals(expected[i][j], registrations.get(j).get("virkninger").size());
             }
             i++;
         }
@@ -594,7 +584,7 @@ public class FapiTest {
         String sep = urlBase.contains("?") ? "&" : "?";
 
         ResponseEntity<String> resp = this.restTemplate.exchange(new URI(urlBase + sep + parameters.asUrlParams()), HttpMethod.GET, httpEntity, String.class);
-        Assert.assertEquals(200, resp.getStatusCode().value());
+        Assertions.assertEquals(200, resp.getStatusCode().value());
         return resp;
     }
 
@@ -643,7 +633,7 @@ public class FapiTest {
             Transaction transaction = session.beginTransaction();
             DemoEntityRecord entity = QueryManager.getEntity(session, uuid, DemoEntityRecord.class);
             if (entity != null) {
-                session.delete(entity);
+                session.remove(entity);
             }
             transaction.commit();
         } finally {
@@ -763,7 +753,7 @@ public class FapiTest {
         BaseQuery.ensureNumeric("test", "9223372036854775807", true);
 
         // These should throw exception
-        Assert.assertThrows(InvalidClientInputException.class, () -> {
+        Assertions.assertThrows(InvalidClientInputException.class, () -> {
             BaseQuery.ensureNumeric("test", "2147483648", false);
             BaseQuery.ensureNumeric("test", "4003279411", false);
             BaseQuery.ensureNumeric("test", "4003279411", true);

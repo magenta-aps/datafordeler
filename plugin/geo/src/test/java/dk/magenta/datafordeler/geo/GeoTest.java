@@ -1,8 +1,10 @@
 package dk.magenta.datafordeler.geo;
 
+import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.WireCache;
 import dk.magenta.datafordeler.geo.data.accessaddress.AccessAddressEntityManager;
 import dk.magenta.datafordeler.geo.data.building.BuildingEntityManager;
 import dk.magenta.datafordeler.geo.data.locality.LocalityEntityManager;
@@ -64,6 +66,7 @@ public abstract class GeoTest {
     }
 
     public void loadCprAddress() throws Exception {
+        System.out.println("LOADCPRADDRESS");
         InputStream testData = GeoTest.class.getResourceAsStream("/roaddata.txt");
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -103,8 +106,17 @@ public abstract class GeoTest {
             e.printStackTrace();
         } finally {
             importMetadata.setTransactionInProgress(false);
-            session.close();
             data.close();
+        }
+        transaction = session.beginTransaction();
+        try {
+            entityManager.wireAll(session);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
     }
 

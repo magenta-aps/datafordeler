@@ -2,9 +2,9 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +36,7 @@ public class CvrList extends DatabaseEntry {
 
     public static final String DB_FIELD_SUBSCRIBER = "subscriber_id";
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = DB_FIELD_SUBSCRIBER)
     private Subscriber subscriber;
 
@@ -90,7 +90,7 @@ public class CvrList extends DatabaseEntry {
         SubscribedCvrNumber number = this.cvrs.stream().filter(f -> cvr.equals(f.getCvrNumber())).findFirst().orElse(null);
         if (number != null) {
             this.cvrs.remove(number);
-            session.delete(number);
+            session.remove(number);
         }
     }
 }

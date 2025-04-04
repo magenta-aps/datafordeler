@@ -19,6 +19,8 @@ import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.ParticipantRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -30,8 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
@@ -82,7 +82,7 @@ public class CvrCompanyOwnerHistory {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{cvrNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{cvrNummer}", "/{cvrNummer}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cvrNummer") String cvrNummer, HttpServletRequest request)
             throws DataFordelerException, JsonProcessingException {
 
@@ -179,6 +179,7 @@ public class CvrCompanyOwnerHistory {
                                 }
                             }
                         } catch (Exception e) {
+                            e.printStackTrace();
                             throw new InvalidReferenceException("Information for participant could not be found " + participantNumber.toString());
                         }
                     } else if ("VIRKSOMHED".equals(participant.getRelationParticipantRecord().getUnitType())) {

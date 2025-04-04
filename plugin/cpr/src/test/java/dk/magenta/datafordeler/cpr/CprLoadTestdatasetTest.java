@@ -9,14 +9,10 @@ import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,26 +24,24 @@ import java.util.List;
 /**
  * Test that it is possible to load and clear data which is dedicated for demopurpose
  */
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class cprLoadTestdatasetTest extends TestBase {
+public class CprLoadTestdatasetTest extends TestBase {
 
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
-        InputStream testData1 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
+        InputStream testData1 = CprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
         LabeledSequenceInputStream labeledInputStream = new LabeledSequenceInputStream("GLBASETEST", new ByteArrayInputStream("GLBASETEST".getBytes()), "GLBASETEST", testData1);
         ImportInputStream inputstream = new ImportInputStream(labeledInputStream);
         personEntityManager.parseData(inputstream, importMetadata);
         testData1.close();
 
-        InputStream testData2 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST2");
+        InputStream testData2 = CprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST2");
         LabeledSequenceInputStream labeledInputStream2 = new LabeledSequenceInputStream("GLBASETEST2", new ByteArrayInputStream("GLBASETEST2".getBytes()), "GLBASETEST2", testData2);
         ImportInputStream inputstream2 = new ImportInputStream(labeledInputStream2);
         personEntityManager.parseData(inputstream2, importMetadata);
         testData2.close();
 
-        InputStream testData3 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST_MEDCOM");
+        InputStream testData3 = CprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST_MEDCOM");
         LabeledSequenceInputStream labeledInputStream3 = new LabeledSequenceInputStream("GLBASETEST_MEDCOM", new ByteArrayInputStream("GLBASETEST_MEDCOM".getBytes()), "GLBASETEST_MEDCOM", testData3);
         ImportInputStream inputstream3 = new ImportInputStream(labeledInputStream3);
         personEntityManager.parseData(inputstream3, importMetadata);
@@ -67,7 +61,7 @@ public class cprLoadTestdatasetTest extends TestBase {
             query.applyFilters(session);
             query.setPageSize(100);
             List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assert.assertEquals(0, persons.size());
+            Assertions.assertEquals(0, persons.size());
         }
     }
 

@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -47,7 +47,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     @OneToOne(targetEntity = OfficeRelationUnitRecord.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = DB_FIELD_UNIT + DatabaseEntry.REF)
-        @JsonProperty(value = IO_FIELD_UNIT)
+    @JsonProperty(value = IO_FIELD_UNIT)
     private OfficeRelationUnitRecord officeRelationUnitRecord;
 
     public OfficeRelationUnitRecord getOfficeRelationUnitRecord() {
@@ -136,10 +136,10 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
         if (this.officeRelationUnitRecord != null) {
             this.officeRelationUnitRecord.traverse(setCallback, itemCallback);
         }
-        super.traverse(setCallback, itemCallback);
     }
 }

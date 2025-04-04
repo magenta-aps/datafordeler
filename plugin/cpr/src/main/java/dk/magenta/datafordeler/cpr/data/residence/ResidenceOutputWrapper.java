@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.OutputWrapper;
 import dk.magenta.datafordeler.core.util.ListHashMap;
-import dk.magenta.datafordeler.core.util.OffsetDateTimeAdapter;
 import dk.magenta.datafordeler.cpr.data.residence.data.ResidenceBaseData;
 import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 
@@ -149,12 +148,12 @@ public class ResidenceOutputWrapper extends OutputWrapper<ResidenceEntity> {
         if (bitemporality != null) {
             output.put(
                     ResidenceEffect.IO_FIELD_EFFECT_FROM,
-                    OffsetDateTimeAdapter.toString(bitemporality.effectFrom)
+                    bitemporality.effectFrom.format(DateTimeFormatter.ISO_DATE_TIME)
             );
             if (includeVirkningTil) {
                 output.put(
                         ResidenceEffect.IO_FIELD_EFFECT_TO,
-                        OffsetDateTimeAdapter.toString(bitemporality.effectTo)
+                        bitemporality.effectTo.format(DateTimeFormatter.ISO_DATE_TIME)
                 );
             }
         }

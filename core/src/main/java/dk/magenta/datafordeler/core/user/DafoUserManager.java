@@ -5,18 +5,18 @@ import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.core.util.MockInternalServletRequest;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.opensaml.saml2.core.Assertion;
+import org.opensaml.saml.saml2.core.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * Manages DAFO users that are created from incoming SAML tokens.
@@ -35,8 +35,8 @@ public class DafoUserManager {
     @Value("${pitu.sdn.whitelist:}")
     private String[] pituSDNWhitelistCsep;
 
-    @Value("${dafo.userdatabase.securitydisabled:false}")
-    private boolean securityDisabled;
+//    @Value("${dafo.userdatabase.securitydisabled:false}")
+    private boolean securityDisabled = false;
 
     private final HashSet<String> pituSDNWhitelist = new HashSet<>();
 
@@ -62,6 +62,7 @@ public class DafoUserManager {
         Assertion samlAssertion = tokenParser.parseAssertion(tokendata);
         tokenVerifier.verifyAssertion(samlAssertion);
         return samlAssertion;
+        //OpenSaml4AuthenticationProvider authenticationProvider = new OpenSaml4AuthenticationProvider();
     }
 
 
@@ -182,6 +183,7 @@ public class DafoUserManager {
 
     public SamlDafoUserDetails getSamlUserDetailsFromToken(String tokenData)
             throws InvalidTokenException {
+
         Assertion samlAssertion = parseAndVerifyToken(tokenData);
         SamlDafoUserDetails samlDafoUserDetails = new SamlDafoUserDetails(samlAssertion);
         this.addUserProfilesToSamlUser(samlDafoUserDetails);

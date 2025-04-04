@@ -9,25 +9,23 @@ import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.PluginSourceData;
 import dk.magenta.datafordeler.core.plugin.*;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
-import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanySubscription;
 import dk.magenta.datafordeler.cvr.synchronization.CvrSourceData;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -53,7 +51,6 @@ public class CvrRegisterManager extends RegisterManager {
     @Autowired
     private CvrConfigurationManager configurationManager;
 
-    @Autowired
     private CvrPlugin plugin;
 
     @Autowired
@@ -71,7 +68,12 @@ public class CvrRegisterManager extends RegisterManager {
     private final Logger log = LogManager.getLogger(CvrRegisterManager.class.getCanonicalName());
 
     public CvrRegisterManager() {
+    }
 
+    public void setPlugin(CvrPlugin plugin) throws IOException {
+        this.plugin = plugin;
+        CvrConfiguration configuration = this.configurationManager.getConfiguration();
+        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     public void setCvrDemoCompanyFile(String cvrDemoCompanyFile) {
@@ -97,7 +99,6 @@ public class CvrRegisterManager extends RegisterManager {
         this.cvrDemoCompanyFile = configuration.getCvrDemoCompanyFile();
         this.cvrDemoUnitFile = configuration.getCvrDemoUnitFile();
         this.cvrDemoParticipantFile = configuration.getCvrDemoParticipantFile();
-        this.localCopyFolder = this.ensureLocalCopyFolder(configuration.getLocalCopyFolder());
     }
 
     @Override

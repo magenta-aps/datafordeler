@@ -3,13 +3,13 @@ package dk.magenta.datafordeler.gladdrreg.data.road;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.Entity;
 
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 /**
  * Created by lars on 16-05-17.
  */
-@javax.persistence.Entity(name = "GladdrregRoadEntity")
+@Entity(name = "GladdrregRoadEntity")
 @Table(name = "gladdrreg_road_entity", indexes = {
         @Index(name = "gladdrreg_road_identification", columnList = "identification_id")
 })

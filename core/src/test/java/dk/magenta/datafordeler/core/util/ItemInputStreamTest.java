@@ -2,19 +2,18 @@ package dk.magenta.datafordeler.core.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 public class ItemInputStreamTest {
 
@@ -28,13 +27,13 @@ public class ItemInputStreamTest {
         ItemInputStream<TestObject> stream = ItemInputStream.parseJsonStream(jsonStream, TestObject.class, "items", this.objectMapper);
         TestObject item;
         item = stream.next();
-        Assert.assertEquals(42, item.foo);
-        Assert.assertEquals("foobar", item.bar);
+        Assertions.assertEquals(42, item.foo);
+        Assertions.assertEquals("foobar", item.bar);
         item = stream.next();
-        Assert.assertEquals(24, item.foo);
-        Assert.assertEquals("barfoo", item.bar);
+        Assertions.assertEquals(24, item.foo);
+        Assertions.assertEquals("barfoo", item.bar);
         item = stream.next();
-        Assert.assertNull(item);
+        Assertions.assertNull(item);
     }
 
     @Test
@@ -46,13 +45,13 @@ public class ItemInputStreamTest {
         ItemInputStream<TestObject> stream = ItemInputStream.parseJsonStream(jsonStream, classMap, "items", "type", this.objectMapper);
         TestObject item;
         item = stream.next();
-        Assert.assertEquals(42, item.foo);
-        Assert.assertEquals("foobar", item.bar);
+        Assertions.assertEquals(42, item.foo);
+        Assertions.assertEquals("foobar", item.bar);
         item = stream.next();
-        Assert.assertEquals(24, item.foo);
-        Assert.assertEquals("barfoo", item.bar);
+        Assertions.assertEquals(24, item.foo);
+        Assertions.assertEquals("barfoo", item.bar);
         item = stream.next();
-        Assert.assertNull(item);
+        Assertions.assertNull(item);
     }
 
     @Test
@@ -64,12 +63,12 @@ public class ItemInputStreamTest {
         ItemInputStream<TestObject> stream = ItemInputStream.parseJsonStream(jsonStream, classMap, "items", "type", this.objectMapper);
         TestObject item;
         item = stream.next();
-        Assert.assertEquals(42, item.foo);
-        Assert.assertEquals("foobar", item.bar);
+        Assertions.assertEquals(42, item.foo);
+        Assertions.assertEquals("foobar", item.bar);
         item = stream.next();
-        Assert.assertEquals(24, item.foo);
-        Assert.assertEquals("barfoo", item.bar);
+        Assertions.assertEquals(24, item.foo);
+        Assertions.assertEquals("barfoo", item.bar);
         item = stream.next();
-        Assert.assertNull(item);
+        Assertions.assertNull(item);
     }
 }

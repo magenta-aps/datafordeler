@@ -32,18 +32,15 @@ import dk.magenta.datafordeler.ger.GerPlugin;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntity;
 import dk.magenta.datafordeler.ger.data.unit.UnitEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.units.qual.C;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.junit.After;
-import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -87,7 +84,7 @@ public abstract class TestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    @SpyBean
+    @MockitoSpyBean
     protected DafoUserManager dafoUserManager;
 
     @Autowired
@@ -108,7 +105,7 @@ public abstract class TestBase {
     @Autowired
     protected GerPlugin gerPlugin;
 
-    @SpyBean
+    @MockitoSpyBean
     protected DirectLookup directLookup;
 
     @Autowired
@@ -125,7 +122,7 @@ public abstract class TestBase {
     }
 
 
-    @After
+    @AfterEach
     public void cleanup() {
         SessionFactory sessionFactory = sessionManager.getSessionFactory();
         try (Session session = sessionFactory.openSession()) {
@@ -141,7 +138,7 @@ public abstract class TestBase {
             for (Class cls : classes) {
                 List<DatabaseEntry> eList = QueryManager.getAllItems(session, cls);
                 for (DatabaseEntry e : eList) {
-                    session.delete(e);
+                    session.remove(e);  // Cascading delete
                 }
             }
             transaction.commit();
@@ -191,7 +188,7 @@ public abstract class TestBase {
             JsonNode root = objectMapper.readTree(testData);
             testData.close();
             JsonNode itemList = root.get("hits").get("hits");
-            Assert.assertTrue(itemList.isArray());
+            Assertions.assertTrue(itemList.isArray());
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
 

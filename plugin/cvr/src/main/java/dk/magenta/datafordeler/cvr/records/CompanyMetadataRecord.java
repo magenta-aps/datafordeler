@@ -7,12 +7,12 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Consumer;
@@ -544,6 +544,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         this.getNewestName().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);
         this.getNewestForm().traverse(setCallback, itemCallback);
@@ -555,7 +556,6 @@ public class CompanyMetadataRecord extends MetadataRecord {
         this.getNewestSecondaryIndustry1().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry2().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry3().traverse(setCallback, itemCallback);
-        super.traverse(setCallback, itemCallback);
     }
 
 }

@@ -14,6 +14,10 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCvrNumber;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.PersistenceException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -26,10 +30,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.PersistenceException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.Iterator;
@@ -57,11 +57,6 @@ public class ManageCvrList {
     private final Logger log = LogManager.getLogger(ManageCvrList.class.getCanonicalName());
 
 
-    @PostConstruct
-    public void init() {
-    }
-
-
     /**
      * Create a cvrList
      *
@@ -73,7 +68,7 @@ public class ManageCvrList {
      * @throws InvalidTokenException
      * @throws InvalidCertificateException
      */
-    @RequestMapping(method = RequestMethod.POST, path = "/subscriber/cvrList/", headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cvrList", "/subscriber/cvrList/"}, headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -86,7 +81,7 @@ public class ManageCvrList {
             } else {
                 Subscriber subscriber = subscribers.get(0);
                 CvrList cvrCreateList = new CvrList(cvrList, subscriber);
-                session.save(cvrCreateList);
+                session.persist(cvrCreateList);
                 subscriber.addCvrList(cvrCreateList);
 
                 transaction.commit();
@@ -112,7 +107,7 @@ public class ManageCvrList {
      *
      * @return
      */
-    @GetMapping("/subscriber/cvrList")
+    @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cvrList", "/subscriber/cvrList/"})
     public ResponseEntity<List<CvrList>> cvrListfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -130,7 +125,7 @@ public class ManageCvrList {
     }
 
 
-    @DeleteMapping("/subscriber/cvrList/cvr/{listId}")
+    @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber/cvrList/cvr/{listId}", "/subscriber/cvrList/cvr/{listId}/"})
     public ResponseEntity cvrListCvrDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -151,7 +146,7 @@ public class ManageCvrList {
             }
             List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
             for (SubscribedCvrNumber subscribed : subscribedList) {
-                session.delete(subscribed);
+                session.remove(subscribed);
                 foundList.getCvr().remove(subscribed);
             }
             transaction.commit();
@@ -166,7 +161,7 @@ public class ManageCvrList {
         }
     }
 
-    @PostMapping("/subscriber/cvrList/cvr/{listId}")
+    @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cvrList/cvr/{listId}", "/subscriber/cvrList/cvr/{listId}/"})
     public ResponseEntity<String> cvrListCvrPut(HttpServletRequest request, @PathVariable("listId") String listId) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -213,7 +208,7 @@ public class ManageCvrList {
      *
      * @return
      */
-    @GetMapping("/subscriber/cvrList/cvr")
+    @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cvrList/cvr", "/subscriber/cvrList/cvr/"})
     public ResponseEntity<Envelope> cvrListCvrfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");

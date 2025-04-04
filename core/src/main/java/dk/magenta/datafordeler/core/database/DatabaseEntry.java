@@ -2,8 +2,8 @@ package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,7 +11,6 @@ import java.util.List;
  * Abstract superclass for all object classes, making sure they have an ID
  */
 @MappedSuperclass
-@Embeddable
 public abstract class DatabaseEntry {
 
     @Id

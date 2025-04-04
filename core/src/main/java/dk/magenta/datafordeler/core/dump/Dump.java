@@ -103,12 +103,12 @@ public class Dump extends Worker {
             for (DumpInfo older : QueryManager.getItems(
                     session, DumpInfo.class, filter)) {
                 if (older.getTimestamp().isBefore(timestamp)) {
-                    session.delete(older);
+                    session.remove(older);
                 }
             }
 
             // then, save the dump
-            session.save(dump);
+            session.persist(dump);
 
             transaction.commit();
 

@@ -11,9 +11,9 @@ import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
+import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
 import java.util.function.Consumer;
@@ -317,10 +317,10 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_MUNICIPALITY = "kommune";
 
     @XmlElement(name = IO_FIELD_MUNICIPALITY)
-    @OneToOne(cascade = CascadeType.ALL)
-        private AddressMunicipalityRecord municipality;
-
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
+    @OneToOne(cascade = CascadeType.ALL)
+    private AddressMunicipalityRecord municipality;
+
     public AddressMunicipalityRecord getMunicipality() {
         return this.municipality;
     }
@@ -362,9 +362,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_POSTCODE = "postnummer";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_POSTCODE)
     private int postnummer;
 
+    @JsonProperty(value = IO_FIELD_POSTCODE)
     public int getPostnummer() {
         if (this.post != null) {
             return this.post.getPostCode();
@@ -372,6 +372,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
         return this.postnummer;
     }
 
+    @JsonProperty(value = IO_FIELD_POSTCODE)
     @XmlElement(name = IO_FIELD_POSTCODE)
     public void setPostnummer(int code) {
         this.postnummer = code;
@@ -383,9 +384,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     public static final String IO_FIELD_POSTDISTRICT = "postdistrikt";
 
     @Transient
-    @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     private String postdistrikt;
 
+    @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     public String getPostdistrikt() {
         if (this.post != null) {
             return this.post.getPostDistrict();
@@ -394,6 +395,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
     }
 
     @XmlElement(name = IO_FIELD_POSTDISTRICT)
+    @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     public void setPostdistrikt(String district) {
         this.postdistrikt = district;
     }
@@ -617,9 +619,9 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(setCallback, itemCallback);
         if (this.municipality != null) {
             this.municipality.traverse(setCallback, itemCallback);
         }
-        super.traverse(setCallback, itemCallback);
     }
 }

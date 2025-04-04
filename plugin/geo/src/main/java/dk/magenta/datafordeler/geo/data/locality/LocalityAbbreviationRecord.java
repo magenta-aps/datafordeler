@@ -3,10 +3,9 @@ package dk.magenta.datafordeler.geo.data.locality;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.common.NameRecord;
-
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = GeoPlugin.DEBUG_TABLE_PREFIX + LocalityAbbreviationRecord.TABLE_NAME, indexes = {

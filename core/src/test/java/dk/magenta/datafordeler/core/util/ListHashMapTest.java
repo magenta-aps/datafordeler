@@ -1,15 +1,13 @@
 package dk.magenta.datafordeler.core.util;
 
 import dk.magenta.datafordeler.core.Application;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 public class ListHashMapTest {
     @Test
@@ -19,7 +17,7 @@ public class ListHashMapTest {
         String value = "bar";
         map.add(key, value);
         List<String> list = map.get(key);
-        Assert.assertTrue(list.contains(value));
+        Assertions.assertTrue(list.contains(value));
     }
 
     @Test
@@ -30,10 +28,10 @@ public class ListHashMapTest {
         String value2 = "baz";
         map.add(key, value1);
         map.add(key, value2);
-        Assert.assertEquals(value1, map.get(key, 0));
-        Assert.assertEquals(value2, map.get(key, 1));
-        Assert.assertNull(map.get(key, 2));
-        Assert.assertNull(map.get("nothing_here", 0));
-        Assert.assertNull(map.get("nothing_here", 1));
+        Assertions.assertEquals(value1, map.get(key, 0));
+        Assertions.assertEquals(value2, map.get(key, 1));
+        Assertions.assertNull(map.get(key, 2));
+        Assertions.assertNull(map.get("nothing_here", 0));
+        Assertions.assertNull(map.get("nothing_here", 1));
     }
 }

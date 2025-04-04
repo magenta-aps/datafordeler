@@ -3,7 +3,6 @@ package dk.magenta.datafordeler.cpr.data;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.*;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -382,7 +381,7 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
             registration.setSequenceNumber(j++);
             registration.setLastImportTime(importMetadata.getImportTime());
             try {
-                session.save(registration);
+                session.persist(registration);
             } catch (javax.persistence.EntityNotFoundException e) {
                 e.printStackTrace();
             }

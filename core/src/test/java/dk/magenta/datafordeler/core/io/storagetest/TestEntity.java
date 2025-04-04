@@ -1,13 +1,13 @@
 package dk.magenta.datafordeler.core.io.storagetest;
 
 import dk.magenta.datafordeler.core.database.Entity;
+import jakarta.persistence.Table;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import javax.persistence.Table;
 import java.util.UUID;
 
-@javax.persistence.Entity
+@jakarta.persistence.Entity
 @Table(name="test_entity")
 public class TestEntity extends Entity<TestEntity, TestRegistration> {
 

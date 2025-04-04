@@ -1,35 +1,21 @@
 package dk.magenta.datafordeler.prisme;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Application;
 import dk.magenta.datafordeler.core.database.Entity;
-import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import dk.magenta.datafordeler.cpr.CprAreaRestrictionDefinition;
-import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
-import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import org.hamcrest.CoreMatchers;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,15 +27,13 @@ import java.util.StringJoiner;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SameAddressTest extends TestBase {
 
     HashSet<Entity> createdEntities = new HashSet<>();
 
-    @Before
+    @BeforeEach
     public void load() throws IOException, DataFordelerException {
         this.loadAllGeoAdress(sessionManager);
     }
@@ -128,16 +112,17 @@ public class SameAddressTest extends TestBase {
                     httpEntity,
                     String.class
             );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+            Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+            Assertions.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
             JSONAssert.assertEquals("{\"cprNumber\":\"0101001234\",\"municipalitycode\":956,\"roadcode\":254,\"housenumber\":\"18\",\"floor\":\"1\",\"door\":\"tv\",\"buildingNo\":\"3197\",\"localityCode\":600,\"roadName\":\"Qarsaalik\",\"sameAddressCprs\":[\"0101001242\",\"0101001243\",\"0101001244\",\"0101001234\",\"0101001236\",\"0101001237\",\"0101001238\",\"0101001239\",\"0101001240\",\"0101001241\",\"0101001245\",\"0101001246\",\"0101001247\",\"0101001248\",\"0101001249\",\"0101001251\"]}", response.getBody(), false);
 
-            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"municipalitycode\":956"));
-            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"roadcode\":254"));
-            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"housenumber\":\"18\""));
-            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"floor\":\"1\""));
-            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"door\":\"tv\""));
+            String body = response.getBody();
+            Assertions.assertTrue(body.contains("\"municipalitycode\":956"));
+            Assertions.assertTrue(body.contains("\"roadcode\":254"));
+            Assertions.assertTrue(body.contains("\"housenumber\":\"18\""));
+            Assertions.assertTrue(body.contains("\"floor\":\"1\""));
+            Assertions.assertTrue(body.contains("\"door\":\"tv\""));
 
 
             testUserDetails.giveAccess(
@@ -154,7 +139,7 @@ public class SameAddressTest extends TestBase {
                     httpEntity,
                     String.class
             );
-            Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+            Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
             testUserDetails.giveAccess(
                     cprPlugin.getAreaRestrictionDefinition().getAreaRestrictionTypeByName(
@@ -170,8 +155,8 @@ public class SameAddressTest extends TestBase {
                     httpEntity,
                     String.class
             );
-            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
-            Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+            Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+            Assertions.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
             response = restTemplate.exchange(
                     "/prisme/sameaddress/1/" + "0101005551",
@@ -179,8 +164,8 @@ public class SameAddressTest extends TestBase {
                     httpEntity,
                     String.class
             );
-            Assert.assertThat(response.getBody(), CoreMatchers.containsString("\"roadName\":\"Administrativ\""));
-            Assert.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
+            Assertions.assertTrue(response.getBody().contains("\"roadName\":\"Administrativ\""));
+            Assertions.assertTrue(objectMapper.readTree(response.getBody()).size() > 0);
 
 
         } finally {
@@ -204,7 +189,7 @@ public class SameAddressTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
 
         testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
         this.applyAccess(testUserDetails);
@@ -216,7 +201,7 @@ public class SameAddressTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001235\",\"Cohabitation\":false,\"ResidentDate\":null}", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -225,7 +210,7 @@ public class SameAddressTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001236\",\"Cohabitation\":true,\"ResidentDate\":\"2008-07-03\"}", response.getBody(), false);
 
         response = restTemplate.exchange(
@@ -234,7 +219,7 @@ public class SameAddressTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/prisme/cpr/cohabitationinformation/1/search/?cpr=" + "0101001234,0101001235",
@@ -242,7 +227,7 @@ public class SameAddressTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"cpr1\":\"0101001234\",\"cpr2\":\"0101001235\",\"Cohabitation\":false,\"ResidentDate\":null}", response.getBody(), false);
     }
 
@@ -255,7 +240,7 @@ public class SameAddressTest extends TestBase {
         Transaction transaction = session.beginTransaction();
         try {
             for (Entity entity : createdEntities) {
-                session.delete(entity);
+                session.remove(entity);
             }
             createdEntities.clear();
         } finally {

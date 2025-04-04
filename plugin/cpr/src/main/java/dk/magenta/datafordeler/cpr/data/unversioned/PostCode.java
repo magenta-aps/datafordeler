@@ -3,12 +3,12 @@ package dk.magenta.datafordeler.cpr.data.unversioned;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.cpr.CprPlugin;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import org.hibernate.Session;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.UUID;
@@ -68,7 +68,7 @@ public class PostCode extends UnversionedEntity {
             postcode.setIdentification(
                     QueryManager.getOrCreateIdentification(session, generateUUID(code), PostCode.getDomain())
             );
-            session.save(postcode);
+            session.persist(postcode);
         }
         return postcode;
     }

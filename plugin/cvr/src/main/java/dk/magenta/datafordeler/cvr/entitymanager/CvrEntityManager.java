@@ -26,16 +26,15 @@ import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.cvr.records.unversioned.*;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,8 +62,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 
-    @Value("${dafo.cpr.demoCompanyList}")
-    private String cvrDemoList;
+    protected String cvrDemoList = "";
 
     private static final String TASK_PARSE = "CvrParse";
     private static final String TASK_FIND_ENTITY = "CvrFindEntity";
@@ -224,6 +222,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                         try {
                             int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
                         } catch (JsonParseException e) {
+                            e.printStackTrace();
                             ImportInterruptedException ex = new ImportInterruptedException(e);
                             session.getTransaction().rollback();
                             importMetadata.setTransactionInProgress(false);
@@ -259,7 +258,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             log.info("All chunks handled\n" + timer.formatAllTotal());
             Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
             progressSession.beginTransaction();
-            progressSession.delete(progress);
+            progressSession.remove(progress);
             progressSession.getTransaction().commit();
             progressSession.close();
         } catch (ImportInterruptedException e) {
@@ -287,7 +286,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     "WHERE aggregateStatus = 'Aktiv' " +
                     "AND (newestCvrRelation) NOT IN " +
                     "(SELECT company.cvrNumber FROM " + CompanyRecord.class.getCanonicalName() + " company " +
-                    "JOIN " + CompanyMetadataRecord.class.getCanonicalName() + " companyMetadata ON company.id" + "=companyMetadata." + CompanyMetadataRecord.DB_FIELD_COMPANY + ")";
+                    "JOIN " + CompanyMetadataRecord.class.getCanonicalName() + " companyMetadata ON company" + "=companyMetadata." + CompanyMetadataRecord.DB_FIELD_COMPANY + ")";
 
             Query querya = sessionSub.createQuery(hql_companies);
             companies = querya.getResultList();
@@ -306,7 +305,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 if (cvr != null && cvr != 0) {
                     try {
                         CompanySubscription companySubscription = new CompanySubscription(cvr);
-                        sessionSub.save(companySubscription);
+                        sessionSub.persist(companySubscription);
                     } catch (Exception e) {
                         // Empty catch as a convenient way for if the system tries to add the same cvr twice
                     }
@@ -317,6 +316,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         } catch (Exception e) {
             String companies_csep = (companies == null) ? null : companies.stream().map(Object::toString).collect(Collectors.joining(", "));
             log.error("Error creating subscription for CVR: "+companies_csep);
+            e.printStackTrace();
         }
     }
 
@@ -326,17 +326,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * democompanys is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData(Session session) {
-        CompanyRecordQuery personQuery = new CompanyRecordQuery();
-        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
-        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
-        session.beginTransaction();
-        personQuery.setPageSize(1000);
-        personQuery.applyFilters(session);
-        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
-        for (CompanyRecord companyForDeletion : companyEntities) {
-            session.delete(companyForDeletion);
-        }
-        session.getTransaction().commit();
     }
 
 

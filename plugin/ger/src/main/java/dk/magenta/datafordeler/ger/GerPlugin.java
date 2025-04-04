@@ -9,10 +9,9 @@ import dk.magenta.datafordeler.ger.configuration.GerConfigurationManager;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntityManager;
 import dk.magenta.datafordeler.ger.data.responsible.ResponsibleEntityManager;
 import dk.magenta.datafordeler.ger.data.unit.UnitEntityManager;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Datafordeler Plugin to fetch, parse and serve Ger dk.magenta.datafordeler.ger.data (dk.magenta.datafordeler.ger.data on regions, localities, roads, addresses etc.)
@@ -33,7 +32,6 @@ public class GerPlugin extends Plugin {
 
     @Autowired
     private GerRegisterManager registerManager;
-
 
     @Autowired
     private CompanyEntityManager companyEntityManager;
@@ -57,6 +55,7 @@ public class GerPlugin extends Plugin {
      */
     @PostConstruct
     public void init() {
+        this.registerManager.setPlugin(this);
         this.registerManager.addEntityManager(this.companyEntityManager);
         this.registerManager.addEntityManager(this.unitEntityManager);
         this.registerManager.addEntityManager(this.responsibleEntityManager);

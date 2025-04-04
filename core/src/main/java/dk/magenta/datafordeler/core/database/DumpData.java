@@ -1,10 +1,11 @@
 package dk.magenta.datafordeler.core.database;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "dump_data")
 public class DumpData extends DatabaseEntry {
     @Column(nullable = false)

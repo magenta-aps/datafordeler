@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dk.magenta.datafordeler.core.database.Identification;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,6 +136,7 @@ public class ObjectMapperConfiguration {
         objectMapper.registerModule(this.getOffsetDateTimeModule());
         objectMapper.registerModule(this.getLocalDateModule());
         objectMapper.registerModule(this.getLocalDateTimeModule());
+        objectMapper.registerModule(new Hibernate6Module());  // To auto-load lazyloaded references
         return objectMapper;
     }
 

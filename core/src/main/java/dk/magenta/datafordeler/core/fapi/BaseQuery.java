@@ -933,25 +933,27 @@ public abstract class BaseQuery {
 
 
     public Condition makeCondition(MultiCondition parent, String handle, Condition.Operator operator, List values, Class type, boolean orNull) throws QueryBuildException {
-        String member = this.useJoinHandle(handle);
-        if (member != null && values != null && !values.isEmpty() && values.stream().anyMatch(f -> f != null)) {
-            values = (List) values.stream().filter(Predicate.not(Predicate.isEqual(""))).collect(Collectors.toList());
-            if (!values.isEmpty()) {
-                String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
-                try {
-                    if (orNull) {
-                        MultiCondition multiCondition = new MultiCondition(parent, "OR");
-                        multiCondition.add(new SingleCondition(multiCondition, member, values, operator, placeholder, type));
-                        multiCondition.add(new NullCondition(multiCondition, member, Condition.Operator.EQ));
-                        parent.add(multiCondition);
-                        return multiCondition;
-                    } else {
-                        SingleCondition condition = new SingleCondition(parent, member, values, operator, placeholder, type);
-                        parent.add(condition);
-                        return condition;
+        if (values != null && !values.isEmpty() && values.stream().anyMatch(f -> f != null)) {
+            String member = this.useJoinHandle(handle);
+            if (member != null) {
+                values = (List) values.stream().filter(Predicate.not(Predicate.isEqual(""))).collect(Collectors.toList());
+                if (!values.isEmpty()) {
+                    String placeholder = this.getEntityIdentifier() + "__" + this.allJoinHandles().get(handle).replaceAll("\\.", "__") + "_" + this.conditionCounter++;
+                    try {
+                        if (orNull) {
+                            MultiCondition multiCondition = new MultiCondition(parent, "OR");
+                            multiCondition.add(new SingleCondition(multiCondition, member, values, operator, placeholder, type));
+                            multiCondition.add(new NullCondition(multiCondition, member, Condition.Operator.EQ));
+                            parent.add(multiCondition);
+                            return multiCondition;
+                        } else {
+                            SingleCondition condition = new SingleCondition(parent, member, values, operator, placeholder, type);
+                            parent.add(condition);
+                            return condition;
+                        }
+                    } catch (QueryBuildException e) {
+                        log.error(e);
                     }
-                } catch (QueryBuildException e) {
-                    log.error(e);
                 }
             }
         }

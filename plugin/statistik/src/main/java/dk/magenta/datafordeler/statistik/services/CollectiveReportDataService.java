@@ -16,6 +16,12 @@ import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportSyncHandler;
 import dk.magenta.datafordeler.statistik.utils.Filter;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,12 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -48,14 +48,8 @@ import java.util.Optional;
 @RequestMapping("/statistik/collective_report")
 public class CollectiveReportDataService extends PersonStatisticsService {
 
-    private class Exclude extends Exception {
-    }
-
     @Autowired
     SessionManager sessionManager;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     private CsvMapper csvMapper;
@@ -445,10 +439,10 @@ public class CollectiveReportDataService extends PersonStatisticsService {
                 civilStatusReport.setRegistrationAfter(registrationAfter);
                 civilStatusReport.setReportStatus(ReportProgressStatus.started);
 
-                reportProgressSession.save(birthReport);
-                reportProgressSession.save(deathReport);
-                reportProgressSession.save(movementReport);
-                reportProgressSession.save(civilStatusReport);
+                reportProgressSession.persist(birthReport);
+                reportProgressSession.persist(deathReport);
+                reportProgressSession.persist(movementReport);
+                reportProgressSession.persist(civilStatusReport);
                 reportProgressSession.getTransaction().commit();
                 currentcollectionUuid = collectionUuid;
             } else {

@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.core;
 import dk.magenta.datafordeler.core.util.Encryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.opensaml.core.config.InitializationService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -24,6 +25,7 @@ import java.nio.file.Files;
 @SpringBootApplication
 @EnableScheduling
 @PropertySource("classpath:/application.properties")
+
 public class Application {
 
     private static final Logger log = LogManager.getLogger(Application.class.getCanonicalName());
@@ -40,18 +42,13 @@ public class Application {
             System.out.println(pass);
             return;
         }
+        InitializationService.initialize();
 
         // Run Spring
         try {
             SpringApplication.run(Application.class, args);
         } catch (Throwable e) {
             log.error(e);
-            while (e != null) {
-                if (e instanceof com.sun.xml.bind.v2.runtime.IllegalAnnotationsException) {
-                    log.error(((com.sun.xml.bind.v2.runtime.IllegalAnnotationsException) e).getErrors());
-                }
-                e = e.getCause();
-            }
         }
     }
 

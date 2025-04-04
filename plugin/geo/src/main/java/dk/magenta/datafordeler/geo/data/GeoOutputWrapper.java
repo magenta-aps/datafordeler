@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.geo.data;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.BitemporalityQuery;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import org.springframework.stereotype.Component;

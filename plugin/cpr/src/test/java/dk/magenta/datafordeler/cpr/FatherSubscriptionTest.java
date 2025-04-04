@@ -10,15 +10,12 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.hibernate.Transaction;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -34,13 +31,10 @@ import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FatherSubscriptionTest extends TestBase {
 
     private static SSLSocketFactory getTrustAllSSLSocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
@@ -68,7 +62,7 @@ public class FatherSubscriptionTest extends TestBase {
     public void testParentSubscription() throws Exception {
 
         Session session = sessionManager.getSessionFactory().openSession();
-        Assert.assertEquals(0, QueryManager.getAllItems(session, PersonSubscription.class).size());
+        Assertions.assertEquals(0, QueryManager.getAllItems(session, PersonSubscription.class).size());
 
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         doReturn(configuration).when(configurationManager).getConfiguration();
@@ -139,7 +133,7 @@ public class FatherSubscriptionTest extends TestBase {
             //There is 5 fathers in the test-file
             //One should not be added to subscription becrause the child is more than 18 years old.
             //One person should not be added becrause the father allready exists as a person.
-            Assert.assertEquals(3, subscriptions.size());
+            Assertions.assertEquals(3, subscriptions.size());
         } finally {
             session.close();
             localSubFolder.delete();
@@ -153,7 +147,11 @@ public class FatherSubscriptionTest extends TestBase {
      */
     @Test
     public void testSubscriptionCreation() throws Exception {
-        personEntityManager.createSubscription(Collections.singleton("1111111111"), Collections.singleton("1111111111"));
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            personEntityManager.createSubscription(session, Collections.singleton("1111111111"), Collections.singleton("1111111111"));
+            transaction.commit();
+        }
     }
 
 }

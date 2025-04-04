@@ -15,21 +15,17 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cpr.records.person.NameRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.NameDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
-import org.mockito.invocation.InvocationOnMock;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -51,13 +47,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PullTest extends TestBase {
 
     private static SSLSocketFactory getTrustAllSSLSocketFactory() {
@@ -93,11 +86,23 @@ public class PullTest extends TestBase {
      * @throws URISyntaxException
      */
     private void loadPersonWithOrigin(ImportMetadata importMetadata) throws DataFordelerException, IOException, URISyntaxException {
-        InputStream testData1 = cprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
+        InputStream testData1 = CprLoadTestdatasetTest.class.getResourceAsStream("/GLBASETEST");
         LabeledSequenceInputStream labeledInputStream = new LabeledSequenceInputStream("GLBASETEST", new ByteArrayInputStream("GLBASETEST".getBytes()), "GLBASETEST", testData1);
         ImportInputStream inputstream = new ImportInputStream(labeledInputStream);
         personEntityManager.parseData(inputstream, importMetadata);
         testData1.close();
+    }
+
+    @BeforeEach
+    public void setUp() {
+        CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
+        File localfolder = new File(configuration.getLocalCopyFolder());
+        System.out.println(localfolder);
+        if (localfolder.isDirectory()) {
+            for (File f : localfolder.listFiles()) {
+                f.delete();
+            }
+        }
     }
 
 
@@ -109,14 +114,18 @@ public class PullTest extends TestBase {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setParameter(PersonRecordQuery.FORNAVNE, "Tester");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());
-            Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
+            Assertions.assertEquals(1, personEntities.size());
+            Assertions.assertEquals(PersonEntity.generateUUID("0101001234"), personEntities.get(0).getUUID());
         } finally {
             session.close();
         }
     }
 
     private void pull() throws Exception {
+        this.pull(objectMapper.createObjectNode());
+    }
+
+    private void pull(ObjectNode importconfig) throws Exception {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
 
@@ -125,6 +134,7 @@ public class PullTest extends TestBase {
 
         doAnswer((Answer<FtpCommunicator>) invocation -> {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+            ftpCommunicator.setKeepFiles(false);
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
@@ -146,10 +156,11 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-            Pull pull = new Pull(engine, plugin);
+            Pull pull = new Pull(engine, plugin, importconfig);
             pull.run();
         } finally {
             personFtp.stopServer();
@@ -169,8 +180,9 @@ public class PullTest extends TestBase {
             FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
             ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
             return ftpCommunicator;
-        }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
-
+        })
+                .when(registerManager)
+                .getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
         String username = "test";
         String password = "test";
@@ -187,6 +199,7 @@ public class PullTest extends TestBase {
         try {
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
@@ -204,16 +217,17 @@ public class PullTest extends TestBase {
             PersonRecordQuery personQuery = new PersonRecordQuery();
             personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, "0101001234");
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());
+            Assertions.assertEquals(1, personEntities.size());
             PersonEntity personEntity = personEntities.get(0);
-            Assert.assertEquals(PersonEntity.generateUUID("0101001234"), personEntity.getUUID());
+            Assertions.assertEquals(PersonEntity.generateUUID("0101001234"), personEntity.getUUID());
+
             Set<BirthPlaceDataRecord> birthPlaceDataRecords = personEntity.getBirthPlace();
-            Assert.assertEquals(1, birthPlaceDataRecords.size());
+            Assertions.assertEquals(1, birthPlaceDataRecords.size());
             BirthPlaceDataRecord birthPlaceDataRecord = birthPlaceDataRecords.iterator().next();
-            Assert.assertTrue(OffsetDateTime.parse("1991-09-23T12:00+02:00").isEqual(birthPlaceDataRecord.getRegistrationFrom()));
-            Assert.assertNull(birthPlaceDataRecord.getRegistrationTo());
-            Assert.assertEquals(9510, birthPlaceDataRecord.getAuthority());
-            Assert.assertEquals(1234, birthPlaceDataRecord.getBirthPlaceCode().intValue());
+            Assertions.assertTrue(OffsetDateTime.parse("1991-09-23T12:00+02:00").isEqual(birthPlaceDataRecord.getRegistrationFrom()));
+            Assertions.assertNull(birthPlaceDataRecord.getRegistrationTo());
+            Assertions.assertEquals(9510, birthPlaceDataRecord.getAuthority());
+            Assertions.assertEquals(1234, birthPlaceDataRecord.getBirthPlaceCode().intValue());
         } finally {
             session.close();
         }
@@ -259,6 +273,7 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
@@ -274,25 +289,26 @@ public class PullTest extends TestBase {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
-            Assert.assertEquals(1, subscriptions.size());
+            Assertions.assertEquals(1, subscriptions.size());
+
+
+            personFtp.startServer(username, password, personPort, Collections.EMPTY_LIST);
+            File localSubFolder = File.createTempFile("foo", "bar");
+
+            try {
+                personEntityManager.createSubscriptionFile(session);
+                doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
+                File[] subFiles = personFtp.getTempDir().listFiles();
+                Assertions.assertEquals(1, subFiles.length);
+                String contents = FileUtils.readFileToString(subFiles[0]);
+                Assertions.assertEquals("06123400OP0101001234                                                            \r\n" +
+                        "071234560101001234               ", contents);
+            } finally {
+                personFtp.stopServer();
+                localSubFolder.delete();
+            }
         } finally {
             session.close();
-        }
-
-        personFtp.startServer(username, password, personPort, Collections.EMPTY_LIST);
-        File localSubFolder = File.createTempFile("foo", "bar");
-
-        try {
-            personEntityManager.createSubscriptionFile();
-            doReturn(localSubFolder.getAbsolutePath()).when(personEntityManager).getLocalSubscriptionFolder();
-            File[] subFiles = personFtp.getTempDir().listFiles();
-            Assert.assertEquals(1, subFiles.length);
-            String contents = FileUtils.readFileToString(subFiles[0]);
-            Assert.assertEquals("06123400OP0101001234                                                            \r\n" +
-                    "071234560101001234               ", contents);
-        } finally {
-            personFtp.stopServer();
-            localSubFolder.delete();
         }
     }
 
@@ -306,12 +322,12 @@ public class PullTest extends TestBase {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
+            Assertions.assertEquals(0, personEntities.size());//Validate that no persons is initiated in the beginning of this test
         }
         pull();  // Pull 1 person from persondata
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+            Assertions.assertEquals(1, personEntities.size());//Validate that 1 person from the file persondata is initiated
         }
 
         //Pull 39 persons from GLBASETEST
@@ -319,23 +335,21 @@ public class PullTest extends TestBase {
             ImportMetadata importMetadata = new ImportMetadata();
             importMetadata.setSession(session);
             this.loadPersonWithOrigin(importMetadata);
-            session.close();
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
-            Assert.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
+            Assertions.assertEquals(52, personEntities.size());//Validate that 52 persons is now initiated
         }
 
         //Clean the testdata
         ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"cleantestdatafirst\":true}");
-        Pull pull = new Pull(engine, plugin, config);
-        pull.run();
+        pull(config);
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, PersonEntity.class);
             String cprs = personEntities.stream().map(p -> p.getPersonnummer()).collect(Collectors.joining(","));
-            Assert.assertEquals("Got "+cprs+" when expecting only 0101001234", 1, personEntities.size());//Validate that 1 person from the file persondata is initiated
+            Assertions.assertEquals(1, personEntities.size(), "Got "+cprs+" when expecting only 0101001234");//Validate that 1 person from the file persondata is initiated
         }
     }
 }

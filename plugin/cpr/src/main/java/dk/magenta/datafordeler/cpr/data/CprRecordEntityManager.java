@@ -20,6 +20,7 @@ import dk.magenta.datafordeler.cpr.CprRegisterManager;
 import dk.magenta.datafordeler.cpr.configuration.CprConfiguration;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
+import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.records.CprDataRecord;
 import org.apache.logging.log4j.LogManager;
@@ -444,6 +445,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
         try {
             return this.getRegisterManager().getEventInterface(this) != null;
         } catch (DataFordelerException e) {
+            e.printStackTrace();
             return false;
         }
     }

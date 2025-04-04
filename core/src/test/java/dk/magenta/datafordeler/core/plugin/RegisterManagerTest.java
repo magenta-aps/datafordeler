@@ -11,16 +11,16 @@ import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.plugindemo.DemoPlugin;
 import dk.magenta.datafordeler.plugindemo.DemoRegisterManager;
 import dk.magenta.datafordeler.plugindemo.model.DemoEntityRecord;
-import org.junit.*;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.net.URI;
@@ -30,9 +30,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = Application.class)
 public class RegisterManagerTest extends PluginTestBase {
 
     @LocalServerPort
@@ -47,9 +46,6 @@ public class RegisterManagerTest extends PluginTestBase {
     @Autowired
     private DemoPlugin plugin;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     private class OtherEntity extends Entity {
         @Override
         protected Registration createEmptyRegistration() {
@@ -57,13 +53,13 @@ public class RegisterManagerTest extends PluginTestBase {
         }
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
         registerManager.setPort(this.port);
     }
 
-    @After
+    @AfterEach
     public void after() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
         registerManager.setPort(Application.servicePort);
@@ -74,35 +70,35 @@ public class RegisterManagerTest extends PluginTestBase {
         EntityManager entityManager = this.plugin.getEntityManager(DemoEntityRecord.schema);
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
 
-        Assert.assertEquals(entityManager, registerManager.getEntityManager(DemoEntityRecord.schema));
-        Assert.assertEquals(entityManager, registerManager.getEntityManager(new URI("http://localhost:" + this.port)));
-        Assert.assertEquals(entityManager, registerManager.getEntityManager(new URI("http://localhost:" + this.port + "/foo")));
-        Assert.assertNull(registerManager.getEntityManager(new URI("http://localhost:" + (this.port + 1))));
+        Assertions.assertEquals(entityManager, registerManager.getEntityManager(DemoEntityRecord.schema));
+        Assertions.assertEquals(entityManager, registerManager.getEntityManager(new URI("http://localhost:" + this.port)));
+        Assertions.assertEquals(entityManager, registerManager.getEntityManager(new URI("http://localhost:" + this.port + "/foo")));
+        Assertions.assertNull(registerManager.getEntityManager(new URI("http://localhost:" + (this.port + 1))));
 
-        Assert.assertNotEquals(entityManager, registerManager.getEntityManager(OtherEntity.class));
+        Assertions.assertNotEquals(entityManager, registerManager.getEntityManager(OtherEntity.class));
     }
 
     @Test
     public void testHandlesSchema() {
-        Assert.assertTrue(this.plugin.handlesSchema(DemoEntityRecord.schema));
-        Assert.assertFalse(this.plugin.handlesSchema("foobar"));
-        Assert.assertFalse(this.plugin.handlesSchema(DemoEntityRecord.schema+"a"));
+        Assertions.assertTrue(this.plugin.handlesSchema(DemoEntityRecord.schema));
+        Assertions.assertFalse(this.plugin.handlesSchema("foobar"));
+        Assertions.assertFalse(this.plugin.handlesSchema(DemoEntityRecord.schema+"a"));
     }
 
     @Test
     public void testGetHandledURISubstrings() {
         DemoRegisterManager registerManager = (DemoRegisterManager) this.plugin.getRegisterManager();
-        Assert.assertTrue(registerManager.getHandledURISubstrings().contains("http://localhost:" + this.port));
-        Assert.assertFalse(registerManager.getHandledURISubstrings().contains("http://localhost:" + (this.port + 1)));
-        Assert.assertFalse(registerManager.getHandledURISubstrings().contains("http://localhost:" + this.port + "/foobar"));
+        Assertions.assertTrue(registerManager.getHandledURISubstrings().contains("http://localhost:" + this.port));
+        Assertions.assertFalse(registerManager.getHandledURISubstrings().contains("http://localhost:" + (this.port + 1)));
+        Assertions.assertFalse(registerManager.getHandledURISubstrings().contains("http://localhost:" + this.port + "/foobar"));
     }
 
     @Test
     public void testExpandBaseUri() throws URISyntaxException {
-        Assert.assertEquals(new URI("http://localhost/foo/bar"), RegisterManager.expandBaseURI(new URI("http://localhost"), "/foo/bar"));
-        Assert.assertEquals(new URI("http://localhost/foo/bar?bat=42#hey"), RegisterManager.expandBaseURI(new URI("http://localhost"), "/foo/bar", "bat=42", "hey"));
-        Assert.assertEquals(new URI("http://localhost/base/foo/bar?bat=42#hey"), RegisterManager.expandBaseURI(new URI("http://localhost/base"), "/foo/bar", "bat=42", "hey"));
-        Assert.assertEquals(new URI("http://localhost/foo/bar?bat=42#hey"), RegisterManager.expandBaseURI(new URI("http", null, "localhost", -1, null, null, null), "/foo/bar", "bat=42", "hey"));
+        Assertions.assertEquals(new URI("http://localhost/foo/bar"), RegisterManager.expandBaseURI(new URI("http://localhost"), "/foo/bar"));
+        Assertions.assertEquals(new URI("http://localhost/foo/bar?bat=42#hey"), RegisterManager.expandBaseURI(new URI("http://localhost"), "/foo/bar", "bat=42", "hey"));
+        Assertions.assertEquals(new URI("http://localhost/base/foo/bar?bat=42#hey"), RegisterManager.expandBaseURI(new URI("http://localhost/base"), "/foo/bar", "bat=42", "hey"));
+        Assertions.assertEquals(new URI("http://localhost/foo/bar?bat=42#hey"), RegisterManager.expandBaseURI(new URI("http", null, "localhost", -1, null, null, null), "/foo/bar", "bat=42", "hey"));
     }
 
 
@@ -128,10 +124,10 @@ public class RegisterManagerTest extends PluginTestBase {
         int eventCounter = 0;
         while ((data = dataStream.next()) != null) {
             eventCounter++;
-            Assert.assertEquals("msgid", data.getId());
-            Assert.assertEquals(reference, data.getReference());
+            Assertions.assertEquals("msgid", data.getId());
+            Assertions.assertEquals(reference, data.getReference());
         }
-        Assert.assertEquals(1, eventCounter);
+        Assertions.assertEquals(1, eventCounter);
 
         this.callbackController.removeCallback("/test/get/" + checksum);
         this.callbackController.removeCallback("/test/getNewEvents");

@@ -1,12 +1,9 @@
 package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
@@ -14,19 +11,13 @@ import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -36,7 +27,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CprListTest extends TestBase {
@@ -46,11 +36,9 @@ public class CprListTest extends TestBase {
     /**
      * Initiate lists
      * Test that it is possible to find a specific CPR-list and add new items
-     *
-     * @throws Exception
      */
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
 
         initMocks(this);
         ManageSubscription controller = new ManageSubscription();
@@ -69,12 +57,12 @@ public class CprListTest extends TestBase {
             subscriber.addDataEventSubscription(new DataEventSubscription("subscription3", "", subscriber));
 
             CprList cprList1 = new CprList("myList1");
-            session.save(cprList1);
+            session.persist(cprList1);
             CprList cprList2 = new CprList("myList2");
-            session.save(cprList2);
+            session.persist(cprList2);
             subscriber.addCprList(cprList1);
             subscriber.addCprList(cprList2);
-            session.save(subscriber);
+            session.persist(subscriber);
             transaction.commit();
         }
 
@@ -121,14 +109,14 @@ public class CprListTest extends TestBase {
         } catch (Exception e) {
             exception = true;
         }
-        Assert.assertTrue(exception);
+        Assertions.assertTrue(exception);
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
-            Assert.assertEquals(4, cprList.getCpr().size());
+            Assertions.assertEquals(4, cprList.getCpr().size());
         }
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -145,7 +133,7 @@ public class CprListTest extends TestBase {
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList1");
             CprList cprList = (CprList) query.getResultList().get(0);
-            Assert.assertEquals(3, cprList.getCpr().size());
+            Assertions.assertEquals(3, cprList.getCpr().size());
             transaction.commit();
         }
 
@@ -154,7 +142,7 @@ public class CprListTest extends TestBase {
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList2");
             CprList cprList = (CprList) query.getResultList().get(0);
-            session.delete(cprList);
+            session.remove(cprList);
             transaction.commit();
         }
 
@@ -162,7 +150,7 @@ public class CprListTest extends TestBase {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId", CprList.class);
             query.setParameter("listId", "myList2");
-            Assert.assertEquals(0, query.getResultList().size());
+            Assertions.assertEquals(0, query.getResultList().size());
             transaction.commit();
         }
 
@@ -192,7 +180,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}]", response.getBody(), false);
 
@@ -204,7 +192,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has one element
         response = restTemplate.exchange(
@@ -213,7 +201,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}," +
                 "{\"listId\":\"cprTestList1\"}]", response.getBody(), false);
@@ -226,7 +214,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has two elements
         response = restTemplate.exchange(
@@ -235,7 +223,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("[{\"listId\":\"myList1\"}," +
                 "{\"listId\":\"myList2\"}," +
                 "{\"listId\":\"cprTestList1\"}," +
@@ -263,7 +251,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         //Confirm that the CPR-list has 6 elements
         response = restTemplate.exchange(
@@ -272,10 +260,10 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         body = objectMapper.createObjectNode();
         cprList = objectMapper.createArrayNode();
@@ -295,7 +283,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
 
         //Confirm that the CPR-list has still 6 elements
         response = restTemplate.exchange(
@@ -304,10 +292,10 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         body = objectMapper.createObjectNode();
         cprList = objectMapper.createArrayNode();
@@ -324,10 +312,10 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         //Confirm that the CPR-list has 9 elements
         results = responseContent.get("results");
-        Assert.assertEquals(6, results.size());
+        Assertions.assertEquals(6, results.size());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cprList/cpr/?listId=cprTestList1",
@@ -335,10 +323,10 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(9, results.size());
+        Assertions.assertEquals(9, results.size());
 
         body = objectMapper.createObjectNode();
         cprList = objectMapper.createArrayNode();
@@ -354,7 +342,7 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         response = restTemplate.exchange(
                 "/subscription/1/manager/subscriber/cprList/cpr/?listId=cprTestList1",
@@ -362,10 +350,10 @@ public class CprListTest extends TestBase {
                 httpEntity,
                 String.class
         );
-        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         results = responseContent.get("results");
-        Assert.assertEquals(7, results.size());
+        Assertions.assertEquals(7, results.size());
     }
 
 }

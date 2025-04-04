@@ -15,7 +15,6 @@ import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class GeoLookupDTO extends CprLookupDTO {
 

@@ -3,13 +3,14 @@ package dk.magenta.datafordeler.core.database;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.ResultSet;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.NoResultException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
-import javax.persistence.FlushModeType;
-import javax.persistence.NoResultException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class QueryManager {
     private static void initializeCache(Session session, String domain) {
         /*if (!identifications.containsKey(domain)) {
             log.info("Loading identifications for domain "+domain);
-            org.hibernate.query.Query<Identification> databaseQuery = session.createQuery("select i from Identification i where i.domain = :domain", Identification.class);
+            Query<Identification> databaseQuery = session.createQuery("select i from Identification i where i.domain = :domain", Identification.class);
             databaseQuery.setParameter("domain", domain);
             databaseQuery.setFlushMode(FlushModeType.COMMIT);
             for (Identification identification : databaseQuery.getResultList()) {
@@ -82,10 +83,9 @@ public class QueryManager {
      */
     public static Identification getIdentification(Session session, UUID uuid) {
         //log.info("Get Identification from UUID " + uuid);
-        org.hibernate.query.Query<Identification> databaseQuery = session.createQuery("select i from Identification i where i.uuid = :uuid", Identification.class);
+        Query<Identification> databaseQuery = session.createQuery("select i from Identification i where i.uuid = :uuid", Identification.class);
         databaseQuery.setParameter("uuid", uuid);
         databaseQuery.setCacheable(true);
-        databaseQuery.setFlushMode(FlushModeType.COMMIT);
         try {
             return databaseQuery.getSingleResult();
         } catch (NoResultException e) {
@@ -141,7 +141,7 @@ public class QueryManager {
             if (identification == null) {
                 log.debug("Creating new for " + domain + "/" + uuid);
                 identification = new Identification(uuid, domain);
-                session.save(identification);
+                session.persist(identification);
                 identifications.put(domain, uuid, identification.getId());
             } else {
                 log.debug("Identification for " + domain + "/" + uuid + " found in database: " + identification.getId());
@@ -183,9 +183,9 @@ public class QueryManager {
 
     public static <E extends DatabaseEntry> List<E> getAllEntities(Session session, Class<E> eClass, boolean joinIdentity) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName());
-        org.hibernate.query.Query<E> databaseQuery;
+        Query<E> databaseQuery;
         if (joinIdentity) {
-            databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid != null", eClass);
+            databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " join " + ENTITY + ".identification i where i.uuid is not null", eClass);
         } else {
             databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY, eClass);
         }
@@ -198,7 +198,7 @@ public class QueryManager {
 
     private static final boolean logQuery = false;
 
-    public static org.hibernate.query.Query getQuery(Session session, BaseQuery query) {
+    public static Query<Object> getQuery(Session session, BaseQuery query) {
         query.applyFilters(session);
 
         String queryString = query.toHql();
@@ -210,7 +210,7 @@ public class QueryManager {
         }
 
         // Build query
-        org.hibernate.query.Query databaseQuery = session.createQuery(queryString);
+        Query<Object> databaseQuery = session.createQuery(queryString, Object.class);
 
         // Insert parameters, casting as necessary
         Map<String, Object> extraParameters = query.getConditionParameters();
@@ -272,7 +272,7 @@ public class QueryManager {
         }
         LinkedHashMap<UUID, ResultSet<E>> identitySetList = new LinkedHashMap<>();
         log.debug("Get all Entities of class " + query.getEntityClassname() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
+        Query<Object> databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         long start = Instant.now().toEpochMilli();
 
@@ -326,7 +326,7 @@ public class QueryManager {
      */
     public static <E extends IdentifiedEntity> Stream<E> getAllEntitiesAsStream(Session session, BaseQuery query, Class<E> eClass) {
         log.debug("Get all Entities of class " + eClass.getCanonicalName() + " matching parameters " + query.getSearchParameters() + " [offset: " + query.getOffset() + ", limit: " + query.getCount() + "]");
-        org.hibernate.query.Query databaseQuery = QueryManager.getQuery(session, query);
+        Query databaseQuery = QueryManager.getQuery(session, query);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
         List<String> classNames = query.getEntityClassnames();
@@ -368,7 +368,7 @@ public class QueryManager {
      */
     public static <E extends IdentifiedEntity> E getEntity(Session session, Identification identification, Class<E> eClass) {
         log.debug("Get Entity of class " + eClass.getCanonicalName() + " by identification " + identification.getUuid());
-        org.hibernate.query.Query<E> databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " where " + ENTITY + ".identification = :identification", eClass);
+        Query<E> databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " where " + ENTITY + ".identification = :identification", eClass);
         databaseQuery.setParameter("identification", identification);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setCacheable(true);
@@ -388,7 +388,7 @@ public class QueryManager {
     public static <T extends DatabaseEntry> List<T> getAllItems(
             Session session, Class<T> tClass
     ) {
-        org.hibernate.query.Query<T> databaseQuery = session
+        Query<T> databaseQuery = session
                 .createQuery(
                         String.format("SELECT t FROM %s t", tClass.getCanonicalName()),
                         tClass);
@@ -399,7 +399,7 @@ public class QueryManager {
     public static <T extends DatabaseEntry> Stream<T> getAllItemsAsStream(
             Session session, Class<T> tClass
     ) {
-        org.hibernate.query.Query<T> databaseQuery = session
+        Query<T> databaseQuery = session
                 .createQuery(
                         String.format("SELECT t FROM %s t", tClass.getCanonicalName()),
                         tClass);
@@ -412,7 +412,7 @@ public class QueryManager {
         for (String key : filter.keySet()) {
             whereJoiner.add("t." + key + " = :" + key);
         }
-        org.hibernate.query.Query<T> databaseQuery = session.createQuery("select t from " + tClass.getCanonicalName() + " t where " + whereJoiner, tClass);
+        Query<T> databaseQuery = session.createQuery("select t from " + tClass.getCanonicalName() + " t where " + whereJoiner, tClass);
         for (String key : filter.keySet()) {
             databaseQuery.setParameter(key, filter.get(key));
         }
@@ -438,7 +438,7 @@ public class QueryManager {
             }
             where = " where " + whereJoiner;
         }
-        org.hibernate.query.Query databaseQuery = session.createQuery("select count(t) from " + tClass.getCanonicalName() + " t " + where);
+        Query databaseQuery = session.createQuery("select count(t) from " + tClass.getCanonicalName() + " t " + where);
         if (filter != null && !filter.isEmpty()) {
             for (String key : filter.keySet()) {
                 databaseQuery.setParameter(key, filter.get(key));

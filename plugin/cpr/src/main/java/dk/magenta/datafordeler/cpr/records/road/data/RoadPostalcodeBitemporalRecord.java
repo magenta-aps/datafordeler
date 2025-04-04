@@ -3,14 +3,15 @@ package dk.magenta.datafordeler.cpr.records.road.data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
-import javax.persistence.Column;
-import javax.persistence.Index;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_ENTITY, columnList = CprBitemporalRoadRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadPostalcodeBitemporalRecord.TABLE_NAME + RoadPostalcodeBitemporalRecord.DB_FIELD_POSTAL_CODE, columnList = RoadPostalcodeBitemporalRecord.DB_FIELD_POSTAL_CODE),
