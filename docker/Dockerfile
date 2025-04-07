@@ -3,7 +3,7 @@ FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9 AS dependencies
 WORKDIR /build/
 
 RUN --mount=type=cache,target=/root/.m2 \
-    --mount=type=bind,source=pom.xml,target=pom.xml \
+    --mount=type=bind,source=./pom.xml,target=pom.xml \
     --mount=type=bind,source=parent/pom.xml,target=parent/pom.xml \
     --mount=type=bind,source=core/pom.xml,target=core/pom.xml \
     --mount=type=bind,source=plugin/adresseservice/pom.xml,target=plugin/adresseservice/pom.xml \
