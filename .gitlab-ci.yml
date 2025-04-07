@@ -54,6 +54,12 @@ variables:
   DAFODOC_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler_doc:${CI_COMMIT_SHA}
   DAFODOC_IMAGE_TAG: magentaaps/datafordeler_doc:${CI_COMMIT_TAG}
 
+  MAVEN_CACHE_DIR: ${CI_PROJECT_DIR}/.m2
+  MAVEN_OPTS: -Dmaven.repo.local=${MAVEN_CACHE_DIR}/repository
+
+cache:
+  paths:
+    - .m2/repository/
 
 # Build stage
 #############
@@ -77,8 +83,8 @@ build-openapi-image:
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.openapi
 
 
- # Test stage 
- #############
+# Test stage
+#############
  
 .test-default: &test-default
   stage: test
@@ -274,8 +280,13 @@ test-subscription:
       junit: /app/plugin/subscription/target/surefire-reports/*.xml
 
 
- # Release stage
- ###############
+# Package stage
+###############
+
+
+
+# Release stage
+###############
  
 .release:
   stage: release
