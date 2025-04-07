@@ -1,6 +1,6 @@
 FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9 AS package
 
-WORKDIR /build/
+WORKDIR /app/
 
 COPY pom.xml pom.xml
 COPY parent/pom.xml parent/pom.xml
@@ -15,8 +15,8 @@ RUN mvn install -DskipTests --batch-mode --show-version --threads 2C
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
-#COPY --from=package /build/core/target/*.jar /app/core/
-#COPY --from=package /build/plugin/jar/*.jar /app/plugin/
+#COPY --from=package /app/core/target/*.jar /app/core/
+#COPY --from=package /app/plugin/jar/*.jar /app/plugin/
 
 COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
 
