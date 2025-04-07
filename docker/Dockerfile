@@ -22,7 +22,7 @@ ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
 
 # For testing
-COPY conf/sts_metadata.test.xml /app/conf/sts_metadata.test.xml
+COPY conf/sts_metadata.test.xml /tmp/sts_metadata.test.xml
 COPY plugin/cpr/data/keyfile.json /tmp/test_cpr_key.json
 
 #EXPOSE 8000
