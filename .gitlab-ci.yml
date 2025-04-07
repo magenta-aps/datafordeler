@@ -126,7 +126,7 @@ build-openapi-image:
     USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
     USER_DATABASE_USERNAME: "sa"
     USER_DATABASE_PASSWORD: "testTEST1"
-    STS_METADATA_PATH: "/app/conf/sts_metadata.test.xml"
+    STS_METADATA_PATH: "/tmp/sts_metadata.test.xml"
     
     STATISTICS_ENABLE: "true"
     PULL_ENABLE: "true"
@@ -163,29 +163,29 @@ build-openapi-image:
 test-core:
   <<: *test-default
   before_script:
-    - cd /app/core
+    - cd /build/core
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/core/target/surefire-reports/*.xml
+        - /build/core/target/surefire-reports/*.xml
 
 test-cpr:
   <<: *test-default
   before_script:
-    - cd /app/plugin/cpr
+    - cd /build/plugin/cpr
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/cpr/target/surefire-reports/TEST-*
+        - /build/plugin/cpr/target/surefire-reports/TEST-*
 
 test-cvr:
   <<: *test-default
   before_script:
-    - cd /app/plugin/cvr
+    - cd /build/plugin/cvr
   script:
     - mvn --batch-mode test
   artifacts:
@@ -195,89 +195,89 @@ test-cvr:
 test-eboks:
   <<: *test-default
   before_script:
-    - cd /app/plugin/eboks
+    - cd /build/plugin/eboks
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/eboks/target/surefire-reports/*.xml
+        - /build/plugin/eboks/target/surefire-reports/*.xml
 
 test-eskat:
   <<: *test-default
   before_script:
-    - cd /app/plugin/eskat
+    - cd /build/plugin/eskat
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/eskat/target/surefire-reports/*.xml
+        - /build/plugin/eskat/target/surefire-reports/*.xml
 
 test-geo:
   <<: *test-default
   before_script:
-    - cd /app/plugin/geo
+    - cd /build/plugin/geo
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/geo/target/surefire-reports/*.xml
+        - /build/plugin/geo/target/surefire-reports/*.xml
 
 test-ger:
   <<: *test-default
   before_script:
-    - cd /app/plugin/ger
+    - cd /build/plugin/ger
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/ger/target/surefire-reports/*.xml
+        - /build/plugin/ger/target/surefire-reports/*.xml
 
 test-prisme:
   <<: *test-default
   before_script:
-    - cd /app/plugin/prisme
+    - cd /build/plugin/prisme
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/prisme/target/surefire-reports/*.xml
+        - /build/plugin/prisme/target/surefire-reports/*.xml
 
 test-combinedPitu:
   <<: *test-default
   before_script:
-    - cd /app/plugin/combinedPitu
+    - cd /build/plugin/combinedPitu
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
+        - /build/plugin/pituCombined/target/surefire-reports/TEST-*.xml
 
 test-statistik:
   <<: *test-default
   before_script:
-    - cd /app/plugin/statistik
+    - cd /build/plugin/statistik
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /app/plugin/statistik/target/surefire-reports/*.xml
+        - /build/plugin/statistik/target/surefire-reports/*.xml
 
 test-subscription:
   <<: *test-default
   before_script:
-    - cd /app/plugin/subscription
+    - cd /build/plugin/subscription
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
-      junit: /app/plugin/subscription/target/surefire-reports/*.xml
+      junit: /build/plugin/subscription/target/surefire-reports/*.xml
 
 
 # Package stage
