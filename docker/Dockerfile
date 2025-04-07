@@ -7,7 +7,7 @@ COPY parent/pom.xml parent/pom.xml
 COPY core core
 COPY plugin plugin
 
-RUN mvn package -DskipTests --batch-mode --show-version --threads 2C
+RUN mvn install -DskipTests --batch-mode --show-version --threads 2C
 
 
 #FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9 AS final
