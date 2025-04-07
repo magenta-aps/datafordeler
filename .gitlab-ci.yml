@@ -66,8 +66,11 @@ build-image:
     CI_IMAGE: ${DAFO_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
   cache:
-    paths:
-      - /root/.m2/
+    - key:
+        files:
+          - maven.lock
+      paths:
+        - /root/.m2/
 
 build-openapi-image:
   extends: .build-docker
