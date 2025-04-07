@@ -1,8 +1,6 @@
-FROM jelastic/maven:3.9.9-openjdk-21.0.2-almalinux-9 AS dependencies
+FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9 AS dependencies
 
 WORKDIR /build/
-
-ENV MAVEN_CLI_OPTS "--batch-mode --show-version --threads 2C"
 
 RUN --mount=type=cache,target=/root/.m2 \
     --mount=type=bind,source=pom.xml,target=pom.xml \
@@ -19,7 +17,7 @@ RUN --mount=type=cache,target=/root/.m2 \
     --mount=type=bind,source=plugin/prisme/pom.xml,target=plugin/prisme/pom.xml \
     --mount=type=bind,source=plugin/statistik/pom.xml,target=plugin/statistik/pom.xml \
     --mount=type=bind,source=plugin/subscription/pom.xml,target=plugin/subscription/pom.xml \
-    mvn dependency:go-offline -DskipTests
+    mvn dependency:go-offline -DskipTests --batch-mode --show-version --threads 2C
 
 
 FROM dependencies AS package
@@ -53,13 +51,14 @@ RUN --mount=type=cache,target=/root/.m2 \
     --mount=type=bind,source=plugin/statistik/src,target=plugin/statistik/src \
     --mount=type=bind,source=plugin/subscription/pom.xml,target=plugin/subscription/pom.xml \
     --mount=type=bind,source=plugin/subscription/src,target=plugin/subscription/src \
-    mvn package -DskipTests \
+    mvn package -DskipTests --batch-mode --show-version --threads 2C
 
 
-FROM eclipse-temurin:21-jre-jammy AS final
+FROM eclipse-temurin:23-jre-alpine AS final
 WORKDIR /app
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
+RUN apk add --no-cache bash
 
 COPY --from=package /build/core/target/*.jar /app/core/
 COPY --from=package /build/plugin/jar/*.jar /app/plugin/
