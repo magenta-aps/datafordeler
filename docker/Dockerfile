@@ -7,8 +7,7 @@ COPY parent/pom.xml parent/pom.xml
 COPY core core
 COPY plugin plugin
 
-RUN --mount=type=cache,target=/root/.m2 \
-    mvn package -DskipTests --batch-mode --show-version --threads 2C
+RUN mvn package -DskipTests --batch-mode --show-version --threads 2C
 
 
 FROM eclipse-temurin:23-jre-alpine AS final
