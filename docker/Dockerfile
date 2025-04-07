@@ -10,11 +10,11 @@ COPY plugin plugin
 RUN mvn package -DskipTests --batch-mode --show-version --threads 2C
 
 
-FROM eclipse-temurin:23-jre-alpine AS final
+FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9 AS final
 WORKDIR /app
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash maven
 
 COPY --from=package /build/core/target/*.jar /app/core/
 COPY --from=package /build/plugin/jar/*.jar /app/plugin/
