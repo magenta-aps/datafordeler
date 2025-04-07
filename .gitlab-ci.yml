@@ -15,6 +15,7 @@ stages:
 .if-merge-request: &if-merge-request
   if: '$CI_MERGE_REQUEST_IID'
 
+
 # Workflow
 ###########
 workflow:
@@ -52,6 +53,7 @@ variables:
   DAFODOC_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler_doc:${CI_COMMIT_SHA}
   DAFODOC_IMAGE_TAG: magentaaps/datafordeler_doc:${CI_COMMIT_TAG}
 
+
 # Build stage
 #############
 build-mssql-image:
@@ -65,12 +67,6 @@ build-image:
   variables:
     CI_IMAGE: ${DAFO_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
-  cache:
-    - key:
-        files:
-          - maven.lock
-      paths:
-        - /root/.m2/
 
 build-openapi-image:
   extends: .build-docker
@@ -155,7 +151,6 @@ build-openapi-image:
   services:
     - name: ${DAFOSQL_IMAGE_SHA}
       alias: datafordeler-db
-
 
 test-core:
   <<: *test-default
@@ -275,6 +270,7 @@ test-subscription:
   artifacts:
     reports:
       junit: /app/plugin/subscription/target/surefire-reports/*.xml
+
 
  # Release stage
  ###############
