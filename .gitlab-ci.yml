@@ -15,6 +15,12 @@ stages:
 .if-merge-request: &if-merge-request
   if: '$CI_MERGE_REQUEST_IID'
 
+default:
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    path:
+      - /root/.m2
+
 # Workflow
 ###########
 workflow:
