@@ -15,12 +15,6 @@ stages:
 .if-merge-request: &if-merge-request
   if: '$CI_MERGE_REQUEST_IID'
 
-default:
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    path:
-      - /root/.m2
-
 # Workflow
 ###########
 workflow:
@@ -71,6 +65,9 @@ build-image:
   variables:
     CI_IMAGE: ${DAFO_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
+  cache:
+    paths:
+      - /root/.m2/
 
 build-openapi-image:
   extends: .build-docker
