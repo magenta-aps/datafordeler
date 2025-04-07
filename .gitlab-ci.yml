@@ -54,19 +54,9 @@ variables:
   DAFODOC_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler_doc:${CI_COMMIT_SHA}
   DAFODOC_IMAGE_TAG: magentaaps/datafordeler_doc:${CI_COMMIT_TAG}
 
-  MAVEN_CACHE_DIR: ${CI_PROJECT_DIR}/.m2
-  MAVEN_OPTS: -Dmaven.repo.local=${MAVEN_CACHE_DIR}/repository
-
 
 # Build stage
 #############
-
-before_script:
-  - mkdir -p $MAVEN_CACHE_DIR/repository
-
-cache:
-  paths:
-    - .m2/repository/
 
 build-mssql-image:
   extends: .build-docker
@@ -75,10 +65,10 @@ build-mssql-image:
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.sqlserver
 
 build-image:
-  stage: build
-  image: eclipse-temurin:21-jdk-jammy
-  script:
-    - mvn -f pom.xml clean compile
+  extends: .build-docker
+  variables:
+    CI_IMAGE: ${DAFO_IMAGE_SHA}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
 
 build-openapi-image:
   extends: .build-docker
