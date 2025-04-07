@@ -276,9 +276,9 @@ test-subscription:
 # Package stage
 ###############
 
-package:
-
-  script:
+#package:
+#
+#  script:
 
 
 # Release stage
