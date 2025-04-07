@@ -2,6 +2,7 @@ FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9 AS dependencies
 
 WORKDIR /build/
 
+# Fetch dependencies and put them in a docker layer, so we can rebuild without donwloading all dependencies again
 RUN --mount=type=cache,target=/root/.m2 \
     --mount=type=bind,source=pom.xml,target=pom.xml \
     --mount=type=bind,source=parent/pom.xml,target=parent/pom.xml \
@@ -24,6 +25,7 @@ FROM dependencies AS package
 
 WORKDIR /build
 
+# Compile
 RUN --mount=type=cache,target=/root/.m2 \
     --mount=type=bind,source=pom.xml,target=pom.xml \
     --mount=type=bind,source=parent/pom.xml,target=parent/pom.xml \
@@ -59,6 +61,7 @@ ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 RUN apk add --no-cache bash
 
+# Copy compiled jars to slim executable container with just a JRE
 COPY --from=package /build/core/target/*.jar /app/core/
 COPY --from=package /build/plugin/jar/*.jar /app/plugin/
 COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
