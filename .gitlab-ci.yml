@@ -77,7 +77,9 @@ build-jdk-image:
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jdk
 
 build-jre-image:
-  extends: .build-docker
+  extends:
+    - .build-docker
+    - .rules:semver-all
   variables:
     CI_IMAGE: ${DAFO_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jre
@@ -113,7 +115,7 @@ build-openapi-image:
     DATABASE_SHOW_SQL: "false"
     DATABASE_USERNAME: "SA"
     DATABASE_PASSWORD: "testTEST1"
-    DATABASE_METHOD: "create-drop"
+    DATABASE_METHOD: "update"
     DATABASE_DEFAULT_SCHEMA: "dbo"
 
     SECONDARY_DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
@@ -122,7 +124,7 @@ build-openapi-image:
     SECONDARY_DATABASE_SHOW_SQL: "false"
     SECONDARY_DATABASE_USERNAME: "SA"
     SECONDARY_DATABASE_PASSWORD: "testTEST1"
-    SECONDARY_DATABASE_METHOD: "create-drop"
+    SECONDARY_DATABASE_METHOD: "update"
     SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
 
     SSL_ENABLE: "false"
