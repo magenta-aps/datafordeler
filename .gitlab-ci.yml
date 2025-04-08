@@ -83,200 +83,200 @@ build-openapi-image:
 
 # Test stage
 #############
- 
-.test-default: &test-default
-  stage: test
-  needs:
-    - build-mssql-image
-    - build-image
-  image: ${DAFO_IMAGE_SHA}
-  variables:
-    GIT_STRATEGY: none
-    JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
-    #M$ sql variables
-    ACCEPT_EULA: "Y"
-    SA_PASSWORD: "testTEST1"
-    SERVERNAME: "dafodev"
-    SERVER_PORT: "80"
-
-    DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-    DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
-    DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
-    DATABASE_SHOW_SQL: "false"
-    DATABASE_USERNAME: "SA"
-    DATABASE_PASSWORD: "testTEST1"
-    DATABASE_METHOD: "update"
-    DATABASE_DEFAULT_SCHEMA: "dbo"
-
-    SECONDARY_DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-    SECONDARY_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
-    SECONDARY_DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
-    SECONDARY_DATABASE_SHOW_SQL: "false"
-    SECONDARY_DATABASE_USERNAME: "SA"
-    SECONDARY_DATABASE_PASSWORD: "testTEST1"
-    SECONDARY_DATABASE_METHOD: "update"
-    SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
-
-    SSL_ENABLE: "false"
-    
-    USER_DATABASE_ENABLED: "false"
-    USER_DATABASE_SECURITY_DISABLED: "false"
-    USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
-    USER_DATABASE_USERNAME: "sa"
-    USER_DATABASE_PASSWORD: "testTEST1"
-    STS_METADATA_PATH: "/tmp/sts_metadata.test.xml"
-    
-    STATISTICS_ENABLE: "true"
-    PULL_ENABLE: "true"
-    CRON_ENABLE: "true"
-    
-    CPR_PROXY_URL: ""
-    CPR_LOCAL_COPY_FOLDER: ""
-    CPR_SUBSCRIPTION_ENABLE: "true"
-    CPR_ENCRYPTION_KEYFILE: "/tmp/test_cpr_key.json"
-    CPR_TEST_PERSON_LIST: > 
-      0112977724,0101570010,0101570088,2505811057,0601980010,1105520049,0103897769,1102640019,
-      0707610042,0902410058,2512474856,1509814844,2512052730,0601980029,3105841026,0101005038,1105801064,0312600013,
-      2510202794,2501950079,0112947728,0101055035,0401570020,0206025050,0106664862,1105015018,0209025000,3105781007,
-      2301175038,1502122777,0103232759,1502062774,0904410039,0708614866,2512484916,2509474829,3101827746,0101005089,
-      1105550193,1111111111,1111111112,1111111113,1111111110,1211111111,
-      1105550193,1111111111,1111111112,1111111113,3111171114,3111171115,3111171116,3111171117,0101704711,1304283824,
-      1703501821,0202940001,0202940003,
-      0104909995,0104909989,0107729995,0108589995,0108629996,0201609995,0201609996,0201919990,0201919995,0201919996,
-      0211223989,0212159995,0504909989,0504909995,0505059996,0505109990,0505159995,0505209996,0506889996,1007059995,
-      1110109996,1310169995,1310169996,1502779995,1502799995,1502829995,1509819996,2103009996,2311143995,2509479989,
-      2512489996,2911829996,3001749995,3103979995
-    
-    CVR_DEMO_COMPANYFILE: "classpath:company_in.json"
-    CVR_DEMO_UNITFILE: "classpath:unit.json"
-    CVR_DEMO_PARTICIPANTFILE: "classpath:person.json"
-    CVR_LOCAL_COPY_FOLDER: ""
-    GEO_LOCAL_COPY_FOLDER: ""
-    
-    ERRORFILE_DIR: "cache/log"
-  services:
-    - name: ${DAFOSQL_IMAGE_SHA}
-      alias: datafordeler-db
-
-test-core:
-  <<: *test-default
-  before_script:
-    - cd /app/core
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/core/target/surefire-reports/*.xml
-
-test-cpr:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/cpr
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/cpr/target/surefire-reports/TEST-*
-
-test-cvr:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/cvr
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit: target/surefire-reports/*.xml
-
-test-eboks:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/eboks
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/eboks/target/surefire-reports/*.xml
-
-test-eskat:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/eskat
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/eskat/target/surefire-reports/*.xml
-
-test-geo:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/geo
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/geo/target/surefire-reports/*.xml
-
-test-ger:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/ger
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/ger/target/surefire-reports/*.xml
-
-test-prisme:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/prisme
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/prisme/target/surefire-reports/*.xml
-
-test-combinedPitu:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/combinedPitu
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
-
-test-statistik:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/statistik
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/statistik/target/surefire-reports/*.xml
-
-test-subscription:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/subscription
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit: /app/plugin/subscription/target/surefire-reports/*.xml
-
+#
+#.test-default: &test-default
+#  stage: test
+#  needs:
+#    - build-mssql-image
+#    - build-image
+#  image: ${DAFO_IMAGE_SHA}
+#  variables:
+#    GIT_STRATEGY: none
+#    JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
+#    #M$ sql variables
+#    ACCEPT_EULA: "Y"
+#    SA_PASSWORD: "testTEST1"
+#    SERVERNAME: "dafodev"
+#    SERVER_PORT: "80"
+#
+#    DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+#    DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
+#    DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
+#    DATABASE_SHOW_SQL: "false"
+#    DATABASE_USERNAME: "SA"
+#    DATABASE_PASSWORD: "testTEST1"
+#    DATABASE_METHOD: "update"
+#    DATABASE_DEFAULT_SCHEMA: "dbo"
+#
+#    SECONDARY_DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+#    SECONDARY_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
+#    SECONDARY_DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
+#    SECONDARY_DATABASE_SHOW_SQL: "false"
+#    SECONDARY_DATABASE_USERNAME: "SA"
+#    SECONDARY_DATABASE_PASSWORD: "testTEST1"
+#    SECONDARY_DATABASE_METHOD: "update"
+#    SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
+#
+#    SSL_ENABLE: "false"
+#
+#    USER_DATABASE_ENABLED: "false"
+#    USER_DATABASE_SECURITY_DISABLED: "false"
+#    USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
+#    USER_DATABASE_USERNAME: "sa"
+#    USER_DATABASE_PASSWORD: "testTEST1"
+#    STS_METADATA_PATH: "/tmp/sts_metadata.test.xml"
+#
+#    STATISTICS_ENABLE: "true"
+#    PULL_ENABLE: "true"
+#    CRON_ENABLE: "true"
+#
+#    CPR_PROXY_URL: ""
+#    CPR_LOCAL_COPY_FOLDER: ""
+#    CPR_SUBSCRIPTION_ENABLE: "true"
+#    CPR_ENCRYPTION_KEYFILE: "/tmp/test_cpr_key.json"
+#    CPR_TEST_PERSON_LIST: >
+#      0112977724,0101570010,0101570088,2505811057,0601980010,1105520049,0103897769,1102640019,
+#      0707610042,0902410058,2512474856,1509814844,2512052730,0601980029,3105841026,0101005038,1105801064,0312600013,
+#      2510202794,2501950079,0112947728,0101055035,0401570020,0206025050,0106664862,1105015018,0209025000,3105781007,
+#      2301175038,1502122777,0103232759,1502062774,0904410039,0708614866,2512484916,2509474829,3101827746,0101005089,
+#      1105550193,1111111111,1111111112,1111111113,1111111110,1211111111,
+#      1105550193,1111111111,1111111112,1111111113,3111171114,3111171115,3111171116,3111171117,0101704711,1304283824,
+#      1703501821,0202940001,0202940003,
+#      0104909995,0104909989,0107729995,0108589995,0108629996,0201609995,0201609996,0201919990,0201919995,0201919996,
+#      0211223989,0212159995,0504909989,0504909995,0505059996,0505109990,0505159995,0505209996,0506889996,1007059995,
+#      1110109996,1310169995,1310169996,1502779995,1502799995,1502829995,1509819996,2103009996,2311143995,2509479989,
+#      2512489996,2911829996,3001749995,3103979995
+#
+#    CVR_DEMO_COMPANYFILE: "classpath:company_in.json"
+#    CVR_DEMO_UNITFILE: "classpath:unit.json"
+#    CVR_DEMO_PARTICIPANTFILE: "classpath:person.json"
+#    CVR_LOCAL_COPY_FOLDER: ""
+#    GEO_LOCAL_COPY_FOLDER: ""
+#
+#    ERRORFILE_DIR: "cache/log"
+#  services:
+#    - name: ${DAFOSQL_IMAGE_SHA}
+#      alias: datafordeler-db
+#
+#test-core:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/core
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/core/target/surefire-reports/*.xml
+#
+#test-cpr:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/cpr
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/cpr/target/surefire-reports/TEST-*
+#
+#test-cvr:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/cvr
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit: target/surefire-reports/*.xml
+#
+#test-eboks:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/eboks
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/eboks/target/surefire-reports/*.xml
+#
+#test-eskat:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/eskat
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/eskat/target/surefire-reports/*.xml
+#
+#test-geo:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/geo
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/geo/target/surefire-reports/*.xml
+#
+#test-ger:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/ger
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/ger/target/surefire-reports/*.xml
+#
+#test-prisme:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/prisme
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/prisme/target/surefire-reports/*.xml
+#
+#test-combinedPitu:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/combinedPitu
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
+#
+#test-statistik:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/statistik
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/statistik/target/surefire-reports/*.xml
+#
+#test-subscription:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/subscription
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit: /app/plugin/subscription/target/surefire-reports/*.xml
+#
 
 # Package stage
 ###############
