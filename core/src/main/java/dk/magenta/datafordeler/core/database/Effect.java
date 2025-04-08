@@ -114,7 +114,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_FROM = "effectFrom";
     public static final String IO_FIELD_EFFECT_FROM = "virkningFra";
 
-    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
@@ -131,7 +131,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String IO_FIELD_EFFECT_TO = "virkningTil";
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
-    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {

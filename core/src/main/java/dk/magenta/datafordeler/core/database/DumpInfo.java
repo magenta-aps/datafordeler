@@ -19,7 +19,7 @@ public final class DumpInfo extends DatabaseEntry implements
     @Column(nullable = false)
     private String name, requestPath, charset, format;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, optional = true,

@@ -32,7 +32,7 @@ public class FtpPulledFile extends DatabaseEntry {
     @Column(name = DB_FIELD_FILENAME)
     private String filename;
 
-    @Column(name = DB_FIELD_TIMESTAMP, nullable = false, updatable = false)
+    @Column(name = DB_FIELD_TIMESTAMP, nullable = false, updatable = false, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
 }

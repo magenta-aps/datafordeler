@@ -213,7 +213,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     public static final String DB_FIELD_REGISTRATION_FROM = "registrationFrom";
     public static final String IO_FIELD_REGISTRATION_FROM = "registreringFra";
 
-    @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationFrom;
 
 
@@ -233,7 +233,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     public static final String DB_FIELD_REGISTRATION_TO = "registrationTo";
     public static final String IO_FIELD_REGISTRATION_TO = "registreringTil";
 
-    @Column(name = DB_FIELD_REGISTRATION_TO, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_REGISTRATION_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationTo;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)

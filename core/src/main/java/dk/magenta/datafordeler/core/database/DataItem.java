@@ -86,7 +86,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED)
+    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime lastUpdated;
 
     public OffsetDateTime getLastUpdated() {

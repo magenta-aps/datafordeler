@@ -24,7 +24,7 @@ public class LastUpdated extends DatabaseEntry {
     private String schemaName;
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP)
+    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
 

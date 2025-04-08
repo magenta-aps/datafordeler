@@ -74,7 +74,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP)
+    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     @JsonIgnore
     @XmlElement(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;

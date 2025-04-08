@@ -32,7 +32,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
 
-    @Column
+    @Column(columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
     public OffsetDateTime getTimestamp() {
