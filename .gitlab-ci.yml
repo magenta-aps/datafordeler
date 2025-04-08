@@ -296,7 +296,7 @@ package:
 .release:
   stage: release
   image: alpine
-  needs: ["test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik","test-subscription"]
+#  needs: ["test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik","test-subscription"]
   variables:
     GIT_STRATEGY: none # We do not need the source code
   before_script:
