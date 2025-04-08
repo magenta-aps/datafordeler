@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - extract
   - package
   - release
   - configure
@@ -70,9 +71,6 @@ build-image:
   variables:
     CI_IMAGE: ${DAFO_BUILD_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
-  artifacts:
-    paths:
-      - build/core/datafordeler-core-exec-jar
 
 build-openapi-image:
   extends: .build-docker
@@ -280,6 +278,17 @@ build-openapi-image:
 
 # Package stage
 ###############
+
+extract:
+  stage: extract
+  needs:
+    - build-image
+  script:
+    - docker run -d --name datafordeler-extract ${DAFO_BUILD_IMAGE_SHA}
+    - docker cp datafordeler-extract:/build/core/datafordeler-core-exec.jar datafordeler-core-exec.jar
+    - docker stop datafordeler-extract
+    - docker rm datafordeler-extract
+
 
 package:
   dependencies:
