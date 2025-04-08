@@ -1,5 +1,0 @@
-FROM eclipse-temurin:23-jre-alpine
-
-WORKDIR /app/
-
-COPY build/core/datafordeler-core-exec.jar /app/core/datafordeler-core-exec.jar
