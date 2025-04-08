@@ -27,3 +27,6 @@ COPY plugin/cpr/data/keyfile.json /tmp/test_cpr_key.json
 #EXPOSE 8000
 #ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["java", "-Dloader.path=/app/plugin/", "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]
+
+
+# TODO: Ny Dockerfile som tager sig af packaging

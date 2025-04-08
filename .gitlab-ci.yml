@@ -48,6 +48,8 @@ variables:
   DAFO_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler:${CI_COMMIT_SHA}
   DAFO_IMAGE_TAG: magentaaps/datafordeler:${CI_COMMIT_TAG}
 
+  DAFO_BUILD_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-build:${CI_COMMIT_SHA}
+
   DAFOSQL_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-test-db:${CI_COMMIT_SHA}
   DAFOSQL_IMAGE_TAG: magentaaps/datafordeler-test-db:${CI_COMMIT_TAG}
 
@@ -66,8 +68,11 @@ build-mssql-image:
 build-image:
   extends: .build-docker
   variables:
-    CI_IMAGE: ${DAFO_IMAGE_SHA}
+    CI_IMAGE: ${DAFO_BUILD_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
+  artifacts:
+    paths:
+      - build/
 
 build-openapi-image:
   extends: .build-docker
@@ -276,9 +281,13 @@ test-subscription:
 # Package stage
 ###############
 
-#package:
-#
-#  script:
+package:
+  dependencies:
+    - build-image
+  extends: .build-docker
+  variables:
+    CI_IMAGE: ${DAFO_IMAGE_SHA}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.package
 
 
 # Release stage
