@@ -70,9 +70,6 @@ build-image:
   variables:
     CI_IMAGE: ${DAFO_BUILD_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
-  artifacts:
-    paths:
-      - build/
 
 build-openapi-image:
   extends: .build-docker
