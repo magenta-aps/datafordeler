@@ -11,6 +11,7 @@ import jakarta.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
 
@@ -37,11 +38,11 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
-        return this.effectFrom;
+        return fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = effectFrom;
+        this.effectFrom = fixOffsetIn(effectFrom);
     }
 
     public static final String DB_FIELD_EFFECT_FROM_UNCERTAIN = "effectFromUncertain";
@@ -67,11 +68,11 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {
-        return this.effectTo;
+        return fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = effectTo;
+        this.effectTo = fixOffsetIn(effectTo);
     }
 
     public static final String DB_FIELD_EFFECT_TO_UNCERTAIN = "effectToUncertain";
@@ -165,10 +166,10 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public CprBitemporalRecord setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo, OffsetDateTime effectFrom, boolean effectFromUncertain, OffsetDateTime effectTo, boolean effectToUncertain) {
         super.setBitemporality(registrationFrom, registrationTo);
-        this.effectFrom = effectFrom;
-        this.effectFromUncertain = effectFromUncertain;
-        this.effectTo = effectTo;
-        this.effectToUncertain = effectToUncertain;
+        this.setEffectFrom(effectFrom);
+        this.setEffectFromUncertain(effectFromUncertain);
+        this.setEffectTo(effectTo);
+        this.setEffectToUncertain(effectToUncertain);
         return this;
     }
 
@@ -213,7 +214,11 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     @JsonIgnore
     public CprBitemporality getBitemporality() {
-        return new CprBitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.effectFrom, this.effectFromUncertain, this.effectTo, this.effectToUncertain);
+        return new CprBitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.getEffectFrom(), this.effectFromUncertain, this.getEffectTo(), this.effectToUncertain);
+    }
+
+    public CprBitemporality getRawBitemporality() {
+        return new CprBitemporality(this.registrationFrom, this.registrationTo, this.effectFrom, this.effectFromUncertain, this.effectTo, this.effectToUncertain);
     }
 
     protected static void copy(CprBitemporalRecord from, CprBitemporalRecord to) {

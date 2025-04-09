@@ -49,34 +49,38 @@ public class cprMatchLogicTest extends TestBase {
 
     @Test
     public void testSameAdressWhenTimestampIsRemoved() throws DataFordelerException, IOException, URISyntaxException {
+        TimeZone t = TimeZone.getDefault();
+        try {
+            TimeZone.setDefault(TimeZone.getTimeZone("America/Godthab"));
 
-        TimeZone.setDefault(TimeZone.getTimeZone("America/Godthab"));
-
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            ImportMetadata importMetadata = new ImportMetadata();
-            importMetadata.setSession(session);
-            this.loadPersonWithOrigin(importMetadata);
-            session.close();
-        }
-
-
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            PersonRecordQuery query = new PersonRecordQuery();
-            query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
-            OffsetDateTime now = Query.parseDateTime("2018-08-08");
+            try (Session session = sessionManager.getSessionFactory().openSession()) {
+                ImportMetadata importMetadata = new ImportMetadata();
+                importMetadata.setSession(session);
+                this.loadPersonWithOrigin(importMetadata);
+                session.close();
+            }
 
 
-            query.setRegistrationAt(OffsetDateTime.now());
-            query.setEffectAt(now);
+            try (Session session = sessionManager.getSessionFactory().openSession()) {
+                PersonRecordQuery query = new PersonRecordQuery();
+                query.setParameter(PersonRecordQuery.PERSONNUMMER, "1111111111");
+                OffsetDateTime now = Query.parseDateTime("2018-08-08");
 
-            query.applyFilters(session);
-            List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
-            Assertions.assertEquals(1, persons.size());
 
-            Set<AddressDataRecord> adresses = persons.get(0).getAddress();
+                query.setRegistrationAt(OffsetDateTime.now());
+                query.setEffectAt(now);
 
-            Set<AddressDataRecord> adresses2 = adresses.stream().filter(d -> !d.isUndone()).collect(Collectors.toSet());
-            Assertions.assertEquals(1, adresses2.size());
+                query.applyFilters(session);
+                List<PersonEntity> persons = QueryManager.getAllEntities(session, query, PersonEntity.class);
+                Assertions.assertEquals(1, persons.size());
+
+                Set<AddressDataRecord> adresses = persons.get(0).getAddress();
+
+                Set<AddressDataRecord> adresses2 = adresses.stream().filter(d -> !d.isUndone()).collect(Collectors.toSet());
+                Assertions.assertEquals(1, adresses2.size());
+            }
+        } finally {
+            TimeZone.setDefault(t);
         }
     }
 

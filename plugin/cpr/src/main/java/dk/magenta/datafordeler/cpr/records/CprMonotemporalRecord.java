@@ -5,9 +5,12 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import org.apache.poi.ss.formula.functions.Offset;
 
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -23,17 +26,32 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
 
 
+    private static ZoneId cprZoneId = ZoneId.of("Europe/Copenhagen");
+    public static OffsetDateTime fixOffsetOut(OffsetDateTime date) {
+        if (date != null) {
+            return date.atZoneSimilarLocal(cprZoneId).toOffsetDateTime();
+        }
+        return null;
+    }
+    public static OffsetDateTime fixOffsetIn(OffsetDateTime date) {
+        if (date != null) {
+            return date.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime();
+        }
+        return null;
+    }
+
+
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
-    private OffsetDateTime registrationFrom;
+    protected OffsetDateTime registrationFrom;
 
     public OffsetDateTime getRegistrationFrom() {
-        return this.registrationFrom;
+        return fixOffsetOut(this.registrationFrom);
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = registrationFrom;
+        this.registrationFrom = fixOffsetIn(registrationFrom);
     }
 
 
@@ -43,20 +61,20 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @XmlElement(name = IO_FIELD_REGISTRATION_TO)
-    private OffsetDateTime registrationTo;
+    protected OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = fixOffsetIn(registrationTo);
     }
 
 
     public CprMonotemporalRecord setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo) {
-        this.registrationFrom = registrationFrom;
-        this.registrationTo = registrationTo;
+        this.setRegistrationFrom(registrationFrom);
+        this.setRegistrationTo(registrationTo);
         return this;
     }
 

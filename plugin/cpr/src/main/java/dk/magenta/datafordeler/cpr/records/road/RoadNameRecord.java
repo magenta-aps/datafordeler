@@ -27,6 +27,13 @@ public class RoadNameRecord extends RoadDataRecord {
         this.obtain("vejnvn", 72, 40);
 
         this.roadTemporality = new CprBitemporality(this.getOffsetDateTime("timestamp"), null, this.getOffsetDateTime("haenstart"), false, null, false);
+
+        if (this.get("vejnvn").equals("Aalborggade")) {
+            System.out.println("construct RoadNameRecord " + this.get("vejnvn"));
+            System.out.println(this.getDateTime("timestamp"));
+            System.out.println(this.getOffsetDateTime("timestamp"));
+            System.out.println(this.roadTemporality);
+        }
     }
 
 
@@ -50,6 +57,9 @@ public class RoadNameRecord extends RoadDataRecord {
                         this.roadTemporality
                 )
         );
+        if (this.getString("vejnvn", true).equals("Aalborggade")) {
+            System.out.println("database object: "+records.get(0).getRawBitemporality());
+        }
         return records;
     }
 
