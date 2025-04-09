@@ -783,7 +783,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
 
     @OneToOne(mappedBy = CompanyUnitMetadataRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyUnitMetadataRecord.class, cascade = CascadeType.ALL)
     @JoinColumn(name = DB_FIELD_META + DatabaseEntry.REF)
-        @JsonProperty(value = IO_FIELD_META)
+    @JsonProperty(value = IO_FIELD_META)
     private CompanyUnitMetadataRecord metadata;
 
     public void setMetadata(CompanyUnitMetadataRecord metadata) {
