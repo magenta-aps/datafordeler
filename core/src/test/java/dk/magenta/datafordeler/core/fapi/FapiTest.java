@@ -67,7 +67,7 @@ public class FapiTest {
 
     private static String veryEarly = "1800-01-01T00:00:00Z";
     private static String veryLate = "2200-12-31T23:59:59Z";
-    private static ZoneId systemZone = ZoneOffset.ofHours(1);
+    private static ZoneId systemZone = ZoneId.of("Europe/Copenhagen");
 
     @Test
     @Order(order = 1)
@@ -705,6 +705,7 @@ public class FapiTest {
     }
 
     private static String updateTimestamps(String input, ZoneId zone) {
+        System.out.println("updateTimestamps "+zone);
         String[] lines = input.split("\n", -1);
         StringJoiner output = new StringJoiner("\n");
         for (String line : lines) {
