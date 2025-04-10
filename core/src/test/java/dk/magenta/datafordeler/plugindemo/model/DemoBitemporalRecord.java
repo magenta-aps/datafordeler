@@ -53,14 +53,15 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
 
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
         return Bitemporal.fixOffsetOut(this.registrationFrom);
     }
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
         this.registrationFrom = Bitemporal.fixOffsetIn(registrationFrom);
     }
@@ -70,14 +71,15 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @XmlElement(name = IO_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
         return Bitemporal.fixOffsetOut(this.registrationTo);
     }
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = Bitemporal.fixOffsetIn(registrationTo);
     }
@@ -90,14 +92,15 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
     @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     @XmlElement(name = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public OffsetDateTime getEffectFrom() {
         return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public void setEffectFrom(OffsetDateTime effectFrom) {
         this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
     }
