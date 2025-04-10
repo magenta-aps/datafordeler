@@ -88,9 +88,9 @@ services:
       - ./plugin/geo/src/test/resources/access.json:/app/dev-env/local/geo/access.json
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
-    command: bash -c "cd /code/core && mvn test"
+#    command: bash -c "cd /code/core && mvn test"
     # command: bash -c "cd /code/plugin/ger && mvn test"
-#    command: bash -c "cd /code/plugin/statistik && mvn test"
+    command: bash -c "cd /code/plugin/statistik && mvn test"
 #    command: bash -c "cd /code/plugin/geo && mvn --batch-mode -T 2C test -Dtest=TestService#testRoad"
     #use docker compose up test to execute tests
 

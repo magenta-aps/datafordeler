@@ -140,6 +140,7 @@ public abstract class StatisticsService {
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
             Filter filter = this.getFilter(request);
+            System.out.println(filter.toString());
             String outputDescription = null;
             OutputStream outputStream = null;
 
@@ -379,12 +380,15 @@ public abstract class StatisticsService {
         }
         CsvSchema schema = builder.build().withHeader();
         int written = 0;
+        System.out.println("writeItems");
 
         if (items.hasNext()) {
+            System.out.println("items.hasNext()");
             ObjectWriter writerobj = mapper.writer(schema);
 
             SequenceWriter writer = writerobj.writeValues(outputStream);
             for (written = 0; items.hasNext(); written++) {
+                System.out.println("written: "+written);
                 Object item = items.next();
                 if (item != null) {
                     writer.write(item);
@@ -393,6 +397,7 @@ public abstract class StatisticsService {
             }
             writer.close();
         }
+        System.out.println("return written: "+written);
         return written;
     }
 
