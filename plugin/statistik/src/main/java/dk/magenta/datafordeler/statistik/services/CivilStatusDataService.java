@@ -183,6 +183,10 @@ public class CivilStatusDataService extends PersonStatisticsService {
         // A23 reg part
         //Filter based on events
         List<CivilStatusDataRecord> filteredList = civilStatusCollection.stream().filter(empl -> eventListCivilState.stream().anyMatch(dept -> empl.getRegistrationFrom().equals(dept.getTimestamp()))).collect(Collectors.toList());
+
+        civilStatusCollection.stream().forEach(dept -> {System.out.println(dept.getRegistrationFrom());});
+        eventListCivilState.stream().forEach(dept -> {System.out.println(dept.getTimestamp());});
+
         System.out.println("filteredList: " + filteredList);
 
         for (CivilStatusDataRecord civilStatusDataRecord : sortRecords(FilterOnRegistrationFrom(filteredList, filter.registrationAfter, filter.registrationBefore))) {
