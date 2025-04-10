@@ -74,33 +74,6 @@ public abstract class TestBase {
             }
             for (CompanyUnitRecord companyUnitRecord : QueryManager.getAllEntities(session, CompanyUnitRecord.class)) {
                 Transaction transaction = session.beginTransaction();
-
-                System.out.println("secnamerecords "+companyUnitRecord.getId());
-                ArrayList<SecNameRecord> db_secNameRecords = new ArrayList<>();
-                Query<SecNameRecord> q = session.createQuery("from "+ SecNameRecord.class.getCanonicalName()+" x where x.companyUnitRecord=:record", SecNameRecord.class);
-                q.setParameter("record", companyUnitRecord);
-                for (SecNameRecord r : q.getResultList()) {
-                    System.out.println("Exists in DB:      " + r.getId()+" "+r.getName()+" "+r.getBitemporality());
-                    System.out.println("Exists in hash:    " + r.getId()+" "+ db_secNameRecords.contains(r));
-                    db_secNameRecords.add(r);
-                }
-
-                ArrayList<SecNameRecord> traverse_secNameRecords = new ArrayList<>();
-                companyUnitRecord.traverse(null, new Consumer<CvrRecord>() {
-                    @Override
-                    public void accept(CvrRecord cvrRecord) {
-                        if (cvrRecord instanceof SecNameRecord) {
-                            SecNameRecord r = (SecNameRecord) cvrRecord;
-                            traverse_secNameRecords.add(r);
-                            System.out.println("Found by traverse: "+ r.getId()+" "+r.getName()+" "+r.getBitemporality());
-                        }
-                    }
-                });
-                if (db_secNameRecords.size() != traverse_secNameRecords.size()) {
-                    System.out.println(db_secNameRecords.size() + " != " + traverse_secNameRecords.size());
-                }
-
-
                 companyUnitRecord.delete(session);
                 transaction.commit();
             }

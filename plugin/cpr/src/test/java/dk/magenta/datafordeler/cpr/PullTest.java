@@ -15,6 +15,7 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
+import dk.magenta.datafordeler.cpr.records.person.PersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthPlaceDataRecord;
 import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
@@ -26,6 +27,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -97,7 +99,6 @@ public class PullTest extends TestBase {
     public void setUp() {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         File localfolder = new File(configuration.getLocalCopyFolder());
-        System.out.println(localfolder);
         if (localfolder.isDirectory()) {
             for (File f : localfolder.listFiles()) {
                 f.delete();
@@ -168,21 +169,20 @@ public class PullTest extends TestBase {
         personFile.delete();
     }
 
+
     @Test
     public void testConfiguredPull() throws Exception {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
-
-        CprRegisterManager registerManager = (CprRegisterManager) plugin.getRegisterManager();
-        registerManager.setProxyString(null);
-
-        when(registerManager.getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class)))
-                .thenAnswer(
-                        (Answer<FtpCommunicator>) invocation -> {
-                            FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
-                            ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
-                            return ftpCommunicator;
-                        }
+        this.registerManager.setProxyString(null);
+        doAnswer(
+                (Answer<FtpCommunicator>) invocation -> {
+                    FtpCommunicator ftpCommunicator = (FtpCommunicator) invocation.callRealMethod();
+                    ftpCommunicator.setSslSocketFactory(PullTest.getTrustAllSSLSocketFactory());
+                    return ftpCommunicator;
+                }
+        ).when(this.registerManager).getFtpCommunicator(
+                any(Session.class), any(URI.class), any(CprRecordEntityManager.class)
         );
 
         String username = "test";
@@ -198,6 +198,7 @@ public class PullTest extends TestBase {
         int personPort = 2106;
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
         try {
+            configuration.setPersonRegisterPasswordEncryptionFile(new File(PullTest.class.getClassLoader().getResource("keyfile.json").getFile()));
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
             configuration.setPersonRegisterFtpDownloadFolder("/");

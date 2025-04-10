@@ -45,6 +45,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
@@ -103,6 +104,12 @@ public abstract class TestBase {
     @Autowired
     protected PersonRecordOutputWrapper personRecordOutputWrapper;
 
+
+    @BeforeEach
+    public void setupPlugin() throws IOException {
+        this.plugin.init();
+    }
+
     @BeforeEach
     public void setupConfiguration() {
         this.configuration = ((CprConfigurationManager) this.plugin.getConfigurationManager()).getConfiguration();
@@ -114,10 +121,10 @@ public abstract class TestBase {
     }
 
     @MockitoSpyBean
-    private CprRegisterManager registerManager;
+    protected CprRegisterManager registerManager;
 
     @BeforeEach
-    public void setupRegisterManager() {
+    public void setupRegisterManager() throws IOException {
         this.registerManager.setProxyString(null);
     }
 
