@@ -64,6 +64,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public OffsetDateTime getTimestamp() {
+        System.out.println("getTimestamp: " + timestamp + " => "+fixOffsetOut(timestamp));
         return fixOffsetOut(timestamp);
     }
 
@@ -75,6 +76,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
 
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        System.out.println("setTimestamp: " + timestamp + " => "+this.timestamp);
     }
 
     public static final String DB_FIELD_EVENT = "eventId";
