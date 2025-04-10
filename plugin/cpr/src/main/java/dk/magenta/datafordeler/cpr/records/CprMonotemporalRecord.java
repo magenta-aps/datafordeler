@@ -13,6 +13,9 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Objects;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends CprMonotemporalRecord<E, S>> extends CprNontemporalRecord<E, S> implements Monotemporal {
 
@@ -24,21 +27,6 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_FROM = Monotemporal.DB_FIELD_REGISTRATION_FROM;
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
-
-
-    private static ZoneId cprZoneId = ZoneId.of("Europe/Copenhagen");
-    public static OffsetDateTime fixOffsetOut(OffsetDateTime date) {
-        if (date != null) {
-            return date.atZoneSimilarLocal(cprZoneId).toOffsetDateTime();
-        }
-        return null;
-    }
-    public static OffsetDateTime fixOffsetIn(OffsetDateTime date) {
-        if (date != null) {
-            return date.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime();
-        }
-        return null;
-    }
 
 
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")

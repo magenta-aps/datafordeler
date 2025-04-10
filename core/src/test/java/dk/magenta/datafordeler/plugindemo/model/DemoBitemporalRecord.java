@@ -58,11 +58,11 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     private OffsetDateTime registrationFrom;
 
     public OffsetDateTime getRegistrationFrom() {
-        return this.registrationFrom;
+        return Bitemporal.fixOffsetOut(this.registrationFrom);
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = registrationFrom;
+        this.registrationFrom = Bitemporal.fixOffsetIn(registrationFrom);
     }
 
 
@@ -75,19 +75,12 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return Bitemporal.fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = Bitemporal.fixOffsetIn(registrationTo);
     }
-
-
-    public void setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo) {
-        this.registrationFrom = registrationFrom;
-        this.registrationTo = registrationTo;
-    }
-
 
 
     public static final Class<?> FILTERPARAMTYPE_EFFECTFROM = OffsetDateTime.class;
@@ -102,11 +95,11 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
-        return this.effectFrom;
+        return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = effectFrom;
+        this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
     }
 
 
@@ -118,11 +111,11 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {
-        return this.effectTo;
+        return Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = effectTo;
+        this.effectTo = Bitemporal.fixOffsetIn(effectTo);
     }
 
     @Override
@@ -142,12 +135,12 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public OffsetDateTime dafoUpdated;
 
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     @Override
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = Bitemporal.fixOffsetIn(dafoUpdated);
     }
 
 

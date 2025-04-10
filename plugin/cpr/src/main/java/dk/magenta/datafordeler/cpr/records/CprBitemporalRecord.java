@@ -38,11 +38,11 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
-        return fixOffsetOut(this.effectFrom);
+        return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = fixOffsetIn(effectFrom);
+        this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
     }
 
     public static final String DB_FIELD_EFFECT_FROM_UNCERTAIN = "effectFromUncertain";
@@ -68,11 +68,11 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {
-        return fixOffsetOut(this.effectTo);
+        return Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = fixOffsetIn(effectTo);
+        this.effectTo = Bitemporal.fixOffsetIn(effectTo);
     }
 
     public static final String DB_FIELD_EFFECT_TO_UNCERTAIN = "effectToUncertain";

@@ -3,6 +3,8 @@ package dk.magenta.datafordeler.core.database;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
 
 public interface Bitemporal extends Monotemporal {
@@ -73,10 +75,24 @@ public interface Bitemporal extends Monotemporal {
     }
 
     Bitemporality getBitemporality();
-
     static void copy(Bitemporal from, Bitemporal to) {
         Monotemporal.copy(from, to);
         to.setEffectFrom(from.getEffectFrom());
         to.setEffectTo(from.getEffectTo());
+    }
+
+
+    ZoneId zoneId = ZoneId.of("Europe/Copenhagen");
+    static OffsetDateTime fixOffsetOut(OffsetDateTime date) {
+        if (date != null) {
+            return date.atZoneSimilarLocal(zoneId).toOffsetDateTime();
+        }
+        return null;
+    }
+    static OffsetDateTime fixOffsetIn(OffsetDateTime date) {
+        if (date != null) {
+            return date.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime();
+        }
+        return null;
     }
 }
