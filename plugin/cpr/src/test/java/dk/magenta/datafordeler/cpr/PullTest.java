@@ -226,7 +226,6 @@ public class PullTest extends TestBase {
             Set<BirthPlaceDataRecord> birthPlaceDataRecords = personEntity.getBirthPlace();
             Assertions.assertEquals(1, birthPlaceDataRecords.size());
             BirthPlaceDataRecord birthPlaceDataRecord = birthPlaceDataRecords.iterator().next();
-            System.out.println("birthPlaceDataRecord.getRegistrationFrom(): "+birthPlaceDataRecord.getRegistrationFrom());
             Assertions.assertTrue(OffsetDateTime.parse("1991-09-23T12:00+02:00").isEqual(birthPlaceDataRecord.getRegistrationFrom()));
             Assertions.assertNull(birthPlaceDataRecord.getRegistrationTo());
             Assertions.assertEquals(9510, birthPlaceDataRecord.getAuthority());
