@@ -66,9 +66,11 @@ public abstract class PersonStatisticsService extends StatisticsService {
             for (PersonRecordQuery query : queries) {
                 System.out.println("Query: "+query.toHql());
                 System.out.println(query.getConditionParameters());
-                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(primarySession, query, PersonEntity.class);
-                System.out.println(personEntities.count());
-                Stream<Map<String, String>> formatted = this.formatItems(primarySession, personEntities, secondarySession, filter);
+//                Stream<PersonEntity> personEntities = QueryManager.getAllEntitiesAsStream(primarySession, query, PersonEntity.class);
+                List<PersonEntity> personEntities = QueryManager.getAllEntities(primarySession, query, PersonEntity.class);
+                System.out.println(personEntities.size());
+                Stream<PersonEntity> personEntityStream = personEntities.stream();
+                Stream<Map<String, String>> formatted = this.formatItems(primarySession, personEntityStream, secondarySession, filter);
 
                 concatenation = (concatenation == null) ? formatted : Stream.concat(concatenation, formatted);
             }
