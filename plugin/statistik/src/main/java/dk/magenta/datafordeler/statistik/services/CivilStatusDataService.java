@@ -151,7 +151,6 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
     protected List<Map<String, String>> formatPersonByRecord(PersonEntity person, Session session, GeoLookupService lookupService, CivilStatusFilter filter) {
 
-        System.out.println("formatPersonByRecord");
         List<Map<String, String>> itemMap = new ArrayList<Map<String, String>>();
 
         OffsetDateTime searchTime = filter.registrationAfter;
@@ -184,34 +183,25 @@ public class CivilStatusDataService extends PersonStatisticsService {
         //Filter based on events
         List<CivilStatusDataRecord> filteredList = civilStatusCollection.stream().filter(empl -> eventListCivilState.stream().anyMatch(dept -> empl.getRegistrationFrom().equals(dept.getTimestamp()))).collect(Collectors.toList());
 
-        civilStatusCollection.stream().forEach(dept -> {System.out.println("A: "+dept.getRegistrationFrom());});
-        eventListCivilState.stream().forEach(dept -> {System.out.println("B: "+dept.getTimestamp());});
-
-        System.out.println("filteredList: " + filteredList);
-
         for (CivilStatusDataRecord civilStatusDataRecord : sortRecords(FilterOnRegistrationFrom(filteredList, filter.registrationAfter, filter.registrationBefore))) {
             mariageEffectTime = civilStatusDataRecord.getEffectFrom();
 
             // Undone entries don't count
             if (civilStatusDataRecord.isUndone()) {
-                System.out.println("bail1");
                 continue;
             }
 
             //If this addressregistration has a sameas, it mean that is is just a close and reopen based on new timeintervals
             if (civilStatusDataRecord.getSameAs() != null) {
-                System.out.println("bail2");
                 continue;
             }
 
             //If this addressregistration has a sameas, it mean that is is just a close and reopen based on new timeintervals
             if (civilStatusDataRecord.getCorrectionof() != null) {
-                System.out.println("bail3");
                 continue;
             }
 
             if (mariageEffectTime != null && Objects.equals(mariageEffectTime, civilStatusDataRecord.getEffectTo())) {
-                System.out.println("bail4");
                 continue;
             }
 
@@ -258,7 +248,6 @@ public class CivilStatusDataService extends PersonStatisticsService {
 
             AddressDataRecord addressDataRecord = findNewestAfterFilterOnEffect(person.getAddress(), mariageEffectTime);
             int municipalityCode = 0;
-            System.out.println("addressDataRecord: "+addressDataRecord);
             if (addressDataRecord != null) {
                 municipalityCode = addressDataRecord.getMunicipalityCode();
 
@@ -295,13 +284,11 @@ public class CivilStatusDataService extends PersonStatisticsService {
             if (citizenshipDataRecord != null) {
                 item.put(CITIZENSHIP_CODE, Integer.toString(citizenshipDataRecord.getCountryCode()));
             }
-            System.out.println(municipalityCode);
             if (municipalityCode > 950) {
                 replaceMapValues(item, null, "");
                 itemMap.add(item);
             }
         }
-        System.out.println(itemMap);
         return itemMap;
     }
 }

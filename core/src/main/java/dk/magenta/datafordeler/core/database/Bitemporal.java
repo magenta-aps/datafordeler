@@ -82,18 +82,19 @@ public interface Bitemporal extends Monotemporal {
     }
 
 
+    // MSSQL's datofelt datetime2 opfører sig lidt sjovt mht. tidszoner
+    // Når en datetime kommer ind i databasen bliver det gemt uden tidszone
+    // og når det udlæses bliver det tolket som UTC
     ZoneId zoneId = ZoneId.of("Europe/Copenhagen");
     static OffsetDateTime fixOffsetOut(OffsetDateTime date) {
         if (date != null) {
             return date.atZoneSameInstant(zoneId).toOffsetDateTime();
-//            return date.atZoneSimilarLocal(zoneId).toOffsetDateTime();
         }
         return null;
     }
     static OffsetDateTime fixOffsetIn(OffsetDateTime date) {
         if (date != null) {
             return date.atZoneSameInstant(ZoneOffset.UTC).toOffsetDateTime();
-//            return date.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime();
         }
         return null;
     }

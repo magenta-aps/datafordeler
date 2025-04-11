@@ -79,7 +79,6 @@ public class ConfigurationSessionManager extends SessionManager {
 
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
         hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
-//        hibernateProperties.setProperty("hibernate.jdbc.time_zone", "Europe/Copenhagen");
         hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
         hibernateProperties.setProperty("hibernate.globally_quoted_identifiers_skip_column_definitions", "true");
 

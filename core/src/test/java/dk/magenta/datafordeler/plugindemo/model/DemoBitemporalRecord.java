@@ -58,9 +58,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
-        OffsetDateTime d = Bitemporal.fixOffsetOut(this.registrationFrom);
-        System.out.println(this.registrationFrom+" => "+d);
-        return d;
+        return Bitemporal.fixOffsetOut(this.registrationFrom);
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
@@ -99,9 +97,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public OffsetDateTime getEffectFrom() {
-        OffsetDateTime d = Bitemporal.fixOffsetOut(this.effectFrom);
-        System.out.println(this.effectFrom+" => "+d);
-        return d;
+        return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)

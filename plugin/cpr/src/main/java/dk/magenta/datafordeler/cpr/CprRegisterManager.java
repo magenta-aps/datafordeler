@@ -119,7 +119,6 @@ public class CprRegisterManager extends RegisterManager {
     }
 
     public FtpCommunicator getFtpCommunicator(Session session, URI eventInterface, EntityManager cprEntityManager) throws DataStreamException {
-        System.out.println("getFtpCommunicator");
         CprConfiguration configuration = this.configurationManager.getConfiguration();
         try {
             return new DatabaseProgressFtpCommunicator(

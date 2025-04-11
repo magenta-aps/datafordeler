@@ -705,7 +705,6 @@ public class FapiTest {
     }
 
     private static String updateTimestamps(String input, ZoneId zone) {
-        System.out.println("updateTimestamps "+zone);
         String[] lines = input.split("\n", -1);
         StringJoiner output = new StringJoiner("\n");
         for (String line : lines) {

@@ -168,7 +168,6 @@ public class CivilStatusDataServiceTest extends TestBase {
 
     @Test
     public void testCivilStateChangeWithPnr0101011235() throws JsonProcessingException {
-        System.out.println("testCivilStateChangeWithPnr0101011235");
         when(civilStatusDataService.getTimeintervallimit()).thenReturn(false);
         when(civilStatusDataService.getWriteToLocalFile()).thenReturn(false);
 

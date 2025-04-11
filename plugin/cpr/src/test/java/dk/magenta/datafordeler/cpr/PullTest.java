@@ -169,7 +169,6 @@ public class PullTest extends TestBase {
         personFile.delete();
     }
 
-
     @Test
     public void testConfiguredPull() throws Exception {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
