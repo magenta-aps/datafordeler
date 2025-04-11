@@ -113,7 +113,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     @JsonProperty(value = IO_FIELD_ID)
     @XmlElement(name = IO_FIELD_ID)
-    @Column(name = DB_FIELD_ID)
+    @Column(name = DB_FIELD_ID, columnDefinition = "binary(16)")
     private UUID addressId;
 
     public UUID getAddressId() {
