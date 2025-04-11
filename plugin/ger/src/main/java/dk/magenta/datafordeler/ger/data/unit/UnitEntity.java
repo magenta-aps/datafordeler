@@ -126,7 +126,7 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
 
     public static final String DB_FIELD_DEID = "deid";
     public static final String IO_FIELD_DEID = "deid";
-    @Column(name = DB_FIELD_DEID)
+    @Column(name = DB_FIELD_DEID, columnDefinition = "binary(16)")
     @JsonProperty(value = IO_FIELD_DEID)
     private UUID deid;
 
@@ -141,7 +141,7 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
 
     public static final String DB_FIELD_JEID = "jeid";
     public static final String IO_FIELD_JEID = "jeid";
-    @Column(name = DB_FIELD_JEID)
+    @Column(name = DB_FIELD_JEID, columnDefinition = "binary(16)")
     @JsonProperty(value = IO_FIELD_JEID)
     private UUID jeid;
 

@@ -33,7 +33,7 @@ public final class Identification extends DatabaseEntry implements Comparable<Id
     public static final String IO_FIELD_UUID = "uuid";
 
     @JsonProperty(value = IO_FIELD_UUID)
-    @Column(unique = true, nullable = false, insertable = true, updatable = false, name = DB_FIELD_UUID)
+    @Column(unique = true, nullable = false, insertable = true, updatable = false, name = DB_FIELD_UUID, columnDefinition = "binary(16)")
     private UUID uuid;
 
     public UUID getUuid() {
