@@ -120,6 +120,7 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
         hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
         hibernateProperties.setProperty("hibernate.globally_quoted_identifiers_skip_column_definitions", "true");
+        hibernateProperties.setProperty("hibernate.type.preferred_uuid_jdbc_type", "binary");
 
         hibernateProperties.setProperty("hibernate.c3p0.min_size", "5");
         hibernateProperties.setProperty("hibernate.c3p0.max_size", "200");

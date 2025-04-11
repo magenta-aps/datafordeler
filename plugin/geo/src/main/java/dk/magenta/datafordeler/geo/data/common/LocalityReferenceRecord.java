@@ -45,7 +45,7 @@ public class LocalityReferenceRecord<E extends GeoEntity> extends GeoMonotempora
     }
 
 
-    public static final String DB_FIELD_UUID = "uuid";
+    public static final String DB_FIELD_UUID = "uuid_16";
     @Column(name = DB_FIELD_UUID, columnDefinition = "binary(16)")
     @JsonIgnore
     private UUID uuid;

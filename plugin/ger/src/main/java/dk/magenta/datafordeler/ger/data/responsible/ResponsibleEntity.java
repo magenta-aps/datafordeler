@@ -180,7 +180,7 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-    public static final String DB_FIELD_CVR_PARTICIPANT_GUID = "cvrParticipantGuid";
+    public static final String DB_FIELD_CVR_PARTICIPANT_GUID = "cvrParticipantGuid_16";
     public static final String IO_FIELD_CVR_PARTICIPANT_GUID = "cvrDeltagerGuid";
     @Column(name = DB_FIELD_CVR_PARTICIPANT_GUID, columnDefinition = "binary(16)")
     @JsonProperty(value = IO_FIELD_CVR_PARTICIPANT_GUID)
