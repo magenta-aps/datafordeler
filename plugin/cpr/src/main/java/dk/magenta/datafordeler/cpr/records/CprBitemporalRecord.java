@@ -11,6 +11,7 @@ import jakarta.persistence.Transient;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
 
@@ -31,17 +32,17 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
-    @Column(name = DB_FIELD_EFFECT_FROM)
+    @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     @XmlElement(name = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
-        return this.effectFrom;
+        return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = effectFrom;
+        this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
     }
 
     public static final String DB_FIELD_EFFECT_FROM_UNCERTAIN = "effectFromUncertain";
@@ -61,17 +62,17 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public static final String DB_FIELD_EFFECT_TO = Bitemporal.DB_FIELD_EFFECT_TO;
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
-    @Column(name = DB_FIELD_EFFECT_TO)
+    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     @XmlElement(name = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {
-        return this.effectTo;
+        return Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = effectTo;
+        this.effectTo = Bitemporal.fixOffsetIn(effectTo);
     }
 
     public static final String DB_FIELD_EFFECT_TO_UNCERTAIN = "effectToUncertain";
@@ -165,10 +166,10 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public CprBitemporalRecord setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo, OffsetDateTime effectFrom, boolean effectFromUncertain, OffsetDateTime effectTo, boolean effectToUncertain) {
         super.setBitemporality(registrationFrom, registrationTo);
-        this.effectFrom = effectFrom;
-        this.effectFromUncertain = effectFromUncertain;
-        this.effectTo = effectTo;
-        this.effectToUncertain = effectToUncertain;
+        this.setEffectFrom(effectFrom);
+        this.setEffectFromUncertain(effectFromUncertain);
+        this.setEffectTo(effectTo);
+        this.setEffectToUncertain(effectToUncertain);
         return this;
     }
 
@@ -213,7 +214,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     @JsonIgnore
     public CprBitemporality getBitemporality() {
-        return new CprBitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.effectFrom, this.effectFromUncertain, this.effectTo, this.effectToUncertain);
+        return new CprBitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.getEffectFrom(), this.effectFromUncertain, this.getEffectTo(), this.effectToUncertain);
     }
 
     protected static void copy(CprBitemporalRecord from, CprBitemporalRecord to) {

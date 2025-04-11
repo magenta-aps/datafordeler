@@ -7,6 +7,9 @@ import org.hibernate.Session;
 import java.time.OffsetDateTime;
 import java.util.*;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * Superclass for bitemporal data, pointing to Effects objects.
  * Pieces of data sharing exact bitemporality may be stored in one DataItem, pointing
@@ -86,15 +89,15 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED)
+    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime lastUpdated;
 
     public OffsetDateTime getLastUpdated() {
-        return this.lastUpdated;
+        return fixOffsetOut(this.lastUpdated);
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
+        this.lastUpdated = fixOffsetIn(lastUpdated);
     }
 
     public void setUpdated(OffsetDateTime lastUpdated) {

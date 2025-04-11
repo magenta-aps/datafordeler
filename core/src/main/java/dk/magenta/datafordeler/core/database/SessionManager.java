@@ -108,7 +108,7 @@ public class SessionManager {
     protected Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
 
-        hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.spatial.dialect.sqlserver.SqlServer2008SpatialDialect"));
+        hibernateProperties.setProperty("hibernate.dialect", getEnv("DATABASE_DIALECT", "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"));
         hibernateProperties.setProperty("hibernate.show_sql", getEnv("DATABASE_SHOW_SQL", "false"));
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("DATABASE_METHOD", "validate"));
         hibernateProperties.setProperty("hibernate.default_schema", getEnv("DATABASE_DEFAULT_SCHEMA", "dbo"));

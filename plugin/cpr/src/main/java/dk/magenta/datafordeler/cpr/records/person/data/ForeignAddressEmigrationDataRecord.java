@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.records.person.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
@@ -89,7 +90,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_EXIT_REGISTRATION = "emigrationRegistration";
     public static final String IO_FIELD_EXIT_REGISTRATION = "udrejseRegistrering";
-    @Column(name = DB_FIELD_EXIT_REGISTRATION)
+    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
     @XmlElement(name = IO_FIELD_EXIT_REGISTRATION)
     private OffsetDateTime emigrationRegistration;
@@ -97,17 +98,18 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
-    @Column(name = DB_FIELD_RETURN_REGISTRATION)
-    @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
+    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_RETURN_REGISTRATION)
     private OffsetDateTime immigrationRegistration;
 
+    @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public OffsetDateTime getImmigrationRegistration() {
-        return this.immigrationRegistration;
+        return Bitemporal.fixOffsetOut(this.immigrationRegistration);
     }
 
+    @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public void setImmigrationRegistration(OffsetDateTime immigrationRegistration) {
-        this.immigrationRegistration = immigrationRegistration;
+        this.immigrationRegistration = Bitemporal.fixOffsetIn(immigrationRegistration);
     }
 
 

@@ -55,7 +55,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
 
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
-    @Column(name = DB_FIELD_CREATION_DATE)
+    @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
     private OffsetDateTime creationDate;
 
     public OffsetDateTime getCreationDate() {
@@ -73,7 +73,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public static final String DB_FIELD_EDIT_DATE = "editDate";
-    @Column(name = DB_FIELD_EDIT_DATE)
+    @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
     private OffsetDateTime editDate;
 
     public OffsetDateTime getEditDate() {
@@ -93,7 +93,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
-    @Column(name = DB_FIELD_DAFO_UPDATED)
+    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)

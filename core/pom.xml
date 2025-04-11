@@ -422,8 +422,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <forkCount>5</forkCount>
-                    <reuseForks>true</reuseForks>
+                    <parallel>methods</parallel>
+                    <threadCount>1</threadCount>
+                    <useUnlimitedThreads>false</useUnlimitedThreads>
                     <additionalClasspathElements>
                         <additionalClasspathElement>${basedir}/src/test/resources</additionalClasspathElement>
                     </additionalClasspathElements>

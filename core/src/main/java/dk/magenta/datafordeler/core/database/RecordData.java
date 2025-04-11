@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * Storage of how we got a piece of data into the system, ie. source, date, ...
  */
@@ -17,7 +20,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
     public RecordData(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
+        this.timestamp = fixOffsetIn(timestamp);
     }
 
     @ManyToOne
@@ -32,11 +35,11 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
 
-    @Column
+    @Column(columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
     public OffsetDateTime getTimestamp() {
-        return this.timestamp;
+        return fixOffsetOut(this.timestamp);
     }
 
 

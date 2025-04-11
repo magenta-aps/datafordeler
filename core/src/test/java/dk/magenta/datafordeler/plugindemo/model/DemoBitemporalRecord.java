@@ -52,42 +52,37 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
 
 
-    @Column(name = DB_FIELD_REGISTRATION_FROM)
-    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
+    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
-        return this.registrationFrom;
+        return Bitemporal.fixOffsetOut(this.registrationFrom);
     }
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = registrationFrom;
+        this.registrationFrom = Bitemporal.fixOffsetIn(registrationFrom);
     }
 
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-    @Column(name = DB_FIELD_REGISTRATION_TO)
-    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
+    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return Bitemporal.fixOffsetOut(this.registrationTo);
     }
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = Bitemporal.fixOffsetIn(registrationTo);
     }
-
-
-    public void setBitemporality(OffsetDateTime registrationFrom, OffsetDateTime registrationTo) {
-        this.registrationFrom = registrationFrom;
-        this.registrationTo = registrationTo;
-    }
-
 
 
     public static final Class<?> FILTERPARAMTYPE_EFFECTFROM = OffsetDateTime.class;
@@ -96,40 +91,42 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
-    @Column(name = DB_FIELD_EFFECT_FROM)
-    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
+    @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public OffsetDateTime getEffectFrom() {
-        return this.effectFrom;
+        return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = effectFrom;
+        this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
     }
 
 
     public static final String DB_FIELD_EFFECT_TO = Bitemporal.DB_FIELD_EFFECT_TO;
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
-    @Column(name = DB_FIELD_EFFECT_TO)
-    @JsonProperty(value = IO_FIELD_EFFECT_TO)
+    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_TO)
     public OffsetDateTime getEffectTo() {
-        return this.effectTo;
+        return Bitemporal.fixOffsetOut(this.effectTo);
     }
 
+    @JsonProperty(value = IO_FIELD_EFFECT_TO)
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = effectTo;
+        this.effectTo = Bitemporal.fixOffsetIn(effectTo);
     }
 
     @Override
     @JsonIgnore
     @XmlTransient
     public Bitemporality getBitemporality() {
-        return new Bitemporality(this.registrationFrom, this.registrationTo, this.effectFrom, this.effectTo);
+        return new Bitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.getEffectFrom(), this.getEffectTo());
     }
 
     public static final Class<?> FILTERPARAMTYPE_LASTUPDATED = OffsetDateTime.class;
@@ -137,17 +134,18 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED)
-    @JsonProperty(value = IO_FIELD_UPDATED)
     @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
+    @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     @Override
+    @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = Bitemporal.fixOffsetIn(dafoUpdated);
     }
 
 

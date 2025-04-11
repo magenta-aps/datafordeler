@@ -21,6 +21,9 @@ import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * A Registration defines the time range in which a piece of data is "registered",
  * that is, when did it enter into the records of our data source, and when was it
@@ -44,8 +47,8 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     public Registration(OffsetDateTime registrationFrom, OffsetDateTime registrationTo, int sequenceNumber) {
         this();
-        this.registrationFrom = registrationFrom;
-        this.registrationTo = registrationTo;
+        this.setRegistrationFrom(registrationFrom);
+        this.setRegistrationTo(registrationTo);
         this.sequenceNumber = sequenceNumber;
         this.setLastImportTime();
     }
@@ -213,7 +216,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     public static final String DB_FIELD_REGISTRATION_FROM = "registrationFrom";
     public static final String IO_FIELD_REGISTRATION_FROM = "registreringFra";
 
-    @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationFrom;
 
 
@@ -221,31 +224,31 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @XmlElement
     @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     public OffsetDateTime getRegistrationFrom() {
-        return this.registrationFrom;
+        return fixOffsetOut(this.registrationFrom);
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = registrationFrom;
+        this.registrationFrom = fixOffsetIn(registrationFrom);
     }
 
 
     public static final String DB_FIELD_REGISTRATION_TO = "registrationTo";
     public static final String IO_FIELD_REGISTRATION_TO = "registreringTil";
 
-    @Column(name = DB_FIELD_REGISTRATION_TO, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_REGISTRATION_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationTo;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @XmlElement
     @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return fixOffsetOut(this.registrationTo);
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = fixOffsetIn(registrationTo);
     }
 
 
@@ -288,11 +291,11 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty("sidstImporteret")
     public OffsetDateTime getLastImportTime() {
-        return this.lastImportTime;
+        return fixOffsetOut(this.lastImportTime);
     }
 
     public void setLastImportTime(OffsetDateTime lastImportTime) {
-        this.lastImportTime = lastImportTime;
+        this.lastImportTime = fixOffsetIn(lastImportTime);
     }
 
     public void setLastImportTime() {
@@ -325,8 +328,8 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
             s.add(subIndentString + "entity: NULL");
         }
         s.add(subIndentString + "checksum: " + this.registerChecksum);
-        s.add(subIndentString + "from: " + this.registrationFrom);
-        s.add(subIndentString + "to: " + this.registrationTo);
+        s.add(subIndentString + "from: " + this.getRegistrationFrom());
+        s.add(subIndentString + "to: " + this.getRegistrationTo());
         s.add(subIndentString + "effects: [");
         for (V effect : this.effects) {
             s.add(effect.toString(indent + 2));
@@ -347,11 +350,11 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
      */
     @Override
     public int compareTo(Registration o) {
-        OffsetDateTime oDateTime = o == null ? null : o.registrationFrom;
+        OffsetDateTime oDateTime = o == null ? null : o.getRegistrationFrom();
         if (this.registrationFrom == null && oDateTime == null) return 0;
         if (oDateTime == null) return 1;
         if (this.registrationFrom == null) return -1;
-        return this.registrationFrom.toInstant().compareTo(oDateTime.toInstant());
+        return this.getRegistrationFrom().toInstant().compareTo(oDateTime.toInstant());
     }
 
     public boolean equals(Registration o) {
@@ -367,18 +370,18 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
         if (o == null) return false;
         if (this.compareTo(o) != 0) return false;
 
-        OffsetDateTime oDateTime = o == null ? null : o.registrationTo;
+        OffsetDateTime oDateTime = o == null ? null : o.getRegistrationTo();
         if (this.registrationTo == null) {
             return (oDateTime == null);
         }
-        return this.registrationTo.toInstant().compareTo(oDateTime.toInstant()) == 0;
+        return this.getRegistrationTo().toInstant().compareTo(oDateTime.toInstant()) == 0;
     }
 
     public R split(OffsetDateTime splitTime) {
         R newReg = (R) this.entity.createRegistration();
         newReg.setRegistrationFrom(splitTime);
-        newReg.setRegistrationTo(this.registrationTo);
-        this.registrationTo = splitTime;
+        newReg.setRegistrationTo(this.getRegistrationTo());
+        this.setRegistrationTo(splitTime);
         for (V effect : new ArrayList<V>(this.effects)) {
             V newEffect = (V) effect.createClone();
             newEffect.setRegistration(newReg);

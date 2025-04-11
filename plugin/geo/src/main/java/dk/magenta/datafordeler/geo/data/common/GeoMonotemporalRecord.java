@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRecord<E> implements Monotemporal {
 
@@ -27,17 +30,17 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_FROM = Monotemporal.DB_FIELD_REGISTRATION_FROM;
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
-    @Column(name = DB_FIELD_REGISTRATION_FROM)
+    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
     public OffsetDateTime getRegistrationFrom() {
-        return this.registrationFrom;
+        return fixOffsetOut(this.registrationFrom);
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = registrationFrom;
+        this.registrationFrom = fixOffsetIn(registrationFrom);
     }
 
     public void setRegistrationFrom(long registrationFrom) {
@@ -50,17 +53,17 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-    @Column(name = DB_FIELD_REGISTRATION_TO)
+    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @XmlElement(name = IO_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = fixOffsetIn(registrationTo);
     }
 
     public void setRegistrationTo(long registrationTo) {

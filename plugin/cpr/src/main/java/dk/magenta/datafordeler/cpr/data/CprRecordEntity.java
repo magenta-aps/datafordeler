@@ -11,6 +11,9 @@ import org.hibernate.Session;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity {
 
@@ -54,16 +57,16 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
-    @Column(name = DB_FIELD_DAFO_UPDATED)
+    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated;
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return fixOffsetOut(this.dafoUpdated);
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
     }
 
 
