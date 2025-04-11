@@ -128,14 +128,14 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
     public static final String IO_FIELD_DEID = "deid";
     @Column(name = DB_FIELD_DEID, columnDefinition = "binary(16)")
     @JsonProperty(value = IO_FIELD_DEID)
-    private UUID deid;
+    private UUID deid_16;
 
     public UUID getDeid() {
-        return this.deid;
+        return this.deid_16;
     }
 
     public void setDeid(UUID deid) {
-        this.deid = deid;
+        this.deid_16 = deid;
     }
 
 
@@ -628,7 +628,7 @@ public class UnitEntity extends GerEntity implements IdentifiedEntity {
         map.put(IO_FIELD_GERNR, this.getGerNumber());
         map.put(IO_FIELD_DNR, this.getDnr());
         map.put(IO_FIELD_JE_END_DATE, this.jeEndDate);
-        map.put(IO_FIELD_DEID, this.deid);
+        map.put(IO_FIELD_DEID, this.deid_16);
         map.put(IO_FIELD_JEID, this.jeid);
         map.put(IO_FIELD_VALIDATED, this.validated);
         map.put(IO_FIELD_COPY, this.copy);
