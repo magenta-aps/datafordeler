@@ -10,6 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.time.OffsetDateTime;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 
 @Entity
 @Table(name = "dump_info")
@@ -19,7 +22,7 @@ public final class DumpInfo extends DatabaseEntry implements
     @Column(nullable = false)
     private String name, requestPath, charset, format;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
     @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, optional = true,
@@ -37,7 +40,7 @@ public final class DumpInfo extends DatabaseEntry implements
         this.requestPath = config.getRequestPath();
         this.format = config.getFormat().name();
         this.charset = config.getCharset().name();
-        this.timestamp = timestamp;
+        this.timestamp = fixOffsetIn(timestamp);
         this.data = data != null ? new DumpData(data) : null;
     }
 
@@ -81,7 +84,7 @@ public final class DumpInfo extends DatabaseEntry implements
 
     @JsonIgnore
     public OffsetDateTime getTimestamp() {
-        return timestamp;
+        return fixOffsetOut(timestamp);
     }
 
     public String toString() {

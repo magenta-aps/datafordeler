@@ -10,6 +10,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 
 @Entity
 @Table(
@@ -56,7 +59,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
 
     public OffsetDateTime getTimestamp() {
-        return timestamp;
+        return fixOffsetOut(timestamp);
     }
 
     public static final String DB_FIELD_FIELD = "field";
@@ -74,7 +77,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP)
+    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     @JsonIgnore
     @XmlElement(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;
@@ -103,7 +106,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     }
 
     public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
+        this.timestamp = fixOffsetIn(timestamp);
     }
 
     public Long getOldItem() {

@@ -231,6 +231,7 @@ public class Pull extends Worker implements Runnable {
                 this.importMetadata.setSession(null);
             }
             session.close();
+            this.log.info("Removing pull lock for " + this.registerManager.getClass().getCanonicalName() + " (" + this.registerManager.hashCode() + ")");
             runningPulls.remove(this.registerManager);
         }
     }

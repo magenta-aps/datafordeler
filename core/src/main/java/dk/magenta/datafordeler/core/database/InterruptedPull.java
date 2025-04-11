@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * Entity that stores data about an interrupted Pull. When a running Pull is interrupted,
  * it should result in a new InterruptedPull being stored to the database, describing:
@@ -52,27 +55,27 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-    @Column
+    @Column(columnDefinition = "datetime2")
     private OffsetDateTime startTime;
 
     public OffsetDateTime getStartTime() {
-        return this.startTime;
+        return fixOffsetOut(this.startTime);
     }
 
     public void setStartTime(OffsetDateTime startTime) {
-        this.startTime = startTime;
+        this.startTime = fixOffsetIn(startTime);
     }
 
 
-    @Column
+    @Column(columnDefinition = "datetime2")
     private OffsetDateTime interruptTime;
 
     public OffsetDateTime getInterruptTime() {
-        return this.interruptTime;
+        return fixOffsetOut(this.interruptTime);
     }
 
     public void setInterruptTime(OffsetDateTime interruptTime) {
-        this.interruptTime = interruptTime;
+        this.interruptTime = fixOffsetIn(interruptTime);
     }
 
 

@@ -101,6 +101,7 @@ public class FatherSubscriptionTest extends TestBase {
         try {
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
             configuration.setPersonRegisterFtpAddress("ftps://localhost:" + personPort);
+            configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);

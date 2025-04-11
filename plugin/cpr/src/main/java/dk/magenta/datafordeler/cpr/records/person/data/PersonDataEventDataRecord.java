@@ -12,6 +12,9 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME, indexes = {
@@ -28,7 +31,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
     public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, String text) {
         this.setDafoUpdated(OffsetDateTime.now());
-        this.timestamp = timestamp;
+        this.timestamp = fixOffsetIn(timestamp);
         this.field = field;
         this.oldItem = oldItem;
         this.text = text;
@@ -58,7 +61,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
 
     public OffsetDateTime getTimestamp() {
-        return timestamp;
+        return fixOffsetOut(timestamp);
     }
 
     public static final String DB_FIELD_FIELD = "field";
@@ -78,7 +81,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP)
+    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     @JsonIgnore
     private OffsetDateTime timestamp;
 

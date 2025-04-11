@@ -13,6 +13,7 @@ import jakarta.persistence.MappedSuperclass;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Objects;
@@ -63,7 +64,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED)
+    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_LAST_UPDATED)
     private OffsetDateTime lastUpdated;
 
@@ -73,20 +74,34 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
+        // TODO: Vi ændrer timezone her fordi felttypen datetime2 gemmer en naiv datetime i databasen,
+        // og udlæser dem med UTC som tidszone.
+        // Nyligt parsede datoer har tidszone Grønland. Når der udlæses fra databasen og sammenlignes,
+        // er der 1-2 timers forskel pga. tidszone (den naive del er ens, men den parsede har f.eks. +0100)
+        // Det betyder at sammenligningen fejler.
+        // Derfor kompenserer vi ved at smide UTC på tidspunktet, uden at ændre den naive del, så sammenligningen
+        // igen fungerer.
+        // Hvis vi går væk fra datetime2 skal vi ændre tilbage til at der bare står
+        // this.lastUpdated = lastUpdated
+        this.lastUpdated = lastUpdated != null ? lastUpdated.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime() : null;
     }
 
 
     public static final String DB_FIELD_LAST_LOADED = "lastLoaded";
     public static final String IO_FIELD_LAST_LOADED = "sidstIndlaest";
 
-    @Column(name = DB_FIELD_LAST_LOADED)
+    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_LAST_LOADED)
     private OffsetDateTime lastLoaded;
 
     @JsonIgnore
     public OffsetDateTime getLastLoaded() {
         return this.lastLoaded;
+    }
+
+    public void setLastLoaded(OffsetDateTime lastLoaded) {
+        // Samme som setLastUpdated
+        this.lastLoaded = lastLoaded != null ? lastLoaded.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime() : null;
     }
 
     @JsonIgnore

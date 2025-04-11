@@ -16,6 +16,9 @@ import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * An Effect defines the time range in which a piece of data has effect.
  * An Effect points to exactly one Registration, but may have any number of DataItems
@@ -53,8 +56,8 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public Effect(R registration, OffsetDateTime effectFrom, OffsetDateTime effectTo) {
         this();
         this.setRegistration(registration);
-        this.effectFrom = effectFrom;
-        this.effectTo = effectTo;
+        this.setEffectFrom(effectFrom);
+        this.setEffectTo(effectTo);
     }
 
     public Effect(R registration, TemporalAccessor effectFrom, TemporalAccessor effectTo) {
@@ -114,16 +117,16 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_FROM = "effectFrom";
     public static final String IO_FIELD_EFFECT_FROM = "virkningFra";
 
-    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
-        return this.effectFrom;
+        return fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = effectFrom;
+        this.effectFrom = fixOffsetIn(effectFrom);
     }
 
 
@@ -131,15 +134,15 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String IO_FIELD_EFFECT_TO = "virkningTil";
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
-    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false)
+    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {
-        return this.effectTo;
+        return fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = effectTo;
+        this.effectTo = fixOffsetIn(effectTo);
     }
 
 
@@ -183,9 +186,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     public boolean equalData(V other) {
         return (
-                (this.effectFrom == null ? other.getEffectFrom() == null : this.effectFrom
+                (this.effectFrom == null ? other.getEffectFrom() == null : this.getEffectFrom()
                         .equals(other.getEffectFrom())) &&
-                        (this.effectTo == null ? other.getEffectTo() == null : this.effectTo
+                        (this.effectTo == null ? other.getEffectTo() == null : this.getEffectTo()
                                 .equals(other.getEffectTo()))
         );
     }
@@ -214,8 +217,8 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
         String subIndentString = new String(new char[4 * (indent + 1)]).replace("\0", " ");
         StringJoiner s = new StringJoiner("\n");
         s.add(indentString + this.getClass().getSimpleName() + "[" + this.hashCode() + "] {");
-        s.add(subIndentString + "from: " + this.effectFrom);
-        s.add(subIndentString + "to: " + this.effectTo);
+        s.add(subIndentString + "from: " + this.getEffectFrom());
+        s.add(subIndentString + "to: " + this.getEffectTo());
         s.add(subIndentString + "data: [");
         for (D dataItem : this.getDataItems()) {
             s.add(dataItem.toString(indent + 2));
@@ -236,13 +239,13 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
      */
     @Override
     public int compareTo(Effect o) {
-        OffsetDateTime otherFrom = o == null ? null : o.effectFrom;
-        int comparison = Equality.compare(this.effectFrom, otherFrom, OffsetDateTime.class, false);
+        OffsetDateTime otherFrom = o == null ? null : o.getEffectFrom();
+        int comparison = Equality.compare(this.getEffectFrom(), otherFrom, OffsetDateTime.class, false);
         if (comparison != 0) {
             return comparison;
         }
-        OffsetDateTime otherTo = o == null ? null : o.effectTo;
-        return Equality.compare(this.effectTo, otherTo, OffsetDateTime.class, true);
+        OffsetDateTime otherTo = o == null ? null : o.getEffectTo();
+        return Equality.compare(this.getEffectTo(), otherTo, OffsetDateTime.class, true);
     }
 
 
@@ -256,7 +259,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     public String toCompactString() {
         R registration = this.registration;
-        return registration.registrationFrom + "|" + registration.registrationTo + "|" + this.effectFrom + "|" + this.effectTo;
+        return registration.registrationFrom + "|" + registration.registrationTo + "|" + this.getEffectFrom() + "|" + this.getEffectTo();
     }
 
     public boolean compareRange(V other) {

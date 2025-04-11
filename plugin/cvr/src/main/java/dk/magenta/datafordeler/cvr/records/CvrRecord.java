@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 
 /**
  * A CVR record is the object representation of a node in our input data,
@@ -27,17 +30,17 @@ public abstract class CvrRecord extends DatabaseEntry {
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
     @JsonIgnore
-    @Column(name = DB_FIELD_DAFO_UPDATED)
+    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
     // @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     @JsonIgnore
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return fixOffsetOut(this.dafoUpdated);
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
     }
 
     public CvrRecord() {

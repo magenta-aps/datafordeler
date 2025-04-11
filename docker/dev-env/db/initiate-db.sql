@@ -61,7 +61,7 @@ BEGIN
 END
 GO
 
-INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cpr"}', 'pull', 'dev-env', 0)
-INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cvr"}', 'pull', 'dev-env', 0)
-INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "geo"}', 'pull', 'dev-env', 0)
+-- INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cpr"}', 'pull', 'dev-env', 0)
+-- INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cvr"}', 'pull', 'dev-env', 0)
+-- INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "geo"}', 'pull', 'dev-env', 0)
 GO

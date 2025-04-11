@@ -47,10 +47,10 @@ public final class Command extends DatabaseEntry implements Configuration {
     @JsonIgnore
     private String issuer;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime received;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime handled;
 
     @Column(nullable = true)

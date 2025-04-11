@@ -14,6 +14,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * Storage for data on a Person's eventhistory
  * referenced by {@link dk.magenta.datafordeler.cpr.records.person.data}
@@ -28,8 +31,8 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public PersonEventDataRecord(OffsetDateTime timestamp, String eventId, String derived) {
-        this.setDafoUpdated(OffsetDateTime.now());
-        this.timestamp = timestamp;
+        this.setDafoUpdated(fixOffsetIn(OffsetDateTime.now()));
+        this.timestamp = fixOffsetIn(timestamp);
         this.eventId = eventId;
         this.derived = derived;
     }
@@ -61,15 +64,18 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public OffsetDateTime getTimestamp() {
-        return timestamp;
+        return fixOffsetOut(timestamp);
     }
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP)
+    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     @JsonIgnore
     @XmlElement(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;
 
+    public void setTimestamp(OffsetDateTime timestamp) {
+        this.timestamp = fixOffsetIn(timestamp);
+    }
 
     public static final String DB_FIELD_EVENT = "eventId";
     public static final String IO_FIELD_EVENT = "eventId";
