@@ -83,8 +83,6 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     private OffsetDateTime timestamp;
 
 
-
-
     public static final String DB_FIELD_OLD_ITEM = "oldItem";
     @Column(name = DB_FIELD_OLD_ITEM)
     @JsonIgnore

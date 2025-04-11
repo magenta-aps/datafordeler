@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRecord<E> implements Monotemporal {
 
@@ -33,11 +36,11 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     private OffsetDateTime registrationFrom;
 
     public OffsetDateTime getRegistrationFrom() {
-        return this.registrationFrom;
+        return fixOffsetOut(this.registrationFrom);
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = registrationFrom;
+        this.registrationFrom = fixOffsetIn(registrationFrom);
     }
 
     public void setRegistrationFrom(long registrationFrom) {
@@ -56,11 +59,11 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = fixOffsetIn(registrationTo);
     }
 
     public void setRegistrationTo(long registrationTo) {
