@@ -17,6 +17,9 @@ import java.time.ZoneOffset;
 import java.util.Set;
 import java.util.UUID;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntity {
@@ -59,12 +62,12 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     private OffsetDateTime creationDate;
 
     public OffsetDateTime getCreationDate() {
-        return this.creationDate;
+        return fixOffsetOut(this.creationDate);
     }
 
     @JsonProperty(value = "CreationDate")
     public void setCreationDate(OffsetDateTime creationDate) {
-        this.creationDate = creationDate;
+        this.creationDate = fixOffsetIn(creationDate);
     }
 
     @JsonProperty(value = "CreationDate")
@@ -77,12 +80,12 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     private OffsetDateTime editDate;
 
     public OffsetDateTime getEditDate() {
-        return this.editDate;
+        return fixOffsetOut(this.editDate);
     }
 
     @JsonProperty(value = "EditDate")
     public void setEditDate(OffsetDateTime editDate) {
-        this.editDate = editDate;
+        this.editDate = fixOffsetIn(editDate);
     }
 
     @JsonProperty(value = "EditDate")
@@ -102,7 +105,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
     }
 
 
@@ -114,8 +117,8 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
         for (GeoMonotemporalRecord record : rawData.getMonotemporalRecords()) {
             record.setDafoUpdated(timestamp);
             this.addMonotemporalRecord(record);
-            if (timestamp != null && (this.dafoUpdated == null || timestamp.isAfter(this.dafoUpdated))) {
-                this.dafoUpdated = timestamp;
+            if (timestamp != null && (this.dafoUpdated == null || timestamp.isAfter(this.getDafoUpdated()))) {
+                this.setDafoUpdated(timestamp);
             }
         }
     }

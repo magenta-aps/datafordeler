@@ -18,6 +18,9 @@ import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.Objects;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord> {
 
@@ -70,7 +73,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     @JsonIgnore
     public OffsetDateTime getLastUpdated() {
-        return this.lastUpdated;
+        return fixOffsetOut(this.lastUpdated);
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
@@ -83,7 +86,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         // igen fungerer.
         // Hvis vi går væk fra datetime2 skal vi ændre tilbage til at der bare står
         // this.lastUpdated = lastUpdated
-        this.lastUpdated = lastUpdated != null ? lastUpdated.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime() : null;
+        this.lastUpdated = fixOffsetIn(lastUpdated);
     }
 
 
@@ -96,21 +99,21 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     @JsonIgnore
     public OffsetDateTime getLastLoaded() {
-        return this.lastLoaded;
+        return fixOffsetOut(this.lastLoaded);
     }
 
     public void setLastLoaded(OffsetDateTime lastLoaded) {
         // Samme som setLastUpdated
-        this.lastLoaded = lastLoaded != null ? lastLoaded.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime() : null;
+        this.lastLoaded = fixOffsetIn(lastLoaded);
     }
 
     @JsonIgnore
     public OffsetDateTime getRegistrationFrom() {
-        return (this.lastUpdated != null) ? this.lastUpdated : this.lastLoaded;
+        return fixOffsetOut((this.lastUpdated != null) ? this.lastUpdated : this.lastLoaded);
     }
 
     public void setRegistrationFrom(OffsetDateTime offsetDateTime) {
-        this.lastUpdated = offsetDateTime;
+        this.setLastUpdated(offsetDateTime);
     }
 
 
