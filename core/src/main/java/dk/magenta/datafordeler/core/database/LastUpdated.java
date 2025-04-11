@@ -6,6 +6,9 @@ import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 /**
  * A database entry for storing the timestamp of the last successful import
  * of an EntityManager. This is done so the next import can request the source
@@ -45,10 +48,10 @@ public class LastUpdated extends DatabaseEntry {
     }
 
     public OffsetDateTime getTimestamp() {
-        return this.timestamp;
+        return fixOffsetOut(this.timestamp);
     }
 
     public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
+        this.timestamp = fixOffsetIn(timestamp);
     }
 }
