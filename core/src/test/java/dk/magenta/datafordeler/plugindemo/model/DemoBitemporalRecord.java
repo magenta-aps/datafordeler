@@ -133,7 +133,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
-    @Column(name = DB_FIELD_UPDATED)
+    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 

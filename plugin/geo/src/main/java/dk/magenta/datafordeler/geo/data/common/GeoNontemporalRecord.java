@@ -14,6 +14,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public abstract class GeoNontemporalRecord<E extends GeoEntity> extends DatabaseEntry implements Nontemporal {
 
@@ -39,17 +42,18 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
     public static final String DB_FIELD_UPDATED = "dafoUpdated";
     public static final String IO_FIELD_UPDATED = "sidstOpdateret";
-    @Column(name = DB_FIELD_UPDATED)
-    @JsonProperty(value = IO_FIELD_UPDATED)
+    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
+    @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return fixOffsetOut(this.dafoUpdated);
     }
 
+    @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
     }
 
     protected static void copy(GeoNontemporalRecord from, GeoNontemporalRecord to) {

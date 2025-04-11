@@ -499,9 +499,9 @@ public class CompanyEntity extends GerEntity implements IdentifiedEntity {
         this.ajourInit = ajourInit;
     }
 
-    public static final String DB_FIELD_STATUS_GUID = "statusGuid";
+    public static final String DB_FIELD_STATUS_GUID = "statusGuid_16";
     public static final String IO_FIELD_STATUS_GUID = "statusGuid";
-    @Column(name = DB_FIELD_STATUS_GUID)
+    @Column(name = DB_FIELD_STATUS_GUID, columnDefinition = "binary(16)")
     @JsonProperty(value = IO_FIELD_STATUS_GUID)
     private UUID statusGuid;
 
