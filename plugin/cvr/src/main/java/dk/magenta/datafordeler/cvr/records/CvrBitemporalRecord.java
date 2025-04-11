@@ -171,14 +171,15 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     @JsonIgnore
+    @Column(columnDefinition = "datetime2")
     private OffsetDateTime registrationTo;
 
     public OffsetDateTime getRegistrationTo() {
-        return this.registrationTo;
+        return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = registrationTo;
+        this.registrationTo = fixOffsetIn(registrationTo);
     }
 
 
