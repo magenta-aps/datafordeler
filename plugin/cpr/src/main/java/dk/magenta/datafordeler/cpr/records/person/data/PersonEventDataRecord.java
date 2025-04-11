@@ -31,8 +31,9 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public PersonEventDataRecord(OffsetDateTime timestamp, String eventId, String derived) {
-        this.setDafoUpdated(OffsetDateTime.now());
-        this.timestamp = timestamp;
+        this.setDafoUpdated(fixOffsetIn(OffsetDateTime.now()));
+        this.timestamp = fixOffsetIn(timestamp);
+        System.out.println("create "+timestamp+" => "+this.timestamp);
         this.eventId = eventId;
         this.derived = derived;
     }
