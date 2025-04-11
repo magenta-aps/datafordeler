@@ -217,10 +217,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         return new CprBitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.getEffectFrom(), this.effectFromUncertain, this.getEffectTo(), this.effectToUncertain);
     }
 
-    public CprBitemporality getRawBitemporality() {
-        return new CprBitemporality(this.registrationFrom, this.registrationTo, this.effectFrom, this.effectFromUncertain, this.effectTo, this.effectToUncertain);
-    }
-
     protected static void copy(CprBitemporalRecord from, CprBitemporalRecord to) {
         CprMonotemporalRecord.copy(from, to);
         to.effectFrom = from.effectFrom;

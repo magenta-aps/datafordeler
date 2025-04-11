@@ -5,12 +5,9 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import org.apache.poi.ss.formula.functions.Offset;
 
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Objects;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;

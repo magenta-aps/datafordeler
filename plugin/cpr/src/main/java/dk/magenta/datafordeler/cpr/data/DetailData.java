@@ -13,6 +13,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class DetailData extends DatabaseEntry {
@@ -25,11 +28,11 @@ public abstract class DetailData extends DatabaseEntry {
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return fixOffsetOut(this.dafoUpdated);
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
     }
 
     public abstract Map<String, Object> asMap();
