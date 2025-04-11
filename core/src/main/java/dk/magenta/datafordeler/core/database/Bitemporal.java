@@ -85,15 +85,15 @@ public interface Bitemporal extends Monotemporal {
     ZoneId zoneId = ZoneId.of("Europe/Copenhagen");
     static OffsetDateTime fixOffsetOut(OffsetDateTime date) {
         if (date != null) {
-//            return date.atZoneSameInstant(zoneId).toOffsetDateTime();
-            return date.atZoneSimilarLocal(zoneId).toOffsetDateTime();
+            return date.atZoneSameInstant(zoneId).toOffsetDateTime();
+//            return date.atZoneSimilarLocal(zoneId).toOffsetDateTime();
         }
         return null;
     }
     static OffsetDateTime fixOffsetIn(OffsetDateTime date) {
         if (date != null) {
-//            return date.atZoneSameInstant(ZoneOffset.UTC).toOffsetDateTime();
-            return date.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime();
+            return date.atZoneSameInstant(ZoneOffset.UTC).toOffsetDateTime();
+//            return date.atZoneSimilarLocal(ZoneOffset.UTC).toOffsetDateTime();
         }
         return null;
     }
