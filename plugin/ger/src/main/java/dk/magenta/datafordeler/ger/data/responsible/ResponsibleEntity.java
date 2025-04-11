@@ -180,18 +180,18 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
     }
 
 
-    public static final String DB_FIELD_CVR_PARTICIPANT_GUID = "cvrParticipantGuid";
+    public static final String DB_FIELD_CVR_PARTICIPANT_GUID = "cvrParticipantGuid_16";
     public static final String IO_FIELD_CVR_PARTICIPANT_GUID = "cvrDeltagerGuid";
-    @Column(name = DB_FIELD_CVR_PARTICIPANT_GUID)
+    @Column(name = DB_FIELD_CVR_PARTICIPANT_GUID, columnDefinition = "binary(16)")
     @JsonProperty(value = IO_FIELD_CVR_PARTICIPANT_GUID)
-    private UUID cvrParticipantGuid;
+    private UUID cvrParticipantGuid_16;
 
     public UUID getCvrParticipantGuid() {
-        return this.cvrParticipantGuid;
+        return this.cvrParticipantGuid_16;
     }
 
     public void setCvrParticipantGuid(UUID cvrParticipantGuid) {
-        this.cvrParticipantGuid = cvrParticipantGuid;
+        this.cvrParticipantGuid_16 = cvrParticipantGuid;
     }
 
 
@@ -300,7 +300,7 @@ public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
         map.put(IO_FIELD_RELATION_END_DATE, this.relationEndDate);
         map.put(IO_FIELD_RELATION_CREATE_DATE, this.relationCreateDate);
         map.put(IO_FIELD_RELATION_UPDATE_DATE, this.relationUpdateDate);
-        map.put(IO_FIELD_CVR_PARTICIPANT_GUID, this.cvrParticipantGuid);
+        map.put(IO_FIELD_CVR_PARTICIPANT_GUID, this.cvrParticipantGuid_16);
         map.put(IO_FIELD_UNIT_NUMBER, this.unitNumber);
         map.put(IO_FIELD_UNIT_TYPE, this.unitType);
         map.put(IO_FIELD_NAME, this.name);

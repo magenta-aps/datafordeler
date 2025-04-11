@@ -286,7 +286,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
 
-    @Column(nullable = true, insertable = true, updatable = true)
+    @Column(nullable = true, insertable = true, updatable = true, columnDefinition = "datetime2")
     protected OffsetDateTime lastImportTime;
 
     @JsonProperty("sidstImporteret")

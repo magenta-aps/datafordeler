@@ -27,14 +27,15 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
 
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
     protected OffsetDateTime registrationFrom;
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
         return fixOffsetOut(this.registrationFrom);
     }
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
         this.registrationFrom = fixOffsetIn(registrationFrom);
     }
@@ -44,14 +45,15 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @XmlElement(name = IO_FIELD_REGISTRATION_TO)
     protected OffsetDateTime registrationTo;
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
     }
 
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = fixOffsetIn(registrationTo);
     }

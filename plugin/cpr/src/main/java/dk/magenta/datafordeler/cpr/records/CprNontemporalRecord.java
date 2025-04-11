@@ -19,6 +19,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+
 @MappedSuperclass
 public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal {
 
@@ -202,18 +205,19 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
-    @Column(name = DB_FIELD_UPDATED)
-    @JsonProperty(value = IO_FIELD_UPDATED)
+    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
+    @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return fixOffsetOut(this.dafoUpdated);
     }
 
     @Override
+    @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = dafoUpdated;
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
     }
 
     protected static void copy(CprNontemporalRecord from, CprNontemporalRecord to) {

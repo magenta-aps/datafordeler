@@ -108,12 +108,12 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord {
 
     //----------------------------------------------------
 
-    public static final String DB_FIELD_ID = "addressId";
+    public static final String DB_FIELD_ID = "addressId_16";
     public static final String IO_FIELD_ID = "adresseId";
 
     @JsonProperty(value = IO_FIELD_ID)
     @XmlElement(name = IO_FIELD_ID)
-    @Column(name = DB_FIELD_ID)
+    @Column(name = DB_FIELD_ID, columnDefinition = "binary(16)")
     private UUID addressId;
 
     public UUID getAddressId() {
