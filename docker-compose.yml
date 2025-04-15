@@ -10,16 +10,6 @@ services:
     env_file:
       - ./docker/dev-env/datafordeler.env
     volumes:
-#      - ./core/src:/app/core/src
-#      - ./plugin/cpr:/app/plugin/cpr
-#      - ./plugin/cvr:/app/plugin/cvr
-#      - ./plugin/geo:/app/plugin/geo
-#      - ./plugin/eskat:/app/plugin/eskat
-#      - ./plugin/eboks:/app/plugin/eboks
-#      - ./plugin/statistik:/app/plugin/statistik
-#      - ./plugin/subscription:/app/plugin/subscription
-#      - ./plugin/prisme:/app/plugin/prisme
-#      - ./docker/dev-env/sts_metadata.xml:/app/conf/sts_metadata.xml:ro
       - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
       - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
       - ./plugin/cvr/src/test/resources/person.json:/app/dev-env/local/cvr/person.json
@@ -30,7 +20,6 @@ services:
       - ./plugin/geo/src/test/resources/access.json:/app/dev-env/local/geo/access.json
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
-#      - ./docker/createdbs.sql:/app/createdbs.sql
     environment:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:
