@@ -15,9 +15,9 @@ FROM eclipse-temurin:23-jre-alpine
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
+COPY docker/entrypoint.sh /app/entrypoint.sh
 COPY --from=build /build/core/target/*.jar /app/core/
 COPY --from=build /build/plugin/jar/*.jar /app/plugin/
-COPY docker/entrypoint.sh /app/entrypoint.sh
 
 EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]
