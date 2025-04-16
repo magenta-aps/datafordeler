@@ -175,14 +175,16 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                             System.out.println("No headers found");
                         }
                         for (Header header : headers) {
-                            System.out.println(header.getName() + ": " + header.getValue());
+                            System.out.println("Header: "+header.getName() + "=" + header.getValue());
                         }
-                        partialGet.setEntity(new StringEntity(entityBuilder.build().toString(), StandardCharsets.UTF_8));
+                        String body = entityBuilder.build().toString();
+                        partialGet.setEntity(new StringEntity(body, StandardCharsets.UTF_8));
+                        System.out.println(body);
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
                             if (response.getCode() != 200) {
-                                log.error(response);
+                                log.error(response.getCode()+" "+response.getReasonPhrase());
                                 throw new HttpStatusException(response, fetchUri);
                             }
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());

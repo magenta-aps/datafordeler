@@ -361,13 +361,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         timer.measure(TASK_PARSE);
         for (T item : items) {
             this.beforeParseSave(item, importMetadata, session);
-            if (this instanceof CompanyUnitEntityManager) {
-                try {
-                    System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(item));
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
             item.save(session);
         }
         return items.size();
