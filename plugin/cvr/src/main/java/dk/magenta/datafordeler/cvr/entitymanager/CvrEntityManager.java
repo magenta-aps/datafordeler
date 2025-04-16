@@ -383,7 +383,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             if (jsonNode.isArray()) {
                 log.debug("Node contains " + jsonNode.size() + " subnodes");
                 for (JsonNode item : jsonNode) {
-                    //this.parseData(item, importMetadata, session);
                     items.addAll(this.parseNode(item, filter));
                 }
                 return items;

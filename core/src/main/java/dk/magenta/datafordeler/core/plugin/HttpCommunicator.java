@@ -69,7 +69,7 @@ public class HttpCommunicator implements Communicator {
 
     public HttpCommunicator(URI httpHost, String username, String password, File keystoreFile, String keystorePassword) {
         try {
-            this.httpHost = HttpHost.create(new URI(httpHost.getScheme(), null, httpHost.getHost(), httpHost.getPort(), null, null, null));
+            this.httpHost = HttpHost.create(this.stripURI(httpHost));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -77,6 +77,10 @@ public class HttpCommunicator implements Communicator {
         this.password = password;
         this.keystoreFile = keystoreFile;
         this.keystorePassword = keystorePassword;
+    }
+
+    private URI stripURI(URI uri) throws URISyntaxException {
+        return new URI(uri.getScheme(), null, uri.getHost(), uri.getPort(), null, null, null);
     }
 
     @Override
@@ -143,7 +147,6 @@ public class HttpCommunicator implements Communicator {
     protected CloseableHttpClient buildClient() throws DataStreamException {
         HttpClientBuilder httpclient = HttpClients.custom();
 
-
         if (this.username != null && this.password != null) {
             CredentialsProvider credentialsProvider = CredentialsProviderBuilder.create()
                     .add(this.httpHost, this.username, this.password.toCharArray()).build();
@@ -184,6 +187,10 @@ public class HttpCommunicator implements Communicator {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setHost(URI httpHost) throws URISyntaxException {
+        this.httpHost = HttpHost.create(this.stripURI(httpHost));
     }
 
     public void setKeystoreFile(File keystoreFile) {
