@@ -15,6 +15,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.jena.base.Sys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -160,6 +161,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     }
                     while (scrollId != null) {
                         scrollIds.add(scrollId);
+                        System.out.println("SCROLL ID: " + scrollId);
 
                         URI fetchUri = new URI(scrollUri.getScheme(), scrollUri.getUserInfo(), scrollUri.getHost(), scrollUri.getPort(), scrollUri.getPath(), "scroll=10m", null);
                         EntityBuilder entityBuilder = EntityBuilder.create();
@@ -179,12 +181,13 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         }
                         String body = entityBuilder.build().toString();
                         partialGet.setEntity(new StringEntity(body, StandardCharsets.UTF_8));
-                        System.out.println(body);
+                        System.out.println(entityBuilder.getText());
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
                             if (response.getCode() != 200) {
                                 log.error(response.getCode()+" "+response.getReasonPhrase());
+                                System.out.println(InputStreamReader.readInputStream(response.getEntity().getContent()));
                                 throw new HttpStatusException(response, fetchUri);
                             }
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());
