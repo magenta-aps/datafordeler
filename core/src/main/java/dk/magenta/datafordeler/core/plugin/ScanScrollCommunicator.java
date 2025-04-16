@@ -163,12 +163,9 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         System.out.println("SCROLL ID: " + scrollId);
 
                         URI fetchUri = new URI(scrollUri.getScheme(), scrollUri.getUserInfo(), scrollUri.getHost(), scrollUri.getPort(), scrollUri.getPath(), "scroll=10m", null);
-                        EntityBuilder entityBuilder = EntityBuilder.create();
-                        entityBuilder.setContentType(ContentType.APPLICATION_JSON);
                         ObjectNode scrollObject = objectMapper.createObjectNode();
                         scrollObject.put("scroll", "10m");
                         scrollObject.put("scroll_id", scrollId);
-                        entityBuilder.setText(scrollObject.toString());
                         HttpGetWithEntity partialGet = new HttpGetWithEntity(fetchUri);
                         partialGet.setHeader("Content-Type", "application/json");
                         Header[] headers = partialGet.getHeaders();
@@ -178,15 +175,15 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         for (Header header : headers) {
                             System.out.println("Header: "+header.getName() + "=" + header.getValue());
                         }
-                        String body = entityBuilder.build().toString();
-                        partialGet.setEntity(new StringEntity(body, StandardCharsets.UTF_8));
-                        System.out.println(entityBuilder.getText());
+                        partialGet.setEntity(new StringEntity(scrollObject.toString(), StandardCharsets.UTF_8));
+                        System.out.println(scrollObject.toString());
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
                             if (response.getCode() != 200) {
                                 log.error(response.getCode()+" "+response.getReasonPhrase());
                                 System.out.println(InputStreamReader.readInputStream(response.getEntity().getContent()));
+                                System.out.println(InputStreamReader.readInputStream(partialGet.getEntity().getContent()));
                                 throw new HttpStatusException(response, fetchUri);
                             }
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());
