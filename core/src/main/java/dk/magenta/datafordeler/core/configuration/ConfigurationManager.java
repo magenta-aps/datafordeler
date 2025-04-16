@@ -64,7 +64,7 @@ public abstract class ConfigurationManager<C extends Configuration> extends Envi
         // This should always fetch fresh data from the database as that data might have been
         // changed.
         Session session = this.getSessionManager().getSessionFactory().openSession();
-        C configuration;
+        C configuration = null;
         try {
             Class<C> configurationClass = this.getConfigurationClass();
             configuration = session.createQuery(
@@ -73,6 +73,8 @@ public abstract class ConfigurationManager<C extends Configuration> extends Envi
             ).getSingleResult();
             session.refresh(configuration);
             return configuration;
+        } catch (NoResultException e) {
+            return null;
         } finally {
             session.close();
         }

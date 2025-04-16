@@ -46,7 +46,7 @@ BEGIN
             1, 'file:///app/dev-env/local/geo/unit.json',
             1, 'file:///app/dev-env/local/geo/building.json'
             )
-            END
+        END
     ELSE
         BEGIN
         UPDATE DatafordelerConfig.dbo.geo_config SET
@@ -59,9 +59,151 @@ BEGIN
         buildingRegisterType = 1, buildingRegisterURL = 'file:///app/dev-env/local/geo/building.json'
         END
 END
-GO
 
--- INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cpr"}', 'pull', 'dev-env', 0)
--- INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "cvr"}', 'pull', 'dev-env', 0)
--- INSERT INTO DatafordelerConfig.dbo.command (commandBody, commandName, issuer, status) VALUES ('{"plugin": "geo"}', 'pull', 'dev-env', 0)
-GO
+BEGIN
+    IF NOT EXISTS (SELECT * FROM DatafordelerConfig.dbo.cvr_config)
+        BEGIN
+        INSERT INTO DatafordelerConfig.dbo.cvr_config (
+            id,
+            companyRegisterDirectLookupAddress,
+            companyRegisterDirectLookupPassword,
+            companyRegisterDirectLookupPasswordEncrypted,
+            companyRegisterPassword,
+            companyRegisterPasswordEncrypted,
+            companyRegisterQuery,
+            companyRegisterScrollAddress,
+            companyRegisterStartAddress,
+            companyRegisterType,
+            companyRegisterUsername,
+            companyUnitRegisterPassword,
+            companyUnitRegisterPasswordEncrypted,
+            companyUnitRegisterQuery,
+            companyUnitRegisterScrollAddress,
+            companyUnitRegisterStartAddress,
+            companyUnitRegisterType,
+            companyUnitRegisterUsername,
+            participantRegisterDirectLookupAddress,
+            participantRegisterDirectLookupPassword,
+            participantRegisterDirectLookupPasswordEncrypted,
+            participantRegisterPassword,
+            participantRegisterPasswordEncrypted,
+            participantRegisterQuery,
+            participantRegisterScrollAddress,
+            participantRegisterStartAddress,
+            participantRegisterType,
+            participantRegisterUsername,
+            pullCronSchedule
+        ) VALUES (
+            'dk.magenta.datafordeler.cvr.CvrPlugin',
+            'https://erst-api.virk.dk/distribution-service-cvr-ekstern/HentAktuelVirksomhedEkstern/enhedsnr/%{cvr}',
+            'password',
+            NULL,
+            'password',
+            NULL,
+            '{
+                "query": {
+                    "bool": {
+                        "should": [
+                                {
+                                    "bool": {
+                                        "must": [
+                                {
+                                    "terms": {
+                                        "Vrvirksomhed.beliggenhedsadresse.kommune.kommuneKode":[954, 955, 956, 957, 958, 959, 960, 961, 962]
+                                    }
+                                },
+                                    {
+                                    "range": {
+                                        "Vrvirksomhed.sidstOpdateret": {
+                                            "gte": "%s"
+                                        }
+                                    }
+                                }
+                                    ]
+                                }
+                            },
+                                                {
+                                    "bool": {
+                                        "must": [
+                                {
+                                    "terms": {
+                                        "Vrvirksomhed.cvrNummer":%s
+                                    }
+                                },
+                                    {
+                                    "range": {
+                                        "Vrvirksomhed.sidstOpdateret": {
+                                            "gte": "%s"
+                                        }
+                                    }
+                                }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            }',
+            'http://distribution.virk.dk/_search/scroll',
+            'http://distribution.virk.dk/cvr-permanent/virksomhed/_search',
+            2,
+            'username',
+            'password',
+            NULL,
+            '{
+                "query":{
+                    "bool":{
+                        "must": [
+                            {
+                                "terms": {
+                                    "VrproduktionsEnhed.beliggenhedsadresse.kommune.kommuneKode":[954, 955, 956, 957, 958, 959, 960, 961, 962]
+                                }
+                            },
+                            {
+                                "range": {
+                                    "VrproduktionsEnhed.sidstOpdateret": {
+                                        "gte": "%s"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }',
+            'http://distribution.virk.dk/_search/scroll',
+            'http://distribution.virk.dk/cvr-permanent/produktionsenhed/_search',
+            2,
+            'username',
+            'https://erst-api.virk.dk/distribution-service-cvr-ekstern/HentAktuelDeltagerEkstern/enhedsnr/%{unit}',
+            'password',
+            NULL,
+            'password',
+            NULL,
+            '{
+                "query":{
+                    "bool":{
+                        "must": [
+                            {
+                                "terms": {
+                                    "Vrdeltagerperson.beliggenhedsadresse.kommune.kommuneKode":[954, 955, 956, 957, 958, 959, 960, 961, 962]
+                                }
+                            },
+                            {
+                                "range": {
+                                    "Vrdeltagerperson.sidstOpdateret": {
+                                        "gte": "%s"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }',
+            'http://distribution.virk.dk/_search/scroll',
+            'http://distribution.virk.dk/cvr-permanent/virksomhed/_search',
+            2,
+            'username',
+            '0 3 * * *'
+        )
+        END
+END
