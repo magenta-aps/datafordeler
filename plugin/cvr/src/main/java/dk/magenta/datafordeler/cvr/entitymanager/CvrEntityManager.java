@@ -400,7 +400,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             try {
                 return Collections.singletonList(getObjectMapper().treeToValue(jsonNode, this.getRecordClass()));
             } catch (JsonProcessingException e) {
-                log.error(jsonNode);
                 e.printStackTrace();
             }
         }

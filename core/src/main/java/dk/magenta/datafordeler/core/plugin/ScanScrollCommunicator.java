@@ -7,13 +7,9 @@ import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import org.apache.hc.client5.http.classic.HttpClient;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.entity.EntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -160,30 +156,18 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     }
                     while (scrollId != null) {
                         scrollIds.add(scrollId);
-                        System.out.println("SCROLL ID: " + scrollId);
-
                         URI fetchUri = new URI(scrollUri.getScheme(), scrollUri.getUserInfo(), scrollUri.getHost(), scrollUri.getPort(), scrollUri.getPath(), "scroll=10m", null);
                         ObjectNode scrollObject = objectMapper.createObjectNode();
                         scrollObject.put("scroll", "10m");
                         scrollObject.put("scroll_id", scrollId);
                         HttpGetWithEntity partialGet = new HttpGetWithEntity(fetchUri);
                         partialGet.setHeader("Content-Type", "application/json");
-                        Header[] headers = partialGet.getHeaders();
-                        if (headers.length == 0) {
-                            System.out.println("No headers found");
-                        }
-                        for (Header header : headers) {
-                            System.out.println("Header: "+header.getName() + "=" + header.getValue());
-                        }
                         partialGet.setEntity(new StringEntity(scrollObject.toString(), StandardCharsets.UTF_8));
-                        System.out.println(scrollObject.toString());
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
                             if (response.getCode() != 200) {
                                 log.error(response.getCode()+" "+response.getReasonPhrase());
-                                System.out.println(InputStreamReader.readInputStream(response.getEntity().getContent()));
-                                System.out.println(InputStreamReader.readInputStream(partialGet.getEntity().getContent()));
                                 throw new HttpStatusException(response, fetchUri);
                             }
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());
