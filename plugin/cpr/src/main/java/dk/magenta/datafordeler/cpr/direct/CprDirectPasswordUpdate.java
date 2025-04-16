@@ -5,6 +5,8 @@ import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDataMap;
 
 import java.io.IOException;
@@ -12,6 +14,8 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
 public class CprDirectPasswordUpdate extends Worker implements Runnable {
+
+    protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
 
     public static class Task extends AbstractTask<CprDirectPasswordUpdate> {
         public static final String DATA_CONFIGURATIONMANAGER = "configurationManager";
@@ -62,14 +66,17 @@ public class CprDirectPasswordUpdate extends Worker implements Runnable {
     @Override
     public void run() {
         try {
+            log.info("Updating CPR Direkte password");
             // Make sure we can access the local password storage
             String oldPassword = this.configurationManager.getConfiguration().getDirectPassword();
             // Generate a new password
             String newPassword = this.generatePassword(8);
             // Update remote pw
             directLookup.login(newPassword);
+            log.info("Remote password updated");
             // If success, update local pw
             this.configurationManager.setDirectPassword(newPassword);
+            log.info("Password saved");
         } catch (GeneralSecurityException | IOException | ConfigurationException | DataStreamException e) {
             e.printStackTrace();
         }
