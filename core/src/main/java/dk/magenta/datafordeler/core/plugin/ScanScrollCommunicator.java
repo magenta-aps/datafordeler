@@ -15,7 +15,6 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.io.entity.StringEntity;
-import org.apache.jena.base.Sys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -170,7 +169,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         scrollObject.put("scroll", "10m");
                         scrollObject.put("scroll_id", scrollId);
                         entityBuilder.setText(scrollObject.toString());
-                        HttpGet partialGet = new HttpGet(fetchUri);
+                        HttpGetWithEntity partialGet = new HttpGetWithEntity(fetchUri);
                         partialGet.setHeader("Content-Type", "application/json");
                         Header[] headers = partialGet.getHeaders();
                         if (headers.length == 0) {
