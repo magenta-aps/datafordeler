@@ -13,6 +13,7 @@ import org.apache.hc.client5.http.entity.EntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -168,6 +169,10 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         scrollObject.put("scroll_id", scrollId);
                         entityBuilder.setText(scrollObject.toString());
                         HttpGet partialGet = new HttpGet(fetchUri);
+                        Header[] headers = partialGet.getHeaders();
+                        for (Header header : headers) {
+                            System.out.println(header.getName() + ": " + header.getValue());
+                        }
                         partialGet.setEntity(new StringEntity(entityBuilder.build().toString(), StandardCharsets.UTF_8));
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
