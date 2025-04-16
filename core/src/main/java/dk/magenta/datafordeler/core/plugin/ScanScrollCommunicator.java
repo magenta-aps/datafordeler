@@ -169,7 +169,11 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         scrollObject.put("scroll_id", scrollId);
                         entityBuilder.setText(scrollObject.toString());
                         HttpGet partialGet = new HttpGet(fetchUri);
+                        partialGet.setHeader("Content-Type", "application/json");
                         Header[] headers = partialGet.getHeaders();
+                        if (headers.length == 0) {
+                            System.out.println("No headers found");
+                        }
                         for (Header header : headers) {
                             System.out.println(header.getName() + ": " + header.getValue());
                         }
@@ -177,6 +181,10 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
+                            if (response.getCode() != 200) {
+                                log.error(response);
+                                throw new HttpStatusException(response, fetchUri);
+                            }
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());
                         } catch (IOException e) {
                             throw new DataStreamException(e);
