@@ -4,23 +4,13 @@ services:
     image: datafordeler:latest
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.local
     depends_on:
       - datafordeler-db
     env_file:
       - ./docker/dev-env/datafordeler.env
     volumes:
-      - ./core/src:/app/core/src
-      - ./plugin/cpr:/app/plugin/cpr
-      - ./plugin/cvr:/app/plugin/cvr
-      - ./plugin/geo:/app/plugin/geo
-      - ./plugin/eskat:/app/plugin/eskat
-      - ./plugin/eboks:/app/plugin/eboks
-      - ./plugin/statistik:/app/plugin/statistik
-      - ./plugin/subscription:/app/plugin/subscription
-      - ./plugin/prisme:/app/plugin/prisme
-      - ./docker/dev-env/sts_metadata.xml:/app/conf/sts_metadata.xml:ro
-#      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
+      - ./plugin/cvr/src/test/resources/company_in.json:/app/dev-env/local/cvr/company_in.json
       - ./plugin/cvr/src/test/resources/unit.json:/app/dev-env/local/cvr/unit.json
       - ./plugin/cvr/src/test/resources/person.json:/app/dev-env/local/cvr/person.json
       - ./plugin/geo/src/test/resources/municipality.json:/app/dev-env/local/geo/municipality.json
@@ -35,17 +25,6 @@ services:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:
       - 8080:80
-    command: [
-      "java",
-      "-Dloader.path=/app/plugin/jar/",
-      "--add-opens", "java.base/java.net=ALL-UNNAMED",
-      "--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED",
-      "-Xms128M", "-Xmx4096M",
-      "-Dterminal.jline=false", "-Dterminal.ansi=true",
-      "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005",
-      "-cp", "datafordeler-core-exec.jar",
-      "org.springframework.boot.loader.launch.PropertiesLauncher"
-    ]
 
   datafordeler-db:
     container_name: datafordeler-db

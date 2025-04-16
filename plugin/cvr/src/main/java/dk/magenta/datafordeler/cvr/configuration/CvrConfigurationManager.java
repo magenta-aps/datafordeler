@@ -49,36 +49,40 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
     @Override
     public CvrConfiguration getConfiguration() {
         CvrConfiguration configuration = super.getConfiguration();
-        File encryptionFile = new File(configuration.getEncryptionKeyFileName());
-        configuration.setCompanyRegisterPasswordEncryptionFile(encryptionFile);
-        configuration.setCompanyUnitRegisterPasswordEncryptionFile(encryptionFile);
-        configuration.setParticipantRegisterPasswordEncryptionFile(encryptionFile);
+        if (configuration != null) {
+            File encryptionFile = new File(configuration.getEncryptionKeyFileName());
+            configuration.setCompanyRegisterPasswordEncryptionFile(encryptionFile);
+            configuration.setCompanyUnitRegisterPasswordEncryptionFile(encryptionFile);
+            configuration.setParticipantRegisterPasswordEncryptionFile(encryptionFile);
+        }
         return configuration;
     }
 
     @PostConstruct
     public void encryptPasswords() {
         CvrConfiguration configuration = this.getConfiguration();
-        Session session = this.getSessionManager().getSessionFactory().openSession();
-        try {
-            Transaction transaction = session.beginTransaction();
+        if (configuration != null) {
+            Session session = this.getSessionManager().getSessionFactory().openSession();
             try {
-                if (configuration.encryptCompanyDirectRegisterPassword(true)) {
-                    // Must use merge instead of save, because we are updating an object that was born in another session
-                    configuration = (CvrConfiguration) session.merge(configuration);
+                Transaction transaction = session.beginTransaction();
+                try {
+                    if (configuration.encryptCompanyDirectRegisterPassword(true)) {
+                        // Must use merge instead of save, because we are updating an object that was born in another session
+                        configuration = (CvrConfiguration) session.merge(configuration);
+                    }
+                    if (configuration.encryptParticipantDirectRegisterPassword(true)) {
+                        // Must use merge instead of save, because we are updating an object that was born in another session
+                        configuration = (CvrConfiguration) session.merge(configuration);
+                    }
+                    transaction.commit();
+                } catch (Exception e) {
+                    transaction.rollback();
+                    e.printStackTrace();
                 }
-                if (configuration.encryptParticipantDirectRegisterPassword(true)) {
-                    // Must use merge instead of save, because we are updating an object that was born in another session
-                    configuration = (CvrConfiguration) session.merge(configuration);
-                }
-                transaction.commit();
-            } catch (Exception e) {
-                transaction.rollback();
-                e.printStackTrace();
+                // TODO: Update more passwords?
+            } finally {
+                session.close();
             }
-            // TODO: Update more passwords?
-        } finally {
-            session.close();
         }
     }
 }
