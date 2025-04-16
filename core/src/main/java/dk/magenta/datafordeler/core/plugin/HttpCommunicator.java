@@ -68,15 +68,22 @@ public class HttpCommunicator implements Communicator {
     }
 
     public HttpCommunicator(URI httpHost, String username, String password, File keystoreFile, String keystorePassword) {
+        System.out.println("Creating HttpCommunicator");
+        System.out.println(httpHost);
         try {
-            this.httpHost = HttpHost.create(new URI(httpHost.getScheme(), null, httpHost.getHost(), httpHost.getPort(), null, null, null));
+            this.httpHost = HttpHost.create(this.stripURI(httpHost));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(this.httpHost);
         this.username = username;
         this.password = password;
         this.keystoreFile = keystoreFile;
         this.keystorePassword = keystorePassword;
+    }
+
+    private URI stripURI(URI uri) throws URISyntaxException {
+        return new URI(uri.getScheme(), null, uri.getHost(), uri.getPort(), null, null, null);
     }
 
     @Override
@@ -143,8 +150,11 @@ public class HttpCommunicator implements Communicator {
     protected CloseableHttpClient buildClient() throws DataStreamException {
         HttpClientBuilder httpclient = HttpClients.custom();
 
-
         if (this.username != null && this.password != null) {
+            System.out.println("Building HttpClient");
+            System.out.println("HttpHost: " + this.httpHost);
+            System.out.println("Username: " + this.username);
+            System.out.println("Password: " + this.password);
             CredentialsProvider credentialsProvider = CredentialsProviderBuilder.create()
                     .add(this.httpHost, this.username, this.password.toCharArray()).build();
             httpclient.setDefaultCredentialsProvider(credentialsProvider);
@@ -184,6 +194,10 @@ public class HttpCommunicator implements Communicator {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setHost(URI httpHost) throws URISyntaxException {
+        this.httpHost = HttpHost.create(this.stripURI(httpHost));
     }
 
     public void setKeystoreFile(File keystoreFile) {

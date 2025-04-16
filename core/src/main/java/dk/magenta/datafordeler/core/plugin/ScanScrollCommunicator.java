@@ -95,6 +95,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
      * This all happens in a thread, so you should get an InputStream returned immediately.
      */
     public InputStream fetch(URI initialUri, URI scrollUri, final String body) throws HttpStatusException, DataStreamException, URISyntaxException, IOException {
+        this.setHost(initialUri);
         CloseableHttpClient httpclient = this.buildClient();
 
         final URI startUri = new URI(
