@@ -7,12 +7,9 @@ import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.HttpStatusException;
 import dk.magenta.datafordeler.core.util.InputStreamReader;
 import org.apache.hc.client5.http.classic.HttpClient;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.entity.EntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -95,6 +92,7 @@ public class ScanScrollCommunicator extends HttpCommunicator {
      * This all happens in a thread, so you should get an InputStream returned immediately.
      */
     public InputStream fetch(URI initialUri, URI scrollUri, final String body) throws HttpStatusException, DataStreamException, URISyntaxException, IOException {
+        this.setHost(initialUri);
         CloseableHttpClient httpclient = this.buildClient();
 
         final URI startUri = new URI(
@@ -158,19 +156,20 @@ public class ScanScrollCommunicator extends HttpCommunicator {
                     }
                     while (scrollId != null) {
                         scrollIds.add(scrollId);
-
                         URI fetchUri = new URI(scrollUri.getScheme(), scrollUri.getUserInfo(), scrollUri.getHost(), scrollUri.getPort(), scrollUri.getPath(), "scroll=10m", null);
-                        EntityBuilder entityBuilder = EntityBuilder.create();
-                        entityBuilder.setContentType(ContentType.APPLICATION_JSON);
                         ObjectNode scrollObject = objectMapper.createObjectNode();
                         scrollObject.put("scroll", "10m");
                         scrollObject.put("scroll_id", scrollId);
-                        entityBuilder.setText(scrollObject.toString());
-                        HttpGet partialGet = new HttpGet(fetchUri);
-                        partialGet.setEntity(new StringEntity(entityBuilder.build().toString(), StandardCharsets.UTF_8));
+                        HttpGetWithEntity partialGet = new HttpGetWithEntity(fetchUri);
+                        partialGet.setHeader("Content-Type", "application/json");
+                        partialGet.setEntity(new StringEntity(scrollObject.toString(), StandardCharsets.UTF_8));
                         try {
                             log.info("Sending chunk GET to " + fetchUri);
                             response = httpclient.execute(partialGet);
+                            if (response.getCode() != 200) {
+                                log.error(response.getCode()+" "+response.getReasonPhrase());
+                                throw new HttpStatusException(response, fetchUri);
+                            }
                             content = InputStreamReader.readInputStream(response.getEntity().getContent());
                         } catch (IOException e) {
                             throw new DataStreamException(e);

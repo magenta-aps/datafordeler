@@ -938,7 +938,9 @@ public class CompanyUnitRecord extends CvrEntityRecord {
                 //this.addParticipant(participantRelationRecord);
                 this.mergeParticipant(participantRelationRecord);
             }
-            this.metadata.merge(otherRecord.getMetadata());
+            if (this.metadata != null) {
+                this.metadata.merge(otherRecord.getMetadata());
+            }
             return true;
         }
         return false;
