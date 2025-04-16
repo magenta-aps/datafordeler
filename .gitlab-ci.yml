@@ -1,3 +1,7 @@
+image: docker:latest
+services:
+  - docker:dind
+
 stages:
   - build
   - test
@@ -14,6 +18,7 @@ stages:
 
 .if-merge-request: &if-merge-request
   if: '$CI_MERGE_REQUEST_IID'
+
 
 # Workflow
 ###########
@@ -46,6 +51,8 @@ variables:
   DAFO_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler:${CI_COMMIT_SHA}
   DAFO_IMAGE_TAG: magentaaps/datafordeler:${CI_COMMIT_TAG}
 
+  DAFO_BUILD_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-build:${CI_COMMIT_SHA}
+
   DAFOSQL_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-test-db:${CI_COMMIT_SHA}
   DAFOSQL_IMAGE_TAG: magentaaps/datafordeler-test-db:${CI_COMMIT_TAG}
 
@@ -54,17 +61,26 @@ variables:
 
 # Build stage
 #############
+
 build-mssql-image:
   extends: .build-docker
   variables:
     CI_IMAGE: ${DAFOSQL_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.sqlserver
 
-build-image:
+build-jdk-image:
   extends: .build-docker
   variables:
+    CI_IMAGE: ${DAFO_BUILD_IMAGE_SHA}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jdk
+
+build-jre-image:
+  extends:
+    - .build-docker
+    - .rules:semver-all
+  variables:
     CI_IMAGE: ${DAFO_IMAGE_SHA}
-    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jre
 
 build-openapi-image:
   extends: .build-docker
@@ -73,15 +89,15 @@ build-openapi-image:
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.openapi
 
 
- # Test stage 
- #############
- 
+# Test stage
+#############
+
 .test-default: &test-default
   stage: test
   needs:
     - build-mssql-image
-    - build-image
-  image: ${DAFO_IMAGE_SHA}
+    - build-jdk-image
+  image: ${DAFO_BUILD_IMAGE_SHA}
   variables:
     GIT_STRATEGY: none
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
@@ -110,23 +126,23 @@ build-openapi-image:
     SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
 
     SSL_ENABLE: "false"
-    
+
     USER_DATABASE_ENABLED: "false"
     USER_DATABASE_SECURITY_DISABLED: "false"
     USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
     USER_DATABASE_USERNAME: "sa"
     USER_DATABASE_PASSWORD: "testTEST1"
-    STS_METADATA_PATH: "/app/conf/sts_metadata.test.xml"
-    
+    STS_METADATA_PATH: "/tmp/sts_metadata.test.xml"
+
     STATISTICS_ENABLE: "true"
     PULL_ENABLE: "true"
     CRON_ENABLE: "true"
-    
+
     CPR_PROXY_URL: ""
     CPR_LOCAL_COPY_FOLDER: ""
     CPR_SUBSCRIPTION_ENABLE: "true"
     CPR_ENCRYPTION_KEYFILE: "/tmp/test_cpr_key.json"
-    CPR_TEST_PERSON_LIST: > 
+    CPR_TEST_PERSON_LIST: >
       0112977724,0101570010,0101570088,2505811057,0601980010,1105520049,0103897769,1102640019,
       0707610042,0902410058,2512474856,1509814844,2512052730,0601980029,3105841026,0101005038,1105801064,0312600013,
       2510202794,2501950079,0112947728,0101055035,0401570020,0206025050,0106664862,1105015018,0209025000,3105781007,
@@ -138,45 +154,44 @@ build-openapi-image:
       0211223989,0212159995,0504909989,0504909995,0505059996,0505109990,0505159995,0505209996,0506889996,1007059995,
       1110109996,1310169995,1310169996,1502779995,1502799995,1502829995,1509819996,2103009996,2311143995,2509479989,
       2512489996,2911829996,3001749995,3103979995
-    
+
     CVR_DEMO_COMPANYFILE: "classpath:company_in.json"
     CVR_DEMO_UNITFILE: "classpath:unit.json"
     CVR_DEMO_PARTICIPANTFILE: "classpath:person.json"
     CVR_LOCAL_COPY_FOLDER: ""
     GEO_LOCAL_COPY_FOLDER: ""
-    
+
     ERRORFILE_DIR: "cache/log"
   services:
     - name: ${DAFOSQL_IMAGE_SHA}
       alias: datafordeler-db
 
-
 test-core:
   <<: *test-default
   before_script:
-    - cd /code/core
+    - cd /app/core
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/core/target/surefire-reports/*.xml
+        - /app/core/target/surefire-reports/*.xml
 
 test-cpr:
   <<: *test-default
   before_script:
-    - cd /code/plugin/cpr
+    - cd /app/plugin/cpr
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/cpr/target/surefire-reports/TEST-*
+        - /app/plugin/cpr/target/surefire-reports/TEST-*
 
 test-cvr:
   <<: *test-default
   before_script:
-    - cd /code/plugin/cvr
+    - cd /app/plugin/cvr
   script:
     - mvn --batch-mode test
   artifacts:
@@ -186,97 +201,98 @@ test-cvr:
 test-eboks:
   <<: *test-default
   before_script:
-    - cd /code/plugin/eboks
+    - cd /app/plugin/eboks
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/eboks/target/surefire-reports/*.xml
+        - /app/plugin/eboks/target/surefire-reports/*.xml
 
 test-eskat:
   <<: *test-default
   before_script:
-    - cd /code/plugin/eskat
+    - cd /app/plugin/eskat
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/eskat/target/surefire-reports/*.xml
+        - /app/plugin/eskat/target/surefire-reports/*.xml
 
 test-geo:
   <<: *test-default
   before_script:
-    - cd /code/plugin/geo
+    - cd /app/plugin/geo
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/geo/target/surefire-reports/*.xml
+        - /app/plugin/geo/target/surefire-reports/*.xml
 
 test-ger:
   <<: *test-default
   before_script:
-    - cd /code/plugin/ger
+    - cd /app/plugin/ger
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/ger/target/surefire-reports/*.xml
+        - /app/plugin/ger/target/surefire-reports/*.xml
 
 test-prisme:
   <<: *test-default
   before_script:
-    - cd /code/plugin/prisme
+    - cd /app/plugin/prisme
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/prisme/target/surefire-reports/*.xml
+        - /app/plugin/prisme/target/surefire-reports/*.xml
 
 test-combinedPitu:
   <<: *test-default
   before_script:
-    - cd /code/plugin/combinedPitu
+    - cd /app/plugin/combinedPitu
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/pituCombined/target/surefire-reports/TEST-*.xml
+        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
 
 test-statistik:
   <<: *test-default
   before_script:
-    - cd /code/plugin/statistik
+    - cd /app/plugin/statistik
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
       junit:
-        - /code/plugin/statistik/target/surefire-reports/*.xml
+        - /app/plugin/statistik/target/surefire-reports/*.xml
 
 test-subscription:
   <<: *test-default
   before_script:
-    - cd /code/plugin/subscription
+    - cd /app/plugin/subscription
   script:
     - mvn --batch-mode test
   artifacts:
     reports:
-      junit: /code/plugin/subscription/target/surefire-reports/*.xml
+      junit: /app/plugin/subscription/target/surefire-reports/*.xml
 
- # Release stage
- ###############
+
+# Release stage
+###############
  
 .release:
   stage: release
   image: alpine
-  needs: ["test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik","test-subscription"]
+  needs: ["build-jre-image", "test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik", "test-subscription"]
   variables:
     GIT_STRATEGY: none # We do not need the source code
   before_script:
