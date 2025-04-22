@@ -52,7 +52,6 @@ services:
     depends_on:
       - datafordeler-db
     volumes:
-      - ./docker/dev-env/m2:/root/.m2
       - ./core/src:/app/core/src
       - ./plugin/cpr:/app/plugin/cpr
       - ./plugin/cvr:/app/plugin/cvr

@@ -3,7 +3,7 @@ FROM jelastic/maven:3.9.9-openjdk-23.0.1-almalinux-9
 WORKDIR /app/
 
 # Fetch dependencies and put them in a docker layer, so we can rebuild without downloading all dependencies again
-RUN --mount=type=bind,source=docker/dev-env/m2,target=/root/.m2,rw \
+RUN --mount=type=cache,target=/root/.m2,rw \
     --mount=type=bind,source=pom.xml,target=pom.xml \
     --mount=type=bind,source=parent/pom.xml,target=parent/pom.xml \
     --mount=type=bind,source=core/pom.xml,target=core/pom.xml \
@@ -25,7 +25,7 @@ COPY parent/pom.xml parent/pom.xml
 COPY core core
 COPY plugin plugin
 
-RUN --mount=type=bind,source=docker/dev-env/m2,target=/root/.m2,rw \
+RUN --mount=type=cache,target=/root/.m2,rw \
     mvn package -DskipTests --batch-mode --show-version --threads 2C
 
 
