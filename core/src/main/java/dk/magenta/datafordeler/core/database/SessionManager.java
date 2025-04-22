@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.database;
 
+import dk.magenta.datafordeler.core.Environment;
 import jakarta.annotation.PreDestroy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +36,7 @@ public class SessionManager {
         try {
             LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
             sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
-            System.out.println(this.getClass().getSimpleName());
+            sessionFactoryBean.setAnnotatedPackages("dk.magenta.datafordeler");
             sessionFactoryBean.setDataSource(this.dataSource());
             sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
             sessionFactoryBean.afterPropertiesSet();
@@ -97,13 +98,11 @@ public class SessionManager {
         dataSource.setUrl(System.getenv("DATABASE_URL"));
         dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
-        System.out.println(dataSource.getUrl());
         return dataSource;
     }
 
     protected static String getEnv(String key, String fallback) {
-        String value = System.getenv(key);
-        return (value != null) ? value : fallback;
+        return Environment.getEnv(key, fallback);
     }
 
     protected Properties hibernateProperties() {

@@ -63,7 +63,6 @@ public class ConfigurationSessionManager extends SessionManager {
         dataSource.setUrl(System.getenv("SECONDARY_DATABASE_URL"));
         dataSource.setUsername(System.getenv("SECONDARY_DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("SECONDARY_DATABASE_PASSWORD"));
-        System.out.println(dataSource.getUrl());
         return dataSource;
     }
 
