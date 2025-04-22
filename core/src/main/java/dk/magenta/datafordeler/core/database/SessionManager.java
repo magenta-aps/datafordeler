@@ -34,10 +34,10 @@ public class SessionManager {
     public SessionManager() throws IOException {
         try {
             LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+            sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
             sessionFactoryBean.setDataSource(this.dataSource());
             sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
             sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
-            sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
             sessionFactoryBean.afterPropertiesSet();
             this.sessionFactory = sessionFactoryBean.getObject();
         } catch (Exception e) {
