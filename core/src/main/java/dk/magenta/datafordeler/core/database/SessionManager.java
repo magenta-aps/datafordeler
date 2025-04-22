@@ -35,9 +35,9 @@ public class SessionManager {
         try {
             LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
             sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
+            System.out.println(this.getClass().getSimpleName());
             sessionFactoryBean.setDataSource(this.dataSource());
             sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-            sessionFactoryBean.setPackagesToScan("dk.magenta.datafordeler");
             sessionFactoryBean.afterPropertiesSet();
             this.sessionFactory = sessionFactoryBean.getObject();
         } catch (Exception e) {
@@ -97,6 +97,7 @@ public class SessionManager {
         dataSource.setUrl(System.getenv("DATABASE_URL"));
         dataSource.setUsername(System.getenv("DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("DATABASE_PASSWORD"));
+        System.out.println(dataSource.getUrl());
         return dataSource;
     }
 
