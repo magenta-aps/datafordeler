@@ -17,6 +17,7 @@ import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.criterion.EntityRoleCriterion;
 import org.opensaml.saml.criterion.ProtocolCriterion;
 import org.opensaml.saml.criterion.RoleDescriptorCriterion;
+import org.opensaml.saml.metadata.resolver.RoleDescriptorResolver;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
@@ -106,7 +107,9 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
                         protocol = protocolCriteria.getProtocol();
                     }
                     this.log.info("Resolve from metadata");
-                    return this.resolveFromMetadata(criteriaSet, entityID, role, protocol, usage);
+                    Collection<Credential> credentials = this.resolveFromMetadata(criteriaSet, entityID, role, protocol, usage);
+                    log.info("credentials: "+credentials.size());
+                    return credentials;
                 }
             } else {
                 throw new ResolverException("Criteria contained neither RoleDescriptorCriterion nor EntityIdCriterion + EntityRoleCriterion, could not perform resolution");
@@ -134,7 +137,9 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
         this.log.info("Resolving credentials from metadata using entityID: {}, role: {}, protocol: {}, usage: {}", new Object[]{entityID, role, protocol, usage});
         LinkedHashSet<Credential> credentials = new LinkedHashSet(3);
 
-        for (RoleDescriptor roleDescriptor : this.getRoleDescriptors(criteriaSet, entityID, role, protocol)) {
+        Iterable<RoleDescriptor> roleDescriptors = this.getRoleDescriptors(criteriaSet, entityID, role, protocol);
+        log.info("roleDescriptors: {}", Iterables.size(roleDescriptors));
+        for (RoleDescriptor roleDescriptor : roleDescriptors) {
             assert roleDescriptor != null;
             log.info(roleDescriptor.toString());
             this.processRoleDescriptor(credentials, roleDescriptor, entityID, usage);
@@ -143,6 +148,28 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
         return credentials;
     }
 
+
+    @Nonnull
+    protected Iterable<RoleDescriptor> getRoleDescriptors(@Nullable final CriteriaSet criteriaSet, @Nonnull final String entityID, @Nonnull final QName role, @Nullable final String protocol) throws ResolverException {
+        RoleDescriptorResolver roleResolver = this.getRoleDescriptorResolver();
+        if (roleResolver == null) {
+            throw new ResolverException("No RoleDescriptorResolver is configured");
+        } else {
+            try {
+                this.log.info("Retrieving role descriptor metadata for entity '{}' in role '{}' for protocol '{}'", new Object[]{entityID, role, protocol});
+
+                CriteriaSet criteria = new CriteriaSet(new Criterion[]{new EntityIdCriterion(entityID), new EntityRoleCriterion(role)});
+                if (protocol != null) {
+                    criteria.add(new ProtocolCriterion(protocol));
+                }
+
+                return roleResolver.resolve(criteria);
+            } catch (ResolverException e) {
+                this.log.error("Unable to resolve information from metadata: {}", e.getMessage());
+                throw new ResolverException("Unable to resolve information from metadata", e);
+            }
+        }
+    }
 
 
     protected void processRoleDescriptor(@Nonnull final Collection<Credential> accumulator, @Nonnull final RoleDescriptor roleDescriptor, @Nullable final String entityID, @Nonnull final UsageType usage) throws ResolverException {
