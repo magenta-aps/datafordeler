@@ -43,6 +43,7 @@ public class DebugTrustEngine extends ExplicitKeySignatureTrustEngine {
         ArrayList<Credential> trustedCredentials;
         try {
             trustedCredentials = new ArrayList<>();
+            log.info("Finding trusted credentials");
             for (Credential c : this.getCredentialResolver().resolve(criteriaSet)) {
                 trustedCredentials.add(c);
             }

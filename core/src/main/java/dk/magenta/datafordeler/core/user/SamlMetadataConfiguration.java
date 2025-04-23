@@ -75,7 +75,7 @@ public class SamlMetadataConfiguration {
     @Bean
     public ExplicitKeySignatureTrustEngine trustEngine(RoleDescriptorResolver roleDescriptorResolver) throws ComponentInitializationException {
         KeyInfoCredentialResolver keyInfoCredResolver = DefaultSecurityConfigurationBootstrap.buildBasicInlineKeyInfoCredentialResolver();
-        MetadataCredentialResolver metadataCredentialResolver = new MetadataCredentialResolver();
+        MetadataCredentialResolver metadataCredentialResolver = new DebugCredentialResolver();
         metadataCredentialResolver.setRoleDescriptorResolver(roleDescriptorResolver);
         metadataCredentialResolver.setKeyInfoCredentialResolver(keyInfoCredResolver);
         metadataCredentialResolver.initialize();

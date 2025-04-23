@@ -35,12 +35,15 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
             log.info(predicate.toString());
         }
         if (predicates.isEmpty()) {
+            log.info("No predicates found");
             return storeCandidates;
         } else {
             Predicate<Credential> aggregatePredicate = null;
             if (this.isSatisfyAllPredicates()) {
+                log.info("Satisfy all predicates");
                 aggregatePredicate = PredicateSupport.and(predicates);
             } else {
+                log.info("Satisfy one predicate");
                 aggregatePredicate = PredicateSupport.or(predicates);
             }
 
