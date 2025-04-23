@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.core.user;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import jakarta.annotation.PostConstruct;
 import net.shibboleth.shared.resolver.CriteriaSet;
+import net.shibboleth.shared.resolver.Criterion;
 import net.shibboleth.shared.resolver.ResolverException;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.criterion.EntityRoleCriterion;
@@ -11,6 +12,7 @@ import org.opensaml.saml.saml2.core.*;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
+import org.opensaml.security.SecurityException;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
 import org.opensaml.xmlsec.signature.Signature;
@@ -117,9 +119,24 @@ public class TokenVerifier {
         // not just any syntactically correct signature.
         CriteriaSet criteriaSet = new CriteriaSet();
         String expectedEntityId = this.entityDescriptor.getEntityID();
+        System.out.println("expectedEntityId: " + expectedEntityId);
         criteriaSet.add(new EntityIdCriterion(expectedEntityId));
+
+        System.out.println("role: "+IDPSSODescriptor.DEFAULT_ELEMENT_NAME);
         criteriaSet.add(new EntityRoleCriterion(IDPSSODescriptor.DEFAULT_ELEMENT_NAME));
+
+        System.out.println("Usage: "+UsageType.SIGNING);
         criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
+
+        for (Criterion c : criteriaSet) {
+            CriteriaSet s = new CriteriaSet();
+            s.add(c);
+            try {
+                System.out.println(c.getClass().getSimpleName()+": "+trustEngine.validate(signature, s));
+            } catch (SecurityException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         boolean criteriaAreValid;
         try {

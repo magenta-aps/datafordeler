@@ -145,6 +145,7 @@ public class DafoUserManager {
         // If an authorization header starting with "SAML " is provided, use it to create a
         // SAML token based user.
         String authHeader = request.getHeader("Authorization");
+        logger.info("authHeader: " + authHeader);
         if (authHeader != null && authHeader.indexOf("SAML ") == 0) {
             LoggerHelper loggerHelper = new LoggerHelper(logger, request);
             loggerHelper.info("Authorizing with SAML token");
