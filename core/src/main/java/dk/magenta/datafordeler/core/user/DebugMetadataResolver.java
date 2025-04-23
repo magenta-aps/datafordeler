@@ -5,7 +5,10 @@ import net.shibboleth.shared.collection.CollectionSupport;
 import net.shibboleth.shared.primitive.LoggerFactory;
 import net.shibboleth.shared.resolver.CriteriaSet;
 import net.shibboleth.shared.resolver.ResolverException;
+import net.shibboleth.shared.resolver.ResolverSupport;
 import org.opensaml.core.criterion.EntityIdCriterion;
+import org.opensaml.core.criterion.SatisfyAnyCriterion;
+import org.opensaml.saml.metadata.criteria.entity.EvaluableEntityDescriptorCriterion;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.slf4j.Logger;
@@ -16,6 +19,7 @@ import java.io.File;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Timer;
+import java.util.function.Predicate;
 
 public class DebugMetadataResolver extends FilesystemMetadataResolver {
 
@@ -37,7 +41,10 @@ public class DebugMetadataResolver extends FilesystemMetadataResolver {
         if (entityIdCriterion != null) {
             Iterable<EntityDescriptor> entityIdcandidates = this.lookupEntityID(entityIdCriterion.getEntityId());
             this.log.info("{} Resolved {} candidates via EntityIdCriterion: {}", new Object[]{this.getLogPrefix(), Iterables.size(entityIdcandidates), entityIdCriterion});
-
+            for (EntityDescriptor entity : entityIdcandidates) {
+                this.log.info("EntityId: "+entity.getEntityID());
+            }
+            this.log.info("Criterion: "+entityIdCriterion.getEntityId());
 
             return this.predicateFilterCandidates(entityIdcandidates, criteria, false);
         } else {
@@ -61,4 +68,35 @@ public class DebugMetadataResolver extends FilesystemMetadataResolver {
             }
         }
     }
+
+
+
+    @Nonnull
+    protected Iterable<EntityDescriptor> predicateFilterCandidates(@Nonnull final Iterable<EntityDescriptor> candidates, @Nullable final CriteriaSet criteria, final boolean onEmptyPredicatesReturnEmpty) throws ResolverException {
+        if (!candidates.iterator().hasNext()) {
+            this.log.info("{} Candidates iteration was empty, nothing to filter via predicates", this.getLogPrefix());
+            return CollectionSupport.emptySet();
+        } else {
+            this.log.info("{} Attempting to filter candidate EntityDescriptors via resolved Predicates", this.getLogPrefix());
+            Set<Predicate<EntityDescriptor>> predicates = ResolverSupport.getPredicates(criteria, EvaluableEntityDescriptorCriterion.class, this.getCriterionPredicateRegistry());
+            this.log.info("{} Resolved {} Predicates: {}", new Object[]{this.getLogPrefix(), predicates.size(), predicates});
+            SatisfyAnyCriterion satisfyAnyCriterion = criteria != null ? (SatisfyAnyCriterion)criteria.get(SatisfyAnyCriterion.class) : null;
+            boolean satisfyAny;
+            if (satisfyAnyCriterion != null) {
+                this.log.info("{} CriteriaSet contained SatisfyAnyCriterion", this.getLogPrefix());
+                satisfyAny = satisfyAnyCriterion.isSatisfyAny();
+            } else {
+                this.log.info("{} CriteriaSet did NOT contain SatisfyAnyCriterion", this.getLogPrefix());
+                satisfyAny = this.isSatisfyAnyPredicates();
+            }
+
+            this.log.info("{} Effective satisyAny value: {}", this.getLogPrefix(), satisfyAny);
+            Iterable<EntityDescriptor> result = ResolverSupport.getFilteredIterable(candidates, predicates, satisfyAny, onEmptyPredicatesReturnEmpty);
+            this.log.info("{} After predicate filtering {} EntityDescriptors remain", this.getLogPrefix(), Iterables.size(result));
+
+
+            return result;
+        }
+    }
+
 }
