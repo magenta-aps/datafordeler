@@ -6,8 +6,10 @@ import net.shibboleth.shared.logic.PredicateSupport;
 import net.shibboleth.shared.primitive.LoggerFactory;
 import net.shibboleth.shared.resolver.CriteriaSet;
 import net.shibboleth.shared.resolver.ResolverException;
+import org.opensaml.core.xml.XMLObject;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
 import org.opensaml.saml.metadata.resolver.impl.PredicateRoleDescriptorResolver;
+import org.opensaml.saml.saml2.common.IsTimeboundSAMLObjectValidPredicate;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
 import org.slf4j.Logger;
@@ -18,8 +20,14 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class DebugRoleDescriptorResolver extends PredicateRoleDescriptorResolver {
+
+    private static final Predicate<XMLObject> IS_VALID_PREDICATE = new IsTimeboundSAMLObjectValidPredicate();
+
+    private MetadataResolver entityDescriptorResolver;
+
     public DebugRoleDescriptorResolver(@Nonnull MetadataResolver mdResolver) {
         super(mdResolver);
+        this.entityDescriptorResolver = mdResolver;
     }
 
     private final Logger log = LoggerFactory.getLogger(DebugRoleDescriptorResolver.class);

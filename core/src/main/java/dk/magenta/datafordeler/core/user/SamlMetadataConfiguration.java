@@ -66,7 +66,8 @@ public class SamlMetadataConfiguration {
 
     @Bean
     public PredicateRoleDescriptorResolver predicateRoleDescriptorResolver(MetadataResolver metadataResolver) throws ComponentInitializationException {
-        PredicateRoleDescriptorResolver predicateRoleDescriptorResolver = new PredicateRoleDescriptorResolver(metadataResolver);
+//        PredicateRoleDescriptorResolver predicateRoleDescriptorResolver = new PredicateRoleDescriptorResolver(metadataResolver);
+        PredicateRoleDescriptorResolver predicateRoleDescriptorResolver = new DebugRoleDescriptorResolver(metadataResolver);
 //        predicateRoleDescriptorResolver.setRequireValidMetadata(true);
         predicateRoleDescriptorResolver.setRequireValidMetadata(false);
         predicateRoleDescriptorResolver.initialize();
