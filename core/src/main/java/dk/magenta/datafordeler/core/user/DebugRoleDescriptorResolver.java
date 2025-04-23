@@ -54,7 +54,7 @@ public class DebugRoleDescriptorResolver extends PredicateRoleDescriptorResolver
                     log.info(SAML2Support.isValid(candidate)?"true":"false");
                 }
                 Objects.requireNonNull(predicate);
-                this.log.info(this.predicateFilterCandidates(Iterables.filter(candidates, IS_VALID_PREDICATE::test), criteria, false););
+                this.log.info("fulfilling IS_VALID_PREDICATE: "+Iterables.size(this.predicateFilterCandidates(Iterables.filter(candidates, IS_VALID_PREDICATE::test), criteria, false)));
 
 
                 return this.predicateFilterCandidates(Iterables.filter(candidates, predicate::test), criteria, false);
