@@ -134,7 +134,7 @@ public class TokenVerifier {
             try {
                 System.out.println(c.getClass().getSimpleName()+": "+trustEngine.validate(signature, s));
             } catch (SecurityException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
 
