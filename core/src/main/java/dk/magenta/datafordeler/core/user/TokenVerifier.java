@@ -119,6 +119,7 @@ public class TokenVerifier {
         // not just any syntactically correct signature.
         CriteriaSet criteriaSet = new CriteriaSet();
         String expectedEntityId = this.entityDescriptor.getEntityID();
+
         System.out.println("expectedEntityId: " + expectedEntityId);
         criteriaSet.add(new EntityIdCriterion(expectedEntityId));
 
@@ -127,16 +128,6 @@ public class TokenVerifier {
 
         System.out.println("Usage: "+UsageType.SIGNING);
         criteriaSet.add(new UsageCriterion(UsageType.SIGNING));
-
-        for (Criterion c : criteriaSet) {
-            CriteriaSet s = new CriteriaSet();
-            s.add(c);
-            try {
-                System.out.println(c.getClass().getSimpleName()+": "+trustEngine.validate(signature, s));
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        }
 
         boolean criteriaAreValid;
         try {

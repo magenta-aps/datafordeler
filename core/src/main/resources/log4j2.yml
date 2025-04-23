@@ -28,10 +28,10 @@ Configuration:
       immediateFlush: true
   Loggers:
     Root:
-      level: "INFO"
+      level: "DEBUG"
       AppenderRef:
         - ref: "console"
-          level: "INFO"
+          level: "DEBUG"
         - ref: "main_file"
           level: "INFO"
         - ref: "error_file"
