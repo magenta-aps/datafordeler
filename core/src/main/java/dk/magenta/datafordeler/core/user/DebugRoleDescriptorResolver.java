@@ -49,8 +49,8 @@ public class DebugRoleDescriptorResolver extends PredicateRoleDescriptorResolver
                 this.log.info("Resolved {} RoleDescriptor candidates via role criteria, performing predicate filtering", Iterables.size(candidates));
 
                 for (RoleDescriptor candidate : candidates) {
-                    log.info(candidate.getDOM().getTagName());
-                    log.info(candidate.getValidUntil().toString());
+                    log.info(candidate.getDOM()!=null?candidate.getDOM().getTagName():null);
+                    log.info(candidate.getValidUntil()!=null?candidate.getValidUntil().toString():null);
                     log.info(SAML2Support.isValid(candidate)?"true":"false");
                 }
                 Objects.requireNonNull(predicate);
