@@ -2,13 +2,22 @@ package dk.magenta.datafordeler.core.user;
 
 import com.google.common.collect.Iterables;
 import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.annotation.constraint.NotLive;
+import net.shibboleth.shared.annotation.constraint.Unmodifiable;
 import net.shibboleth.shared.collection.CollectionSupport;
 import net.shibboleth.shared.collection.LockableClassToInstanceMultiMap;
+import net.shibboleth.shared.logic.Constraint;
 import net.shibboleth.shared.logic.PredicateSupport;
 import net.shibboleth.shared.primitive.LoggerFactory;
 import net.shibboleth.shared.resolver.CriteriaSet;
 import net.shibboleth.shared.resolver.Criterion;
 import net.shibboleth.shared.resolver.ResolverException;
+import org.opensaml.core.criterion.EntityIdCriterion;
+import org.opensaml.core.xml.XMLObject;
+import org.opensaml.saml.criterion.EntityRoleCriterion;
+import org.opensaml.saml.criterion.ProtocolCriterion;
+import org.opensaml.saml.criterion.RoleDescriptorCriterion;
+import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.KeyDescriptor;
 import org.opensaml.saml.saml2.metadata.RoleDescriptor;
 import org.opensaml.saml.security.impl.MetadataCredentialResolver;
@@ -32,10 +41,11 @@ import java.util.function.Predicate;
 
 public class DebugCredentialResolver extends MetadataCredentialResolver {
 
-    private final Logger log = LoggerFactory.getLogger(DebugMetadataResolver.class);
+    private final Logger log = LoggerFactory.getLogger(DebugCredentialResolver.class);
 
     @Nonnull
     public Iterable<Credential> resolve(@Nullable final CriteriaSet criteriaSet) throws ResolverException {
+        this.log.info("Getting store candidates");
         Iterable<Credential> storeCandidates = this.resolveFromSource(criteriaSet);
         this.log.info("storeCandidates: "+Iterables.size(storeCandidates));
         Set<Predicate<Credential>> predicates = this.getPredicates(criteriaSet);
@@ -70,6 +80,55 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
         }
     }
 
+
+    @Nonnull
+    protected Iterable<Credential> resolveFromSource(@Nullable final CriteriaSet criteriaSet) throws ResolverException {
+        this.ifNotInitializedThrowUninitializedComponentException();
+        Constraint.isNotNull(criteriaSet, "CriteriaSet was null");
+        UsageType usage = this.getEffectiveUsageInput(criteriaSet);
+        RoleDescriptorCriterion roleCrit = criteriaSet != null ? (RoleDescriptorCriterion)criteriaSet.get(RoleDescriptorCriterion.class) : null;
+        log.info("roleCrit: "+roleCrit);
+        if (roleCrit != null) {
+            log.info("resolve from role descriptor");
+            return this.resolveFromRoleDescriptor(criteriaSet, roleCrit.getRole(), usage);
+        } else {
+            EntityIdCriterion entityIDCrit = criteriaSet != null ? (EntityIdCriterion)criteriaSet.get(EntityIdCriterion.class) : null;
+            EntityRoleCriterion entityRoleCrit = criteriaSet != null ? (EntityRoleCriterion)criteriaSet.get(EntityRoleCriterion.class) : null;
+            if (entityIDCrit != null && entityRoleCrit != null) {
+                if (this.getRoleDescriptorResolver() == null) {
+                    throw new ResolverException("EntityID and role input were supplied but no RoleDescriptorResolver is configured");
+                } else {
+                    String entityID = entityIDCrit.getEntityId();
+                    QName role = entityRoleCrit.getRole();
+                    String protocol = null;
+                    ProtocolCriterion protocolCriteria = criteriaSet != null ? (ProtocolCriterion)criteriaSet.get(ProtocolCriterion.class) : null;
+                    if (protocolCriteria != null) {
+                        protocol = protocolCriteria.getProtocol();
+                    }
+                    this.log.info("Resolve from metadata");
+                    return this.resolveFromMetadata(criteriaSet, entityID, role, protocol, usage);
+                }
+            } else {
+                throw new ResolverException("Criteria contained neither RoleDescriptorCriterion nor EntityIdCriterion + EntityRoleCriterion, could not perform resolution");
+            }
+        }
+    }
+
+    @Nonnull
+    @Unmodifiable
+    @NotLive
+    protected Collection<Credential> resolveFromRoleDescriptor(@Nullable final CriteriaSet criteriaSet, @Nonnull final RoleDescriptor roleDescriptor, @Nonnull final UsageType usage) throws ResolverException {
+        String entityID = null;
+        XMLObject var6 = roleDescriptor.getParent();
+        if (var6 instanceof EntityDescriptor entity) {
+            entityID = entity.getEntityID();
+        }
+
+        this.log.info("Resolving credentials from supplied RoleDescriptor using usage: {}.  Effective entityID was: {}", usage, entityID);
+        LinkedHashSet<Credential> credentials = new LinkedHashSet(3);
+        this.processRoleDescriptor(credentials, roleDescriptor, entityID, usage);
+        return credentials;
+    }
 
     protected Collection<Credential> resolveFromMetadata(@Nullable final CriteriaSet criteriaSet, @Nonnull @NotEmpty final String entityID, @Nonnull final QName role, @Nullable final String protocol, @Nonnull final UsageType usage) throws ResolverException {
         this.log.info("Resolving credentials from metadata using entityID: {}, role: {}, protocol: {}, usage: {}", new Object[]{entityID, role, protocol, usage});
