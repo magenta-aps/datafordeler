@@ -59,8 +59,15 @@ public class DafoUserManager {
      * @throws InvalidTokenException
      */
     public Assertion parseAndVerifyToken(String tokendata) throws InvalidTokenException {
+        logger.info("Parsing token");
         Assertion samlAssertion = tokenParser.parseAssertion(tokendata);
-        tokenVerifier.verifyAssertion(samlAssertion);
+        logger.info("Assertion obtained");
+        try {
+            tokenVerifier.verifyAssertion(samlAssertion);
+        } catch (InvalidTokenException e) {
+            e.printStackTrace();
+            throw e;
+        }
         return samlAssertion;
         //OpenSaml4AuthenticationProvider authenticationProvider = new OpenSaml4AuthenticationProvider();
     }
