@@ -8,6 +8,7 @@ import net.shibboleth.shared.resolver.ResolverException;
 import net.shibboleth.shared.resolver.ResolverSupport;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.core.criterion.SatisfyAnyCriterion;
+import org.opensaml.profile.criterion.ProfileRequestContextCriterion;
 import org.opensaml.saml.metadata.criteria.entity.EvaluableEntityDescriptorCriterion;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Timer;
@@ -33,6 +35,18 @@ public class DebugMetadataResolver extends FilesystemMetadataResolver {
         super(backgroundTaskTimer, file);
     }
 
+
+    @Nonnull
+    public Iterable<EntityDescriptor> resolve(@Nullable final CriteriaSet criteria) throws ResolverException {
+        ArrayList<EntityDescriptor> r = new ArrayList<>();
+        for (EntityDescriptor e : super.resolve(criteria)) {
+            r.add(e);
+        }
+        this.log.info("Resolved " + r.size() + " for " + criteria);
+        return r;
+    }
+
+
     @Nonnull
     @Override
     protected Iterable<EntityDescriptor> doResolve(@Nullable CriteriaSet criteria) throws ResolverException {
@@ -46,7 +60,12 @@ public class DebugMetadataResolver extends FilesystemMetadataResolver {
             }
             this.log.info("Criterion: "+entityIdCriterion.getEntityId());
 
-            return this.predicateFilterCandidates(entityIdcandidates, criteria, false);
+            ArrayList<EntityDescriptor> r = new ArrayList<>();
+            for (EntityDescriptor e : this.predicateFilterCandidates(entityIdcandidates, criteria, false)) {
+                r.add(e);
+            }
+            this.log.info("Resolved "+r.size()+" candidates");
+            return r;
         } else {
             Optional<Set<EntityDescriptor>> indexedCandidates = this.lookupByIndexes(criteria);
             if (indexedCandidates.isPresent()) {
