@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.core.user;
 
 import com.google.common.collect.Iterables;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
 import net.shibboleth.shared.collection.CollectionSupport;
 import net.shibboleth.shared.primitive.LoggerFactory;
 import net.shibboleth.shared.resolver.CriteriaSet;
@@ -12,15 +13,16 @@ import org.opensaml.profile.criterion.ProfileRequestContextCriterion;
 import org.opensaml.saml.metadata.criteria.entity.EvaluableEntityDescriptorCriterion;
 import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
 import org.opensaml.saml.saml2.metadata.EntityDescriptor;
+import org.opensaml.saml.saml2.metadata.RoleDescriptor;
+import org.opensaml.security.credential.Credential;
+import org.opensaml.security.credential.UsageType;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.namespace.QName;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Timer;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class DebugMetadataResolver extends FilesystemMetadataResolver {
