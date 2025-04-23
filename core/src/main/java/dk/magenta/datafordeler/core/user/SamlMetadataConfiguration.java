@@ -55,7 +55,8 @@ public class SamlMetadataConfiguration {
             throw new ConfigurationException("SAML Issuer metadata path is null");
         }
         File metadataFile = new File(path);
-        FilesystemMetadataResolver resolver = new FilesystemMetadataResolver(metadataFile);
+        System.out.println("metadataFile: "+metadataFile.getAbsolutePath());
+        FilesystemMetadataResolver resolver = new DebugMetadataResolver(metadataFile);
         resolver.setRequireValidMetadata(false);
         resolver.setParserPool(parserPool);
         resolver.setId("sts-metadata");

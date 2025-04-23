@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class DebugTrustEngine extends ExplicitKeySignatureTrustEngine {
     public DebugTrustEngine(@Nonnull CredentialResolver resolver, @Nonnull KeyInfoCredentialResolver keyInfoResolver) {
@@ -39,12 +40,16 @@ public class DebugTrustEngine extends ExplicitKeySignatureTrustEngine {
             criteriaSet.add(new KeyAlgorithmCriterion(jcaAlgorithm), true);
         }
 
-        Iterable<Credential> trustedCredentials;
+        ArrayList<Credential> trustedCredentials;
         try {
-            trustedCredentials = this.getCredentialResolver().resolve(criteriaSet);
+            trustedCredentials = new ArrayList<>();
+            for (Credential c : this.getCredentialResolver().resolve(criteriaSet)) {
+                trustedCredentials.add(c);
+            }
         } catch (ResolverException e) {
             throw new SecurityException("Error resolving trusted credentials", e);
         }
+        this.log.info("There are "+trustedCredentials.size()+" trusted credentials");
 
         if (this.validate(signature, trustedCredentials)) {
             return true;
