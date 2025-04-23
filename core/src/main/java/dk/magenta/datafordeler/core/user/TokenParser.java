@@ -64,6 +64,7 @@ public class TokenParser {
             return (Assertion) unmarshaller.unmarshall(element);
         } catch (IOException | ParserConfigurationException | SAXException | UnmarshallingException |
                  MessageDecodingException e) {
+            e.printStackTrace();
             throw new InvalidTokenException("Could not parse authorization token", e);
         }
     }
