@@ -31,9 +31,6 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
         this.log.info("storeCandidates: "+Iterables.size(storeCandidates));
         Set<Predicate<Credential>> predicates = this.getPredicates(criteriaSet);
         log.info("predicates: "+predicates.size());
-        for (Predicate<Credential> predicate : predicates) {
-            log.info(predicate.toString());
-        }
         if (predicates.isEmpty()) {
             log.info("No predicates found");
             return storeCandidates;
@@ -45,6 +42,18 @@ public class DebugCredentialResolver extends MetadataCredentialResolver {
             } else {
                 log.info("Satisfy one predicate");
                 aggregatePredicate = PredicateSupport.or(predicates);
+            }
+
+            for (Credential credential : storeCandidates) {
+                log.info("-------------");
+                log.info(credential.toString());
+                log.info((credential.getPublicKey() != null ? credential.getPublicKey().getAlgorithm():null)+"/"+(credential.getPrivateKey()!=null?credential.getPrivateKey().getAlgorithm():null));
+                log.info(credential.getUsageType()!=null?credential.getUsageType().getValue():null);
+                log.info(credential.getEntityId());
+                for (Predicate<Credential> p : predicates) {
+                    log.info(p.toString());
+                    log.info(p.test(credential)?"true":"false");
+                }
             }
 
             Objects.requireNonNull(aggregatePredicate);
