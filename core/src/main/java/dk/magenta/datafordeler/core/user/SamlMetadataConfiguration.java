@@ -78,7 +78,8 @@ public class SamlMetadataConfiguration {
         metadataCredentialResolver.setRoleDescriptorResolver(roleDescriptorResolver);
         metadataCredentialResolver.setKeyInfoCredentialResolver(keyInfoCredResolver);
         metadataCredentialResolver.initialize();
-        return new ExplicitKeySignatureTrustEngine(
+        // return new ExplicitKeySignatureTrustEngine(
+        return new DebugTrustEngine(
                 metadataCredentialResolver,
                 keyInfoCredResolver
         );

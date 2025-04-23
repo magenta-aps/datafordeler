@@ -5,6 +5,7 @@ import jakarta.annotation.PostConstruct;
 import net.shibboleth.shared.resolver.CriteriaSet;
 import net.shibboleth.shared.resolver.Criterion;
 import net.shibboleth.shared.resolver.ResolverException;
+import org.apache.jena.base.Sys;
 import org.opensaml.core.criterion.EntityIdCriterion;
 import org.opensaml.saml.criterion.EntityRoleCriterion;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
@@ -13,6 +14,7 @@ import org.opensaml.saml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
 import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
 import org.opensaml.security.SecurityException;
+import org.opensaml.security.credential.Credential;
 import org.opensaml.security.credential.UsageType;
 import org.opensaml.security.criteria.UsageCriterion;
 import org.opensaml.xmlsec.signature.Signature;
@@ -131,11 +133,23 @@ public class TokenVerifier {
 
         boolean criteriaAreValid;
         try {
+            Iterable<Credential> trustedCredentials = trustEngine.getCredentialResolver().resolve(criteriaSet);
+            for (Credential c : trustedCredentials) {
+                System.out.println(c.getEntityId());
+                for (String s : c.getKeyNames()) {
+                    System.out.println("    "+s);
+                }
+            }
+
+
+
             criteriaAreValid = trustEngine.validate(signature, criteriaSet);
         } catch (org.opensaml.security.SecurityException e) {
             throw new InvalidTokenException(
                     "Security exception while validating token signature: " + e.getMessage(), e
             );
+        } catch (ResolverException e) {
+            throw new RuntimeException(e);
         }
         if (!criteriaAreValid) {
             throw new InvalidTokenException("Signature is not trusted or invalid");
