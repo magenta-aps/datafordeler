@@ -68,6 +68,7 @@ public class DafoUserManager {
             e.printStackTrace();
             throw e;
         }
+        logger.info("Assertion verified");
         return samlAssertion;
         //OpenSaml4AuthenticationProvider authenticationProvider = new OpenSaml4AuthenticationProvider();
     }
@@ -88,6 +89,7 @@ public class DafoUserManager {
 
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
+        logger.info("getUserFromRequest");
         if (securityDisabled) {
 
             //VALIDATE SECURITY
@@ -190,6 +192,7 @@ public class DafoUserManager {
 
     public SamlDafoUserDetails getSamlUserDetailsFromToken(String tokenData)
             throws InvalidTokenException {
+        logger.info("getSamlUserDetailsFromToken");
 
         Assertion samlAssertion = parseAndVerifyToken(tokenData);
         SamlDafoUserDetails samlDafoUserDetails = new SamlDafoUserDetails(samlAssertion);

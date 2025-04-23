@@ -57,6 +57,7 @@ public class TokenParser {
             serializer.getDomConfig().setParameter("xml-declaration", false); //by default its true, so set it to false to get String without xml-declaration
             serializer.getDomConfig().setParameter("format-pretty-print", true);
             String str = serializer.writeToString(element);
+            System.out.println(str);
 
             UnmarshallerFactory unmarshallerFactory = XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
             Unmarshaller unmarshaller = unmarshallerFactory.getUnmarshaller(element);

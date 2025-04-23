@@ -97,6 +97,8 @@ public class CompanyRecordService extends FapiBaseService<CompanyRecord, Company
 
     @Override
     protected void checkAccess(DafoUserDetails dafoUserDetails) throws AccessDeniedException, AccessRequiredException {
+        System.out.println("checkAccess");
+        System.out.println(dafoUserDetails.getIdentity());
         CvrAccessChecker.checkAccess(dafoUserDetails);
     }
 
