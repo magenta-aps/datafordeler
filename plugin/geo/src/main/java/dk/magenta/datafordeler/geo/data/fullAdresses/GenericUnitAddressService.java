@@ -243,18 +243,30 @@ public class GenericUnitAddressService {
                 output.setSource(accessAddressEntity.getSource().stream().findFirst().orElse(null).getSource());
                 output.setStatus(accessAddressEntity.getStatus().stream().findFirst().orElse(null).getStatus());
                 //output.mabeysomething(accessAddressEntity.getBuilding().stream().findFirst().orElse(null).);
-                output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
-                output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
-                //output.mabeysomething(unitAddressEntity.getUsage().stream().findFirst().orElse(null).getUsage());
-                output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
-                output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
-                output.setLokalitet_type(localityRecord.getType().stream().findFirst().orElse(null).getType());
-                output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
-                output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
-                output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
+                if (unitAddressEntity != null) {
+                    output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+                    output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
+                    //output.mabeysomething(unitAddressEntity.getUsage().stream().findFirst().orElse(null).getUsage());
+                    output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+                }
+                if (localityRecord != null) {
+                    output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
+                    output.setLokalitet_type(localityRecord.getType().stream().findFirst().orElse(null).getType());
+                }
+                if (postcodeRecord != null) {
+                    output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());
+                }
+                if (roadRecord != null) {
+                    output.setVej_navn(roadRecord.getName().stream().findFirst().orElse(null).getName());
+                }
+                if (geoMunicipalityEntity != null) {
+                    output.setKommune_navn(geoMunicipalityEntity.getName().stream().findFirst().orElse(null).getName());
+                }
                 if (debug) {
                     output.setAccessAddress_objectId(Integer.toString(accessAddressEntity.getObjectId()));
-                    output.setUnitAddress_objectId(Integer.toString(unitAddressEntity.getObjectId()));
+                    if (unitAddressEntity != null) {
+                        output.setUnitAddress_objectId(Integer.toString(unitAddressEntity.getObjectId()));
+                    }
                 }
                 adressElementList.add(output);
             }
