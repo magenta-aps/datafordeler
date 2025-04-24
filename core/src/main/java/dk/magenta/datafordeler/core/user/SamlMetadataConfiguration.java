@@ -66,7 +66,7 @@ public class SamlMetadataConfiguration {
     @Bean
     public PredicateRoleDescriptorResolver predicateRoleDescriptorResolver(MetadataResolver metadataResolver) throws ComponentInitializationException {
         PredicateRoleDescriptorResolver predicateRoleDescriptorResolver = new PredicateRoleDescriptorResolver(metadataResolver);
-        predicateRoleDescriptorResolver.setRequireValidMetadata(false);
+        predicateRoleDescriptorResolver.setRequireValidMetadata(false);  // Allow expired STS signing certificate (for now)
         predicateRoleDescriptorResolver.initialize();
         return predicateRoleDescriptorResolver;
     }
