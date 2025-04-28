@@ -21,6 +21,4 @@ COPY --from=build /build/plugin/jar/*.jar /app/plugin/
 
 EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["java", "-Dloader.path=/app/plugin/", "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]
-
-
+CMD ["java", "-Xms4g", "-Xmx8g", "-Dloader.path=/app/plugin/", "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]
