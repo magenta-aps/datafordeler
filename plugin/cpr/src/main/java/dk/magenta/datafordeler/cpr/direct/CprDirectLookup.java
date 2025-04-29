@@ -163,6 +163,7 @@ public class CprDirectLookup {
                     // All ok, return response
                     return response;
                 }
+                log.info("CPR Direct lookup response: "+response);
                 if (errorCode == 5) {
                     // Unknown cpr
                     log.warn("cpr not found " + pnr);
@@ -213,10 +214,12 @@ public class CprDirectLookup {
         return new String(baCompleteResponse, StandardCharsets.ISO_8859_1);
     }
 
-    private int parseErrorCode(String response) {
+    private int parseErrorCode(String response) throws IOException {
         int startErrorResponse = 22; // start of error code in response body
         int startDataSection = 28; // start of DATA section in response
-
+        if (response.length() < startDataSection) {
+            throw new IOException("No response body");
+        }
         int errorCode = Integer.parseInt(
                 response.substring(startErrorResponse, startErrorResponse + 2)
         );

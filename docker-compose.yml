@@ -4,7 +4,7 @@ services:
     image: datafordeler:latest
     build:
       context: .
-      dockerfile: docker/Dockerfile.local
+      dockerfile: docker/Dockerfile.jre
     depends_on:
       - datafordeler-db
     env_file:
@@ -20,6 +20,7 @@ services:
       - ./plugin/geo/src/test/resources/access.json:/app/dev-env/local/geo/access.json
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
+      - ./conf/sts_metadata.test.xml:/tmp/sts_metadata.test.xml:ro
       - ./docker/createdbs.sql:/app/createdbs.sql
     environment:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
