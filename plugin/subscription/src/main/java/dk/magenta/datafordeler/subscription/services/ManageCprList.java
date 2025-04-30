@@ -181,14 +181,17 @@ public class ManageCprList {
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
+            loggerHelper.info("session open");
             Transaction transaction = session.beginTransaction();
             try {
                 Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
                 query.setParameter("listId", listId);
                 List<CprList> lists = query.getResultList();
                 if (lists.isEmpty()) {
+                    loggerHelper.info("not found");
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
+                loggerHelper.info("found " + lists.size() + " cprs");
                 CprList foundList = lists.get(0);
                 String subscriberId = this.getSubscriberId(request);
                 if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
@@ -196,18 +199,24 @@ public class ManageCprList {
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
                     loggerHelper.warn(errorMessage);
+                    loggerHelper.info("forbidden");
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 JsonNode requestBody = objectMapper.readTree(request.getInputStream());
                 Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
+                long i=0;
                 while (cprBodyIterator.hasNext()) {
                     JsonNode node = cprBodyIterator.next();
                     foundList.addCprString(node.textValue());
+                    loggerHelper.info("loop "+i);
+                    i++;
                 }
+                loggerHelper.info("persisting");
                 session.persist(foundList);
                 for (SubscribedCprNumber n : foundList.getCpr()) {
                     session.persist(n);
                 }
+                loggerHelper.info("persisted");
                 String errorMessage = "Elements were added";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("message", errorMessage);
