@@ -88,7 +88,13 @@ public class CprList extends DatabaseEntry {
     }
 
     public void addCprString(String cpr) {
-        this.cprs.add(new SubscribedCprNumber(this, cpr));
+        SubscribedCprNumber n = new SubscribedCprNumber(this, cpr);
+        if (!cprs.contains(n)) {
+            System.out.println("not already contained");
+            this.cprs.add(n);
+        } else {
+            System.out.println("already contained");
+        }
     }
 
     public void removeCprString(String cpr, Session session) {
