@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
+import dk.magenta.datafordeler.core.exception.ConflictException;
 import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import dk.magenta.datafordeler.core.exception.InvalidTokenException;
 import dk.magenta.datafordeler.core.fapi.Envelope;
@@ -244,7 +245,7 @@ public class ManageCprList {
                 e.printStackTrace();
                 throw e;
             }
-        } catch (ConstraintViolationException e) {
+        } catch (ConstraintViolationException | ConflictException e) {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
