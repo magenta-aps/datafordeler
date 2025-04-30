@@ -72,7 +72,7 @@ services:
 #    command: bash -c "cd /code/core && mvn test"
 #    command: bash -c "cd /code/plugin/ger && mvn test"
 #    command: bash -c "cd /code/plugin/cvr && mvn test"
-    command: bash -c "cd /app/plugin/eboks && mvn test"
+    command: bash -c "cd /app/plugin/subscription && mvn test"
 #    command: bash -c "cd /code/plugin/geo && mvn --batch-mode -T 2C test -Dtest=TestService#testRoad"
     #use docker compose up test to execute tests
 

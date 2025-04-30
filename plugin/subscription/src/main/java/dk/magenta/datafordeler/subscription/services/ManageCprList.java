@@ -213,13 +213,12 @@ public class ManageCprList {
                 obj.put("message", errorMessage);
                 String output = objectMapper.writeValueAsString(obj);
                 loggerHelper.info("UPDATE complete " + listId);
+                transaction.commit();
                 return new ResponseEntity(output, HttpStatus.OK);
             } catch (Exception e) {
                 transaction.rollback();
                 e.printStackTrace();
                 throw e;
-            } finally {
-                transaction.commit();
             }
         } catch (PersistenceException e) {
             String errorMessage = "Elements already exists";
