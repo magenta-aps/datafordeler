@@ -88,6 +88,8 @@ public class ConfigurationSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.c3p0.timeout", "300");
         hibernateProperties.setProperty("hibernate.c3p0.max_statements", "50");
         hibernateProperties.setProperty("hibernate.c3p0.idle_test_period", "3000");
+        hibernateProperties.setProperty("hibernate.c3p0.debugUnreturnedConnectionStackTraces", "true");
+        hibernateProperties.setProperty("hibernate.c3p0.unreturnedConnectionTimeout", "10");
 
         System.out.println("ConfigurationSessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
