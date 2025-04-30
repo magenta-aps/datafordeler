@@ -82,9 +82,9 @@ public class CprList extends DatabaseEntry {
         return cprs;
     }
 
-    public void addCprStrings(List<String> cprs) {
+    public void addCprStrings(List<String> cprs) throws ConflictException {
         for (String cpr : cprs) {
-            this.cprs.add(new SubscribedCprNumber(this, cpr));
+            this.addCprString(cpr);
         }
     }
 
