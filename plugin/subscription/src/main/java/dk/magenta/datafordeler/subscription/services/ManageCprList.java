@@ -195,7 +195,7 @@ public class ManageCprList {
                     String errorMessage = "No access to this list";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
+                    loggerHelper.warn(errorMessage);
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 JsonNode requestBody = objectMapper.readTree(request.getInputStream());
@@ -216,6 +216,7 @@ public class ManageCprList {
                 return new ResponseEntity(output, HttpStatus.OK);
             } catch (Exception e) {
                 transaction.rollback();
+                e.printStackTrace();
                 throw e;
             } finally {
                 transaction.commit();
@@ -224,13 +225,13 @@ public class ManageCprList {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.warn(errorMessage, e);
+            loggerHelper.warn(errorMessage, e);
             return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
         } catch (Exception e) {
             String errorMessage = "Failure";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            log.error(errorMessage, e);
+            loggerHelper.error(errorMessage, e);
             return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
