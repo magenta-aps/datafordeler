@@ -106,7 +106,7 @@ public class ManageCprList {
                 transaction.commit();
                 return ResponseEntity.ok(cprCreateList);
             }
-        } catch (PersistenceException e) {
+        } catch (ConstraintViolationException e) {
             String errorMessage = "cprList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -185,7 +185,8 @@ public class ManageCprList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
+        Session session = sessionManager.getSessionFactory().openSession();
+        try {
             loggerHelper.info("session open");
             Transaction transaction = session.beginTransaction();
             try {
@@ -236,13 +237,14 @@ public class ManageCprList {
                 String output = objectMapper.writeValueAsString(obj);
                 loggerHelper.info("UPDATE complete " + listId);
                 transaction.commit();
+                loggerHelper.info("transaction committed");
                 return new ResponseEntity(output, HttpStatus.OK);
             } catch (Exception e) {
                 transaction.rollback();
                 e.printStackTrace();
                 throw e;
             }
-        } catch (PersistenceException e) {
+        } catch (ConstraintViolationException e) {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -254,6 +256,10 @@ public class ManageCprList {
             obj.put("errorMessage", errorMessage);
             loggerHelper.error(errorMessage, e);
             return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            log.info("closing session");
+            session.close();
+            log.info("session closed");
         }
     }
 

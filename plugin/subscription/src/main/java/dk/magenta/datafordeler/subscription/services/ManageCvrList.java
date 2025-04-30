@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,7 +88,7 @@ public class ManageCvrList {
                 transaction.commit();
                 return ResponseEntity.ok(cvrCreateList);
             }
-        } catch (PersistenceException e) {
+        } catch (ConstraintViolationException e) {
             String errorMessage = "cvrList already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
@@ -191,7 +192,7 @@ public class ManageCvrList {
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("message", errorMessage);
             return new ResponseEntity<>(objectMapper.writeValueAsString(obj), HttpStatus.OK);
-        } catch (PersistenceException e) {
+        } catch (ConstraintViolationException e) {
             String errorMessage = "Elements allready exists";
             ObjectNode obj = this.objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
