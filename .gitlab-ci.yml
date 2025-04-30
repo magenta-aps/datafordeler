@@ -48,10 +48,10 @@ variables:
   RELEASE_REGISTRY: docker.io
   RELEASE_REGISTRY_IMAGE: index.docker.io/magentaaps/datafordeler
 
-  DAFO_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler:${CI_COMMIT_SHA}
+  DAFO_JRE_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler:${CI_COMMIT_SHA}
   DAFO_IMAGE_TAG: magentaaps/datafordeler:${CI_COMMIT_TAG}
 
-  DAFO_BUILD_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-build:${CI_COMMIT_SHA}
+  DAFO_JDK_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-build:${CI_COMMIT_SHA}
 
   DAFOSQL_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-test-db:${CI_COMMIT_SHA}
   DAFOSQL_IMAGE_TAG: magentaaps/datafordeler-test-db:${CI_COMMIT_TAG}
@@ -71,7 +71,7 @@ build-mssql-image:
 build-jdk-image:
   extends: .build-docker
   variables:
-    CI_IMAGE: ${DAFO_BUILD_IMAGE_SHA}
+    CI_IMAGE: ${DAFO_JDK_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jdk
 
 build-jre-image:
@@ -79,7 +79,7 @@ build-jre-image:
     - .build-docker
     - .rules:semver-all
   variables:
-    CI_IMAGE: ${DAFO_IMAGE_SHA}
+    CI_IMAGE: ${DAFO_JRE_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jre
 
 build-openapi-image:
@@ -97,7 +97,7 @@ build-openapi-image:
   needs:
     - build-mssql-image
     - build-jdk-image
-  image: ${DAFO_BUILD_IMAGE_SHA}
+  image: ${DAFO_JDK_IMAGE_SHA}
   variables:
     GIT_STRATEGY: none
     JAVA_OPTS: "-Duser.timezone=Europe/Copenhagen"
@@ -306,7 +306,7 @@ Release Datafordeler image:
     - skopeo copy
       --src-creds=${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD}
       --dest-creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD}
-      "docker://${DAFO_IMAGE_SHA}"
+      "docker://${DAFO_JDK_IMAGE_SHA}"
       "docker://${DAFO_IMAGE_TAG}"
 
 # TODO: Remove when no longer needed
