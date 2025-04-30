@@ -95,6 +95,7 @@ public class ManageCprList {
             } else {
                 Subscriber subscriber = (Subscriber) query.getResultList().get(0);
                 CprList cprCreateList = new CprList(cprList, subscriber);
+                session.persist(subscriber);
                 session.persist(cprCreateList);
                 subscriber.addCprList(cprCreateList);
 
@@ -202,7 +203,9 @@ public class ManageCprList {
                     loggerHelper.info("forbidden");
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
+                loggerHelper.info("has access");
                 JsonNode requestBody = objectMapper.readTree(request.getInputStream());
+                loggerHelper.info("request body: "+requestBody);
                 Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
                 long i=0;
                 while (cprBodyIterator.hasNext()) {
