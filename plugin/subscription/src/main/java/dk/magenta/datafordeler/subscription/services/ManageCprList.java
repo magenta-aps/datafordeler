@@ -182,34 +182,46 @@ public class ManageCprList {
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
-            query.setParameter("listId", listId);
-            List<CprList> lists = query.getResultList();
-            if (lists.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            try {
+                Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
+                query.setParameter("listId", listId);
+                List<CprList> lists = query.getResultList();
+                if (lists.isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+                CprList foundList = lists.get(0);
+                String subscriberId = this.getSubscriberId(request);
+                if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                    String errorMessage = "No access to this list";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    log.warn(errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                }
+                JsonNode requestBody = objectMapper.readTree(request.getInputStream());
+                Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
+                while (cprBodyIterator.hasNext()) {
+                    JsonNode node = cprBodyIterator.next();
+                    foundList.addCprString(node.textValue());
+                }
+                session.persist(foundList);
+                for (SubscribedCprNumber n : foundList.getCpr()) {
+                    session.persist(n);
+                }
+                String errorMessage = "Elements were added";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("message", errorMessage);
+                String output = objectMapper.writeValueAsString(obj);
+                loggerHelper.info("UPDATE complete " + listId);
+                return new ResponseEntity(output, HttpStatus.OK);
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            } finally {
+                transaction.commit();
             }
-            CprList foundList = lists.get(0);
-            String subscriberId = this.getSubscriberId(request);
-            if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                String errorMessage = "No access to this list";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-            }
-            JsonNode requestBody = objectMapper.readTree(request.getInputStream());
-            Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
-            while (cprBodyIterator.hasNext()) {
-                JsonNode node = cprBodyIterator.next();
-                foundList.addCprString(node.textValue());
-            }
-            transaction.commit();
-            String errorMessage = "Elements were added";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("message", errorMessage);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.OK);
         } catch (PersistenceException e) {
-            String errorMessage = "Elements allready exists";
+            String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
             log.warn(errorMessage, e);
