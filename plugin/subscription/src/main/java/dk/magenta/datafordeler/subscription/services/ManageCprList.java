@@ -19,6 +19,8 @@ import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.PersistenceException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -32,7 +34,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -177,7 +181,7 @@ public class ManageCprList {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
-    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
+    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @Valid @RequestBody String content) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
@@ -204,7 +208,13 @@ public class ManageCprList {
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
                 loggerHelper.info("has access");
-                JsonNode requestBody = objectMapper.readTree(request.getInputStream());
+                if (content == null || content.isEmpty()) {
+                    String errorMessage = "No access to this list";
+                    ObjectNode obj = this.objectMapper.createObjectNode();
+                    obj.put("errorMessage", errorMessage);
+                    return new ResponseEntity(obj.toString(), HttpStatus.BAD_REQUEST);
+                }
+                JsonNode requestBody = objectMapper.readTree(content);
                 loggerHelper.info("request body: "+requestBody);
                 Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
                 long i=0;
