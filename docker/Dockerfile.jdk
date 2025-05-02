@@ -10,11 +10,14 @@ COPY plugin plugin
 RUN mvn install -DskipTests --batch-mode --show-version --threads 2C
 
 
+
+
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
-COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
 
+
+COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
 RUN mv /app/core/target/*.jar /app/core/
 RUN mv /app/plugin/jar/*.jar /app/plugin/
 

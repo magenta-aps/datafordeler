@@ -75,8 +75,8 @@ public class Engine {
      */
     @PostConstruct
     public void init() {
-//        this.setupPullSchedules();
-//        this.setupDumpSchedules();
+        this.setupPullSchedules();
+        this.setupDumpSchedules();
     }
 
     public String getServerName() {
@@ -284,7 +284,7 @@ public class Engine {
             return null;
         }
         log.info("Reformatted cronjob specification: " + s);
-        return cronSchedule(s);
+        return CronScheduleBuilder.cronSchedule(s);
     }
 
     private void stopScheduler() {
@@ -330,7 +330,7 @@ public class Engine {
         Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("memorydumptrigger")
-                .withSchedule(cronSchedule("0/2 * * * * ?")).build();
+                .withSchedule(cronSchedule("0/5 * * * * ?")).build();
 
         JobDetail job = JobBuilder.newJob(MemoryDumper.class)
                 .withIdentity("memorydumpjob")

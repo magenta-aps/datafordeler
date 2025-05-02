@@ -91,10 +91,8 @@ public class CprList extends DatabaseEntry {
     public void addCprString(String cpr) throws ConflictException {
         SubscribedCprNumber n = new SubscribedCprNumber(this, cpr);
         if (!cprs.contains(n)) {
-            System.out.println("not already contained");
             this.cprs.add(n);
         } else {
-            System.out.println("already contained");
             throw new ConflictException(cpr+" already exists in list");
         }
     }
