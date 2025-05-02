@@ -9,14 +9,13 @@ COPY plugin plugin
 
 RUN mvn install -DskipTests --batch-mode --show-version --threads 2C
 
-FROM eclipse-temurin:23-jdk-alpine
 
+FROM eclipse-temurin:23-jdk-alpine
 
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
-COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
-
+COPY docker/entrypoint.sh /app/entrypoint.sh
 COPY --from=build /build/core/target/*.jar /app/core/
 COPY --from=build /build/plugin/jar/*.jar /app/plugin/
 
