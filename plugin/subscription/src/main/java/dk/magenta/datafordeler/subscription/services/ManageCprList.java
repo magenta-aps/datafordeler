@@ -186,9 +186,7 @@ public class ManageCprList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
-        Session session = sessionManager.getSessionFactory().openSession();
-        try {
-            loggerHelper.info("session open");
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
                 Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
@@ -202,15 +200,12 @@ public class ManageCprList {
                 CprList foundList = lists.get(0);
                 String subscriberId = this.getSubscriberId(request);
                 if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                    log.info(foundList.getSubscriber().getSubscriberId()+" != "+subscriberId);
                     String errorMessage = "No access to this list";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
                     log.warn(errorMessage);
                     log.info("forbidden");
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                } else {
-                    log.info(foundList.getSubscriber().getSubscriberId()+" == "+subscriberId);
                 }
                 loggerHelper.info("has access");
                 if (content == null || content.isEmpty()) {
@@ -222,12 +217,9 @@ public class ManageCprList {
                 JsonNode requestBody = objectMapper.readTree(content);
                 loggerHelper.info("request body: "+requestBody);
                 Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
-                long i=0;
                 while (cprBodyIterator.hasNext()) {
                     JsonNode node = cprBodyIterator.next();
                     foundList.addCprString(node.textValue());
-                    loggerHelper.info("loop "+i);
-                    i++;
                 }
                 loggerHelper.info("persisting");
                 session.persist(foundList);
@@ -259,10 +251,6 @@ public class ManageCprList {
             obj.put("errorMessage", errorMessage);
             loggerHelper.error(errorMessage, e);
             return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.INTERNAL_SERVER_ERROR);
-        } finally {
-            log.info("closing session");
-            session.close();
-            log.info("session closed");
         }
     }
 
