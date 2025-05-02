@@ -202,12 +202,15 @@ public class ManageCprList {
                 CprList foundList = lists.get(0);
                 String subscriberId = this.getSubscriberId(request);
                 if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                    log.info(foundList.getSubscriber().getSubscriberId()+" != "+subscriberId);
                     String errorMessage = "No access to this list";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
-                    loggerHelper.warn(errorMessage);
-                    loggerHelper.info("forbidden");
+                    log.warn(errorMessage);
+                    log.info("forbidden");
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                } else {
+                    log.info(foundList.getSubscriber().getSubscriberId()+" == "+subscriberId);
                 }
                 loggerHelper.info("has access");
                 if (content == null || content.isEmpty()) {
