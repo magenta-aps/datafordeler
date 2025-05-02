@@ -24,12 +24,12 @@ COPY plugin/cpr/data/keyfile.json /tmp/test_cpr_key.json
 
 EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD [
-    "java",
-    "-Dloader.path=/app/plugin/",
-    "-Xms4g", "-Xmx8g",
-    "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/app/log",
-    "-XX:+UseShenandoahGC", "-XX:+UnlockExperimentalVMOptions", "-XX:ShenandoahUncommitDelay=1000", "-XX:ShenandoahGuaranteedGCInterval=10000",
-    "-Djava.rmi.server.hostname=127.0.0.1", "-Dcom.sun.management.jmxremote.rmi.port=7012", "-Dcom.sun.management.jmxremote.port=7012", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false",
-    "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"
+CMD [ \
+    "java", \
+    "-Dloader.path=/app/plugin/", \
+    "-Xms4g", "-Xmx8g", \
+    "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/app/log", \
+    "-XX:+UseShenandoahGC", "-XX:+UnlockExperimentalVMOptions", "-XX:ShenandoahUncommitDelay=1000", "-XX:ShenandoahGuaranteedGCInterval=10000", \
+    "-Djava.rmi.server.hostname=127.0.0.1", "-Dcom.sun.management.jmxremote.rmi.port=7012", "-Dcom.sun.management.jmxremote.port=7012", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", \
+    "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher" \
 ]
