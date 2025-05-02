@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+
 @Component
 public class Engine {
 
@@ -73,8 +75,8 @@ public class Engine {
      */
     @PostConstruct
     public void init() {
-        this.setupPullSchedules();
-        this.setupDumpSchedules();
+//        this.setupPullSchedules();
+//        this.setupDumpSchedules();
     }
 
     public String getServerName() {
@@ -282,7 +284,7 @@ public class Engine {
             return null;
         }
         log.info("Reformatted cronjob specification: " + s);
-        return CronScheduleBuilder.cronSchedule(s);
+        return cronSchedule(s);
     }
 
     private void stopScheduler() {
@@ -321,5 +323,20 @@ public class Engine {
         HandlerMethod method = (HandlerMethod) chain.getHandler();
 
         handlerAdapter.handle(request, response, method);
+    }
+
+    @PostConstruct
+    public void setupHeapSizeDisplay() throws SchedulerException {
+        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity("memorydumptrigger")
+                .withSchedule(cronSchedule("0/2 * * * * ?")).build();
+
+        JobDetail job = JobBuilder.newJob(MemoryDumper.class)
+                .withIdentity("memorydumpjob")
+                .build();
+
+        scheduler.scheduleJob(job, Collections.singleton(trigger), true);
+        scheduler.start();
     }
 }

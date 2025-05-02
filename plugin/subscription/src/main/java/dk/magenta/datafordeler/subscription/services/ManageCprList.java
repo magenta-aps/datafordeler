@@ -242,7 +242,6 @@ public class ManageCprList {
                 return new ResponseEntity(output, HttpStatus.OK);
             } catch (Exception e) {
                 transaction.rollback();
-                e.printStackTrace();
                 throw e;
             }
         } catch (ConstraintViolationException | ConflictException e) {
