@@ -325,18 +325,4 @@ public class Engine {
         handlerAdapter.handle(request, response, method);
     }
 
-    @PostConstruct
-    public void setupHeapSizeDisplay() throws SchedulerException {
-        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-        Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity("memorydumptrigger")
-                .withSchedule(cronSchedule("0/5 * * * * ?")).build();
-
-        JobDetail job = JobBuilder.newJob(MemoryDumper.class)
-                .withIdentity("memorydumpjob")
-                .build();
-
-        scheduler.scheduleJob(job, Collections.singleton(trigger), true);
-        scheduler.start();
-    }
 }
