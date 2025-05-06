@@ -47,6 +47,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
         this.nameQualifier = headers.get(HEADER_SSL_CLIENT_ISSUER_DN);
         this.serverSubject = headers.get(HEADER_SSL_SERVER_SUBJECT_DN_OU);
         this.verify = headers.get(HEADER_SSL_CLIENT_VERIFY);
+        System.out.println(headers);
 
         Map<String, String> parameterMap = firstParameter(parameters);
 
@@ -135,5 +136,10 @@ public class PituDafoUserDetails extends DafoUserDetails {
         } else {
             return Collections.EMPTY_LIST;
         }
+    }
+
+    @Override
+    public String toString() {
+        return this.subsystemCode;
     }
 }

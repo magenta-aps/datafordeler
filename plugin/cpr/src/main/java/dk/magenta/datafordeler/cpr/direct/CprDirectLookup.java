@@ -40,6 +40,7 @@ public class CprDirectLookup {
 
     private SSLSocketFactory socketFactory;
 
+    private static final int ERR_PNR_NOT_FOUND = 5;
     private static final int ERR_TOKEN_EXPIRED = 7;
 
     private final Logger log = LogManager.getLogger(CprDirectLookup.class.getCanonicalName());
@@ -163,8 +164,7 @@ public class CprDirectLookup {
                     // All ok, return response
                     return response;
                 }
-                log.info("CPR Direct lookup response: "+response);
-                if (errorCode == 5) {
+                if (errorCode == ERR_PNR_NOT_FOUND) {
                     // Unknown cpr
                     log.warn("cpr not found " + pnr);
                     return null;
