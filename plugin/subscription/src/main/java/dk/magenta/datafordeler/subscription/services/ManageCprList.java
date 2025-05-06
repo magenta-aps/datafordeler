@@ -64,12 +64,6 @@ public class ManageCprList {
     private final Logger log = LogManager.getLogger(ManageCprList.class.getCanonicalName());
 
 
-    @PostConstruct
-    public void init() {
-        this.monitorService.addAccessCheckPoint("/subscription/1/manager/subscriber/cprList");
-        this.monitorService.addAccessCheckPoint("/subscription/1/manager/subscriber/cprList/cpr");
-    }
-
     private String getSubscriberId(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         String subscriberId = Optional.ofNullable(
                 request.getHeader("uxp-client")
