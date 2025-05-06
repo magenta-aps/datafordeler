@@ -15,10 +15,24 @@ FROM eclipse-temurin:23-jre-alpine
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
+RUN apk add --no-cache jattach --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/
+
 COPY docker/entrypoint.sh /app/entrypoint.sh
 COPY --from=build /build/core/target/*.jar /app/core/
 COPY --from=build /build/plugin/jar/*.jar /app/plugin/
 
+
+
+
+
 EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["java", "-Xms4g", "-Xmx8g", "-Dloader.path=/app/plugin/", "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]
+CMD [ \
+    "java", \
+    "-Dloader.path=/app/plugin/", \
+    "-Xms4g", "-Xmx8g", \
+    "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/app/log", \
+    "-XX:+UseShenandoahGC", "-XX:+UnlockExperimentalVMOptions", "-XX:ShenandoahUncommitDelay=1000", "-XX:ShenandoahGuaranteedGCInterval=10000", \
+    "-Djava.rmi.server.hostname=127.0.0.1", "-Dcom.sun.management.jmxremote.rmi.port=7012", "-Dcom.sun.management.jmxremote.port=7012", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", \
+    "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher" \
+]

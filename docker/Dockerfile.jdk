@@ -10,10 +10,16 @@ COPY plugin plugin
 RUN mvn install -DskipTests --batch-mode --show-version --threads 2C
 
 
+
+
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
 
+
+
 COPY --chmod=0500 docker/entrypoint.sh /app/entrypoint.sh
+RUN mv /app/core/target/*.jar /app/core/
+RUN mv /app/plugin/jar/*.jar /app/plugin/
 
 # For testing
 COPY conf/sts_metadata.test.xml /tmp/sts_metadata.test.xml
@@ -21,4 +27,12 @@ COPY plugin/cpr/data/keyfile.json /tmp/test_cpr_key.json
 
 EXPOSE 8000
 ENTRYPOINT ["/app/entrypoint.sh"]
-CMD ["java", "-Dloader.path=/app/plugin/", "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher"]
+CMD [ \
+    "java", \
+    "-Dloader.path=/app/plugin/", \
+    "-Xms4g", "-Xmx8g", \
+    "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/app/log", \
+    "-XX:+UseShenandoahGC", "-XX:+UnlockExperimentalVMOptions", "-XX:ShenandoahUncommitDelay=1000", "-XX:ShenandoahGuaranteedGCInterval=10000", \
+    "-Djava.rmi.server.hostname=127.0.0.1", "-Dcom.sun.management.jmxremote.rmi.port=7012", "-Dcom.sun.management.jmxremote.port=7012", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", \
+    "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher" \
+]
