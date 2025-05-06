@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.exception.ConflictException;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.BusinessEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
@@ -78,7 +79,7 @@ public class CprListTest extends TestBase {
      * Confirm that the datamodel accepts specified modifications to the datamodel
      */
     @Test
-    public void testModifications() {
+    public void testModifications() throws ConflictException {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();

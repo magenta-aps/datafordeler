@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.exception.ConflictException;
 import jakarta.persistence.*;
 import org.hibernate.Session;
 
@@ -81,14 +82,19 @@ public class CprList extends DatabaseEntry {
         return cprs;
     }
 
-    public void addCprStrings(List<String> cprs) {
+    public void addCprStrings(List<String> cprs) throws ConflictException {
         for (String cpr : cprs) {
-            this.cprs.add(new SubscribedCprNumber(this, cpr));
+            this.addCprString(cpr);
         }
     }
 
-    public void addCprString(String cpr) {
-        this.cprs.add(new SubscribedCprNumber(this, cpr));
+    public void addCprString(String cpr) throws ConflictException {
+        SubscribedCprNumber n = new SubscribedCprNumber(this, cpr);
+        if (!cprs.contains(n)) {
+            this.cprs.add(n);
+        } else {
+            throw new ConflictException(cpr+" already exists in list");
+        }
     }
 
     public void removeCprString(String cpr, Session session) {

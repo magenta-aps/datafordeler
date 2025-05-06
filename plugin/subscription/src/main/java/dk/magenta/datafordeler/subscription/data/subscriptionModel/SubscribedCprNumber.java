@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(
         name = SubscribedCprNumber.TABLE_NAME,
@@ -46,5 +48,17 @@ public class SubscribedCprNumber extends DatabaseEntry {
 
     public CprList getCprList() {
         return this.cprList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        SubscribedCprNumber that = (SubscribedCprNumber) o;
+        return Objects.equals(cprNumber, that.cprNumber) && Objects.equals(cprList, that.cprList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cprNumber, cprList);
     }
 }
