@@ -64,6 +64,12 @@ public class ManageCprList {
     private final Logger log = LogManager.getLogger(ManageCprList.class.getCanonicalName());
 
 
+    @PostConstruct
+    public void init() {
+        this.monitorService.addAccessCheckPoint("/subscription/1/manager/subscriber/cprList");
+        this.monitorService.addAccessCheckPoint("/subscription/1/manager/subscriber/cprList/cpr");
+    }
+
     private String getSubscriberId(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         String subscriberId = Optional.ofNullable(
                 request.getHeader("uxp-client")
@@ -162,7 +168,6 @@ public class ManageCprList {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
-                log.warn(errorMessage);
                 return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
             }
             List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
@@ -193,21 +198,16 @@ public class ManageCprList {
                 query.setParameter("listId", listId);
                 List<CprList> lists = query.getResultList();
                 if (lists.isEmpty()) {
-                    loggerHelper.info("not found");
                     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
-                loggerHelper.info("found " + lists.size() + " cprs");
                 CprList foundList = lists.get(0);
                 String subscriberId = this.getSubscriberId(request);
                 if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                     String errorMessage = "No access to this list";
                     ObjectNode obj = this.objectMapper.createObjectNode();
                     obj.put("errorMessage", errorMessage);
-                    log.warn(errorMessage);
-                    log.info("forbidden");
                     return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
                 }
-                loggerHelper.info("has access");
                 if (content == null || content.isEmpty()) {
                     String errorMessage = "No access to this list";
                     ObjectNode obj = this.objectMapper.createObjectNode();
@@ -215,25 +215,20 @@ public class ManageCprList {
                     return new ResponseEntity(obj.toString(), HttpStatus.BAD_REQUEST);
                 }
                 JsonNode requestBody = objectMapper.readTree(content);
-                loggerHelper.info("request body: "+requestBody);
                 Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
                 while (cprBodyIterator.hasNext()) {
                     JsonNode node = cprBodyIterator.next();
                     foundList.addCprString(node.textValue());
                 }
-                loggerHelper.info("persisting");
                 session.persist(foundList);
                 for (SubscribedCprNumber n : foundList.getCpr()) {
                     session.persist(n);
                 }
-                loggerHelper.info("persisted");
                 String errorMessage = "Elements were added";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("message", errorMessage);
                 String output = objectMapper.writeValueAsString(obj);
-                loggerHelper.info("UPDATE complete " + listId);
                 transaction.commit();
-                loggerHelper.info("transaction committed");
                 return new ResponseEntity(output, HttpStatus.OK);
             } catch (Exception e) {
                 transaction.rollback();

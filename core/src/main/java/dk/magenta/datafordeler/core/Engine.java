@@ -33,8 +33,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-
 @Component
 public class Engine {
 
