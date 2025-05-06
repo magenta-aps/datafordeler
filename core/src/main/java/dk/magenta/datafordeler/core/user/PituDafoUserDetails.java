@@ -11,6 +11,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
     public static String HEADER_SSL_CLIENT_ISSUER_DN = "ssl-client-i-dn";
     public static String HEADER_SSL_SERVER_SUBJECT_DN_OU = "ssl-server-s-dn-ou";
     public static String HEADER_SSL_CLIENT_VERIFY = "ssl-client-verify";
+    public static String HEADER_PITU_CLIENT = "uxp-client";
 
     public static String PARAMETER_XROAD_INSTANCE = "xRoadInstance";
     public static String PARAMETER_MEMBERCLASS = "memberClass";
@@ -35,6 +36,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
     private final String subsystemCode;
     private final String serviceCode;
     private final String serviceVersion;
+    private final String pituClient;
 
     public PituDafoUserDetails(HttpServletRequest request) throws InvalidCertificateException {
         this(extractHeaders(request), request.getParameterMap());
@@ -47,7 +49,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
         this.nameQualifier = headers.get(HEADER_SSL_CLIENT_ISSUER_DN);
         this.serverSubject = headers.get(HEADER_SSL_SERVER_SUBJECT_DN_OU);
         this.verify = headers.get(HEADER_SSL_CLIENT_VERIFY);
-        System.out.println(headers);
+        this.pituClient = headers.get(HEADER_PITU_CLIENT);
 
         Map<String, String> parameterMap = firstParameter(parameters);
 
@@ -140,6 +142,6 @@ public class PituDafoUserDetails extends DafoUserDetails {
 
     @Override
     public String toString() {
-        return this.subsystemCode;
+        return this.pituClient;
     }
 }
