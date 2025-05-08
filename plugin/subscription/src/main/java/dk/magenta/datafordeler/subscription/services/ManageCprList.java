@@ -213,14 +213,12 @@ public class ManageCprList {
                     Engine.setupHeapSizeDisplay();
                     JsonNode requestBody = objectMapper.readTree(content);
                     log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());
-                    Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
-                    while (cprBodyIterator.hasNext()) {
-                        JsonNode node = cprBodyIterator.next();
+                    for (JsonNode node : requestBody.get("cpr")) {
                         SubscribedCprNumber number = foundList.addCprString(node.textValue());
                         log.info("Subscribing number " + number.getCprNumber());
                         session.persist(number);
                     }
-                    session.persist(foundList);
+//                    session.persist(foundList);
                     String errorMessage = "Elements were added";
                     ObjectNode obj = objectMapper.createObjectNode();
                     obj.put("message", errorMessage);
