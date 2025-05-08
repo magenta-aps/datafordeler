@@ -34,9 +34,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -132,8 +132,8 @@ public class ManageCprList {
                 log.info("Did not find subscription with subscriber id " + subscriberId);
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = (Subscriber) query.getResultList().get(0);
-                return ResponseEntity.ok(subscriber.getCprLists().stream().collect(Collectors.toList()));
+                Subscriber subscriber = (Subscriber) query.getResultList().getFirst();
+                return ResponseEntity.ok(new ArrayList<>(subscriber.getCprLists()));
             }
         }
     }
@@ -153,7 +153,7 @@ public class ManageCprList {
             if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 return new ResponseEntity<>("Failed creating list", HttpStatus.FORBIDDEN);
             }
-            List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
+            List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).toList();
             for (SubscribedCprNumber subscribed : subscribedList) {
                 session.remove(subscribed);
                 foundList.getCpr().remove(subscribed);
@@ -224,7 +224,7 @@ public class ManageCprList {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/cprList/cpr", "/subscriber/cprList/cpr/"})
-    public ResponseEntity<dk.magenta.datafordeler.core.fapi.Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<Envelope> cprListCprfindAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
 
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
@@ -258,10 +258,7 @@ public class ManageCprList {
             }
             CprList foundList = lists.getFirst();
             if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                String errorMessage = "No access to this list";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.warn(errorMessage);
+                log.warn("No access to this list");
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
