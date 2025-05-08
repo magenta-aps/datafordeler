@@ -182,7 +182,7 @@ public class ManageCprList {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList/cpr/{listId}", "/subscriber/cprList/cpr/{listId}/"})
-    public ResponseEntity cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @Valid @RequestBody String content) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
+    public ResponseEntity<String> cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @Valid @RequestBody String content) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
@@ -190,10 +190,11 @@ public class ManageCprList {
             try {
                 Transaction transaction = session.beginTransaction();
                 try {
-                    Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
+                    Query<CprList> query = session.createQuery(" from " + CprList.class.getCanonicalName() + " where listId = :listId", CprList.class);
                     query.setParameter("listId", listId);
                     List<CprList> lists = query.getResultList();
                     if (lists.isEmpty()) {
+                        transaction.rollback();
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
                     CprList foundList = lists.get(0);
@@ -202,15 +203,17 @@ public class ManageCprList {
                         String errorMessage = "No access to this list";
                         ObjectNode obj = this.objectMapper.createObjectNode();
                         obj.put("errorMessage", errorMessage);
-                        return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                        transaction.rollback();
+                        return new ResponseEntity<>(obj.toString(), HttpStatus.FORBIDDEN);
                     }
                     if (content == null || content.isEmpty()) {
                         String errorMessage = "No access to this list";
                         ObjectNode obj = this.objectMapper.createObjectNode();
                         obj.put("errorMessage", errorMessage);
-                        return new ResponseEntity(obj.toString(), HttpStatus.BAD_REQUEST);
+                        transaction.rollback();
+                        return new ResponseEntity<>(obj.toString(), HttpStatus.BAD_REQUEST);
                     }
-                    Engine.setupHeapSizeDisplay();
+                    //Engine.setupHeapSizeDisplay();
                     JsonNode requestBody = objectMapper.readTree(content);
                     log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());
                     for (JsonNode node : requestBody.get("cpr")) {
@@ -222,9 +225,8 @@ public class ManageCprList {
                     String errorMessage = "Elements were added";
                     ObjectNode obj = objectMapper.createObjectNode();
                     obj.put("message", errorMessage);
-                    String output = objectMapper.writeValueAsString(obj);
                     transaction.commit();
-                    return new ResponseEntity(output, HttpStatus.OK);
+                    return new ResponseEntity<>(obj.toString(), HttpStatus.OK);
                 } catch (Exception e) {
                     transaction.rollback();
                     throw e;
@@ -234,13 +236,13 @@ public class ManageCprList {
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
                 loggerHelper.warn(errorMessage);
-                return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
+                return new ResponseEntity<>(obj.toString(), HttpStatus.CONFLICT);
             } catch (Exception e) {
                 String errorMessage = "Failure";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
                 loggerHelper.error(errorMessage, e);
-                return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
