@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+
 @Component
 public class Engine {
 
@@ -323,4 +325,22 @@ public class Engine {
         handlerAdapter.handle(request, response, method);
     }
 
+
+    private static boolean memoryDumpRunning = false;
+    public static void setupHeapSizeDisplay() throws SchedulerException {
+        if (!memoryDumpRunning) {
+            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity("memorydumptrigger")
+                    .withSchedule(cronSchedule("0/2 * * * * ?")).build();
+
+            JobDetail job = JobBuilder.newJob(MemoryDumper.class)
+                    .withIdentity("memorydumpjob")
+                    .build();
+
+            scheduler.scheduleJob(job, Collections.singleton(trigger), true);
+            scheduler.start();
+            memoryDumpRunning = true;
+        }
+    }
 }

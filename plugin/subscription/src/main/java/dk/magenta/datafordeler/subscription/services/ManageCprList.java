@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -208,16 +209,17 @@ public class ManageCprList {
                     obj.put("errorMessage", errorMessage);
                     return new ResponseEntity(obj.toString(), HttpStatus.BAD_REQUEST);
                 }
+                Engine.setupHeapSizeDisplay();
                 JsonNode requestBody = objectMapper.readTree(content);
+                log.info("Incoming subscription PUT request for list "+listId+": "+requestBody.toString());
                 Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
                 while (cprBodyIterator.hasNext()) {
                     JsonNode node = cprBodyIterator.next();
-                    foundList.addCprString(node.textValue());
+                    SubscribedCprNumber number = foundList.addCprString(node.textValue());
+                    log.info("Subscribing number "+number.getCprNumber());
+                    session.persist(number);
                 }
                 session.persist(foundList);
-                for (SubscribedCprNumber n : foundList.getCpr()) {
-                    session.persist(n);
-                }
                 String errorMessage = "Elements were added";
                 ObjectNode obj = objectMapper.createObjectNode();
                 obj.put("message", errorMessage);
