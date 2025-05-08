@@ -301,11 +301,9 @@ public class Engine {
         }
     }
 
-    public void handleRequest(HttpServletRequest request,
-                              HttpServletResponse response) throws Exception {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        HandlerExecutionChain chain =
-                handlerMapping.getHandler(request);
+        HandlerExecutionChain chain = handlerMapping.getHandler(request);
 
         log.info("HANDLER for {} is {}", request.getRequestURI(), chain);
         if (chain != null) {
@@ -315,8 +313,7 @@ public class Engine {
         }
 
         if (chain == null || chain.getHandler() == null) {
-            throw new HttpNotFoundException("No handler found for " +
-                    request.getRequestURI());
+            throw new HttpNotFoundException("No handler found for " + request.getRequestURI());
         }
 
         // we merely propagate any exception thrown here
@@ -325,22 +322,4 @@ public class Engine {
         handlerAdapter.handle(request, response, method);
     }
 
-
-    private static boolean memoryDumpRunning = false;
-    public static void setupHeapSizeDisplay() throws SchedulerException {
-        if (!memoryDumpRunning) {
-            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-            Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity("memorydumptrigger")
-                    .withSchedule(cronSchedule("0/2 * * * * ?")).build();
-
-            JobDetail job = JobBuilder.newJob(MemoryDumper.class)
-                    .withIdentity("memorydumpjob")
-                    .build();
-
-            scheduler.scheduleJob(job, Collections.singleton(trigger), true);
-            scheduler.start();
-            memoryDumpRunning = true;
-        }
-    }
 }

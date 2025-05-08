@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.Engine;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -18,11 +17,7 @@ import dk.magenta.datafordeler.core.util.LoggerHelper;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.PersistenceException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.io.Charsets;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -38,9 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -109,7 +102,6 @@ public class ManageCprList {
                 session.persist(subscriber);
                 session.persist(cprCreateList);
                 subscriber.addCprList(cprCreateList);
-
                 transaction.commit();
                 return ResponseEntity.ok(objectMapper.writeValueAsString(cprCreateList));
             }
@@ -200,7 +192,6 @@ public class ManageCprList {
                         transaction.rollback();
                         return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.BAD_REQUEST);
                     }
-                    //Engine.setupHeapSizeDisplay();
                     JsonNode requestBody = objectMapper.readTree(content);
                     log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());
                     for (JsonNode node : requestBody.get("cpr")) {
@@ -208,7 +199,6 @@ public class ManageCprList {
                         log.info("Subscribing number " + number.getCprNumber());
                         session.persist(number);
                     }
-//                    session.persist(foundList);
                     transaction.commit();
                     return new ResponseEntity<>(this.envelopMessage("Elements were added"), HttpStatus.OK);
                 } catch (Exception e) {
@@ -272,7 +262,7 @@ public class ManageCprList {
                 ObjectNode obj = this.objectMapper.createObjectNode();
                 obj.put("errorMessage", errorMessage);
                 log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
             Envelope envelope = new Envelope();
@@ -285,7 +275,7 @@ public class ManageCprList {
             return ResponseEntity.ok(envelope);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
-            return ResponseEntity.status(500).build();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
