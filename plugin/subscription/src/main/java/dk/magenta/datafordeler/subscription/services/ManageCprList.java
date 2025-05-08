@@ -64,6 +64,11 @@ public class ManageCprList {
 
     private final Logger log = LogManager.getLogger(ManageCprList.class.getCanonicalName());
 
+    private String envelopMessage(String message) {
+        ObjectNode obj = objectMapper.createObjectNode();
+        obj.put("message", message);
+        return obj.toString();
+    }
 
     private String getSubscriberId(HttpServletRequest request) throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
         String subscriberId = Optional.ofNullable(
@@ -86,7 +91,7 @@ public class ManageCprList {
      * @throws InvalidCertificateException
      */
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cprList", "/subscriber/cprList/"}, headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cprListCreate(HttpServletRequest request, @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<String> cprListCreate(HttpServletRequest request, @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription CREATE request with list "+cprList);
@@ -106,20 +111,14 @@ public class ManageCprList {
                 subscriber.addCprList(cprCreateList);
 
                 transaction.commit();
-                return ResponseEntity.ok(cprCreateList);
+                return ResponseEntity.ok(objectMapper.writeValueAsString(cprCreateList));
             }
         } catch (ConstraintViolationException e) {
-            String errorMessage = "cprList already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            log.warn(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(this.envelopMessage("cprList already exists"), HttpStatus.CONFLICT);
         } catch (Exception e) {
             String errorMessage = "Failed creating list";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -156,14 +155,11 @@ public class ManageCprList {
         loggerHelper.info("Incoming subscription DELETE request for list "+listId);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
+            Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
             query.setParameter("listId", listId);
-            CprList foundList = (CprList) query.getResultList().get(0);
+            CprList foundList = query.getResultList().get(0);
             if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                String errorMessage = "No access to this list";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>("Failed creating list", HttpStatus.FORBIDDEN);
             }
             List<SubscribedCprNumber> subscribedList = foundList.getCpr().stream().filter(item -> cprs.contains(item.getCprNumber())).collect(Collectors.toList());
             for (SubscribedCprNumber subscribed : subscribedList) {
@@ -171,10 +167,7 @@ public class ManageCprList {
                 foundList.getCpr().remove(subscribed);
             }
             transaction.commit();
-            String errorMessage = "Elements were removed";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("message", errorMessage);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.OK);
+            return new ResponseEntity<>(this.envelopMessage("Elements were removed"), HttpStatus.OK);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
@@ -197,21 +190,15 @@ public class ManageCprList {
                         transaction.rollback();
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
-                    CprList foundList = lists.get(0);
+                    CprList foundList = lists.getFirst();
                     String subscriberId = this.getSubscriberId(request);
                     if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                        String errorMessage = "No access to this list";
-                        ObjectNode obj = this.objectMapper.createObjectNode();
-                        obj.put("errorMessage", errorMessage);
                         transaction.rollback();
-                        return new ResponseEntity<>(obj.toString(), HttpStatus.FORBIDDEN);
+                        return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.FORBIDDEN);
                     }
                     if (content == null || content.isEmpty()) {
-                        String errorMessage = "No access to this list";
-                        ObjectNode obj = this.objectMapper.createObjectNode();
-                        obj.put("errorMessage", errorMessage);
                         transaction.rollback();
-                        return new ResponseEntity<>(obj.toString(), HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.BAD_REQUEST);
                     }
                     //Engine.setupHeapSizeDisplay();
                     JsonNode requestBody = objectMapper.readTree(content);
@@ -222,27 +209,20 @@ public class ManageCprList {
                         session.persist(number);
                     }
 //                    session.persist(foundList);
-                    String errorMessage = "Elements were added";
-                    ObjectNode obj = objectMapper.createObjectNode();
-                    obj.put("message", errorMessage);
                     transaction.commit();
-                    return new ResponseEntity<>(obj.toString(), HttpStatus.OK);
+                    return new ResponseEntity<>(this.envelopMessage("Elements were added"), HttpStatus.OK);
                 } catch (Exception e) {
                     transaction.rollback();
                     throw e;
                 }
             } catch (ConstraintViolationException | ConflictException e) {
                 String errorMessage = "Elements already exists";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
                 loggerHelper.warn(errorMessage);
-                return new ResponseEntity<>(obj.toString(), HttpStatus.CONFLICT);
+                return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.CONFLICT);
             } catch (Exception e) {
                 String errorMessage = "Failure";
-                ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
                 loggerHelper.error(errorMessage, e);
-                return new ResponseEntity<>(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -286,7 +266,7 @@ public class ManageCprList {
                 log.info("Subscriber list with id "+listId+" not found");
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            CprList foundList = lists.get(0);
+            CprList foundList = lists.getFirst();
             if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
