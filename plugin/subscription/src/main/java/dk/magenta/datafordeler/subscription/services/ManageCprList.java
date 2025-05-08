@@ -234,7 +234,7 @@ public class ManageCprList {
             String errorMessage = "Elements already exists";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("errorMessage", errorMessage);
-            loggerHelper.warn(errorMessage, e);
+            loggerHelper.warn(errorMessage);
             return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
         } catch (Exception e) {
             String errorMessage = "Failure";
