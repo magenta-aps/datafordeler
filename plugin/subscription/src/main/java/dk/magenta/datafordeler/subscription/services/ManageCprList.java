@@ -187,61 +187,63 @@ public class ManageCprList {
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
             try {
-                Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
-                query.setParameter("listId", listId);
-                List<CprList> lists = query.getResultList();
-                if (lists.isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                Transaction transaction = session.beginTransaction();
+                try {
+                    Query<CprList> query = session.createQuery(" from " + CprList.class.getName() + " where listId = :listId ", CprList.class);
+                    query.setParameter("listId", listId);
+                    List<CprList> lists = query.getResultList();
+                    if (lists.isEmpty()) {
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                    }
+                    CprList foundList = lists.get(0);
+                    String subscriberId = this.getSubscriberId(request);
+                    if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
+                        String errorMessage = "No access to this list";
+                        ObjectNode obj = this.objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                    }
+                    if (content == null || content.isEmpty()) {
+                        String errorMessage = "No access to this list";
+                        ObjectNode obj = this.objectMapper.createObjectNode();
+                        obj.put("errorMessage", errorMessage);
+                        return new ResponseEntity(obj.toString(), HttpStatus.BAD_REQUEST);
+                    }
+                    Engine.setupHeapSizeDisplay();
+                    JsonNode requestBody = objectMapper.readTree(content);
+                    log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());
+                    Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
+                    while (cprBodyIterator.hasNext()) {
+                        JsonNode node = cprBodyIterator.next();
+                        SubscribedCprNumber number = foundList.addCprString(node.textValue());
+                        log.info("Subscribing number " + number.getCprNumber());
+                        session.persist(number);
+                    }
+                    session.persist(foundList);
+                    String errorMessage = "Elements were added";
+                    ObjectNode obj = objectMapper.createObjectNode();
+                    obj.put("message", errorMessage);
+                    String output = objectMapper.writeValueAsString(obj);
+                    transaction.commit();
+                    return new ResponseEntity(output, HttpStatus.OK);
+                } catch (Exception e) {
+                    transaction.rollback();
+                    throw e;
                 }
-                CprList foundList = lists.get(0);
-                String subscriberId = this.getSubscriberId(request);
-                if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                    String errorMessage = "No access to this list";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
-                }
-                if (content == null || content.isEmpty()) {
-                    String errorMessage = "No access to this list";
-                    ObjectNode obj = this.objectMapper.createObjectNode();
-                    obj.put("errorMessage", errorMessage);
-                    return new ResponseEntity(obj.toString(), HttpStatus.BAD_REQUEST);
-                }
-                Engine.setupHeapSizeDisplay();
-                JsonNode requestBody = objectMapper.readTree(content);
-                log.info("Incoming subscription PUT request for list "+listId+": "+requestBody.toString());
-                Iterator<JsonNode> cprBodyIterator = requestBody.get("cpr").iterator();
-                while (cprBodyIterator.hasNext()) {
-                    JsonNode node = cprBodyIterator.next();
-                    SubscribedCprNumber number = foundList.addCprString(node.textValue());
-                    log.info("Subscribing number "+number.getCprNumber());
-                    session.persist(number);
-                }
-                session.persist(foundList);
-                String errorMessage = "Elements were added";
+            } catch (ConstraintViolationException | ConflictException e) {
+                String errorMessage = "Elements already exists";
                 ObjectNode obj = objectMapper.createObjectNode();
-                obj.put("message", errorMessage);
-                String output = objectMapper.writeValueAsString(obj);
-                transaction.commit();
-                return new ResponseEntity(output, HttpStatus.OK);
+                obj.put("errorMessage", errorMessage);
+                loggerHelper.warn(errorMessage);
+                return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
             } catch (Exception e) {
-                transaction.rollback();
-                throw e;
+                String errorMessage = "Failure";
+                ObjectNode obj = objectMapper.createObjectNode();
+                obj.put("errorMessage", errorMessage);
+                loggerHelper.error(errorMessage, e);
+                return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (ConstraintViolationException | ConflictException e) {
-            String errorMessage = "Elements already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            loggerHelper.warn(errorMessage);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
-        } catch (Exception e) {
-            String errorMessage = "Failure";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
-            loggerHelper.error(errorMessage, e);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
