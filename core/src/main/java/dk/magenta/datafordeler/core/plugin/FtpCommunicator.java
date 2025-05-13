@@ -293,14 +293,8 @@ public abstract class FtpCommunicator implements Communicator {
     protected abstract List<String> filterFilesToDownload(List<String> paths) throws IOException;
 
     private void deleteLocalFiles(List<File> localFiles) {
-        System.out.println("Keep files: "+this.keepFiles);
         if (!this.keepFiles) {
             for (File file : localFiles) {
-                try {
-                    System.out.println("Delete file "+file.getCanonicalPath());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
                 file.delete();
             }
         }
