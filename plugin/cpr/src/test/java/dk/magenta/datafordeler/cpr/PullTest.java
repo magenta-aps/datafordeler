@@ -162,7 +162,7 @@ public class PullTest extends TestBase {
             configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
-            System.out.println(configuration.getRegisterURI(personEntityManager));
+            System.out.println("registerURI: "+configuration.getRegisterURI(personEntityManager));
             Pull pull = new Pull(engine, plugin, importconfig);
             pull.run();
         } finally {
@@ -344,6 +344,7 @@ public class PullTest extends TestBase {
         }
 
         //Clean the testdata
+        System.out.println("================================");
         ObjectNode config = (ObjectNode) objectMapper.readTree("{\"" + CprRecordEntityManager.IMPORTCONFIG_RECORDTYPE + "\": [5], \"cleantestdatafirst\":true}");
         pull(config);
 
