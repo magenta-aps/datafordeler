@@ -140,7 +140,6 @@ public class PullTest extends TestBase {
             return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
-
         String username = "test";
         String password = "test";
 
@@ -160,13 +159,16 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterFtpDownloadFolder("/");
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
+            configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
+            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
+            System.out.println(configuration.getRegisterURI(personEntityManager));
             Pull pull = new Pull(engine, plugin, importconfig);
             pull.run();
         } finally {
             personFtp.stopServer();
+            personFile.delete();
         }
-        personFile.delete();
     }
 
     @Test
@@ -209,8 +211,8 @@ public class PullTest extends TestBase {
             pull.run();
         } finally {
             personFtp.stopServer();
+            personFile.delete();
         }
-        personFile.delete();
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
@@ -284,15 +286,13 @@ public class PullTest extends TestBase {
             pull.run();
         } finally {
             personFtp.stopServer();
+            personFile.delete();
         }
-        personFile.delete();
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
             List<PersonSubscription> subscriptions = QueryManager.getAllItems(session, PersonSubscription.class);
             Assertions.assertEquals(1, subscriptions.size());
-
-
             personFtp.startServer(username, password, personPort, Collections.EMPTY_LIST);
             File localSubFolder = File.createTempFile("foo", "bar");
 
