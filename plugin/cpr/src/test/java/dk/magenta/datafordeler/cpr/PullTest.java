@@ -149,6 +149,8 @@ public class PullTest extends TestBase {
         FileUtils.copyInputStreamToFile(personContents, personFile);
         personContents.close();
 
+        importconfig.put("remote", true);
+
         FtpService personFtp = new FtpService();
         int personPort = 2102;
         personFtp.startServer(username, password, personPort, Collections.singletonList(personFile));
