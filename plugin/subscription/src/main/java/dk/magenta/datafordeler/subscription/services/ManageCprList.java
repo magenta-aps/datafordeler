@@ -171,28 +171,40 @@ public class ManageCprList {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
+        if (content == null || content.isEmpty()) {
+            log.info("Did not find json content in request");
+            return new ResponseEntity<>(this.envelopMessage("No request body"), HttpStatus.BAD_REQUEST);
+        }
+        JsonNode requestBody;
+        try {
+            requestBody = objectMapper.readTree(content);
+        } catch (JsonProcessingException e) {
+            log.info("Did not understand json content in request");
+            return new ResponseEntity<>(this.envelopMessage("Request body could not be parsed as json"), HttpStatus.BAD_REQUEST);
+        }
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             try {
                 Transaction transaction = session.beginTransaction();
                 try {
-                    Query<CprList> query = session.createQuery(" from " + CprList.class.getCanonicalName() + " where listId = :listId", CprList.class);
+                    String subscriberId = this.getSubscriberId(request);
+                    Query<CprList> query = session.createQuery(
+                            " from " + CprList.class.getCanonicalName() + " list join list.subscriber subscriber where list.listId = :listId and subscriber.subscriberId = :subscriberId",
+                            CprList.class
+                    );
                     query.setParameter("listId", listId);
+                    query.setParameter("subscriberId", subscriberId);
                     List<CprList> lists = query.getResultList();
                     if (lists.isEmpty()) {
                         transaction.rollback();
+                        log.info("not found");
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
                     CprList foundList = lists.getFirst();
-                    String subscriberId = this.getSubscriberId(request);
                     if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
                         transaction.rollback();
+                        log.info("Incorrect subscriber id " + subscriberId);
                         return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.FORBIDDEN);
                     }
-                    if (content == null || content.isEmpty()) {
-                        transaction.rollback();
-                        return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.BAD_REQUEST);
-                    }
-                    JsonNode requestBody = objectMapper.readTree(content);
                     log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());
                     for (JsonNode node : requestBody.get("cpr")) {
                         SubscribedCprNumber number = foundList.addCprString(node.textValue());
@@ -200,7 +212,8 @@ public class ManageCprList {
                         session.persist(number);
                     }
                     transaction.commit();
-                    return new ResponseEntity<>(this.envelopMessage("Elements were added"), HttpStatus.OK);
+                    log.info("Subscription updated");
+                    return ResponseEntity.ok(this.envelopMessage("Elements were added"));
                 } catch (Exception e) {
                     transaction.rollback();
                     throw e;
