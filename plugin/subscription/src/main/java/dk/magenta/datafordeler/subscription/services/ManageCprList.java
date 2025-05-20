@@ -170,6 +170,12 @@ public class ManageCprList {
     public ResponseEntity<String> cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @Valid @RequestBody String content) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
         if (content == null || content.isEmpty()) {
             log.info("Did not find json content in request");
@@ -189,7 +195,7 @@ public class ManageCprList {
                 try {
                     String subscriberId = this.getSubscriberId(request);
                     Query<CprList> query = session.createQuery(
-                            " from " + CprList.class.getCanonicalName() + " list join list.subscriber subscriber where list.listId = :listId and subscriber.subscriberId = :subscriberId",
+                            " from " + CprList.class.getCanonicalName() + " list inner join list.subscriber as subscriber where list.listId = :listId and subscriber.subscriberId = :subscriberId",
                             CprList.class
                     );
                     query.setParameter("listId", listId);
