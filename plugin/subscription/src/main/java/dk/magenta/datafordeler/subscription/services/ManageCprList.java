@@ -182,6 +182,7 @@ public class ManageCprList {
             log.info("Did not understand json content in request");
             return new ResponseEntity<>(this.envelopMessage("Request body could not be parsed as json"), HttpStatus.BAD_REQUEST);
         }
+        log.info("Content: "+content);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             try {
                 Transaction transaction = session.beginTransaction();
@@ -193,7 +194,10 @@ public class ManageCprList {
                     );
                     query.setParameter("listId", listId);
                     query.setParameter("subscriberId", subscriberId);
+                    log.info("Fetch from database");
                     List<CprList> lists = query.getResultList();
+                    log.info("Got list from database");
+                    log.info("List size: "+lists.size());
                     if (lists.isEmpty()) {
                         transaction.rollback();
                         log.info("not found");
