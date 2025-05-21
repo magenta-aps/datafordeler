@@ -136,7 +136,9 @@ public class ObjectMapperConfiguration {
         objectMapper.registerModule(this.getOffsetDateTimeModule());
         objectMapper.registerModule(this.getLocalDateModule());
         objectMapper.registerModule(this.getLocalDateTimeModule());
-        objectMapper.registerModule(new Hibernate6Module());  // To auto-load lazyloaded references
+        Hibernate6Module hibernate6Module = new Hibernate6Module();
+        hibernate6Module.enable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);
+        objectMapper.registerModule(hibernate6Module);  // To auto-load lazyloaded references
         return objectMapper;
     }
 
