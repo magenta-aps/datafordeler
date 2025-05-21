@@ -117,10 +117,12 @@ public class ManageSubscription {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
             ArrayNode arrayNode = objectMapper.createArrayNode();
+            System.out.println("----------------------");
             System.out.println(objectMapper.writeValueAsString(subscriptionList));
             for (Subscriber s : subscriptionList) {
-                arrayNode.add(objectMapper.valueToTree(s));
+                System.out.println(objectMapper.writeValueAsString(s));
                 System.out.println(s.getCvrLists());
+                arrayNode.add(objectMapper.valueToTree(s));
                 System.out.println(objectMapper.writeValueAsString(s));
                 System.out.println(objectMapper.writeValueAsString(objectMapper.valueToTree(s)));
             }
