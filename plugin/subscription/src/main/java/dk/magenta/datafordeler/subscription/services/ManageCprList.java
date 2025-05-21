@@ -210,9 +210,13 @@ public class ManageCprList {
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
                     CprList foundList = lists.getFirst();
+                    log.info("found list: "+foundList.toString());
+                    log.info("foundList.getSubscriber(): "+foundList.getSubscriber());
+                    log.info("foundList.getSubscriber().getSubscriberId(): "+foundList.getSubscriber().getSubscriberId());
+                    log.info("subscriberId: "+subscriberId);
                     if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                        transaction.rollback();
                         log.info("Incorrect subscriber id " + subscriberId);
+                        transaction.rollback();
                         return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.FORBIDDEN);
                     }
                     log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());

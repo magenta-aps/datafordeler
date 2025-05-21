@@ -39,7 +39,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cprList_id")
     Set<CprList> cprLists = new HashSet<>();
 
@@ -55,7 +55,7 @@ public class Subscriber extends DatabaseEntry {
         this.cprLists.remove(cprList);
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cvrList_id")
     Set<CvrList> cvrLists = new HashSet<>();
 
@@ -72,7 +72,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "subscriber")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subscriber")
     Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
     public Set<BusinessEventSubscription> getBusinessEventSubscription() {
@@ -89,7 +89,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "subscriber")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subscriber")
     Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
     public Set<DataEventSubscription> getDataEventSubscription() {
