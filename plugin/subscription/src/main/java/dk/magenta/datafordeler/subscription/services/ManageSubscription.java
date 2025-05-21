@@ -116,18 +116,12 @@ public class ManageSubscription {
     public ResponseEntity<String> findAll(HttpServletRequest request) {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
-            ArrayNode arrayNode = objectMapper.createArrayNode();
-//            System.out.println("----------------------");
-//            System.out.println(objectMapper.writeValueAsString(subscriptionList));
-            for (Subscriber s : subscriptionList) {
-//                System.out.println(s.getCprLists());
-//                System.out.println(s.getCvrLists());
-//                System.out.println(s.getBusinessEventSubscription());
-//                System.out.println(s.getDataEventSubscription());
-                arrayNode.add(objectMapper.valueToTree(s));
-            }
-//            System.out.println(objectMapper.writeValueAsString(arrayNode));
-            return ResponseEntity.ok(objectMapper.writeValueAsString(arrayNode));
+//            ArrayNode arrayNode = objectMapper.createArrayNode();
+//            for (Subscriber s : subscriptionList) {
+//                arrayNode.add(objectMapper.valueToTree(s));
+//            }
+//            return ResponseEntity.ok(objectMapper.writeValueAsString(arrayNode));
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscriptionList));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -156,7 +150,7 @@ public class ManageSubscription {
 
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber", "/subscriber/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Subscriber> createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, ConflictException {
+    public ResponseEntity<String> createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, ConflictException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -169,7 +163,7 @@ public class ManageSubscription {
                 session.persist(subscriber);
                 transaction.commit();
                 loggerHelper.urlInvokePersistablelogs("subscriber done");
-                return ResponseEntity.ok(subscriber);
+                return ResponseEntity.ok(objectMapper.writeValueAsString(subscriber));
             } catch (PersistenceException e) {
                 transaction.rollback();
                 throw new ConflictException("Failed creating subscriber");
@@ -181,15 +175,17 @@ public class ManageSubscription {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/{subscriberId}", "/subscriber/{subscriberId}/"})
-    public ResponseEntity<Subscriber> getBySubscriberId(@PathVariable("subscriberId") String subscriberId) throws HttpNotFoundException {
+    public ResponseEntity<String> getBySubscriberId(@PathVariable("subscriberId") String subscriberId) throws HttpNotFoundException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
-            return ResponseEntity.ok(subscriber);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscriber));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber", "/subscriber/"})
-    public ResponseEntity<Subscriber> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+    public ResponseEntity<String> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         loggerHelper.urlInvokePersistablelogs("subscriber");
@@ -200,7 +196,9 @@ public class ManageSubscription {
             session.remove(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("subscriber done");
-            return ResponseEntity.ok(subscriber);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscriber));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -211,7 +209,7 @@ public class ManageSubscription {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/subscription/businesseventSubscription", "/subscriber/subscription/businesseventSubscription/"})
-    public ResponseEntity<List<BusinessEventSubscription>> businessEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+    public ResponseEntity<String> businessEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             String subscriberId = this.getSubscriberId(request, user);
@@ -224,13 +222,15 @@ public class ManageSubscription {
                 list.add(subscriptions.next());
             }
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(list));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/subscription/businesseventSubscription", "/subscriber/subscription/businesseventSubscription/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity businessEventSubscriptionCreate(HttpServletRequest request,
+    public ResponseEntity<String> businessEventSubscriptionCreate(HttpServletRequest request,
                                                           @RequestParam(value = "businessEventId", required = false, defaultValue = "") String businessEventId,
                                                           @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
                                                           @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws HttpNotFoundException, InvalidTokenException, AccessDeniedException, InvalidCertificateException, ConflictException {
@@ -256,14 +256,16 @@ public class ManageSubscription {
             session.persist(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-            return ResponseEntity.ok(subscription);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
         } catch (PersistenceException e) {
             throw new ConflictException("Subscription already exists", e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = {"/subscriber/subscription/businesseventSubscription/{businessEventId}", "/subscriber/subscription/businesseventSubscription/{businessEventId}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<BusinessEventSubscription> businessEventSubscriptionUpdate(HttpServletRequest request, @PathVariable("businessEventId") String businessEventId,
+    public ResponseEntity<String> businessEventSubscriptionUpdate(HttpServletRequest request, @PathVariable("businessEventId") String businessEventId,
                                                           @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
                                                           @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
 
@@ -289,24 +291,28 @@ public class ManageSubscription {
             session.persist(subscription);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-            return ResponseEntity.ok(subscription);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/subscription/businesseventSubscription/{subscriptionId}", "/subscriber/subscription/businesseventSubscription/{subscriptionId}/"})
-    public ResponseEntity<BusinessEventSubscription> businessEventSubscriptiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+    public ResponseEntity<String> businessEventSubscriptiongetBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, subscriptionId);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
-            return ResponseEntity.ok(subscription);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber/subscription/businesseventSubscription/{subscriptionId}", "/subscriber/subscription/businesseventSubscription/{subscriptionId}/"})
-    public ResponseEntity<BusinessEventSubscription> businessEventSubscriptiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws HttpNotFoundException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<String> businessEventSubscriptiondeleteBySubscriberId(HttpServletRequest request, @PathVariable("subscriptionId") String subscriptionId) throws HttpNotFoundException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, subscriptionId);
@@ -320,11 +326,13 @@ public class ManageSubscription {
                 session.remove(subscription);
                 transaction.commit();
                 loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                return ResponseEntity.ok(subscription);
+                return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
             } else {
                 transaction.rollback();
                 throw new AccessDeniedException("No access to this subscription");
             }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -334,7 +342,7 @@ public class ManageSubscription {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/subscription/dataeventSubscription", "/subscriber/subscription/dataeventSubscription/"})
-    public ResponseEntity<List<DataEventSubscription>> dataEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+    public ResponseEntity<String > dataEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -342,13 +350,15 @@ public class ManageSubscription {
             String subscriberId = this.getSubscriberId(request, user);
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-            return ResponseEntity.ok(new ArrayList<>(subscriber.getDataEventSubscription()));
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscriber.getDataEventSubscription()));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
 
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/subscription/dataeventSubscription", "/subscriber/subscription/dataeventSubscription/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<DataEventSubscription> dataEventSubscriptionCreate(HttpServletRequest request,
+    public ResponseEntity<String> dataEventSubscriptionCreate(HttpServletRequest request,
                                                       @RequestParam(value = "dataEventId", required = false, defaultValue = "") String dataEventId,
                                                       @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
                                                       @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList,
@@ -377,15 +387,17 @@ public class ManageSubscription {
             session.persist(subscriber);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-            return ResponseEntity.ok(subscription);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
 
         } catch (PersistenceException e) {
             throw new ConflictException("Subscription already exists", e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = {"/subscriber/subscription/dataeventSubscription/{dataEventId}", "/subscriber/subscription/dataeventSubscription/{dataEventId}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<DataEventSubscription> dataEventSubscriptionUpdate(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId,
+    public ResponseEntity<String> dataEventSubscriptionUpdate(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId,
                                                       @RequestParam(value = "kodeId", required = false, defaultValue = "") String kodeId,
                                                       @RequestParam(value = "cprList", required = false, defaultValue = "") String cprList,
                                                       @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
@@ -414,23 +426,27 @@ public class ManageSubscription {
             session.persist(subscription);
             transaction.commit();
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-            return ResponseEntity.ok(subscription);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber/subscription/dataeventSubscription/{subscriptionId}", "/subscriber/subscription/dataeventSubscription/{subscriptionId}/"})
-    public ResponseEntity<DataEventSubscription> dataEventSubscriptiongetBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
+    public ResponseEntity<String> dataEventSubscriptiongetBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-            return ResponseEntity.ok(subscription);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @RequestMapping(path = {"/subscriber/subscription/dataeventSubscription/{dataEventId}", "/subscriber/subscription/dataeventSubscription/{dataEventId}/"})
-    public ResponseEntity<DataEventSubscription> dataEventSubscriptionDeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws HttpNotFoundException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<String> dataEventSubscriptionDeleteBySubscriberId(HttpServletRequest request, @PathVariable("dataEventId") String dataEventId) throws HttpNotFoundException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
             Transaction transaction = session.beginTransaction();
@@ -443,11 +459,13 @@ public class ManageSubscription {
                 session.remove(subscription);
                 transaction.commit();
                 loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
-                return ResponseEntity.ok(subscription);
+                return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
             } else {
                 transaction.rollback();
                 throw new AccessDeniedException("No access to this subscription");
             }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
