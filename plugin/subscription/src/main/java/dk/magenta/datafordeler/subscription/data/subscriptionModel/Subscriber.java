@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import jakarta.persistence.*;
 
@@ -41,6 +42,7 @@ public class Subscriber extends DatabaseEntry {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cprList_id")
+    @JsonProperty
     Set<CprList> cprLists = new HashSet<>();
 
     public Set<CprList> getCprLists() {
@@ -57,6 +59,7 @@ public class Subscriber extends DatabaseEntry {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cvrList_id")
+    @JsonProperty
     Set<CvrList> cvrLists = new HashSet<>();
 
     public Set<CvrList> getCvrLists() {
