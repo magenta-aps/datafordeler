@@ -59,11 +59,11 @@ public class Subscriber extends DatabaseEntry {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cvrList_id")
-    @JsonProperty
     Set<CvrList> cvrLists = new HashSet<>();
 
+    @JsonProperty
     public Set<CvrList> getCvrLists() {
-        return this.cvrLists;
+        return this.cvrLists != null ? this.cvrLists : new HashSet<>();
     }
 
     public void addCvrList(CvrList cvrList) {
