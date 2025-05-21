@@ -122,6 +122,8 @@ public class ManageSubscription {
             for (Subscriber s : subscriptionList) {
                 System.out.println(objectMapper.writeValueAsString(s));
                 System.out.println(s.getCvrLists());
+                System.out.println(s.getBusinessEventSubscription());
+                System.out.println(s.getDataEventSubscription());
                 arrayNode.add(objectMapper.valueToTree(s));
                 System.out.println(objectMapper.writeValueAsString(s));
                 System.out.println(objectMapper.writeValueAsString(objectMapper.valueToTree(s)));

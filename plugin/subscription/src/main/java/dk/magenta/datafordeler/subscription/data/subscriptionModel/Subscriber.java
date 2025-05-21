@@ -48,7 +48,7 @@ public class Subscriber extends DatabaseEntry {
     Set<CprList> cprLists = new HashSet<>();
 
     public Set<CprList> getCprLists() {
-        return this.cprLists;
+        return this.cprLists != null ? this.cprLists : new HashSet<>();
     }
 
     public void addCprList(CprList cprList) {
