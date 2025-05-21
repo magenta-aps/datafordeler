@@ -122,6 +122,7 @@ public class ManageSubscription {
                 arrayNode.add(objectMapper.valueToTree(s));
                 System.out.println(s.getCvrLists());
                 System.out.println(objectMapper.writeValueAsString(s));
+                System.out.println(objectMapper.writeValueAsString(objectMapper.valueToTree(s)));
             }
             System.out.println(objectMapper.writeValueAsString(arrayNode));
             return ResponseEntity.ok(objectMapper.writeValueAsString(arrayNode));
