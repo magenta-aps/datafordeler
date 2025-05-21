@@ -48,7 +48,7 @@ public class Subscriber extends DatabaseEntry {
     Set<CprList> cprLists = new HashSet<>();
 
     public Set<CprList> getCprLists() {
-        return this.cprLists != null ? this.cprLists : new HashSet<>();
+        return this.cprLists;
     }
 
     public void addCprList(CprList cprList) {
@@ -66,7 +66,7 @@ public class Subscriber extends DatabaseEntry {
     Set<CvrList> cvrLists = new HashSet<>();
 
     public Set<CvrList> getCvrLists() {
-        return this.cvrLists != null ? this.cvrLists : new HashSet<>();
+        return this.cvrLists;
     }
 
     public void addCvrList(CvrList cvrList) {

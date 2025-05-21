@@ -120,13 +120,11 @@ public class ManageSubscription {
             System.out.println("----------------------");
             System.out.println(objectMapper.writeValueAsString(subscriptionList));
             for (Subscriber s : subscriptionList) {
-                System.out.println(objectMapper.writeValueAsString(s));
+                s.getCprLists();
                 System.out.println(s.getCvrLists());
                 System.out.println(s.getBusinessEventSubscription());
                 System.out.println(s.getDataEventSubscription());
                 arrayNode.add(objectMapper.valueToTree(s));
-                System.out.println(objectMapper.writeValueAsString(s));
-                System.out.println(objectMapper.writeValueAsString(objectMapper.valueToTree(s)));
             }
             System.out.println(objectMapper.writeValueAsString(arrayNode));
             return ResponseEntity.ok(objectMapper.writeValueAsString(arrayNode));
