@@ -120,7 +120,7 @@ public class ManageSubscription {
             System.out.println("----------------------");
             System.out.println(objectMapper.writeValueAsString(subscriptionList));
             for (Subscriber s : subscriptionList) {
-                s.getCprLists();
+                System.out.println(s.getCprLists());
                 System.out.println(s.getCvrLists());
                 System.out.println(s.getBusinessEventSubscription());
                 System.out.println(s.getDataEventSubscription());
