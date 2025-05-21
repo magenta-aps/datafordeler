@@ -117,16 +117,16 @@ public class ManageSubscription {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
             ArrayNode arrayNode = objectMapper.createArrayNode();
-            System.out.println("----------------------");
-            System.out.println(objectMapper.writeValueAsString(subscriptionList));
+//            System.out.println("----------------------");
+//            System.out.println(objectMapper.writeValueAsString(subscriptionList));
             for (Subscriber s : subscriptionList) {
-                System.out.println(s.getCprLists());
-                System.out.println(s.getCvrLists());
-                System.out.println(s.getBusinessEventSubscription());
-                System.out.println(s.getDataEventSubscription());
+//                System.out.println(s.getCprLists());
+//                System.out.println(s.getCvrLists());
+//                System.out.println(s.getBusinessEventSubscription());
+//                System.out.println(s.getDataEventSubscription());
                 arrayNode.add(objectMapper.valueToTree(s));
             }
-            System.out.println(objectMapper.writeValueAsString(arrayNode));
+//            System.out.println(objectMapper.writeValueAsString(arrayNode));
             return ResponseEntity.ok(objectMapper.writeValueAsString(arrayNode));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
