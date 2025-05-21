@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscription.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import dk.magenta.datafordeler.core.MonitorService;
@@ -112,10 +113,12 @@ public class ManageSubscription {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, path = {"/subscriber", "/subscriber/"})
-    public ResponseEntity<List<Subscriber>> findAll(HttpServletRequest request) {
+    public ResponseEntity<String> findAll(HttpServletRequest request) {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
-            return ResponseEntity.ok(subscriptionList);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscriptionList));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -128,13 +131,13 @@ public class ManageSubscription {
      * @throws IOException
      */
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/create", "/subscriber/create/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Subscriber> createSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, ConflictException {
+    public ResponseEntity<String> createSubscriber(HttpServletRequest request, @Valid @RequestBody String subscriberContent) throws IOException, ConflictException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             Subscriber subscriber = objectMapper.readValue(subscriberContent, Subscriber.class);
             session.persist(subscriber);
             transaction.commit();
-            return ResponseEntity.ok(subscriber);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(subscriber));
         } catch (PersistenceException e) {
             throw new ConflictException("Elements already exists");
         }
