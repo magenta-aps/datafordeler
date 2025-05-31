@@ -116,11 +116,6 @@ public class ManageSubscription {
     public ResponseEntity<String> findAll(HttpServletRequest request) {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             List<Subscriber> subscriptionList = QueryManager.getAllItems(session, Subscriber.class);
-//            ArrayNode arrayNode = objectMapper.createArrayNode();
-//            for (Subscriber s : subscriptionList) {
-//                arrayNode.add(objectMapper.valueToTree(s));
-//            }
-//            return ResponseEntity.ok(objectMapper.writeValueAsString(arrayNode));
             return ResponseEntity.ok(objectMapper.writeValueAsString(subscriptionList));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

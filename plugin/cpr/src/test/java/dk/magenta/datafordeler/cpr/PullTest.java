@@ -140,6 +140,7 @@ public class PullTest extends TestBase {
             return ftpCommunicator;
         }).when(registerManager).getFtpCommunicator(any(Session.class), any(URI.class), any(CprRecordEntityManager.class));
 
+
         String username = "test";
         String password = "test";
 

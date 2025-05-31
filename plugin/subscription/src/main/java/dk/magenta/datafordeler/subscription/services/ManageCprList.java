@@ -170,12 +170,6 @@ public class ManageCprList {
     public ResponseEntity<String> cprListCprPut(HttpServletRequest request, @PathVariable("listId") String listId, @Valid @RequestBody String content) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, JsonProcessingException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
-        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        loggerHelper.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         loggerHelper.info("Incoming subscription UPDATE request for list "+listId);
         if (content == null || content.isEmpty()) {
             log.info("Did not find json content in request");
@@ -200,33 +194,22 @@ public class ManageCprList {
                     );
                     query.setParameter("listId", listId);
                     query.setParameter("subscriberId", subscriberId);
-                    log.info("Fetch from database");
                     List<CprList> lists = query.getResultList();
-                    log.info("Got list from database");
-                    log.info("List size: "+lists.size());
                     if (lists.isEmpty()) {
                         transaction.rollback();
-                        log.info("not found");
                         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     }
                     CprList foundList = lists.getFirst();
-                    log.info("found list: "+foundList.toString());
-                    log.info("foundList.getSubscriber(): "+foundList.getSubscriber());
-                    log.info("foundList.getSubscriber().getSubscriberId(): "+foundList.getSubscriber().getSubscriberId());
-                    log.info("subscriberId: "+subscriberId);
                     if (!foundList.getSubscriber().getSubscriberId().equals(subscriberId)) {
-                        log.info("Incorrect subscriber id " + subscriberId);
                         transaction.rollback();
                         return new ResponseEntity<>(this.envelopMessage("No access to this list"), HttpStatus.FORBIDDEN);
                     }
-                    log.info("Incoming subscription PUT request for list " + listId + ": " + requestBody.toString());
+                    
                     for (JsonNode node : requestBody.get("cpr")) {
                         SubscribedCprNumber number = foundList.addCprString(node.textValue());
-                        log.info("Subscribing number " + number.getCprNumber());
                         session.persist(number);
                     }
                     transaction.commit();
-                    log.info("Subscription updated");
                     return ResponseEntity.ok(this.envelopMessage("Elements were added"));
                 } catch (Exception e) {
                     transaction.rollback();
