@@ -243,9 +243,9 @@ public class RoadTest extends TestBase {
             pull.run();
         } finally {
             this.stopFtp();
+            roadFile.delete();
         }
 
-        roadFile.delete();
 
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {

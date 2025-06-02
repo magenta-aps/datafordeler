@@ -14,10 +14,7 @@ import dk.magenta.datafordeler.core.user.DafoUserManager;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.CvrList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCvrNumber;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.Subscriber;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.PersistenceException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -33,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,6 +54,11 @@ public class ManageCvrList {
 
     private final Logger log = LogManager.getLogger(ManageCvrList.class.getCanonicalName());
 
+    private String envelopMessage(String message) {
+        ObjectNode obj = objectMapper.createObjectNode();
+        obj.put("message", message);
+        return obj.toString();
+    }
 
     /**
      * Create a cvrList
@@ -70,7 +72,7 @@ public class ManageCvrList {
      * @throws InvalidCertificateException
      */
     @RequestMapping(method = RequestMethod.POST, path = {"/subscriber/cvrList", "/subscriber/cvrList/"}, headers = "Accept=application/json", consumes = MediaType.ALL_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<String> cvrListCreate(HttpServletRequest request, @RequestParam(value = "cvrList", required = false, defaultValue = "") String cvrList) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -80,26 +82,21 @@ public class ManageCvrList {
             if (subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = subscribers.get(0);
+                Subscriber subscriber = subscribers.getFirst();
                 CvrList cvrCreateList = new CvrList(cvrList, subscriber);
                 session.persist(cvrCreateList);
                 subscriber.addCvrList(cvrCreateList);
-
                 transaction.commit();
-                return ResponseEntity.ok(cvrCreateList);
+                return ResponseEntity.ok(objectMapper.writeValueAsString(cvrCreateList));
             }
         } catch (ConstraintViolationException e) {
             String errorMessage = "cvrList already exists";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
             log.warn(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.CONFLICT);
         } catch (Exception e) {
             String errorMessage = "Failed creating list";
-            ObjectNode obj = objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
             log.error(errorMessage, e);
-            return new ResponseEntity(obj.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -119,15 +116,15 @@ public class ManageCvrList {
             if (subscribers.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-                Subscriber subscriber = subscribers.get(0);
-                return ResponseEntity.ok(subscriber.getCvrLists().stream().collect(Collectors.toList()));
+                Subscriber subscriber = subscribers.getFirst();
+                return ResponseEntity.ok(new ArrayList<>(subscriber.getCvrLists()));
             }
         }
     }
 
 
     @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber/cvrList/cvr/{listId}", "/subscriber/cvrList/cvr/{listId}/"})
-    public ResponseEntity cvrListCvrDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
+    public ResponseEntity<String> cvrListCvrDelete(HttpServletRequest request, @PathVariable("listId") String listId, @RequestParam(value = "cvr", required = false, defaultValue = "") List<String> cvrs) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
@@ -137,13 +134,11 @@ public class ManageCvrList {
             if (lists.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            CvrList foundList = lists.get(0);
+            CvrList foundList = lists.getFirst();
             if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                 String errorMessage = "No access to this list";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
                 log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.FORBIDDEN);
             }
             List<SubscribedCvrNumber> subscribedList = foundList.getCvr().stream().filter(item -> cvrs.contains(item.getCvrNumber())).collect(Collectors.toList());
             for (SubscribedCvrNumber subscribed : subscribedList) {
@@ -154,7 +149,7 @@ public class ManageCvrList {
             String errorMessage = "Elements were removed";
             ObjectNode obj = objectMapper.createObjectNode();
             obj.put("message", errorMessage);
-            return new ResponseEntity(objectMapper.writeValueAsString(obj), HttpStatus.OK);
+            return new ResponseEntity<>(objectMapper.writeValueAsString(obj), HttpStatus.OK);
 
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
@@ -173,7 +168,7 @@ public class ManageCvrList {
             if (lists.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            CvrList foundList = lists.get(0);
+            CvrList foundList = lists.getFirst();
             if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                 String errorMessage = "No access to this list";
                 ObjectNode obj = this.objectMapper.createObjectNode();
@@ -182,9 +177,7 @@ public class ManageCvrList {
                 return new ResponseEntity<>(obj.toString(), HttpStatus.FORBIDDEN);
             }
             JsonNode requestBody = objectMapper.readTree(request.getInputStream());
-            Iterator<JsonNode> cvrBodyIterator = requestBody.get("cvr").iterator();
-            while (cvrBodyIterator.hasNext()) {
-                JsonNode node = cvrBodyIterator.next();
+            for (JsonNode node : requestBody.get("cvr")) {
                 foundList.addCvrString(node.textValue());
             }
             transaction.commit();
@@ -194,10 +187,8 @@ public class ManageCvrList {
             return new ResponseEntity<>(objectMapper.writeValueAsString(obj), HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             String errorMessage = "Elements allready exists";
-            ObjectNode obj = this.objectMapper.createObjectNode();
-            obj.put("errorMessage", errorMessage);
             log.warn(errorMessage, e);
-            return new ResponseEntity<>(objectMapper.writeValueAsString(obj), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(this.envelopMessage(errorMessage), HttpStatus.CONFLICT);
         } catch (Exception e) {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
@@ -240,13 +231,10 @@ public class ManageCvrList {
             if (lists.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            CvrList foundList = lists.get(0);
+            CvrList foundList = lists.getFirst();
             if (!foundList.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
-                String errorMessage = "No access to this list";
-                ObjectNode obj = this.objectMapper.createObjectNode();
-                obj.put("errorMessage", errorMessage);
-                log.warn(errorMessage);
-                return new ResponseEntity(obj.toString(), HttpStatus.FORBIDDEN);
+                log.warn("No access to this list");
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
             Envelope envelope = new Envelope();
@@ -261,13 +249,6 @@ public class ManageCvrList {
             log.error("FAILED REMOVING ELEMENT", e);
             return ResponseEntity.status(500).build();
         }
-    }
-
-
-    private static void setHeaders(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-        response.setStatus(200);
     }
 
 }
