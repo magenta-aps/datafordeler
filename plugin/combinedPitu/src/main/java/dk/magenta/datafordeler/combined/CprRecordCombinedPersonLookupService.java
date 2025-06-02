@@ -27,7 +27,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,7 +75,7 @@ public class CprRecordCombinedPersonLookupService {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/cpr/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public String getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams)
+    public ResponseEntity<String> getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams)
             throws AccessDeniedException, InvalidTokenException, InvalidClientInputException, HttpNotFoundException, InvalidCertificateException {
 
         String forceDirect = requestParams.getFirst("forceDirect");
@@ -107,13 +110,13 @@ public class CprRecordCombinedPersonLookupService {
                     throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
                 }
                 Object obj = personOutputWrapper.wrapRecordResult(personEntity, null, includeGlobalIds);
-                return obj.toString();
+                return ResponseEntity.ok(obj.toString());
             }
 
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             PersonEntity personEntity = null;
             if (!personEntities.isEmpty()) {
-                personEntity = personEntities.get(0);
+                personEntity = personEntities.getFirst();
             }
             if (personEntity == null && "true".equalsIgnoreCase(allowDirect)) {
                 personEntity = cprDirectLookup.getPerson(cprNummer);
@@ -121,19 +124,19 @@ public class CprRecordCombinedPersonLookupService {
             }
 
             if (personEntity == null) {
-                throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
+                return new ResponseEntity<>("No entity with CPR number " + cprNummer + " was found", HttpStatus.NOT_FOUND);
             }
 
             Object obj = personOutputWrapper.wrapRecordResult(personEntity, null, includeGlobalIds);
-            return obj.toString();
+            return ResponseEntity.ok(obj.toString());
         } catch (DataStreamException e) {
             log.error(e);
-            throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
+            return new ResponseEntity<>("No entity with CPR number " + cprNummer + " was found", HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/cpr")
-    public String findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException, InvalidClientInputException {
+    public ResponseEntity<String> findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException, InvalidClientInputException {
 
         List<String> cprs = requestParams.get("cpr");
         String allowDirect = requestParams.getFirst("allowDirect");
@@ -150,13 +153,13 @@ public class CprRecordCombinedPersonLookupService {
 
         for (String cpr : cprs) {
             Stream<String> s = Arrays.stream(cpr.split(","));
-            cprNumbers.addAll(s.map(c -> c.replaceAll("\\D", "")).collect(Collectors.toList()));
+            cprNumbers.addAll(s.map(c -> c.replaceAll("\\D", "")).toList());
         }
 
         personQuery.setParameter(PersonRecordQuery.PERSONNUMMER, cprNumbers);
         personQuery.setPageSize(100);
         if (cprs.size() > 100) {
-            throw new QueryBuildException("Maximum 100 numbers is allowed");
+            return new ResponseEntity<>("Maximum 100 numbers is allowed", HttpStatus.BAD_REQUEST);
         }
 
         OffsetDateTime now = OffsetDateTime.now();
@@ -207,7 +210,7 @@ public class CprRecordCombinedPersonLookupService {
             }
         }
         try {
-            return objectMapper.writeValueAsString(objects);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(objects));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

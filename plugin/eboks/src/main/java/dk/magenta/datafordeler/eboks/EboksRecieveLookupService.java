@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -86,6 +87,7 @@ public class EboksRecieveLookupService {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
         this.checkAndLogAccess(loggerHelper);
+        loggerHelper.info("Incoming request for eboks lookup (cprs="+ String.join(", ", cprs) +", cvrs="+String.join(", ", cvrs)+")");
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
         personQuery.setPageSize(Integer.MAX_VALUE);

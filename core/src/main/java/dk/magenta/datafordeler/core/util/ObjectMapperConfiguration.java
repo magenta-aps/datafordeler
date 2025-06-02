@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.core.util;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -131,12 +132,14 @@ public class ObjectMapperConfiguration {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
         objectMapper.configure(SerializationFeature.INDENT_OUTPUT, indent);
-        objectMapper.enable(JsonParser.Feature.ALLOW_TRAILING_COMMA);
+        objectMapper.configure(JsonReadFeature.ALLOW_TRAILING_COMMA.mappedFeature(), true);
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.registerModule(this.getOffsetDateTimeModule());
         objectMapper.registerModule(this.getLocalDateModule());
         objectMapper.registerModule(this.getLocalDateTimeModule());
-        objectMapper.registerModule(new Hibernate6Module());  // To auto-load lazyloaded references
+        Hibernate6Module hibernate6Module = new Hibernate6Module();
+        hibernate6Module.enable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);
+        objectMapper.registerModule(hibernate6Module);  // To auto-load lazyloaded references
         return objectMapper;
     }
 

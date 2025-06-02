@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.subscription.data.subscriptionModel;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import jakarta.persistence.*;
 
@@ -39,8 +41,10 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cprList_id")
+    @JsonProperty
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     Set<CprList> cprLists = new HashSet<>();
 
     public Set<CprList> getCprLists() {
@@ -55,8 +59,10 @@ public class Subscriber extends DatabaseEntry {
         this.cprLists.remove(cprList);
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "cvrList_id")
+    @JsonProperty
+    @JsonInclude(JsonInclude.Include.ALWAYS)
     Set<CvrList> cvrLists = new HashSet<>();
 
     public Set<CvrList> getCvrLists() {
@@ -72,7 +78,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "subscriber")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subscriber")
     Set<BusinessEventSubscription> businessEventSubscription = new HashSet<>();
 
     public Set<BusinessEventSubscription> getBusinessEventSubscription() {
@@ -89,7 +95,7 @@ public class Subscriber extends DatabaseEntry {
     }
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "subscriber")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subscriber")
     Set<DataEventSubscription> dataEventSubscription = new HashSet<>();
 
     public Set<DataEventSubscription> getDataEventSubscription() {

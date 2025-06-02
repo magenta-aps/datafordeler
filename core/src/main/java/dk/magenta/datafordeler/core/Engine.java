@@ -299,11 +299,9 @@ public class Engine {
         }
     }
 
-    public void handleRequest(HttpServletRequest request,
-                              HttpServletResponse response) throws Exception {
+    public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        HandlerExecutionChain chain =
-                handlerMapping.getHandler(request);
+        HandlerExecutionChain chain = handlerMapping.getHandler(request);
 
         log.info("HANDLER for {} is {}", request.getRequestURI(), chain);
         if (chain != null) {
@@ -313,8 +311,7 @@ public class Engine {
         }
 
         if (chain == null || chain.getHandler() == null) {
-            throw new HttpNotFoundException("No handler found for " +
-                    request.getRequestURI());
+            throw new HttpNotFoundException("No handler found for " + request.getRequestURI());
         }
 
         // we merely propagate any exception thrown here

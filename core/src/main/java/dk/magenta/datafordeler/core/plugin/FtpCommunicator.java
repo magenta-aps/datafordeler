@@ -144,7 +144,7 @@ public abstract class FtpCommunicator implements Communicator {
     public ImportInputStream fetchLocal() throws DataStreamException {
         ArrayList<File> files = new ArrayList<>(Arrays.asList(localCopyFolder.toFile().listFiles()));
         files.sort(File::compareTo);
-        log.info("Fetching from local files in "+localCopyFolder);
+        log.info("Fetching from local files in "+localCopyFolder+": "+files);
         try {
             InputStream inputStream = this.buildChainedInputStream(files);
             if (inputStream != null) {
