@@ -17,7 +17,6 @@ import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
-import dk.magenta.datafordeler.cvr.QueryBuilder;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
@@ -65,9 +64,6 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     private final SessionManager sessionManager;
 
     private final Logger log = LogManager.getLogger(CompanyEntityManager.class.getCanonicalName());
-
-    @Autowired
-    QueryBuilder queryBuilder;
 
     @Autowired
     public CompanyEntityManager(@Lazy CompanyRecordService companyRecordService, @Lazy SessionManager sessionManager) {
