@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.plugin.*;
 import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
+import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanySubscription;
@@ -41,7 +42,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class CvrRegisterManager extends RegisterManager {
@@ -171,13 +174,12 @@ public class CvrRegisterManager extends RegisterManager {
         if (!(entityManager instanceof CvrEntityManager)) {
             throw new WrongSubclassException(CvrEntityManager.class, entityManager);
         }
+        CvrEntityManager cvrEntityManager = (CvrEntityManager) entityManager;
         String schema = entityManager.getSchema();
+
         ScanScrollCommunicator eventCommunicator = (ScanScrollCommunicator) this.getEventFetcher();
         eventCommunicator.setThrottle(0);
 
-        List<Integer> specificCvrs = this.specificCvrs(importMetadata);
-
-        String requestBody = null;
 
         Session session = this.sessionManager.getSessionFactory().openSession();
         OffsetDateTime lastUpdateTime = entityManager.getLastUpdated(session);
@@ -247,10 +249,17 @@ public class CvrRegisterManager extends RegisterManager {
                 final ArrayList<Throwable> errors = new ArrayList<>();
                 InputStream responseBody;
                 File cacheFile;
+                String requestBody = null;
+
                 try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()) {
+                    List<Integer> specificCvrs = this.specificCvrs(importMetadata);
                     if (specificCvrs != null) {
-                        cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-                        requestBody = this.queryFromCvrs(specificCvrs, null);
+                        if (schema.equals(CompanyRecord.schema)) {
+                            cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                            requestBody = cvrEntityManager.getSpecificQuery(specificCvrs);
+                        } else {
+                            return null;
+                        }
                     } else {
                         cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
                         if (!cacheFile.exists()) {
@@ -262,6 +271,7 @@ public class CvrRegisterManager extends RegisterManager {
                                 log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
                             }
 
+                            // TODO: Erstat med getDailyQuery
                             CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
                             CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
                             allCompanySubscription.from(CompanySubscription.class);
@@ -270,6 +280,9 @@ public class CvrRegisterManager extends RegisterManager {
                             Query<Integer> query = missingCompanySession.createQuery("select " + CompanyRecord.DB_FIELD_CVR_NUMBER + " from " + CompanyRecord.class.getCanonicalName(), Integer.class);
                             HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
                             missingCompanyList.removeAll(new HashSet<>(query.list()));
+
+                            // requestBody = cvrEntityManager.getDailyQuery(missingCompanySession, lastUpdateTime);
+
 
                             requestBody = String.format(
                                     configuration.getQuery(schema),
@@ -384,10 +397,14 @@ public class CvrRegisterManager extends RegisterManager {
         ObjectNode importConfiguration = importMetadata.getImportConfiguration();
         List<Integer> specificCvrs = new ArrayList<>();
         if (importConfiguration != null) {
-            ArrayNode cvrNodes = (ArrayNode) importConfiguration.get("cvr");
+            JsonNode cvrNodes = importConfiguration.get("cvr");
             if (cvrNodes != null) {
-                for (JsonNode cvrNode : cvrNodes) {
-                    specificCvrs.add(cvrNode.asInt());
+                if (cvrNodes.isInt()) {
+                    specificCvrs.add(cvrNodes.asInt());
+                } else if (cvrNodes.isArray()) {
+                    for (JsonNode cvrNode : cvrNodes) {
+                        specificCvrs.add(cvrNode.asInt());
+                    }
                 }
                 return specificCvrs;
             }
@@ -395,35 +412,4 @@ public class CvrRegisterManager extends RegisterManager {
         return null;
     }
 
-    private String finalizeQuery(String query) {
-        return "{\"query\":"+query+"}";
-    }
-
-    private String combineQueryAnd(List<String> queries) {
-        if (queries.size() == 1) {
-            return queries.get(0);
-        } else {
-            return "{\"bool\":{\"must\":[" + String.join(",", queries) + "]}}";
-        }
-    }
-
-    private String queryFromCvrs(List<Integer> cvrs) {
-        return this.queryFromCvrs(cvrs, null);
-    }
-
-    private String queryFromCvrs(List<Integer> cvrs, OffsetDateTime since) {
-        List<String> queries = new ArrayList<>();
-        queries.add(
-                String.format("{\"terms\": {\"Vrvirksomhed.cvrNummer\":%s}", cvrs)
-        );
-        if (since != null) {
-            queries.add(
-                    String.format(
-                            "{\"range\": {\"Vrvirksomhed.sidstOpdateret\": {\"gte\": \"%s\"}}}",
-                            since.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                    )
-            );
-        }
-        return finalizeQuery(combineQueryAnd(queries));
-    }
 }

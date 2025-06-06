@@ -17,15 +17,20 @@ import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.ScanScrollCommunicator;
 import dk.magenta.datafordeler.cvr.CvrRegisterManager;
+import dk.magenta.datafordeler.cvr.QueryBuilder;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfiguration;
 import dk.magenta.datafordeler.cvr.configuration.CvrConfigurationManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanySubscription;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -39,6 +44,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static dk.magenta.datafordeler.cvr.configuration.CvrConfiguration.RegisterType.ALL_LOCAL_FILES;
 
@@ -59,6 +65,9 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     private final SessionManager sessionManager;
 
     private final Logger log = LogManager.getLogger(CompanyEntityManager.class.getCanonicalName());
+
+    @Autowired
+    QueryBuilder queryBuilder;
 
     @Autowired
     public CompanyEntityManager(@Lazy CompanyRecordService companyRecordService, @Lazy SessionManager sessionManager) {
@@ -320,5 +329,46 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
             session.remove(companyForDeletion);
         }
         session.getTransaction().commit();
+    }
+
+
+    protected ObjectNode queryFromMunicipalities(List<Integer> municipalities) {
+        return queryFromIntegerTerms("Vrvirksomhed.beliggenhedsadresse.kommune.kommuneKode", municipalities);
+    }
+    protected ObjectNode queryFromUpdatedSince(OffsetDateTime updatedSince) {
+        return queryFromUpdatedSince("Vrvirksomhed.sidstOpdateret", updatedSince);
+    }
+    protected ObjectNode queryFromCvrs(List<Integer> cvrs) {
+        return queryFromIntegerTerms("Vrvirksomhed.cvrNummer", cvrs);
+    }
+
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
+
+        CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
+        allCompanySubscription.from(CompanySubscription.class);
+        List<Integer> subscribedCompanyList = session.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+
+        Query<Integer> query = session.createQuery("select " + CompanyRecord.DB_FIELD_CVR_NUMBER + " from " + CompanyRecord.class.getCanonicalName(), Integer.class);
+        HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
+        missingCompanyList.removeAll(new HashSet<>(query.list()));
+
+        return finalizeQuery(
+            combineQueryOr(
+                combineQueryAnd(
+                    queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),
+                    queryFromUpdatedSince(lastUpdated)
+                ),
+                combineQueryAnd(
+                    queryFromCvrs(subscribedCompanyList),
+                    queryFromUpdatedSince(lastUpdated)
+                ),
+                queryFromCvrs(missingCompanyList.stream().toList())
+            )
+        );
+    }
+
+    public String getSpecificQuery(List<Integer> ids) {
+        return finalizeQuery(queryFromCvrs(ids));
     }
 }

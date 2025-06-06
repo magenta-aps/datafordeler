@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.InterruptedPull;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -41,6 +43,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -479,4 +482,79 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
+
+
+    protected String finalizeQuery(ObjectNode query) {
+        ObjectNode queryNode = objectMapper.createObjectNode();
+        queryNode.set("query", query);
+        return queryNode.toString();
+    }
+
+    protected ObjectNode combineQuery(String join, List<ObjectNode> queries) {
+        if (queries.size() == 1) {
+            return queries.getFirst();
+        } else {
+            ObjectNode boolNode = objectMapper.createObjectNode();
+            ArrayNode joinNodes = objectMapper.createArrayNode();
+            queries.forEach(joinNodes::add);
+            boolNode.set(join, joinNodes);
+            return boolNode;
+        }
+    }
+    protected ObjectNode combineQuery(String join, ObjectNode... queries) {
+        return combineQuery(join, Arrays.asList(queries));
+    }
+    protected ObjectNode combineQueryOr(List<ObjectNode> queries) {
+        return combineQuery("should", queries);
+    }
+    protected ObjectNode combineQueryOr(ObjectNode... queries) {
+        return combineQuery("should", queries);
+    }
+    protected ObjectNode combineQueryAnd(List<ObjectNode> queries) {
+        return combineQuery("must", queries);
+    }
+    protected ObjectNode combineQueryAnd(ObjectNode... queries) {
+        return combineQuery("must", queries);
+    }
+
+    protected ObjectNode queryFromIntegerTerms(String key, List<Integer> values) {
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        values.forEach(arrayNode::add);
+        return queryFromTerms(key, arrayNode);
+    }
+    protected ObjectNode queryFromStringTerms(String key, List<String> values) {
+        ArrayNode arrayNode = objectMapper.createArrayNode();
+        values.forEach(arrayNode::add);
+        return queryFromTerms(key, arrayNode);
+    }
+    protected ObjectNode queryFromTerms(String key, ArrayNode values) {
+        ObjectNode query = objectMapper.createObjectNode();
+        ArrayNode valueList = objectMapper.createArrayNode();
+        values.forEach(valueList::add);
+        query.set("terms", valueList);
+        return query;
+    }
+
+
+
+
+    protected ObjectNode queryFromUnitMunicipalities(List<Integer> municipalities) {
+        return queryFromIntegerTerms(
+                "VrproduktionsEnhed.beliggenhedsadresse.kommune.kommuneKode",
+                municipalities
+        );
+    }
+    protected ObjectNode queryFromUpdatedSince(String key, OffsetDateTime updatedSince) {
+        ObjectNode query = objectMapper.createObjectNode();
+        ObjectNode rangeNode = objectMapper.createObjectNode();
+        ObjectNode valueNode = objectMapper.createObjectNode();
+        valueNode.put("gte", updatedSince.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        rangeNode.set(key, valueNode);
+        query.set("range", rangeNode);
+        return query;
+    }
+
+    public abstract String getDailyQuery(Session session, OffsetDateTime lastUpdated);
+
+    public abstract String getSpecificQuery(List<Integer> ids);
 }
