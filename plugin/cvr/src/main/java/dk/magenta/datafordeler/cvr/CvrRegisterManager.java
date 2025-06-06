@@ -18,6 +18,8 @@ import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
 import dk.magenta.datafordeler.cvr.records.CompanySubscription;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.cvr.synchronization.CvrSourceData;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -253,6 +255,9 @@ public class CvrRegisterManager extends RegisterManager {
 
                 try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()) {
                     List<Integer> specificCvrs = this.specificCvrs(importMetadata);
+                    List<Integer> specificPnrs = this.specificPnrs(importMetadata);
+                    List<Integer> specificUnitNrs = this.specificUnitNrs(importMetadata);
+
                     if (specificCvrs != null) {
                         if (schema.equals(CompanyRecord.schema)) {
                             cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -260,6 +265,21 @@ public class CvrRegisterManager extends RegisterManager {
                         } else {
                             return null;
                         }
+                    } else if (specificPnrs != null) {
+                        if (schema.equals(CompanyUnitRecord.schema)) {
+                            cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                            requestBody = cvrEntityManager.getSpecificQuery(specificPnrs);
+                        } else {
+                            return null;
+                        }
+                    } else if (specificUnitNrs != null) {
+                        if (schema.equals(ParticipantRecord.schema)) {
+                            cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                            requestBody = cvrEntityManager.getSpecificQuery(specificUnitNrs);
+                        } else {
+                            return null;
+                        }
+
                     } else {
                         cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
                         if (!cacheFile.exists()) {
@@ -281,8 +301,8 @@ public class CvrRegisterManager extends RegisterManager {
                             HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
                             missingCompanyList.removeAll(new HashSet<>(query.list()));
 
+                            // TODO: use this instead
                             // requestBody = cvrEntityManager.getDailyQuery(missingCompanySession, lastUpdateTime);
-
 
                             requestBody = String.format(
                                     configuration.getQuery(schema),
@@ -394,10 +414,20 @@ public class CvrRegisterManager extends RegisterManager {
     }
 
     private List<Integer> specificCvrs(ImportMetadata importMetadata) {
+        return this.specificIds(importMetadata, "cvr");
+    }
+    private List<Integer> specificPnrs(ImportMetadata importMetadata) {
+        return this.specificIds(importMetadata, "pnr");
+    }
+    private List<Integer> specificUnitNrs(ImportMetadata importMetadata) {
+        return this.specificIds(importMetadata, "unitNr");
+    }
+
+    private List<Integer> specificIds(ImportMetadata importMetadata, String key) {
         ObjectNode importConfiguration = importMetadata.getImportConfiguration();
         List<Integer> specificCvrs = new ArrayList<>();
         if (importConfiguration != null) {
-            JsonNode cvrNodes = importConfiguration.get("cvr");
+            JsonNode cvrNodes = importConfiguration.get(key);
             if (cvrNodes != null) {
                 if (cvrNodes.isInt()) {
                     specificCvrs.add(cvrNodes.asInt());

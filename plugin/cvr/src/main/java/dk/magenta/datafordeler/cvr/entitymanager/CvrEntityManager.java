@@ -527,7 +527,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         values.forEach(arrayNode::add);
         return queryFromTerms(key, arrayNode);
     }
-    protected ObjectNode queryFromTerms(String key, ArrayNode values) {
+    private ObjectNode queryFromTerms(String key, ArrayNode values) {
         ObjectNode query = objectMapper.createObjectNode();
         ObjectNode termsNode = objectMapper.createObjectNode();
         ArrayNode valueList = objectMapper.createArrayNode();
