@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.entitymanager;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -160,5 +162,25 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
         }
     }
 
+    protected ObjectNode queryFromMunicipalities(List<Integer> municipalities) {
+        return queryFromIntegerTerms("Vrdeltagerperson.beliggenhedsadresse.kommune.kommuneKode", municipalities);
+    }
+    protected ObjectNode queryFromUpdatedSince(OffsetDateTime updatedSince) {
+        return queryFromUpdatedSince("Vrdeltagerperson.sidstOpdateret", updatedSince);
+    }
+    protected ObjectNode queryFromUnitNumbers(List<Integer> unitNumbers) {
+        return queryFromIntegerTerms("Vrdeltagerperson.enhedsNummer", unitNumbers);
+    }
 
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
+        return finalizeQuery(
+                combineQueryAnd(
+                        queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),
+                        queryFromUpdatedSince(lastUpdated)
+                )
+        );
+    }
+    public String getSpecificQuery(List<Integer> ids) {
+        return finalizeQuery(queryFromUnitNumbers(ids));
+    }
 }

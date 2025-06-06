@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.cvr.entitymanager;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.fapi.FapiBaseService;
@@ -10,12 +11,15 @@ import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -90,6 +94,31 @@ public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord
     @Override
     public BaseQuery getQuery(String... strings) {
         return this.getQuery();
+    }
+
+
+
+    protected ObjectNode queryFromMunicipalities(List<Integer> municipalities) {
+        return queryFromIntegerTerms("VrproduktionsEnhed.beliggenhedsadresse.kommune.kommuneKode", municipalities);
+    }
+    protected ObjectNode queryFromUpdatedSince(OffsetDateTime updatedSince) {
+        return queryFromUpdatedSince("VrproduktionsEnhed.sidstOpdateret", updatedSince);
+    }
+    protected ObjectNode queryFromPnumbers(List<Integer> pNumbers) {
+        return queryFromIntegerTerms("VrproduktionsEnhed.pNummer", pNumbers);
+    }
+
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
+        return finalizeQuery(
+            combineQueryAnd(
+                    queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),
+                    queryFromUpdatedSince(lastUpdated)
+            )
+        );
+    }
+
+    public String getSpecificQuery(List<Integer> ids) {
+        return finalizeQuery(queryFromPnumbers(ids));
     }
 
 }
