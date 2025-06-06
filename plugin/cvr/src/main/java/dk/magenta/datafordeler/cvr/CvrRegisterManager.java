@@ -1,6 +1,9 @@
 package dk.magenta.datafordeler.cvr;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.*;
@@ -172,7 +175,9 @@ public class CvrRegisterManager extends RegisterManager {
         ScanScrollCommunicator eventCommunicator = (ScanScrollCommunicator) this.getEventFetcher();
         eventCommunicator.setThrottle(0);
 
-        String requestBody;
+        List<Integer> specificCvrs = this.specificCvrs(importMetadata);
+
+        String requestBody = null;
 
         Session session = this.sessionManager.getSessionFactory().openSession();
         OffsetDateTime lastUpdateTime = entityManager.getLastUpdated(session);
@@ -241,43 +246,48 @@ public class CvrRegisterManager extends RegisterManager {
             case REMOTE_HTTP:
                 final ArrayList<Throwable> errors = new ArrayList<>();
                 InputStream responseBody;
-                File cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                File cacheFile;
                 try (Session missingCompanySession = this.sessionManager.getSessionFactory().openSession()) {
-                    if (!cacheFile.exists()) {
-                        log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");
-                        if (lastUpdateTime == null) {
-                            lastUpdateTime = OffsetDateTime.parse("0000-01-01T00:00:00Z");
-                            log.info("Last update time not found");
+                    if (specificCvrs != null) {
+                        cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                        requestBody = this.queryFromCvrs(specificCvrs, null);
+                    } else {
+                        cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                        if (!cacheFile.exists()) {
+                            log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");
+                            if (lastUpdateTime == null) {
+                                lastUpdateTime = OffsetDateTime.parse("0000-01-01T00:00:00Z");
+                                log.info("Last update time not found");
+                            } else {
+                                log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                            }
+
+                            CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
+                            CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
+                            allCompanySubscription.from(CompanySubscription.class);
+                            List<Integer> subscribedCompanyList = missingCompanySession.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+
+                            Query<Integer> query = missingCompanySession.createQuery("select " + CompanyRecord.DB_FIELD_CVR_NUMBER + " from " + CompanyRecord.class.getCanonicalName(), Integer.class);
+                            HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
+                            missingCompanyList.removeAll(new HashSet<>(query.list()));
+
+                            requestBody = String.format(
+                                    configuration.getQuery(schema),
+                                    lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                    subscribedCompanyList,
+                                    lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                    new ArrayList<>(missingCompanyList)
+                            );
                         } else {
-                            log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                            log.info("Cache file " + cacheFile.getAbsolutePath() + " already exists.");
                         }
-
-                        CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
-                        CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
-                        allCompanySubscription.from(CompanySubscription.class);
-                        List<Integer> subscribedCompanyList = missingCompanySession.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
-
-                        Query<Integer> query = missingCompanySession.createQuery("select "+CompanyRecord.DB_FIELD_CVR_NUMBER+" from "+CompanyRecord.class.getCanonicalName(), Integer.class);
-                        HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
-                        missingCompanyList.removeAll(new HashSet<>(query.list()));
-
-                        requestBody = String.format(
-                                configuration.getQuery(schema),
-                                lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                subscribedCompanyList,
-                                lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                new ArrayList<>(missingCompanyList)
-                        );
-
+                    }
+                    if (!cacheFile.exists()) {
+                        System.out.println(requestBody);
                         eventCommunicator.setUsername(configuration.getUsername(schema));
                         eventCommunicator.setPassword(configuration.getPassword(schema));
 
-                        eventCommunicator.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                            @Override
-                            public void uncaughtException(Thread t, Throwable e) {
-                                errors.add(e);
-                            }
-                        });
+                        eventCommunicator.setUncaughtExceptionHandler((t, e) -> errors.add(e));
                         responseBody = eventCommunicator.fetch(
                                 new URI(configuration.getStartAddress(schema)),
                                 new URI(configuration.getScrollAddress(schema)),
@@ -291,9 +301,8 @@ public class CvrRegisterManager extends RegisterManager {
                         eventCommunicator.wait(responseBody);
                         responseBody.close();
                         log.info("Loaded into cache file");
-                    } else {
-                        log.info("Cache file " + cacheFile.getAbsolutePath() + " already exists.");
                     }
+
                 } catch (URISyntaxException e) {
                     throw new ConfigurationException("Invalid pull URI '" + e.getInput() + "'");
                 } catch (IOException e) {
@@ -369,5 +378,52 @@ public class CvrRegisterManager extends RegisterManager {
         } catch (IOException e) {
             throw new DataStreamException(e);
         }
+    }
+
+    private List<Integer> specificCvrs(ImportMetadata importMetadata) {
+        ObjectNode importConfiguration = importMetadata.getImportConfiguration();
+        List<Integer> specificCvrs = new ArrayList<>();
+        if (importConfiguration != null) {
+            ArrayNode cvrNodes = (ArrayNode) importConfiguration.get("cvr");
+            if (cvrNodes != null) {
+                for (JsonNode cvrNode : cvrNodes) {
+                    specificCvrs.add(cvrNode.asInt());
+                }
+                return specificCvrs;
+            }
+        }
+        return null;
+    }
+
+    private String finalizeQuery(String query) {
+        return "{\"query\":"+query+"}";
+    }
+
+    private String combineQueryAnd(List<String> queries) {
+        if (queries.size() == 1) {
+            return queries.get(0);
+        } else {
+            return "{\"bool\":{\"must\":[" + String.join(",", queries) + "]}}";
+        }
+    }
+
+    private String queryFromCvrs(List<Integer> cvrs) {
+        return this.queryFromCvrs(cvrs, null);
+    }
+
+    private String queryFromCvrs(List<Integer> cvrs, OffsetDateTime since) {
+        List<String> queries = new ArrayList<>();
+        queries.add(
+                String.format("{\"terms\": {\"Vrvirksomhed.cvrNummer\":%s}", cvrs)
+        );
+        if (since != null) {
+            queries.add(
+                    String.format(
+                            "{\"range\": {\"Vrvirksomhed.sidstOpdateret\": {\"gte\": \"%s\"}}}",
+                            since.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    )
+            );
+        }
+        return finalizeQuery(combineQueryAnd(queries));
     }
 }
