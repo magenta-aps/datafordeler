@@ -172,7 +172,7 @@ public class ParticipantEntityManager extends CvrEntityManager<ParticipantRecord
         return queryFromIntegerTerms("Vrdeltagerperson.enhedsNummer", unitNumbers);
     }
 
-    public String getDailyQuery(OffsetDateTime lastUpdated, List<Integer> subscribedCompanyList, List<Integer> missingCompanyList) {
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
         return finalizeQuery(
                 combineQueryAnd(
                         queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),

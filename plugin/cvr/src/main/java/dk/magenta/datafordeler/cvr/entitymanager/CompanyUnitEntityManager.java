@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
 import dk.magenta.datafordeler.cvr.service.CompanyUnitRecordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -107,7 +108,7 @@ public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord
         return queryFromIntegerTerms("VrproduktionsEnhed.pNummer", pNumbers);
     }
 
-    public String getDailyQuery(OffsetDateTime lastUpdated, List<Integer> subscribedCompanyList, List<Integer> missingCompanyList) {
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
         return finalizeQuery(
             combineQueryAnd(
                     queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),
