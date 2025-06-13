@@ -55,8 +55,8 @@ public class AssignmentCleanerTest {
 
             System.out.println("BETWEEN");
 
-            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
-            Thread.sleep(1000);
+//            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
+//            Thread.sleep(1000);
 
             reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
             System.out.println("\n");
