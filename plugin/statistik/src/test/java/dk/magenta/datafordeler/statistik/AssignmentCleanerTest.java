@@ -52,21 +52,21 @@ public class AssignmentCleanerTest {
             for (ReportAssignment reportAssign : reportAssignmentList) {
                 System.out.println(reportAssign.getCreateDateTime());
             }
-
-            AssignmentCleaner assignmentCleaner = new AssignmentCleaner(sessionManager.getSessionFactory(), 0);
-            RunnableFuture<Void> task = new FutureTask<>(assignmentCleaner, null);
-            task.run();
-            try {
-                task.get(); // this will block until Runnable completes
-            } catch (InterruptedException | ExecutionException e) {
-                // handle exception
-            }
+//
+//            AssignmentCleaner assignmentCleaner = new AssignmentCleaner(sessionManager.getSessionFactory(), 0);
+//            RunnableFuture<Void> task = new FutureTask<>(assignmentCleaner, null);
+//            task.run();
+//            try {
+//                task.get(); // this will block until Runnable completes
+//            } catch (InterruptedException | ExecutionException e) {
+//                // handle exception
+//            }
 
 
             System.out.println("BETWEEN");
 
-//            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
-//            Thread.sleep(1000);
+            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
+            Thread.sleep(1000);
 
             reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
             System.out.println("\n");
