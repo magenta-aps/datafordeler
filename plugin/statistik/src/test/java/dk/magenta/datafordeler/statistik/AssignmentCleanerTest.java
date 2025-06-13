@@ -38,13 +38,25 @@ public class AssignmentCleanerTest {
             session.persist(reportAssignment);
             session.getTransaction().commit();
 
+
+
             List<ReportAssignment> reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
             Assertions.assertFalse(reportAssignmentList.isEmpty());
+
+            System.out.println("Before cleanup:");
+            for (ReportAssignment reportAssign : reportAssignmentList) {
+                System.out.println(reportAssign.getCreateDateTime());
+            }
 
             AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
             Thread.sleep(1000);
 
             reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
+            System.out.println("\n");
+            System.out.println("After cleanup:");
+            for (ReportAssignment reportAssign : reportAssignmentList) {
+                System.out.println(reportAssign.getCreateDateTime());
+            }
             Assertions.assertEquals(0, reportAssignmentList.size());
         } finally {
             AssignmentCleaner.unSchedule();

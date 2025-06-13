@@ -4,6 +4,7 @@ import dk.magenta.datafordeler.core.AbstractTask;
 import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.util.CronUtil;
+import org.apache.jena.base.Sys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
