@@ -67,9 +67,10 @@ public class AssignmentCleanerTest {
 
             AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * * *");
 
-            Thread.sleep(10000);
+            Thread.sleep(1000);
 
             System.out.println("WAITED");
+            AssignmentCleaner.unSchedule();
 
             reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
             System.out.println("\n");
