@@ -44,9 +44,9 @@ public class AssignmentCleaner extends Worker implements Runnable {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
-                LocalDateTime deadline = LocalDateTime.now().minus(daysToLive, ChronoUnit.DAYS);
-                Query query = session.createQuery("delete from ReportAssignment where createDateTime < :deadline");
-                query.setParameter("deadline", deadline);
+                LocalDateTime cutoffDate = LocalDateTime.now().minus(daysToLive, ChronoUnit.DAYS);
+                Query query = session.createQuery("delete from ReportAssignment where createDateTime < :cutoffDate");
+                query.setParameter("cutoffDate", cutoffDate);
                 query.executeUpdate();
                 transaction.commit();
             } catch (Exception e) {
