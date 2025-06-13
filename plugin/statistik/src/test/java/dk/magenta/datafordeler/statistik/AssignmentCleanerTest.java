@@ -18,6 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -51,7 +54,14 @@ public class AssignmentCleanerTest {
             }
 
             AssignmentCleaner assignmentCleaner = new AssignmentCleaner(sessionManager.getSessionFactory(), 0);
-            assignmentCleaner.start();
+            RunnableFuture<Void> task = new FutureTask<>(assignmentCleaner, null);
+            task.run();
+            try {
+                task.get(); // this will block until Runnable completes
+            } catch (InterruptedException | ExecutionException e) {
+                // handle exception
+            }
+
 
             System.out.println("BETWEEN");
 
