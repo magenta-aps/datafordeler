@@ -7,7 +7,9 @@ import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.statistik.reportExecution.AssignmentCleaner;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportAssignment;
 import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
+import org.apache.jena.base.Sys;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.quartz.SchedulerException;
@@ -34,9 +36,9 @@ public class AssignmentCleanerTest {
         reportAssignment.setTemplateName("template");
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            session.beginTransaction();
+            Transaction t = session.beginTransaction();
             session.persist(reportAssignment);
-            session.getTransaction().commit();
+            t.commit();
 
 
 
@@ -50,6 +52,8 @@ public class AssignmentCleanerTest {
 
             AssignmentCleaner assignmentCleaner = new AssignmentCleaner(sessionManager.getSessionFactory(), 0);
             assignmentCleaner.start();
+
+            System.out.println("BETWEEN");
 
             AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
             Thread.sleep(1000);

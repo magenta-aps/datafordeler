@@ -44,14 +44,20 @@ public class AssignmentCleaner extends Worker implements Runnable {
     public void run() {
         log.info("Starting " + getClass().getSimpleName() + ".run()");
         try (Session session = sessionFactory.openSession()) {
+            log.info("run1");
             Transaction transaction = session.beginTransaction();
+            log.info("run2");
             try {
                 transaction.begin();
+                log.info("run3");
                 LocalDateTime deadline = LocalDateTime.now().minus(daysToLive, ChronoUnit.DAYS);
+                log.info("run4");
                 log.info("Cleaning up " + deadline);
                 Query query = session.createQuery("delete from ReportAssignment where createDateTime < :deadline");
                 query.setParameter("deadline", deadline);
+                log.info("run5");
                 query.executeUpdate();
+                log.info("run6");
                 transaction.commit();
                 log.info("Cleaned up " + deadline);
             } catch (Exception e) {
@@ -60,6 +66,7 @@ public class AssignmentCleaner extends Worker implements Runnable {
                 throw e;
             }
         }
+        log.info("DONE");
     }
 
     public static void setup(SessionFactory sessionFactory, int daysToLive, String cronSchedule) throws ConfigurationException {
