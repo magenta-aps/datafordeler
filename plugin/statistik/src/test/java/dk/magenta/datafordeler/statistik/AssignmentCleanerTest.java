@@ -48,6 +48,9 @@ public class AssignmentCleanerTest {
                 System.out.println(reportAssign.getCreateDateTime());
             }
 
+            AssignmentCleaner assignmentCleaner = new AssignmentCleaner(sessionManager.getSessionFactory(), 0);
+            assignmentCleaner.start();
+
             AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
             Thread.sleep(1000);
 
