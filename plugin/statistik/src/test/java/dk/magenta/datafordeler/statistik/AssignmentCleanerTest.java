@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.statistik.reportExecution.ReportProgressStatus;
 import org.hibernate.Session;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,7 +25,7 @@ public class AssignmentCleanerTest {
     SessionManager sessionManager;
 
     @Test
-    public void testRun() throws ConfigurationException, InterruptedException {
+    public void testRun() throws ConfigurationException, InterruptedException, SchedulerException {
         ReportAssignment reportAssignment = new ReportAssignment();
         reportAssignment.setReason("reason");
         reportAssignment.setReportStatus(ReportProgressStatus.done);
@@ -32,21 +33,22 @@ public class AssignmentCleanerTest {
         reportAssignment.setRegistrationBefore("registration before");
         reportAssignment.setTemplateName("template");
 
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.save(reportAssignment);
-        session.getTransaction().commit();
-
-        List<ReportAssignment> reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class);
-        Assertions.assertEquals(1, reportAssignmentList.size());
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.persist(reportAssignment);
+            session.getTransaction().commit();
 
 
-        AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
-        Thread.sleep(1000);
+            List<ReportAssignment> reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
+            Assertions.assertEquals(1, reportAssignmentList.size());
 
-        reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class);
-        Assertions.assertEquals(0, reportAssignmentList.size());
+            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
+            Thread.sleep(1000);
 
-        session.close();
+            reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
+            Assertions.assertEquals(0, reportAssignmentList.size());
+        } finally {
+            AssignmentCleaner.unSchedule();
+        }
     }
 }

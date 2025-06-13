@@ -86,4 +86,9 @@ public class AssignmentCleaner extends Worker implements Runnable {
             log.error("Failed to schedule AssignmentCleaner", e);
         }
     }
+
+    public static void unSchedule() throws SchedulerException {
+        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+        scheduler.unscheduleJob(TriggerKey.triggerKey("assignmentCleaner"));
+    }
 }
