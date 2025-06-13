@@ -40,6 +40,10 @@ public class ReportAssignment extends DatabaseEntry {
     @CreationTimestamp
     private LocalDateTime createDateTime;
 
+    public LocalDateTime getCreateDateTime() {
+        return this.createDateTime;
+    }
+
     @UpdateTimestamp
     private LocalDateTime updateDateTime;
 
