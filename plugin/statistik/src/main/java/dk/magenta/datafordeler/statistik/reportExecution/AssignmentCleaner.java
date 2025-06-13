@@ -41,17 +41,22 @@ public class AssignmentCleaner extends Worker implements Runnable {
 
     @Override
     public void run() {
+        log.info("Starting " + getClass().getSimpleName() + ".run()");
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             try {
                 transaction.begin();
                 LocalDateTime deadline = LocalDateTime.now().minus(daysToLive, ChronoUnit.DAYS);
+                log.info("Cleaning up " + deadline);
                 Query query = session.createQuery("delete from ReportAssignment where createDateTime < :deadline");
                 query.setParameter("deadline", deadline);
                 query.executeUpdate();
                 transaction.commit();
+                log.info("Cleaned up " + deadline);
             } catch (Exception e) {
                 transaction.rollback();
+                e.printStackTrace();
+                throw e;
             }
         }
     }

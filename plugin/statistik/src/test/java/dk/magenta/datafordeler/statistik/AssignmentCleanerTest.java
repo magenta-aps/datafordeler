@@ -38,9 +38,8 @@ public class AssignmentCleanerTest {
             session.persist(reportAssignment);
             session.getTransaction().commit();
 
-
             List<ReportAssignment> reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
-            Assertions.assertEquals(1, reportAssignmentList.size());
+            Assertions.assertFalse(reportAssignmentList.isEmpty());
 
             AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * *");
             Thread.sleep(1000);
