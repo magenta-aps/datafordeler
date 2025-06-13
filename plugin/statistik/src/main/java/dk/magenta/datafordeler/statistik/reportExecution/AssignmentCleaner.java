@@ -48,8 +48,6 @@ public class AssignmentCleaner extends Worker implements Runnable {
             Transaction transaction = session.beginTransaction();
             log.info("run2");
             try {
-                transaction.begin();
-                log.info("run3");
                 LocalDateTime deadline = LocalDateTime.now().minus(daysToLive, ChronoUnit.DAYS);
                 log.info("run4");
                 log.info("Cleaning up " + deadline);
