@@ -110,7 +110,7 @@ build-openapi-image:
     DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
     DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
-    DATABASE_SHOW_SQL: "true"
+    DATABASE_SHOW_SQL: "false"
     DATABASE_USERNAME: "SA"
     DATABASE_PASSWORD: "testTEST1"
     DATABASE_METHOD: "update"

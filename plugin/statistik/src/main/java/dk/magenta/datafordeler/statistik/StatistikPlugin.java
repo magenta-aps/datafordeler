@@ -48,6 +48,6 @@ public class StatistikPlugin extends Plugin {
 
     @PostConstruct
     public void init() throws ConfigurationException {
-        AssignmentCleaner.setup(sessionManager.getSessionFactory(), 7, "0 0 15 * *");
+        AssignmentCleaner.setup(sessionManager.getSessionFactory(), 7, "0 0 0 15 * *");
     }
 }
