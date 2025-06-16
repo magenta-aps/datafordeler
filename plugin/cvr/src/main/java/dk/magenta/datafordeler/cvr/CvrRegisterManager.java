@@ -287,37 +287,46 @@ public class CvrRegisterManager extends RegisterManager {
 
                     } else {
                         cacheFile = new File(this.localCopyFolder, schema + "_" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
-                        if (!cacheFile.exists()) {
-                            log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");
-                            if (lastUpdateTime == null) {
-                                lastUpdateTime = OffsetDateTime.parse("0000-01-01T00:00:00Z");
-                                log.info("Last update time not found");
-                            } else {
-                                log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
-                            }
-
-                            // TODO: Erstat med getDailyQuery
-                            CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
-                            CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
-                            allCompanySubscription.from(CompanySubscription.class);
-                            List<Integer> subscribedCompanyList = missingCompanySession.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
-
-                            Query<Integer> query = missingCompanySession.createQuery("select " + CompanyRecord.DB_FIELD_CVR_NUMBER + " from " + CompanyRecord.class.getCanonicalName(), Integer.class);
-                            HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
-                            missingCompanyList.removeAll(new HashSet<>(query.list()));
-
-                            // TODO: use this instead
-                            // requestBody = cvrEntityManager.getDailyQuery(missingCompanySession, lastUpdateTime);
-
-                            requestBody = String.format(
-                                    configuration.getQuery(schema),
-                                    lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                    subscribedCompanyList,
-                                    lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                                    new ArrayList<>(missingCompanyList)
-                            );
+                        if (this.refreshAll(importMetadata)) {
+                            requestBody = cvrEntityManager.getDailyQuery(missingCompanySession, lastUpdateTime, true);
                         } else {
-                            log.info("Cache file " + cacheFile.getAbsolutePath() + " already exists.");
+
+                            if (!cacheFile.exists()) {
+                                log.info("Cache file " + cacheFile.getAbsolutePath() + " doesn't exist. Creating new and filling from source");
+                                if (lastUpdateTime == null) {
+                                    lastUpdateTime = OffsetDateTime.parse("0000-01-01T00:00:00Z");
+                                    log.info("Last update time not found");
+                                } else {
+                                    log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                                }
+
+                                // TODO: Erstat med getDailyQuery
+                                CriteriaBuilder subscriptionBuilder = missingCompanySession.getCriteriaBuilder();
+                                CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
+                                allCompanySubscription.from(CompanySubscription.class);
+                                List<Integer> subscribedCompanyList = missingCompanySession.createQuery(allCompanySubscription).getResultList().stream().map(s -> s.getCvrNumber()).sorted().collect(Collectors.toList());
+
+                                Query<Integer> query = missingCompanySession.createQuery("select " + CompanyRecord.DB_FIELD_CVR_NUMBER + " from " + CompanyRecord.class.getCanonicalName(), Integer.class);
+                                HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
+                                missingCompanyList.removeAll(new HashSet<>(query.list()));
+
+                                // TODO: use this instead
+                                // requestBody = cvrEntityManager.getDailyQuery(missingCompanySession, lastUpdateTime);
+
+                                requestBody = String.format(
+                                        configuration.getQuery(schema),
+                                        lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                        subscribedCompanyList,
+                                        lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                                        new ArrayList<>(missingCompanyList)
+                                );
+
+                                log.info("old requestBody: " + requestBody);
+                                log.info("new requestBody: " + cvrEntityManager.getDailyQuery(missingCompanySession, lastUpdateTime, false));
+
+                            } else {
+                                log.info("Cache file " + cacheFile.getAbsolutePath() + " already exists.");
+                            }
                         }
                     }
                     if (!cacheFile.exists()) {
@@ -445,6 +454,14 @@ public class CvrRegisterManager extends RegisterManager {
             }
         }
         return null;
+    }
+
+    private boolean refreshAll(ImportMetadata importMetadata) {
+        JsonNode refreshNode = importMetadata.getImportConfiguration().get("refreshAll");
+        if (refreshNode != null) {
+            return refreshNode.asBoolean();
+        }
+        return false;
     }
 
 }

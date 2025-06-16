@@ -108,13 +108,12 @@ public class CompanyUnitEntityManager extends CvrEntityManager<CompanyUnitRecord
         return queryFromIntegerTerms("VrproduktionsEnhed.pNummer", pNumbers);
     }
 
-    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
-        return finalizeQuery(
-            combineQueryAnd(
-                    queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),
-                    queryFromUpdatedSince(lastUpdated)
-            )
-        );
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated, boolean forceRefresh) {
+        ObjectNode municipalityQuery = queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962));
+        if (!forceRefresh) {
+            municipalityQuery = combineQueryAnd(municipalityQuery, queryFromUpdatedSince(lastUpdated));
+        }
+        return finalizeQuery(municipalityQuery);
     }
 
     public String getSpecificQuery(List<Integer> ids) {
