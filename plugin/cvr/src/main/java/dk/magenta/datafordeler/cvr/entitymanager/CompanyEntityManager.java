@@ -338,7 +338,7 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         return queryFromIntegerTerms("Vrvirksomhed.cvrNummer", cvrs);
     }
 
-    public String getDailyQuery(Session session, OffsetDateTime lastUpdated) {
+    public String getDailyQuery(Session session, OffsetDateTime lastUpdated, boolean forceRefresh) {
 
         CriteriaBuilder subscriptionBuilder = session.getCriteriaBuilder();
         CriteriaQuery<CompanySubscription> allCompanySubscription = subscriptionBuilder.createQuery(CompanySubscription.class);
@@ -349,16 +349,20 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         HashSet<Integer> missingCompanyList = new HashSet<>(subscribedCompanyList);
         missingCompanyList.removeAll(new HashSet<>(query.list()));
 
+        ObjectNode municipalityQuery = queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962));
+        if (!forceRefresh) {
+            municipalityQuery = combineQueryAnd(municipalityQuery, queryFromUpdatedSince(lastUpdated));
+        }
+
+        ObjectNode subscriptionQuery = queryFromCvrs(subscribedCompanyList);
+        if (!forceRefresh) {
+            subscriptionQuery = combineQueryAnd(subscriptionQuery, queryFromUpdatedSince(lastUpdated));
+        }
+
         return finalizeQuery(
             combineQueryOr(
-                combineQueryAnd(
-                    queryFromMunicipalities(Arrays.asList(954, 955, 956, 957, 958, 959, 960, 961, 962)),
-                    queryFromUpdatedSince(lastUpdated)
-                ),
-                combineQueryAnd(
-                    queryFromCvrs(subscribedCompanyList),
-                    queryFromUpdatedSince(lastUpdated)
-                ),
+                municipalityQuery,
+                subscriptionQuery,
                 queryFromCvrs(missingCompanyList.stream().toList())
             )
         );

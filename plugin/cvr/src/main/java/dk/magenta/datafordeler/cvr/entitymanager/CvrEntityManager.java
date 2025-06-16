@@ -576,7 +576,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return query;
     }
 
-    public abstract String getDailyQuery(Session session, OffsetDateTime lastUpdated);
+    public abstract String getDailyQuery(Session session, OffsetDateTime lastUpdated, boolean forceUpdate);
 
     public abstract String getSpecificQuery(List<Integer> ids);
 }
