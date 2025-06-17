@@ -458,7 +458,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestName));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestPrimaryIndustry));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry1));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry2));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry3));
         return updated;
