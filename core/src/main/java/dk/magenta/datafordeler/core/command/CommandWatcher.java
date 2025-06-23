@@ -43,7 +43,6 @@ public class CommandWatcher {
      */
     @PostConstruct
     public void init() {
-        //this.session = this.sessionManager.getSessionFactory().openSession();
         this.mappedHandlers = new HashMap<>();
         for (CommandHandler commandHandler : this.commandHandlers) {
             for (String handledCommand : commandHandler.getHandledCommands()) {
