@@ -492,19 +492,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
-    public void closeAllEligibleRegistrations() {
-        Session session = getSessionManager().getSessionFactory().openSession();
-        List<T> items = QueryManager.getAllEntities(session, this.getRecordClass());
-        Transaction transaction = session.beginTransaction();
-        try {
-            items.forEach(t -> {
-                    Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
-                    session.persist(updated);
-            });
-            transaction.commit();
-        } catch (Exception e) {
-            transaction.rollback();
-        }
+    public void closeAllEligibleRegistrations(Session session, List<T> items) {
+        log.info("Closing all eligible registrations for "+items.size()+" items");
+        items.forEach(t -> {
+                Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
+                session.persist(updated);
+        });
     }
 
     protected String finalizeQuery(ObjectNode query) {

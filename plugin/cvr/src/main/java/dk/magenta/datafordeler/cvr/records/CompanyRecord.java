@@ -1703,6 +1703,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (this.metadata != null) {
             updated.addAll(this.metadata.closeRegistrations());
         }
+        System.out.println(updated);
         return updated;
     }
 

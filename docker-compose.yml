@@ -6,7 +6,7 @@ services:
     image: datafordeler:latest
     build:
       context: .
-      dockerfile: docker/Dockerfile.jdk
+      dockerfile: docker/Dockerfile.jre
     depends_on:
       - datafordeler-db
     env_file:
