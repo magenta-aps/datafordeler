@@ -524,6 +524,8 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 }
                 System.out.println("saving");
                 for (CvrBitemporalRecord bitemporalRecord : updated) {
+//                    session.merge()
+                    System.out.println(bitemporalRecord.getId()+" "+session.contains(bitemporalRecord));
                     session.persist(bitemporalRecord);
                 }
 
