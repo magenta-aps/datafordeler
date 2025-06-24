@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.InterruptedPull;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -496,7 +498,19 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         log.info("Closing all eligible registrations for "+items.size()+" items");
         items.forEach(t -> {
                 Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
-                session.persist(updated);
+            if (updated != null && !updated.isEmpty()) {
+                if (t instanceof CompanyRecord) {
+                    CompanyRecord companyRecord = (CompanyRecord) t;
+                    System.out.println("cvr: "+companyRecord.getCvrNumber());
+                } else if (t instanceof CompanyUnitRecord) {
+                    CompanyUnitRecord companyUnitRecord = (CompanyUnitRecord) t;
+                    System.out.println("p: "+companyUnitRecord.getpNumber());
+                } else if (t instanceof ParticipantRecord) {
+                    ParticipantRecord participantRecord = (ParticipantRecord) t;
+                    System.out.println("id: "+participantRecord.getUnitNumber());
+                }
+            }
+//            session.persist(updated);
         });
     }
 

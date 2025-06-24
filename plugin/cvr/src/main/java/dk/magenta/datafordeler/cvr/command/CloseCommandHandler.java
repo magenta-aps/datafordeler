@@ -107,7 +107,9 @@ public class CloseCommandHandler extends CommandHandler {
                             switch (commandData.type) {
                                 case "company":
                                     CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-                                    companyRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
+                                    if (!commandData.ids.contains("all")) {
+                                        companyRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
+                                    }
                                     List<CompanyRecord> companies = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
                                     if (!companies.isEmpty()) {
                                         CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
@@ -115,7 +117,9 @@ public class CloseCommandHandler extends CommandHandler {
                                     break;
                                 case "unit":
                                     CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
-                                    companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
+                                    if (!commandData.ids.contains("all")) {
+                                        companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
+                                    }
                                     List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
                                     if (!units.isEmpty()) {
                                         CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, units);
@@ -123,14 +127,17 @@ public class CloseCommandHandler extends CommandHandler {
                                     break;
                                 case "participant":
                                     ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-                                    participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
+                                    if (!commandData.ids.contains("all")) {
+                                        participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
+                                    }
                                     List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
                                     if (!participants.isEmpty()) {
                                         CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, participants);
                                     }
                                     break;
                             }
-                            transaction.commit();
+//                            transaction.commit();
+                            transaction.rollback();//
                         } catch (Exception e) {
                             transaction.rollback();
                         }
