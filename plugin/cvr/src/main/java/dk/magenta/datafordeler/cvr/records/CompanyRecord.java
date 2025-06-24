@@ -1658,8 +1658,8 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     @Override
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+    public HashSet<CvrBitemporalRecord> closeRegistrations() {
+        HashSet<CvrBitemporalRecord> updated = new HashSet<>();
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyForm));

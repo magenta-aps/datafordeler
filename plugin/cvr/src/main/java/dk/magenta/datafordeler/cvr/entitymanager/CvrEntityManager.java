@@ -496,6 +496,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     public void closeAllEligibleRegistrations(Session session, List<T> items) {
         log.info("Closing all eligible registrations for "+items.size()+" items");
+        objectMapper.setFilterProvider(new SimpleFilterProvider().addFilter(
+                "ParticipantRecordFilter",
+                SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+        ));
         items.forEach(t -> {
                 Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
             if (updated != null && !updated.isEmpty()) {
@@ -511,6 +515,11 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 }
                 for (CvrBitemporalRecord bitemporalRecord : updated) {
                     System.out.println("    "+bitemporalRecord);
+                    try {
+                        objectMapper.writeValueAsString(bitemporalRecord);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 //            session.persist(updated);
