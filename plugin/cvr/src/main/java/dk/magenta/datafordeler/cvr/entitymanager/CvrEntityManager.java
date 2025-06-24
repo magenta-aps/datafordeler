@@ -523,7 +523,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                     }
                 }
             }
-//            session.persist(updated);
+            session.persist(updated);
         });
     }
 
