@@ -522,8 +522,12 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                         throw new RuntimeException(e);
                     }
                 }
+                System.out.println("saving");
+                for (CvrBitemporalRecord bitemporalRecord : updated) {
+                    session.persist(bitemporalRecord);
+                }
+
             }
-            session.persist(updated);
         });
     }
 
