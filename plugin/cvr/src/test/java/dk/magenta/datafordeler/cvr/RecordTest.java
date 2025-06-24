@@ -997,7 +997,7 @@ public class RecordTest extends TestBase {
             for (SecNameRecord nameRecord : company.getNames()) {
                 session.save(nameRecord);
             }
-            List<CvrBitemporalRecord> updated = company.closeRegistrations();
+            Collection<CvrBitemporalRecord> updated = company.closeRegistrations();
             for (CvrBitemporalRecord nameRecord : updated) {
                 session.save(nameRecord);
             }
