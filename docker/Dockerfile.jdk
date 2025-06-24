@@ -4,7 +4,20 @@ WORKDIR /app/
 
 COPY pom.xml pom.xml
 COPY parent/pom.xml parent/pom.xml
-RUN mvn dependency:copy-dependencies
+COPY core/pom.xml core/pom.xml
+COPY plugin/geo/pom.xml plugin/geo/pom.xml
+COPY plugin/combinedPitu/pom.xml plugin/combinedPitu/pom.xml
+COPY plugin/cpr/pom.xml plugin/cpr/pom.xml
+COPY plugin/cvr/pom.xml plugin/cvr/pom.xml
+COPY plugin/eboks/pom.xml plugin/eboks/pom.xml
+COPY plugin/eskat/pom.xml plugin/eskat/pom.xml
+COPY plugin/ger/pom.xml plugin/ger/pom.xml
+COPY plugin/prisme/pom.xml plugin/prisme/pom.xml
+COPY plugin/statistik/pom.xml plugin/statistik/pom.xml
+COPY plugin/subscription/pom.xml plugin/subscription/pom.xml
+
+RUN mvn verify --fail-never
+
 COPY core core
 COPY plugin plugin
 
