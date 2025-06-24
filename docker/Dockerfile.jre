@@ -21,7 +21,7 @@ RUN mvn verify --fail-never
 COPY core core
 COPY plugin plugin
 
-RUN mvn install -DskipTests --batch-mode --show-version --threads 2C
+RUN mvn install -DskipTests --batch-mode --show-version
 
 
 FROM eclipse-temurin:23-jre-alpine
