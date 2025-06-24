@@ -4,6 +4,7 @@ WORKDIR /app/
 
 COPY pom.xml pom.xml
 COPY parent/pom.xml parent/pom.xml
+RUN mvn dependency:copy-dependencies
 COPY core core
 COPY plugin plugin
 
