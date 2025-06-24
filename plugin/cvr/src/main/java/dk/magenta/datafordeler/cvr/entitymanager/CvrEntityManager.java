@@ -501,13 +501,16 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             if (updated != null && !updated.isEmpty()) {
                 if (t instanceof CompanyRecord) {
                     CompanyRecord companyRecord = (CompanyRecord) t;
-                    System.out.println("cvr: "+companyRecord.getCvrNumber());
+                    System.out.println("cvr: "+companyRecord.getCvrNumber()+", updated.size: "+updated.size());
                 } else if (t instanceof CompanyUnitRecord) {
                     CompanyUnitRecord companyUnitRecord = (CompanyUnitRecord) t;
-                    System.out.println("p: "+companyUnitRecord.getpNumber());
+                    System.out.println("p: "+companyUnitRecord.getpNumber()+", updated.size: "+updated.size());
                 } else if (t instanceof ParticipantRecord) {
                     ParticipantRecord participantRecord = (ParticipantRecord) t;
-                    System.out.println("id: "+participantRecord.getUnitNumber());
+                    System.out.println("id: "+participantRecord.getUnitNumber()+", updated.size: "+updated.size());
+                }
+                for (CvrBitemporalRecord bitemporalRecord : updated) {
+                    System.out.println("    "+bitemporalRecord);
                 }
             }
 //            session.persist(updated);
