@@ -136,8 +136,10 @@ public class CloseCommandHandler extends CommandHandler {
                                     }
                                     break;
                             }
+                            System.out.println("Committing");
                             transaction.commit();
                         } catch (Exception e) {
+                            e.printStackTrace();
                             transaction.rollback();
                         }
                     }
