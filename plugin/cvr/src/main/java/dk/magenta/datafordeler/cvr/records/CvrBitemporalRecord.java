@@ -242,6 +242,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
+
                             clone.setEffectTo(next.getEffectFrom());
                             clone.setRegistrationFrom(registrationCut);
                             updated.add(clone);
