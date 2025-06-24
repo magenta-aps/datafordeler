@@ -179,5 +179,5 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         session.remove(this);
     }
 
-    public abstract ArrayList<CvrBitemporalRecord> closeRegistrations();
+    public abstract Collection<CvrBitemporalRecord> closeRegistrations();
 }
