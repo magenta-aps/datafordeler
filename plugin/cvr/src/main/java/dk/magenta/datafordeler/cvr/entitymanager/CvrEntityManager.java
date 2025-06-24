@@ -516,7 +516,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                 for (CvrBitemporalRecord bitemporalRecord : updated) {
                     System.out.println("    "+bitemporalRecord);
                     try {
-                        objectMapper.writeValueAsString(bitemporalRecord);
+                        System.out.println(objectMapper.writeValueAsString(bitemporalRecord));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                         throw new RuntimeException(e);
