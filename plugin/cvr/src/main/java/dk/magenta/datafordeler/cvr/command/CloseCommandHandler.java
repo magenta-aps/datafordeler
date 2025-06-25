@@ -112,6 +112,9 @@ public class CloseCommandHandler extends CommandHandler {
                                     }
                                     List<CompanyRecord> companies = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
                                     if (!companies.isEmpty()) {
+                                        CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, companies);
+
+
                                         CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
                                     }
                                     break;
