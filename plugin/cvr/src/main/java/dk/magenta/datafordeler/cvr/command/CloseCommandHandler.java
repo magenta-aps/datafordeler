@@ -115,29 +115,29 @@ public class CloseCommandHandler extends CommandHandler {
                                         CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, companies);
 
 
-                                        CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
+//                                        CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
                                     }
                                     break;
-                                case "unit":
-                                    CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
-                                    if (!commandData.ids.contains("all")) {
-                                        companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
-                                    }
-                                    List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
-                                    if (!units.isEmpty()) {
-                                        CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, units);
-                                    }
-                                    break;
-                                case "participant":
-                                    ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-                                    if (!commandData.ids.contains("all")) {
-                                        participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
-                                    }
-                                    List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-                                    if (!participants.isEmpty()) {
-                                        CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, participants);
-                                    }
-                                    break;
+//                                case "unit":
+//                                    CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
+//                                    if (!commandData.ids.contains("all")) {
+//                                        companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
+//                                    }
+//                                    List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
+//                                    if (!units.isEmpty()) {
+//                                        CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, units);
+//                                    }
+//                                    break;
+//                                case "participant":
+//                                    ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+//                                    if (!commandData.ids.contains("all")) {
+//                                        participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
+//                                    }
+//                                    List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+//                                    if (!participants.isEmpty()) {
+//                                        CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, participants);
+//                                    }
+//                                    break;
                             }
                             System.out.println("Committing");
                             transaction.commit();
