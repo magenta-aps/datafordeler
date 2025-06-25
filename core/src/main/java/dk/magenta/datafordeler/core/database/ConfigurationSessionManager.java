@@ -74,8 +74,8 @@ public class ConfigurationSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", getEnv("SECONDARY_DATABASE_METHOD", "validate"));
         hibernateProperties.setProperty("hibernate.default_schema", getEnv("SECONDARY_DATABASE_DEFAULT_SCHEMA", "dbo"));
 
-        hibernateProperties.setProperty("hibernate.connection.username", System.getenv("DATABASE_USERNAME"));
-        hibernateProperties.setProperty("hibernate.connection.password", System.getenv("DATABASE_PASSWORD"));
+        hibernateProperties.setProperty("hibernate.connection.username", System.getenv("SECONDARY_DATABASE_USERNAME"));
+        hibernateProperties.setProperty("hibernate.connection.password", System.getenv("SECONDARY_DATABASE_PASSWORD"));
 
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", "30");
         hibernateProperties.setProperty("hibernate.jdbc.time_zone", "UTC");
