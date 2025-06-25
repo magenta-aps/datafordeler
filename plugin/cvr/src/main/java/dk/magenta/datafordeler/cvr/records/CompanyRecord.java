@@ -1749,13 +1749,13 @@ public class CompanyRecord extends CvrEntityRecord {
                                     addressRecord.getCoName()+", "+addressRecord.getCountryCode()+", "+addressRecord.getAddressText()+", "+addressRecord.getLastValidated()+" "+
                                     addressRecord.getFreeText()+" "+addressRecord.getDafoUpdated()+(record==newest?("  <---"):"")
                     );
+                    if (record != newest) {
+                        System.out.println("Should delete id "+record.getId());
+                    }
                 }
+
             }
 
-
-
-
-            /**/
         }
     }
 }
