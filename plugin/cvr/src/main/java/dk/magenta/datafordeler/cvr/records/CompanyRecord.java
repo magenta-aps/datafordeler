@@ -1709,14 +1709,18 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public void cleanupBitemporalSets(Session session) {
         for (CompanyParticipantRelationRecord participantRelation : this.participants) {
+            System.out.println("-----------------");
             RelationParticipantRecord p = participantRelation.getRelationParticipantRecord();
+            System.out.println(p.getLocationAddress().size());
             Query q = session.createQuery(
                     "from "+AddressRecord.class.getCanonicalName()+" a " +
-                            "where a."+AddressRecord.DB_FIELD_PARTICIPANT_RELATION+" = :id", AddressRecord.class);
-            q.setParameter("id", p.getId());
+                       "where a."+AddressRecord.DB_FIELD_PARTICIPANT_RELATION+" = :p",
+                    AddressRecord.class
+            );
+            q.setParameter("p", p);
             List<AddressRecord> addressRecords = q.getResultList();
             for (AddressRecord addressRecord : addressRecords) {
-                System.out.println(addressRecord.getId()+" "+p.getLocationAddress().contains(addressRecord));
+                System.out.println(addressRecord.getId()+" "+p.getLocationAddress().contains(addressRecord) + " " + addressRecord.getRoadName()+" "+addressRecord.getHouseNumberFrom());
             }
         }
     }
