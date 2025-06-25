@@ -229,6 +229,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     // Find records that have open bitemporality,
                     // and find other records that are registered and effected after them
                     Stream<T> candidates = recordList.stream().filter(c -> c != current);
+
                     if (current.getRegistrationFrom() != null) {
                         candidates = candidates.filter(record -> record.getRegistrationFrom() != null)
                                                .filter(record -> record.getRegistrationFrom().isAfter(current.getRegistrationFrom()));
@@ -242,7 +243,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
-
                             clone.setEffectTo(next.getEffectFrom());
                             clone.setRegistrationFrom(registrationCut);
                             updated.add(clone);
@@ -252,6 +252,18 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
+                    } else {
+                        if (current.getRegistrationFrom() != null) {
+                            candidates = recordList.stream().filter(c -> c != current);
+                            candidates = candidates
+                                    .filter(record -> record.getRegistrationFrom() != null)
+                                    .filter(record -> record.getRegistrationFrom().isAfter(current.getRegistrationFrom()));
+                            next = candidates.min(comparator).orElse(null);
+                            if (next != null) {
+                                current.setRegistrationTo(next.getRegistrationFrom());
+                            }
+                        }
+
                     }
                 }
             }
@@ -259,9 +271,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return updated;
     }
 
-    static <R extends CvrBitemporalRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R>> setCollection) {
+    static <R extends CvrBitemporalRecord, P extends CvrRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R, P>> setCollection) {
         ArrayList<R> updated = new ArrayList<>();
-        for (BitemporalSet<R> values : setCollection) {
+        for (BitemporalSet<R, P> values : setCollection) {
             updated.addAll(CvrBitemporalRecord.closeRegistrations(values));
         }
         return updated;

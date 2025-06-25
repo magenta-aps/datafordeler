@@ -629,7 +629,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
 
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         if (this.municipality != null) {
             this.municipality.traverse(setCallback, itemCallback);

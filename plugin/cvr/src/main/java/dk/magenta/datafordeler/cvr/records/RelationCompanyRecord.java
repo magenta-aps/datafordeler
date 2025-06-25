@@ -104,8 +104,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<CompanyRegNumberRecord> getRegNumber() {
-        return new BitemporalSet<>(this.regNumber);
+    public BitemporalSet<CompanyRegNumberRecord, RelationCompanyRecord> getRegNumber() {
+        return new BitemporalSet<>(this.regNumber, this, CompanyRegNumberRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION);
     }
 
 
@@ -130,8 +130,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<BaseNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<BaseNameRecord, RelationCompanyRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_COMPANY_RELATION);
     }
 
 
@@ -156,8 +156,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<LifecycleRecord> getLifecycle() {
-        return new BitemporalSet<>(this.lifecycle);
+    public BitemporalSet<LifecycleRecord, RelationCompanyRecord> getLifecycle() {
+        return new BitemporalSet<>(this.lifecycle, this, LifecycleRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION);
     }
 
 
@@ -182,8 +182,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<StatusRecord> getStatus() {
-        return new BitemporalSet<>(this.status);
+    public BitemporalSet<StatusRecord, RelationCompanyRecord> getStatus() {
+        return new BitemporalSet<>(this.status, this, StatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION);
     }
 
 
@@ -209,8 +209,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<CompanyStatusRecord> getCompanyStatus() {
-        return new BitemporalSet<>(this.companyStatus);
+    public BitemporalSet<CompanyStatusRecord, RelationCompanyRecord> getCompanyStatus() {
+        return new BitemporalSet<>(this.companyStatus, this, CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION);
     }
 
 
@@ -235,8 +235,8 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<FormRecord> getForm() {
-        return new BitemporalSet<>(this.form);
+    public BitemporalSet<FormRecord, RelationCompanyRecord> getForm() {
+        return new BitemporalSet<>(this.form, this, FormRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION);
     }
 
 
@@ -322,7 +322,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getCompanyStatus().traverse(setCallback, itemCallback);
         this.getForm().traverse(setCallback, itemCallback);

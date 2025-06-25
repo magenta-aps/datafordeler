@@ -110,8 +110,8 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public BitemporalSet<AttributeValueRecord> getValues() {
-        return new BitemporalSet<>(this.values);
+    public BitemporalSet<AttributeValueRecord, AttributeRecord> getValues() {
+        return new BitemporalSet<>(this.values, this, AttributeValueRecord.DB_FIELD_ATTRIBUTE);
     }
 
 
@@ -217,7 +217,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
 
 
 
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getValues().traverse(setCallback, itemCallback);
     }

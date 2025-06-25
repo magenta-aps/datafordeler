@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
+import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.ParticipantEntityManager;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
 import dk.magenta.datafordeler.cvr.query.CompanyUnitRecordQuery;
@@ -93,7 +94,7 @@ public class CloseCommandHandler extends CommandHandler {
             return new Worker() {
                 @Override
                 public void run() {
-                    CloseCommandData commandData = null;
+                    CloseCommandData commandData;
                     try {
                         commandData = CloseCommandHandler.this.getCommandData(command.getCommandBody());
                     } catch (InvalidClientInputException e) {
@@ -101,7 +102,6 @@ public class CloseCommandHandler extends CommandHandler {
                     }
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
-
                         Transaction transaction = session.beginTransaction();
                         try {
                             switch (commandData.type) {
@@ -113,33 +113,30 @@ public class CloseCommandHandler extends CommandHandler {
                                     List<CompanyRecord> companies = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
                                     if (!companies.isEmpty()) {
                                         CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, companies);
-
-
-//                                        CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
+                                        CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
                                     }
                                     break;
-//                                case "unit":
-//                                    CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
-//                                    if (!commandData.ids.contains("all")) {
-//                                        companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
-//                                    }
-//                                    List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
-//                                    if (!units.isEmpty()) {
-//                                        CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, units);
-//                                    }
-//                                    break;
-//                                case "participant":
-//                                    ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-//                                    if (!commandData.ids.contains("all")) {
-//                                        participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
-//                                    }
-//                                    List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-//                                    if (!participants.isEmpty()) {
-//                                        CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, participants);
-//                                    }
-//                                    break;
+                                case "unit":
+                                    CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
+                                    if (!commandData.ids.contains("all")) {
+                                        companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
+                                    }
+                                    List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
+                                    if (!units.isEmpty()) {
+                                        CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, units);
+                                    }
+                                    break;
+                                case "participant":
+                                    ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+                                    if (!commandData.ids.contains("all")) {
+                                        participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
+                                    }
+                                    List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
+                                    if (!participants.isEmpty()) {
+                                        CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, participants);
+                                    }
+                                    break;
                             }
-                            System.out.println("Committing");
                             transaction.commit();
                         } catch (Exception e) {
                             e.printStackTrace();

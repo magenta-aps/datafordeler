@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cvr;
 
 import dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord;
+import dk.magenta.datafordeler.cvr.records.CvrRecord;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -10,10 +11,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BitemporalSet<R extends CvrBitemporalRecord> extends RecordSet<R> implements Set<R> {
+public class BitemporalSet<R extends CvrBitemporalRecord, P extends CvrRecord> extends RecordSet<R, P> implements Set<R> {
 
-    public BitemporalSet(Set<R> inner) {
-        super(inner);
+    public BitemporalSet(Set<R> inner, P parent, String field) {
+        super(inner, parent, field);
+    }
+    public BitemporalSet(Set<R> inner, P parent, String field, String clause) {
+        super(inner, parent, field, clause);
     }
 
     /**

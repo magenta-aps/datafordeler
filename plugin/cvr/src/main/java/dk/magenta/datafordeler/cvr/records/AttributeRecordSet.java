@@ -9,10 +9,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class AttributeRecordSet extends RecordSet<AttributeRecord> {
+public class AttributeRecordSet<P extends CvrRecord> extends RecordSet<AttributeRecord, P> {
 
-    public AttributeRecordSet(Collection<AttributeRecord> c) {
-        super(new HashSet<>(c));
+    public AttributeRecordSet(Collection<AttributeRecord> c, P parent, String field) {
+        super(new HashSet<>(c), parent, field);
+    }
+    public AttributeRecordSet(Collection<AttributeRecord> c, P parent, String field, String clause) {
+        super(new HashSet<>(c), parent, field, clause);
     }
 
     public List<AttributeRecord> byType(String type) {
