@@ -102,8 +102,8 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     @JsonProperty(value = IO_FIELD_NAME)
     private Set<BaseNameRecord> names = new HashSet<>();
 
-    public BitemporalSet<BaseNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<BaseNameRecord, OfficeRelationUnitRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_OFFICE_UNIT);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -125,7 +125,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_OFFICE_UNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
+    @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
     private Set<AddressRecord> locationAddress = new HashSet<>();
 
     public void setLocationAddress(Set<AddressRecord> locationAddress) {
@@ -144,8 +144,8 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress);
+    public BitemporalSet<AddressRecord, OfficeRelationUnitRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_OFFICE_UNIT);
     }
 
     // TODO: Postadresse
@@ -176,7 +176,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);

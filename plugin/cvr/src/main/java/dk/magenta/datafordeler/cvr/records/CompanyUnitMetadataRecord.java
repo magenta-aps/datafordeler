@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
@@ -50,8 +51,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     @OneToMany(targetEntity = MetadataContactRecord.class, mappedBy = MetadataContactRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
 
-    public RecordSet<MetadataContactRecord> getMetadataContactRecords() {
-        return new RecordSet<>(this.metadataContactRecords);
+    public RecordSet<MetadataContactRecord, CompanyUnitMetadataRecord> getMetadataContactRecords() {
+        return new RecordSet<>(this.metadataContactRecords, this, MetadataContactRecord.DB_FIELD_UNIT_METADATA);
     }
 
     public void setMetadataContactRecords(Set<MetadataContactRecord> metadataContactRecords) {
@@ -104,8 +105,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<BaseNameRecord> getNewestName() {
-        return new RecordSet<>(this.newestName);
+    public RecordSet<BaseNameRecord, CompanyUnitMetadataRecord> getNewestName() {
+        return new RecordSet<>(this.newestName, this, BaseNameRecord.DB_FIELD_UNIT_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_NAME)
@@ -155,8 +156,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<AddressRecord> getNewestLocation() {
-        return new RecordSet<>(this.newestLocation);
+    public RecordSet<AddressRecord, CompanyUnitMetadataRecord> getNewestLocation() {
+        return new RecordSet<>(this.newestLocation, this, AddressRecord.DB_FIELD_UNIT_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -173,9 +174,10 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_PRIMARY_INDUSTRY = "newestPrimaryIndustry";
     public static final String IO_FIELD_NEWEST_PRIMARY_INDUSTRY = "nyesteHovedbranche";
+    public static final String CLAUSE_PRIMARY_INDUSTRY = CompanyIndustryRecord.DB_FIELD_INDEX + "=0";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=0")
+    @SQLRestriction(CLAUSE_PRIMARY_INDUSTRY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -207,9 +209,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
         }
     }
 
-    @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestPrimaryIndustry() {
-        return new RecordSet<>(this.newestPrimaryIndustry);
+    public BitemporalSet<CompanyIndustryRecord, CompanyUnitMetadataRecord> getNewestPrimaryIndustry() {
+        return new BitemporalSet<>(this.newestPrimaryIndustry, this, CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, "index=0");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_PRIMARY_INDUSTRY)
@@ -226,6 +227,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "newestSecondaryIndustry1";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "nyesteBibranche1";
+    public static final String CLAUSE_SECONDARY_INDUSTRY1 = CompanyIndustryRecord.DB_FIELD_INDEX + "=1";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
     @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=1")
@@ -261,8 +263,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry1() {
-        return new RecordSet<>(this.newestSecondaryIndustry1);
+    public RecordSet<CompanyIndustryRecord, CompanyUnitMetadataRecord> getNewestSecondaryIndustry1() {
+        return new RecordSet<>(this.newestSecondaryIndustry1, this, CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, "index=1");
     }
 
     @JsonProperty(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
@@ -279,9 +281,10 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "newestSecondaryIndustry2";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "nyesteBibranche2";
+    public static final String CLAUSE_SECONDARY_INDUSTRY2 = CompanyIndustryRecord.DB_FIELD_INDEX + "=2";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=2")
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY2)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -314,8 +317,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry2() {
-        return new RecordSet<>(this.newestSecondaryIndustry2);
+    public RecordSet<CompanyIndustryRecord, CompanyUnitMetadataRecord> getNewestSecondaryIndustry2() {
+        return new RecordSet<>(this.newestSecondaryIndustry2, this, CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, "index=2");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY2)
@@ -332,9 +335,10 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "newestSecondaryIndustry3";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "nyesteBibranche3";
+    public static final String CLAUSE_SECONDARY_INDUSTRY3 = CompanyIndustryRecord.DB_FIELD_INDEX + "=3";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, cascade = CascadeType.ALL, orphanRemoval = true)
-    @SQLRestriction(CompanyIndustryRecord.DB_FIELD_INDEX + "=3")
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY3)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -367,8 +371,8 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry3() {
-        return new RecordSet<>(this.newestSecondaryIndustry3);
+    public RecordSet<CompanyIndustryRecord, CompanyUnitMetadataRecord> getNewestSecondaryIndustry3() {
+        return new RecordSet<>(this.newestSecondaryIndustry3, this, CompanyIndustryRecord.DB_FIELD_UNIT_METADATA, "index=3");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY3)
@@ -434,7 +438,7 @@ public class CompanyUnitMetadataRecord extends MetadataRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getNewestName().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);

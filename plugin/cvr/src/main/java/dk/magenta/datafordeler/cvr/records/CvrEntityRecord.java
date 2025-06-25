@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.util.ListHashMap;
+import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
 import org.hibernate.Session;
@@ -179,5 +181,48 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         session.remove(this);
     }
 
-    public abstract Collection<CvrBitemporalRecord> closeRegistrations();
+    public abstract void closeRegistrations(Session session);
+
+
+    public void cleanupBitemporalSets(Session session) {
+        this.traverse(
+            recordSet -> {
+                if (recordSet instanceof BitemporalSet<?, ?>) {
+                    CvrRecord first = recordSet.isEmpty() ? null : recordSet.iterator().next();
+                    if (first != null) {
+                        CvrRecord parent = recordSet.getParent();
+                        StringJoiner hql = new StringJoiner(" ");
+                        hql.add("from " + first.getClass().getCanonicalName() + " record");
+                        hql.add("where record." + recordSet.getField() + " = :parent");
+                        String clause = recordSet.getClause();
+                        if (clause != null) {
+                            for (String subclause : clause.split(" AND ")) {
+                                hql.add("AND record." + subclause);
+                            }
+                        }
+                        Query q = session.createQuery(hql.toString(), first.getClass());
+                        q.setParameter("parent", parent);
+                        List<CvrBitemporalRecord> records = q.getResultList();
+
+                        ListHashMap<Integer, CvrBitemporalRecord> groups = new ListHashMap<>();
+                        for (CvrBitemporalRecord record : records) {
+                            int hash = record.hashCode();
+                            groups.add(hash, record);
+                        }
+                        for (Integer hash : groups.keySet()) {
+                            CvrBitemporalRecord newest = groups.get(hash).stream().sorted(Comparator.comparing(CvrRecord::getDafoUpdated).reversed()).findFirst().get();
+                            for (CvrBitemporalRecord record : groups.get(hash)) {
+                                if (record != newest) {
+                                    System.out.println("Should delete " + record.getClass().getSimpleName() + " " + record.getId());
+                                    session.remove(record);
+                                    recordSet.remove(record);
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            null
+        );
+    }
 }

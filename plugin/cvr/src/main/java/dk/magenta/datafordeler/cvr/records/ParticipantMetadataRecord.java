@@ -69,8 +69,8 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
     }
 
     @JsonIgnore
-    public BitemporalSet<AddressRecord> getNewestLocation() {
-        return new BitemporalSet<>(this.newestLocation);
+    public BitemporalSet<AddressRecord, ParticipantMetadataRecord> getNewestLocation() {
+        return new BitemporalSet<>(this.newestLocation, this, AddressRecord.DB_FIELD_PARTICIPANT_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -128,8 +128,8 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
         return contacts;
     }
 
-    public RecordSet<MetadataContactRecord> getMetadataContactRecords() {
-        return new RecordSet<>(this.metadataContactRecords);
+    public RecordSet<MetadataContactRecord, ParticipantMetadataRecord> getMetadataContactRecords() {
+        return new RecordSet<>(this.metadataContactRecords, this, MetadataContactRecord.DB_FIELD_PARTICIPANT_METADATA);
     }
 
 
@@ -168,7 +168,7 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
     }*/
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);

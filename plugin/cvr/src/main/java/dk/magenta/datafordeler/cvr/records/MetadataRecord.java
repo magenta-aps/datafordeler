@@ -70,7 +70,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     public static final String IO_FIELD_NEWEST_CONTACT_DATA = "nyesteKontaktoplysninger";
 
     @JsonIgnore
-    public abstract RecordSet<MetadataContactRecord> getMetadataContactRecords();
+    public abstract RecordSet<MetadataContactRecord, ? extends MetadataRecord> getMetadataContactRecords();
 
     public abstract void setMetadataContactRecords(Set<MetadataContactRecord> metadataContactRecords);
 
@@ -298,7 +298,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getMetadataContactRecords().traverse(setCallback, itemCallback);
         if (this.newestMonthlyNumbers != null) {

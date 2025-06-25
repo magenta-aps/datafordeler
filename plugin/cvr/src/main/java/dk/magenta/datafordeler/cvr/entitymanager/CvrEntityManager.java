@@ -494,53 +494,20 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
+
+    public void cleanupBitemporalSets(Session session, Collection<T> records) {
+        for (T record : records) {
+            record.cleanupBitemporalSets(session);
+        }
+    }
+
     public void closeAllEligibleRegistrations(Session session, List<T> items) {
         log.info("Closing all eligible registrations for "+items.size()+" items");
         objectMapper.setFilterProvider(new SimpleFilterProvider().addFilter(
                 "ParticipantRecordFilter",
                 SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
         ));
-        items.forEach(t -> {
-                Collection<CvrBitemporalRecord> updated = t.closeRegistrations();
-            if (updated != null && !updated.isEmpty()) {
-                if (t instanceof CompanyRecord) {
-                    CompanyRecord companyRecord = (CompanyRecord) t;
-                    System.out.println("cvr: "+companyRecord.getCvrNumber()+", updated.size: "+updated.size());
-                } else if (t instanceof CompanyUnitRecord) {
-                    CompanyUnitRecord companyUnitRecord = (CompanyUnitRecord) t;
-                    System.out.println("p: "+companyUnitRecord.getpNumber()+", updated.size: "+updated.size());
-                } else if (t instanceof ParticipantRecord) {
-                    ParticipantRecord participantRecord = (ParticipantRecord) t;
-                    System.out.println("id: "+participantRecord.getUnitNumber()+", updated.size: "+updated.size());
-                }
-                for (CvrBitemporalRecord bitemporalRecord : updated) {
-                    System.out.println("    "+bitemporalRecord);
-                    try {
-                        System.out.println(objectMapper.writeValueAsString(bitemporalRecord));
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-                }
-                System.out.println("saving");
-                for (CvrBitemporalRecord bitemporalRecord : updated) {
-                    System.out.println(bitemporalRecord.getId()+" "+session.contains(bitemporalRecord));
-                    if (bitemporalRecord.getId() == null) {
-                        System.out.println("persist");
-                        session.persist(bitemporalRecord);
-                    } else if (!session.contains(bitemporalRecord)) {
-                        System.out.println("merge");
-                        session.merge(bitemporalRecord);
-                    }
-//                    if (session.contains(bitemporalRecord)) {
-//                        session.persist(bitemporalRecord);
-//                    } else {
-//                        session.merge(bitemporalRecord);
-//                    }
-                }
-
-            }
-        });
+        items.forEach(t -> t.closeRegistrations(session));
     }
 
     protected String finalizeQuery(ObjectNode query) {

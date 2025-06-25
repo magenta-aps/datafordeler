@@ -100,8 +100,8 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         }
     }
 
-    public RecordSet<OfficeRelationRecord> getOffices() {
-        return new RecordSet<>(this.offices);
+    public RecordSet<OfficeRelationRecord, CompanyParticipantRelationRecord> getOffices() {
+        return new RecordSet<>(this.offices, this, OfficeRelationRecord.DB_FIELD_COMPANY_RELATION);
     }
 
 
@@ -126,8 +126,8 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         }
     }
 
-    public RecordSet<OrganizationRecord> getOrganizations() {
-        return new RecordSet<>(this.organizations);
+    public RecordSet<OrganizationRecord, CompanyParticipantRelationRecord> getOrganizations() {
+        return new RecordSet<>(this.organizations, this, OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION);
     }
 
 
@@ -301,7 +301,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getOrganizations().traverse(setCallback, itemCallback);
         this.getOffices().traverse(setCallback, itemCallback);
         RelationParticipantRecord relationParticipantRecord = this.getRelationParticipantRecord();

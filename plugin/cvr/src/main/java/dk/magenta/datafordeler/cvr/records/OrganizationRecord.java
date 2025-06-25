@@ -84,8 +84,8 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
     @JsonProperty(value = IO_FIELD_NAME)
     public Set<BaseNameRecord> names;
 
-    public BitemporalSet<BaseNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<BaseNameRecord, OrganizationRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_ORGANIZATION);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -107,7 +107,7 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_ORGANIZATION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     public Set<AttributeRecord> attributes;
 
     public void setAttributes(Set<AttributeRecord> attributes) {
@@ -139,8 +139,8 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
         }
     }
 
-    public AttributeRecordSet getAttributes() {
-        return new AttributeRecordSet(this.attributes);
+    public AttributeRecordSet<OrganizationRecord> getAttributes() {
+        return new AttributeRecordSet<>(this.attributes, this, AttributeRecord.DB_FIELD_ORGANIZATION);
     }
 
 
@@ -170,8 +170,8 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
         }
     }
 
-    public RecordSet<OrganizationMemberdataRecord> getMemberData() {
-        return new RecordSet<>(this.memberData);
+    public RecordSet<OrganizationMemberdataRecord, OrganizationRecord> getMemberData() {
+        return new RecordSet<>(this.memberData, this, OrganizationMemberdataRecord.DB_FIELD_ORGANIZATION);
     }
 
 
@@ -229,7 +229,7 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
     }
 
 
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getMemberData().traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
