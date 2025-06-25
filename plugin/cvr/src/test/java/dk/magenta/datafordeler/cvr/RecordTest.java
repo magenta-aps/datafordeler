@@ -997,10 +997,7 @@ public class RecordTest extends TestBase {
             for (SecNameRecord nameRecord : company.getNames()) {
                 session.save(nameRecord);
             }
-            Collection<CvrBitemporalRecord> updated = company.closeRegistrations();
-            for (CvrBitemporalRecord nameRecord : updated) {
-                session.save(nameRecord);
-            }
+            company.closeRegistrations(session);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
