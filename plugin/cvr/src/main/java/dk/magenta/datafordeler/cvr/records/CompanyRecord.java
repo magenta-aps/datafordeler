@@ -19,6 +19,7 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.Where;
+import org.opensaml.soap.wsfed.Address;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -1713,7 +1714,21 @@ public class CompanyRecord extends CvrEntityRecord {
 
             System.out.println("-----------------");
             RelationParticipantRecord p = participantRelation.getRelationParticipantRecord();
-            System.out.println(p.getLocationAddress().size());
+
+//            Collection<AddressRecord> addressRecords = p.getLocationAddress();
+            Query q = session.createQuery(
+                    "from "+AddressRecord.class.getCanonicalName()+" a " +
+                            "where a."+AddressRecord.DB_FIELD_PARTICIPANT_RELATION+" = :p",
+                    AddressRecord.class
+            );
+            q.setParameter("p", p);
+            List<AddressRecord> addressRecords = q.getResultList();
+
+            Collection<AddressRecord> set = p.getLocationAddress();
+
+
+
+            System.out.println(addressRecords.size());
             ListHashMap<Integer, CvrBitemporalRecord> groups = new ListHashMap<>();
             for (CvrBitemporalRecord record : p.getLocationAddress()) {
                 int hash = record.hashCode();
@@ -1727,7 +1742,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
                     AddressRecord addressRecord = (AddressRecord) record;
                     System.out.println(
-                            addressRecord.getType()+", "+addressRecord.getAddressId()+", "+addressRecord.getRoadCode()+" "+
+                            (set.contains(addressRecord))+" "+addressRecord.getId()+", "+addressRecord.getAddressId()+", "+addressRecord.getRoadCode()+" "+
                                     addressRecord.getCityName()+", "+addressRecord.getSupplementalCityName()+", "+addressRecord.getRoadName()+", "+addressRecord.getHouseNumberFrom()+" "+
                                     addressRecord.getHouseNumberTo()+", "+addressRecord.getLetterFrom()+", "+addressRecord.getLetterTo()+", "+addressRecord.getFloor()+", "+addressRecord.getDoor()+" "+
                                     addressRecord.getMunicipalitycode()+", "+addressRecord.getPostnummer()+", "+addressRecord.getPostBox()+" "+
@@ -1740,24 +1755,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
 
 
-            /*Query q = session.createQuery(
-                    "from "+AddressRecord.class.getCanonicalName()+" a " +
-                       "where a."+AddressRecord.DB_FIELD_PARTICIPANT_RELATION+" = :p",
-                    AddressRecord.class
-            );
-            q.setParameter("p", p);
-            List<AddressRecord> addressRecords = q.getResultList();
-            for (AddressRecord addressRecord : addressRecords) {
-                System.out.println(addressRecord.getId()+" "+p.getLocationAddress().contains(addressRecord) + " " + addressRecord.getRoadName()+" "+addressRecord.getHouseNumberFrom()+" "+addressRecord.hashCode());
-                System.out.println(
-                        addressRecord.getType()+", "+addressRecord.getAddressId()+", "+addressRecord.getRoadCode()+" "+
-                        addressRecord.getCityName()+", "+addressRecord.getSupplementalCityName()+", "+addressRecord.getRoadName()+", "+addressRecord.getHouseNumberFrom()+" "+
-                        addressRecord.getHouseNumberTo()+", "+addressRecord.getLetterFrom()+", "+addressRecord.getLetterTo()+", "+addressRecord.getFloor()+", "+addressRecord.getDoor()+" "+
-                        addressRecord.getMunicipalitycode()+", "+addressRecord.getPostnummer()+", "+addressRecord.getPostBox()+" "+
-                        addressRecord.getCoName()+", "+addressRecord.getCountryCode()+", "+addressRecord.getAddressText()+", "+addressRecord.getLastValidated()+" "+
-                        addressRecord.getFreeText()
-                );
-            }*/
+            /**/
         }
     }
 }
