@@ -1722,7 +1722,7 @@ public class CompanyRecord extends CvrEntityRecord {
             for (Integer hash : groups.keySet()) {
                 System.out.println("--------");
                 System.out.println(hash);
-                CvrBitemporalRecord oldest = groups.get(hash).stream().sorted(Comparator.comparing(CvrRecord::getDafoUpdated)).findFirst().get();
+                CvrBitemporalRecord newest = groups.get(hash).stream().sorted(Comparator.comparing(CvrRecord::getDafoUpdated).reversed()).findFirst().get();
                 for (CvrBitemporalRecord record : groups.get(hash)) {
 
                     AddressRecord addressRecord = (AddressRecord) record;
@@ -1732,7 +1732,7 @@ public class CompanyRecord extends CvrEntityRecord {
                                     addressRecord.getHouseNumberTo()+", "+addressRecord.getLetterFrom()+", "+addressRecord.getLetterTo()+", "+addressRecord.getFloor()+", "+addressRecord.getDoor()+" "+
                                     addressRecord.getMunicipalitycode()+", "+addressRecord.getPostnummer()+", "+addressRecord.getPostBox()+" "+
                                     addressRecord.getCoName()+", "+addressRecord.getCountryCode()+", "+addressRecord.getAddressText()+", "+addressRecord.getLastValidated()+" "+
-                                    addressRecord.getFreeText()+" "+addressRecord.getDafoUpdated()+(record==oldest?("  <---"):"")
+                                    addressRecord.getFreeText()+" "+addressRecord.getDafoUpdated()+(record==newest?("  <---"):"")
                     );
                 }
             }

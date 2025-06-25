@@ -546,13 +546,24 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
                 Objects.equals(coName, that.coName) &&
                 Objects.equals(countryCode, that.countryCode) &&
                 Objects.equals(addressText, that.addressText) &&
-                Objects.equals(lastValidated, that.lastValidated) &&
+//                Objects.equals(lastValidated, that.lastValidated) &&
                 Objects.equals(freeText, that.freeText);
     }
 
     @Override
     public int hashCode() {
-        int h = Objects.hash(super.hashCode(), type, addressId, roadCode, cityName, supplementalCityName, roadName, houseNumberFrom, houseNumberTo, letterFrom, letterTo, floor, door, this.getMunicipalitycode(), this.getPostnummer(), postBox, coName, countryCode, addressText, lastValidated, freeText);
+        int h = Objects.hash(
+                super.hashCode(),
+                type, addressId, roadCode, cityName, supplementalCityName, roadName,
+                houseNumberFrom, houseNumberTo, letterFrom, letterTo,
+                floor, door,
+                this.getMunicipalitycode(), this.getPostnummer(), postBox,
+                coName,
+                countryCode,
+                addressText,
+//                lastValidated,
+                freeText
+        );
         return h;
     }
 
