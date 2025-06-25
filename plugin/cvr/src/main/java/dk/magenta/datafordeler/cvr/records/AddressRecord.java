@@ -540,7 +540,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
                 Objects.equals(letterTo, that.letterTo) &&
                 Objects.equals(floor, that.floor) &&
                 Objects.equals(door, that.door) &&
-                Objects.equals(municipality, that.municipality) &&
+                Objects.equals(this.getMunicipalitycode(), that.getMunicipalitycode()) &&
                 this.getPostnummer() == that.getPostnummer() &&
                 Objects.equals(postBox, that.postBox) &&
                 Objects.equals(coName, that.coName) &&

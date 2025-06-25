@@ -1720,7 +1720,15 @@ public class CompanyRecord extends CvrEntityRecord {
             q.setParameter("p", p);
             List<AddressRecord> addressRecords = q.getResultList();
             for (AddressRecord addressRecord : addressRecords) {
-                System.out.println(addressRecord.getId()+" "+p.getLocationAddress().contains(addressRecord) + " " + addressRecord.getRoadName()+" "+addressRecord.getHouseNumberFrom());
+                System.out.println(addressRecord.getId()+" "+p.getLocationAddress().contains(addressRecord) + " " + addressRecord.getRoadName()+" "+addressRecord.getHouseNumberFrom()+" "+addressRecord.hashCode());
+                System.out.println(
+                        addressRecord.getType()+", "+addressRecord.getAddressId()+", "+addressRecord.getRoadCode()+" "+
+                        addressRecord.getCityName()+", "+addressRecord.getSupplementalCityName()+", "+addressRecord.getRoadName()+", "+addressRecord.getHouseNumberFrom()+" "+
+                        addressRecord.getHouseNumberTo()+", "+addressRecord.getLetterFrom()+", "+addressRecord.getLetterTo()+", "+addressRecord.getFloor()+", "+addressRecord.getDoor()+" "+
+                        addressRecord.getMunicipalitycode()+", "+addressRecord.getPostnummer()+", "+addressRecord.getPostBox()+" "+
+                        addressRecord.getCoName()+", "+addressRecord.getCountryCode()+", "+addressRecord.getAddressText()+", "+addressRecord.getLastValidated()+" "+
+                        addressRecord.getFreeText()
+                );
             }
         }
     }
