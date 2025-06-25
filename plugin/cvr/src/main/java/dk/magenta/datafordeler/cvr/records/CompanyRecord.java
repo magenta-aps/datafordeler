@@ -1726,11 +1726,11 @@ public class CompanyRecord extends CvrEntityRecord {
 
             Collection<AddressRecord> set = p.getLocationAddress();
 
-
-
             System.out.println(addressRecords.size());
+
+
             ListHashMap<Integer, CvrBitemporalRecord> groups = new ListHashMap<>();
-            for (CvrBitemporalRecord record : p.getLocationAddress()) {
+            for (CvrBitemporalRecord record : addressRecords) {
                 int hash = record.hashCode();
                 groups.add(hash, record);
             }
