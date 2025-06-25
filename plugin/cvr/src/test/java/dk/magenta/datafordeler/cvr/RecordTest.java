@@ -531,7 +531,7 @@ public class RecordTest extends TestBase {
             CompanyUnitRecord companyUnitRecord = records.get(0);
             Assertions.assertEquals(2, companyUnitRecord.getNames().size());
             Assertions.assertEquals(1, companyUnitRecord.getPostalAddress().size());
-            Assertions.assertEquals(2, companyUnitRecord.getLocationAddress().size());
+            Assertions.assertEquals(1, companyUnitRecord.getLocationAddress().size());
             Assertions.assertEquals(1, companyUnitRecord.getPhoneNumber().size());
             Assertions.assertEquals(0, companyUnitRecord.getFaxNumber().size());
             Assertions.assertEquals(2, companyUnitRecord.getEmailAddress().size());
