@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.core.util.DoubleHashMap;
+import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -1709,10 +1710,37 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public void cleanupBitemporalSets(Session session) {
         for (CompanyParticipantRelationRecord participantRelation : this.participants) {
+
             System.out.println("-----------------");
             RelationParticipantRecord p = participantRelation.getRelationParticipantRecord();
             System.out.println(p.getLocationAddress().size());
-            Query q = session.createQuery(
+            ListHashMap<Integer, CvrBitemporalRecord> groups = new ListHashMap<>();
+            for (CvrBitemporalRecord record : p.getLocationAddress()) {
+                int hash = record.hashCode();
+                groups.add(hash, record);
+            }
+            for (Integer hash : groups.keySet()) {
+                System.out.println("--------");
+                System.out.println(hash);
+                CvrBitemporalRecord oldest = groups.get(hash).stream().sorted(Comparator.comparing(CvrRecord::getDafoUpdated)).findFirst().get();
+                for (CvrBitemporalRecord record : groups.get(hash)) {
+
+                    AddressRecord addressRecord = (AddressRecord) record;
+                    System.out.println(
+                            addressRecord.getType()+", "+addressRecord.getAddressId()+", "+addressRecord.getRoadCode()+" "+
+                                    addressRecord.getCityName()+", "+addressRecord.getSupplementalCityName()+", "+addressRecord.getRoadName()+", "+addressRecord.getHouseNumberFrom()+" "+
+                                    addressRecord.getHouseNumberTo()+", "+addressRecord.getLetterFrom()+", "+addressRecord.getLetterTo()+", "+addressRecord.getFloor()+", "+addressRecord.getDoor()+" "+
+                                    addressRecord.getMunicipalitycode()+", "+addressRecord.getPostnummer()+", "+addressRecord.getPostBox()+" "+
+                                    addressRecord.getCoName()+", "+addressRecord.getCountryCode()+", "+addressRecord.getAddressText()+", "+addressRecord.getLastValidated()+" "+
+                                    addressRecord.getFreeText()+" "+addressRecord.getDafoUpdated()+(record==oldest?("  <---"):"")
+                    );
+                }
+            }
+
+
+
+
+            /*Query q = session.createQuery(
                     "from "+AddressRecord.class.getCanonicalName()+" a " +
                        "where a."+AddressRecord.DB_FIELD_PARTICIPANT_RELATION+" = :p",
                     AddressRecord.class
@@ -1729,7 +1757,7 @@ public class CompanyRecord extends CvrEntityRecord {
                         addressRecord.getCoName()+", "+addressRecord.getCountryCode()+", "+addressRecord.getAddressText()+", "+addressRecord.getLastValidated()+" "+
                         addressRecord.getFreeText()
                 );
-            }
+            }*/
         }
     }
 }
