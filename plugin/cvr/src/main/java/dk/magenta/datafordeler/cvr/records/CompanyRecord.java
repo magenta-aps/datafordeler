@@ -211,7 +211,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public static final String DB_FIELD_SECONDARY_NAMES = "secondaryNames";
     public static final String IO_FIELD_SECONDARY_NAMES = "binavne";
-    public static final String CLAUSE_NAME_SECONDARY = SecNameRecord.DB_FIELD_SECONDARY + "=false";
+    public static final String CLAUSE_NAME_SECONDARY = SecNameRecord.DB_FIELD_SECONDARY + "=true";
 
     @OneToMany(targetEntity = SecNameRecord.class, mappedBy = SecNameRecord.DB_FIELD_COMPANY, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Where(clause = CLAUSE_NAME_SECONDARY)
