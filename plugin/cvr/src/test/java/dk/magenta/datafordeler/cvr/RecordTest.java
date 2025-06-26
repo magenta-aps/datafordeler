@@ -238,6 +238,11 @@ public class RecordTest extends TestBase {
             CompanyRecord companyRecord = records.get(0);
 
             Assertions.assertEquals(3, companyRecord.getNames().size());
+
+            for (SecNameRecord n : companyRecord.getSecondaryNames()) {
+                System.out.println(n.getName()+" "+n.getBitemporality());
+            }
+
             Assertions.assertEquals(1, companyRecord.getSecondaryNames().size());
             Assertions.assertEquals(2, companyRecord.getPostalAddress().size());
             Assertions.assertEquals(5, companyRecord.getLocationAddress().size());
