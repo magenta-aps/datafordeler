@@ -1,5 +1,7 @@
 services:
   datafordeler:
+    profiles:
+      - donotstart
     container_name: datafordeler
     image: datafordeler:latest
     build:
@@ -30,6 +32,8 @@ services:
 #    command: java -Xms8g -Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Djava.rmi.server.hostname=127.0.0.1 -XX:HeapDumpPath=/app/log -Dcom.sun.management.jmxremote.rmi.port=7012 -Dcom.sun.management.jmxremote.port=7012 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dloader.path=/app/plugin/ -cp /app/core/datafordeler-core-exec.jar org.springframework.boot.loader.launch.PropertiesLauncher
 
   datafordeler-db:
+    profiles:
+      - donotstart
     container_name: datafordeler-db
     build:
       context: .
@@ -78,12 +82,20 @@ services:
 #    command: bash -c "cd /code/plugin/geo && mvn --batch-mode -T 2C test -Dtest=TestService#testRoad"
     #use docker compose up test to execute tests
 
-  openapi:
+#  openapi:
+#    build:
+#      context: .
+#      dockerfile: docker/Dockerfile.openapi
+#    ports:
+#      - "8081:8080"
+
+  doc:
     build:
       context: .
-      dockerfile: docker/Dockerfile.openapi
-    ports:
-      - "8081:8080"
+      dockerfile: docker/Dockerfile.docs
+    volumes:
+      - ./docs/output:/output
+
 
 volumes:
   datafordeler-gl:

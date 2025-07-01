@@ -309,6 +309,17 @@ Release Datafordeler image:
       "docker://${DAFO_JRE_IMAGE_SHA}"
       "docker://${DAFO_IMAGE_TAG}"
 
+Release Datafordeler-doc-openapi image:
+  extends:
+    - .rules:semver-all
+    - .release
+  script:
+    - skopeo copy
+      --src-creds=${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD}
+      --dest-creds=${RELEASE_REGISTRY_USER}:${RELEASE_REGISTRY_PASSWORD}
+      "docker://${DAFODOC_IMAGE_SHA}"
+      "docker://${DAFODOC_IMAGE_TAG}"
+
 # TODO: Remove when no longer needed
 Release Datafordeler-test-db image:
   extends:

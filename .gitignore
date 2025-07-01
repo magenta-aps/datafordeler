@@ -6,6 +6,7 @@
 /docs.zip
 *.retry
 *.swp
+/docs/output/*
 
 # MacOS system files
 .DS_Store

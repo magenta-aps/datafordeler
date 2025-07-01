@@ -3,7 +3,13 @@ window.onload = function() {
 
   // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   window.ui = SwaggerUIBundle({
-    url: "https://petstore.swagger.io/v2/swagger.json",
+    urls: [
+      { name: "generic", url: "openapi/openapi.json" },
+      { name: "combined", url: "openapi/combinedapi.json" },
+      { name: "custody", url: "openapi/cprapi.json" },
+      { name: "prisme", url: "openapi/prismeapi.json" },
+      { name: "subscription", url: "openapi/subscriptionapi.json" }
+    ],
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
