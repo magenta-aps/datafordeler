@@ -82,11 +82,11 @@ build-jre-image:
     CI_IMAGE: ${DAFO_JRE_IMAGE_SHA}
     DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.jre
 
-build-openapi-image:
+build-doc-image:
   extends: .build-docker
   variables:
     CI_IMAGE: ${DAFODOC_IMAGE_SHA}
-    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.openapi
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/Dockerfile.docs
 
 
 # Test stage
@@ -309,7 +309,7 @@ Release Datafordeler image:
       "docker://${DAFO_JRE_IMAGE_SHA}"
       "docker://${DAFO_IMAGE_TAG}"
 
-Release Datafordeler-doc-openapi image:
+Release Datafordeler-doc image:
   extends:
     - .rules:semver-all
     - .release
@@ -341,7 +341,7 @@ Configure Test:
   extends:
     - .rules:semver-all
     - .config:endpoint-with-tag
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image"]
   variables:
     ENDPOINT: datafordeler/salt/update-test
 
@@ -350,7 +350,7 @@ Configure Demo:
   extends:
     - .rules:semver-all
     - .config:endpoint-with-tag
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image"]
   variables:
     ENDPOINT: datafordeler/salt/update-demo
 
@@ -359,7 +359,7 @@ Configure Production:
   extends:
     - .rules:semver-core
     - .config:endpoint-with-tag
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image"]
   variables:
     ENDPOINT: datafordeler/salt/update-prod
 
@@ -373,7 +373,7 @@ Deploy Test 1:
   extends:
     - .rules:semver-all
     - .saltbert
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image", "Configure Test"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-1
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
@@ -389,7 +389,7 @@ Deploy Test 2:
     - .saltbert
   # Depend on test 1, so we only have one server down at a time
   # It needs to be checked that service 1 is up & running before taking down service 2
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Test 1"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image", "Configure Test", "Deploy Test 1"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-test-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
@@ -403,7 +403,7 @@ Deploy Demo 1:
   extends:
     - .rules:semver-all
     - .saltbert
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Demo"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image", "Configure Demo"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-demo-1
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
@@ -419,7 +419,7 @@ Deploy Demo 2:
     - .saltbert
   # Depend on test 1, so we only have one server down at a time
   # It needs to be checked that service 1 is up & running before taking down service 2
-  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Configure Test", "Deploy Demo 1"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-test-db image", "Release Datafordeler-doc image", "Configure Test", "Deploy Demo 1"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-demo-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
@@ -433,7 +433,7 @@ Deploy Production 1:
   extends:
     - .rules:semver-core
     - .saltbert
-  needs: ["Release Datafordeler image", "Configure Production"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-doc image", "Configure Production"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-prod-1
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
@@ -449,7 +449,7 @@ Deploy Production 2:
     - .saltbert
   # Depend on test 1, so we only have one server down at a time
   # It needs to be checked that service 1 is up & running before taking down service 2
-  needs: ["Release Datafordeler image", "Configure Production", "Deploy Production 1"]
+  needs: ["Release Datafordeler image", "Release Datafordeler-doc image", "Configure Production", "Deploy Production 1"]
   variables:
     SALTBERT_ORCHESTRATION: groenland.datafordeler.service-prod-2
     SALTBERT_URL: https://saltmaster.groenland.magentahosted.dk
