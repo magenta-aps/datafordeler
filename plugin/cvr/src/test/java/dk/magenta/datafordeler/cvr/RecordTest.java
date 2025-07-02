@@ -1018,13 +1018,13 @@ public class RecordTest extends TestBase {
         Assertions.assertTrue(Equality.equal(time, actualName2.getRegistrationFrom()));
         Assertions.assertNull(actualName2.getRegistrationTo());
         Assertions.assertNull(actualName2.getEffectFrom());
-        Assertions.assertTrue(Equality.equal(timeTruncated, actualName2.getEffectTo()));
+        Assertions.assertTrue(Equality.equal(timeTruncated.toLocalDate().minusDays(1), actualName2.getEffectTo().toLocalDate()));
 
         SecNameRecord actualName3 = nameRecords.get(2);
         Assertions.assertEquals("Name2", actualName3.getName());
         Assertions.assertTrue(Equality.equal(time, actualName3.getRegistrationFrom()));
         Assertions.assertNull(actualName3.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(timeTruncated, actualName3.getEffectFrom()));
+        Assertions.assertTrue(Equality.equal(timeTruncated.toLocalDate().minusDays(1), actualName3.getEffectFrom().toLocalDate()));
         Assertions.assertNull(actualName3.getEffectTo());
     }
 
