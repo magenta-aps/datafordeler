@@ -56,8 +56,8 @@ variables:
   DAFOSQL_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-test-db:${CI_COMMIT_SHA}
   DAFOSQL_IMAGE_TAG: magentaaps/datafordeler-test-db:${CI_COMMIT_TAG}
 
-  DAFODOC_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler_doc:${CI_COMMIT_SHA}
-  DAFODOC_IMAGE_TAG: magentaaps/datafordeler_doc:${CI_COMMIT_TAG}
+  DAFODOC_IMAGE_SHA: ${CI_REGISTRY_IMAGE}/datafordeler-doc:${CI_COMMIT_SHA}
+  DAFODOC_IMAGE_TAG: magentaaps/datafordeler-doc:${CI_COMMIT_TAG}
 
 # Build stage
 #############
