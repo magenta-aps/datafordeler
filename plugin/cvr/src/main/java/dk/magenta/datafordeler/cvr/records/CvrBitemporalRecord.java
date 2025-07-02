@@ -18,10 +18,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
@@ -273,6 +270,32 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
+
+        ListHashMap<CvrRecordPeriod, T> effectGroups = new ListHashMap<>();
+        for (T record : records) {
+            effectGroups.add(record.getValidity(), record);
+        }
+        for (CvrRecordPeriod period : effectGroups.keySet()) {
+            ArrayList<T> effectGroup = effectGroups.get(period);
+            if (effectGroup.size() > 1) {
+                effectGroup.sort(Comparator.comparing(T::getRegistrationFrom));
+                T previous = null;
+                for (T record : effectGroup) {
+                    if (previous != null) {
+                        if (record.getRegistrationFrom().equals(previous.getRegistrationFrom())) {
+                            System.out.println("Should delete " + record.getClass().getSimpleName() + " #" + record.getId());
+                            continue;
+                        } else {
+                            System.out.println("Should set registrationTo for " + record.getClass().getSimpleName() + " #" + record.getId()+" to "+record.getRegistrationFrom());
+//                            previous.setRegistrationTo(record.getRegistrationFrom());
+//                            updated.add(previous);
+                        }
+                    }
+                    previous = record;
+                }
+            }
+        }
+
         return updated;
     }
 
