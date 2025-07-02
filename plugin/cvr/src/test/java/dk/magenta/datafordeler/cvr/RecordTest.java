@@ -16,6 +16,7 @@ import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.core.user.DafoUserManager;
+import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
@@ -35,6 +36,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
@@ -528,7 +531,7 @@ public class RecordTest extends TestBase {
             CompanyUnitRecord companyUnitRecord = records.get(0);
             Assertions.assertEquals(2, companyUnitRecord.getNames().size());
             Assertions.assertEquals(1, companyUnitRecord.getPostalAddress().size());
-            Assertions.assertEquals(2, companyUnitRecord.getLocationAddress().size());
+            Assertions.assertEquals(1, companyUnitRecord.getLocationAddress().size());
             Assertions.assertEquals(1, companyUnitRecord.getPhoneNumber().size());
             Assertions.assertEquals(0, companyUnitRecord.getFaxNumber().size());
             Assertions.assertEquals(2, companyUnitRecord.getEmailAddress().size());
@@ -551,6 +554,7 @@ public class RecordTest extends TestBase {
     @Test
     public void testRestCompanyUnit() throws IOException, DataFordelerException {
         loadUnit("/unit.json");
+        ObjectMapper objectMapper = this.getObjectMapper();
         TestUserDetails testUserDetails = new TestUserDetails();
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
         ResponseEntity<String> resp = restTemplate.exchange("/cvr/unit/1/rest/search?pnummer=1020895337", HttpMethod.GET, httpEntity, String.class);
@@ -943,30 +947,6 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testEnrich() throws IOException, DataFordelerException {
-        this.cleanup();
-//        try (Session session = sessionManager.getSessionFactory().openSession()) {
-//            List<ParticipantRecord> items = QueryManager.getAllEntities(session, ParticipantRecord.class);
-//            if (!items.isEmpty()) {
-//                for (ParticipantRecord participantRecord : items) {
-//                    Transaction transaction = session.beginTransaction();
-//                    if (participantRecord.getMetadata() != null) {
-//                        session.remove(participantRecord.getMetadata());
-//                    }
-//                    for (CompanyParticipantRelationRecord companyParticipantRelationRecord : participantRecord.getCompanyRelation()) {
-//                        if (companyParticipantRelationRecord.getRelationParticipantRecord() != null) {
-//                            session.remove(companyParticipantRelationRecord.getRelationParticipantRecord());
-//                        }
-//                        if (companyParticipantRelationRecord.getRelationCompanyRecord() != null) {
-//                            session.remove(companyParticipantRelationRecord.getRelationCompanyRecord());
-//                        }
-//                        session.remove(companyParticipantRelationRecord);
-//                    }
-//                    session.remove(participantRecord);
-//                    transaction.commit();
-//                }
-//            }
-//        }
-
         loadParticipant("/person.json");
         /*ParticipantRecordQuery query = new ParticipantRecordQuery();
         query.setParameter(ParticipantRecordQuery.NAVN, "Morten*");
@@ -990,4 +970,62 @@ public class RecordTest extends TestBase {
             Assertions.assertEquals(Long.valueOf(1234567890L), record.getBusinessKey());
         }*/
     }
+
+    @Test
+    public void testCloseRegistration() {
+        Session session = sessionManager.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        CompanyRecord company = new CompanyRecord();
+        OffsetDateTime time = OffsetDateTime.now();
+        OffsetDateTime timeTruncated = time.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
+        try {
+            SecNameRecord name1 = new SecNameRecord();
+            name1.setSecondary(false);
+            name1.setName("Name1");
+            name1.setRegistrationFrom(null);
+            name1.setEffectTo(null);
+            company.addName(name1);
+
+            SecNameRecord name2 = new SecNameRecord();
+            name2.setSecondary(false);
+            name2.setName("Name2");
+            name2.setRegistrationFrom(time);
+            name2.setEffectFrom(time);
+            company.addName(name2);
+
+            session.save(company);
+            for (SecNameRecord nameRecord : company.getNames()) {
+                session.save(nameRecord);
+            }
+            company.closeRegistrations(session);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+        }
+
+        List<SecNameRecord> nameRecords = company.getNames().ordered();
+        Assertions.assertEquals(3, nameRecords.size());
+
+        SecNameRecord actualName1 = nameRecords.get(0);
+        Assertions.assertEquals("Name1", actualName1.getName());
+        Assertions.assertNull(actualName1.getRegistrationFrom());
+        Assertions.assertTrue(Equality.equal(time, actualName1.getRegistrationTo()));
+        Assertions.assertNull(actualName1.getEffectFrom());
+        Assertions.assertNull(actualName1.getEffectTo());
+
+        SecNameRecord actualName2 = nameRecords.get(1);
+        Assertions.assertEquals("Name1", actualName2.getName());
+        Assertions.assertTrue(Equality.equal(time, actualName2.getRegistrationFrom()));
+        Assertions.assertNull(actualName2.getRegistrationTo());
+        Assertions.assertNull(actualName2.getEffectFrom());
+        Assertions.assertTrue(Equality.equal(timeTruncated, actualName2.getEffectTo()));
+
+        SecNameRecord actualName3 = nameRecords.get(2);
+        Assertions.assertEquals("Name2", actualName3.getName());
+        Assertions.assertTrue(Equality.equal(time, actualName3.getRegistrationFrom()));
+        Assertions.assertNull(actualName3.getRegistrationTo());
+        Assertions.assertTrue(Equality.equal(timeTruncated, actualName3.getEffectFrom()));
+        Assertions.assertNull(actualName3.getEffectTo());
+    }
+
 }

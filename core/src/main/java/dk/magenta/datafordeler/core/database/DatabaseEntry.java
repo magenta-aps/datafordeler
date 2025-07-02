@@ -29,4 +29,11 @@ public abstract class DatabaseEntry {
     public List<BaseQuery> getAssoc() {
         return Collections.emptyList();
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        DatabaseEntry clone = (DatabaseEntry) super.clone();
+        clone.id = null;
+        return clone;
+    }
 }

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.InterruptedPull;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -225,7 +227,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
                         try {
                             int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
                         } catch (JsonParseException e) {
-                            e.printStackTrace();
                             ImportInterruptedException ex = new ImportInterruptedException(e);
                             session.getTransaction().rollback();
                             importMetadata.setTransactionInProgress(false);
@@ -329,6 +330,17 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
      * democompanys is used on the demoenvironment for demo and education purposes
      */
     public void cleanDemoData(Session session) {
+        CompanyRecordQuery personQuery = new CompanyRecordQuery();
+        List<String> testCompanyList = Arrays.asList(cvrDemoList.split(","));
+        personQuery.setParameter(CompanyRecordQuery.CVRNUMMER, testCompanyList);
+        session.beginTransaction();
+        personQuery.setPageSize(1000);
+        personQuery.applyFilters(session);
+        List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
+        for (CompanyRecord companyForDeletion : companyEntities) {
+            session.delete(companyForDeletion);
+        }
+        session.getTransaction().commit();
     }
 
 
@@ -483,6 +495,20 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
     }
 
 
+    public void cleanupBitemporalSets(Session session, Collection<T> records) {
+        for (T record : records) {
+            record.cleanupBitemporalSets(session);
+        }
+    }
+
+    public void closeAllEligibleRegistrations(Session session, List<T> items) {
+        log.info("Closing all eligible registrations for "+items.size()+" items");
+        objectMapper.setFilterProvider(new SimpleFilterProvider().addFilter(
+                "ParticipantRecordFilter",
+                SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
+        ));
+        items.forEach(t -> t.closeRegistrations(session));
+    }
 
     protected String finalizeQuery(ObjectNode query) {
         ObjectNode queryNode = objectMapper.createObjectNode();

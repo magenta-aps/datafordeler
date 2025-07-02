@@ -89,8 +89,8 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         }
     }
 
-    public AttributeRecordSet getAttributes() {
-        return new AttributeRecordSet(this.attributes);
+    public AttributeRecordSet<OrganizationMemberdataRecord> getAttributes() {
+        return new AttributeRecordSet<>(this.attributes, this, AttributeRecord.DB_FIELD_ORGANIZATION_MEMBERDATA);
     }
 
 
@@ -122,8 +122,18 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         return subs;
     }
 
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
+    }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord> updated = new ArrayList<>();
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        return updated;
     }
 }

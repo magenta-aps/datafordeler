@@ -57,4 +57,12 @@ public abstract class CvrBitemporalDataRecord extends CvrBitemporalRecord {
         return this.participantRecord;
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CvrBitemporalDataRecord clone = (CvrBitemporalDataRecord) super.clone();
+        clone.setCompanyRecord(this.companyRecord);
+        clone.setCompanyUnitRecord(this.companyUnitRecord);
+        clone.setParticipantRecord(this.participantRecord);
+        return clone;
+    }
 }

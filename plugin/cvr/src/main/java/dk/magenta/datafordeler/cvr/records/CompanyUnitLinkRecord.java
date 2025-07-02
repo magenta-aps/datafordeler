@@ -29,7 +29,7 @@ import java.util.UUID;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord {
+public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_company_unit_relation";
 
@@ -44,6 +44,10 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord {
     @Column(name = DB_FIELD_PNUMBER)
     @JsonProperty(value = IO_FIELD_PNUMBER)
     private int pNumber;
+
+    public void setpNumber(int pNumber) {
+        this.pNumber = pNumber;
+    }
 
     private Identification getUnitIdentification(Session session) {
         UUID unitUUID = CompanyUnitRecord.generateUUID(this.pNumber);
@@ -75,4 +79,11 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord {
         CompanyUnitLinkRecord that = (CompanyUnitLinkRecord) o;
         return pNumber == that.pNumber;
     }*/
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        CompanyUnitLinkRecord clone = (CompanyUnitLinkRecord) super.clone();
+        clone.setpNumber(this.pNumber);
+        return clone;
+    }
 }

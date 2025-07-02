@@ -104,8 +104,8 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<BaseNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<BaseNameRecord, RelationParticipantRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_PARTICIPANT_RELATION);
     }
 
 
@@ -142,10 +142,12 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress);
+    public BitemporalSet<AddressRecord, RelationParticipantRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_PARTICIPANT_RELATION);
     }
 
+
+    // TODO: Postadresse?
 
     @OneToOne(targetEntity = CompanyParticipantRelationRecord.class, mappedBy = CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT_RELATION)
     @JsonIgnore
@@ -212,9 +214,16 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
+    }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        return updated;
     }
 }

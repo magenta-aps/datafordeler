@@ -28,7 +28,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + BaseNameRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BaseNameRecord extends CvrBitemporalMetaRecord {
+public class BaseNameRecord extends CvrBitemporalMetaRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_name1";
 
@@ -132,4 +132,15 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord {
         return Objects.hash(super.hashCode(), name);
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        BaseNameRecord clone = (BaseNameRecord) super.clone();
+        clone.setName(this.name);
+        clone.setFusionSplitRecord(this.fusionSplitRecord);
+        clone.setOrganizationRecord(this.organizationRecord);
+        clone.setOfficeUnitRecord(this.officeUnitRecord);
+        clone.setRelationCompanyRecord(this.relationCompanyRecord);
+        clone.setRelationParticipantRecord(this.relationParticipantRecord);
+        return clone;
+    }
 }

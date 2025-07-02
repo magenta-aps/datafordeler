@@ -65,8 +65,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<FormRecord> getNewestForm() {
-        return new RecordSet<>(this.newestForm);
+    public RecordSet<FormRecord, CompanyMetadataRecord> getNewestForm() {
+        return new RecordSet<>(this.newestForm, this, FormRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_FORM)
@@ -116,8 +116,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<BaseNameRecord> getNewestName() {
-        return new RecordSet<>(this.newestName);
+    public RecordSet<BaseNameRecord, CompanyMetadataRecord> getNewestName() {
+        return new RecordSet<>(this.newestName, this, BaseNameRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_NAME)
@@ -167,8 +167,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<AddressRecord> getNewestLocation() {
-        return new RecordSet<>(this.newestLocation);
+    public RecordSet<AddressRecord, CompanyMetadataRecord> getNewestLocation() {
+        return new RecordSet<>(this.newestLocation, this, AddressRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -185,9 +185,10 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_PRIMARY_INDUSTRY = "newestPrimaryIndustry";
     public static final String IO_FIELD_NEWEST_PRIMARY_INDUSTRY = "nyesteHovedbranche";
+    public static final String CLAUSE_PRIMARY_INDUSTRY = CompanyIndustryRecord.DB_FIELD_INDEX + "=0";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=0")
+    @Where(clause = CLAUSE_PRIMARY_INDUSTRY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -220,8 +221,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestPrimaryIndustry() {
-        return new RecordSet<>(this.newestPrimaryIndustry);
+    public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestPrimaryIndustry() {
+        return new RecordSet<>(this.newestPrimaryIndustry, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=0");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_PRIMARY_INDUSTRY)
@@ -238,9 +239,10 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "newestSecondaryIndustry1";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY1 = "nyesteBibranche1";
+    public static final String CLAUSE_SECONDARY_INDUSTRY1 = CompanyIndustryRecord.DB_FIELD_INDEX + "=1";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=1")
+    @Where(clause = CLAUSE_SECONDARY_INDUSTRY1)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -274,8 +276,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry1() {
-        return new RecordSet<>(this.newestSecondaryIndustry1);
+    public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestSecondaryIndustry1() {
+        return new RecordSet<>(this.newestSecondaryIndustry1, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=1");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
@@ -292,9 +294,10 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "newestSecondaryIndustry2";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY2 = "nyesteBibranche2";
+    public static final String CLAUSE_SECONDARY_INDUSTRY2 = CompanyIndustryRecord.DB_FIELD_INDEX + "=2";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=2")
+    @Where(clause = CLAUSE_SECONDARY_INDUSTRY2)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -328,8 +331,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry2() {
-        return new RecordSet<>(this.newestSecondaryIndustry2);
+    public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestSecondaryIndustry2() {
+        return new RecordSet<>(this.newestSecondaryIndustry2, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=2");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY2)
@@ -346,9 +349,10 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     public static final String DB_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "newestSecondaryIndustry3";
     public static final String IO_FIELD_NEWEST_SECONDARY_INDUSTRY3 = "nyesteBibranche3";
+    public static final String CLAUSE_SECONDARY_INDUSTRY3 = CompanyIndustryRecord.DB_FIELD_INDEX + "=3";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=3")
+    @Where(clause = CLAUSE_SECONDARY_INDUSTRY3)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -382,8 +386,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @JsonIgnore
-    public RecordSet<CompanyIndustryRecord> getNewestSecondaryIndustry3() {
-        return new RecordSet<>(this.newestSecondaryIndustry3);
+    public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestSecondaryIndustry3() {
+        return new RecordSet<>(this.newestSecondaryIndustry3, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=3");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY3)
@@ -466,8 +470,8 @@ public class CompanyMetadataRecord extends MetadataRecord {
     @OneToMany(targetEntity = MetadataContactRecord.class, mappedBy = MetadataContactRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
         private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
 
-    public RecordSet<MetadataContactRecord> getMetadataContactRecords() {
-        return new RecordSet<>(this.metadataContactRecords);
+    public RecordSet<MetadataContactRecord, CompanyMetadataRecord> getMetadataContactRecords() {
+        return new RecordSet<>(this.metadataContactRecords, this, MetadataContactRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     public void setMetadataContactRecords(Set<MetadataContactRecord> metadataContactRecords) {
@@ -543,7 +547,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getNewestName().traverse(setCallback, itemCallback);
         this.getNewestLocation().traverse(setCallback, itemCallback);
@@ -556,6 +560,19 @@ public class CompanyMetadataRecord extends MetadataRecord {
         this.getNewestSecondaryIndustry1().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry2().traverse(setCallback, itemCallback);
         this.getNewestSecondaryIndustry3().traverse(setCallback, itemCallback);
+    }
+
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestName));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestForm));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestPrimaryIndustry));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry1));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestSecondaryIndustry3));
+        return updated;
     }
 
 }

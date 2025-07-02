@@ -28,7 +28,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyIndustryRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord {
+public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_industry";
 
@@ -59,6 +59,9 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord {
         return this.industryCode;
     }
 
+    public void setIndustryCode(String industryCode) {
+        this.industryCode = industryCode;
+    }
 
     public static final String DB_FIELD_TEXT = "industryText";
     public static final String IO_FIELD_TEXT = "branchetekst";
@@ -71,6 +74,9 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord {
         return this.industryText;
     }
 
+    public void setIndustryText(String industryText) {
+        this.industryText = industryText;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -96,4 +102,13 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord {
                 Objects.equals(industryCode, that.industryCode) &&
                 Objects.equals(industryText, that.industryText);
     }*/
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CompanyIndustryRecord clone = (CompanyIndustryRecord) super.clone();
+        clone.setIndex(this.index);
+        clone.setIndustryCode(this.industryCode);
+        clone.setIndustryText(this.industryText);
+        return clone;
+    }
 }

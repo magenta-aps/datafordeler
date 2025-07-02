@@ -133,8 +133,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     @JsonProperty(value = IO_FIELD_NAMES)
     private Set<SecNameRecord> names = new HashSet<>();
 
-    public BitemporalSet<SecNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<SecNameRecord, CompanyUnitRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, SecNameRecord.DB_FIELD_COMPANYUNIT);
     }
 
     public void setNames(Set<SecNameRecord> names) {
@@ -155,9 +155,10 @@ public class CompanyUnitRecord extends CvrEntityRecord {
 
     public static final String DB_FIELD_LOCATION_ADDRESS = "locationAddress";
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
+    public static final String CLAUSE_ADDRESS_LOCATION = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION;
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_COMPANYUNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION)
+    @Where(clause = CLAUSE_ADDRESS_LOCATION)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -189,16 +190,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress);
+    public BitemporalSet<AddressRecord, CompanyUnitRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_COMPANYUNIT, CLAUSE_ADDRESS_LOCATION);
     }
 
 
     public static final String DB_FIELD_POSTAL_ADDRESS = "postalAddress";
     public static final String IO_FIELD_POSTAL_ADDRESS = "postadresse";
+    public static final String CLAUSE_ADDRESS_POSTAL = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL;
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_COMPANYUNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL)
+    @Where(clause = CLAUSE_ADDRESS_POSTAL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -231,16 +233,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getPostalAddress() {
-        return new BitemporalSet<>(this.postalAddress);
+    public BitemporalSet<AddressRecord, CompanyUnitRecord> getPostalAddress() {
+        return new BitemporalSet<>(this.postalAddress, this, AddressRecord.DB_FIELD_COMPANYUNIT, CLAUSE_ADDRESS_POSTAL);
     }
 
 
     public static final String DB_FIELD_PHONE = "phoneNumber";
     public static final String IO_FIELD_PHONE = "telefonNummer";
+    public static final String CLAUSE_CONTACT_PHONE = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_COMPANYUNIT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER)
+    @Where(clause = CLAUSE_CONTACT_PHONE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -273,16 +276,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<ContactRecord> getPhoneNumber() {
-        return new BitemporalSet<>(this.phoneNumber);
+    public BitemporalSet<ContactRecord, CompanyUnitRecord> getPhoneNumber() {
+        return new BitemporalSet<>(this.phoneNumber, this, ContactRecord.DB_FIELD_COMPANYUNIT, CLAUSE_CONTACT_PHONE);
     }
 
 
     public static final String DB_FIELD_FAX = "faxNumber";
     public static final String IO_FIELD_FAX = "telefaxNummer";
+    public static final String CLAUSE_CONTACT_FAX = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_COMPANYUNIT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER)
+    @Where(clause = CLAUSE_CONTACT_FAX)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -315,16 +319,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<ContactRecord> getFaxNumber() {
-        return new BitemporalSet<>(this.faxNumber);
+    public BitemporalSet<ContactRecord, CompanyUnitRecord> getFaxNumber() {
+        return new BitemporalSet<>(this.faxNumber, this, ContactRecord.DB_FIELD_COMPANYUNIT, CLAUSE_CONTACT_FAX);
     }
 
 
     public static final String DB_FIELD_EMAIL = "emailAddress";
     public static final String IO_FIELD_EMAIL = "elektroniskPost";
+    public static final String CLAUSE_CONTACT_EMAIL = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_COMPANYUNIT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE)
+    @Where(clause = CLAUSE_CONTACT_EMAIL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -356,8 +361,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<ContactRecord> getEmailAddress() {
-        return new BitemporalSet<>(this.emailAddress);
+    public BitemporalSet<ContactRecord, CompanyUnitRecord> getEmailAddress() {
+        return new BitemporalSet<>(this.emailAddress, this, ContactRecord.DB_FIELD_COMPANYUNIT, CLAUSE_CONTACT_EMAIL);
     }
 
 
@@ -394,16 +399,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<LifecycleRecord> getLifecycle() {
-        return new BitemporalSet<>(this.lifecycle);
+    public BitemporalSet<LifecycleRecord, CompanyUnitRecord> getLifecycle() {
+        return new BitemporalSet<>(this.lifecycle, this, LifecycleRecord.DB_FIELD_COMPANYUNIT);
     }
 
 
     public static final String DB_FIELD_PRIMARY_INDUSTRY = "primaryIndustry";
     public static final String IO_FIELD_PRIMARY_INDUSTRY = "hovedbranche";
+    public static final String CLAUSE_PRIMARY_INDUSTRY = CompanyIndustryRecord.DB_FIELD_INDEX + "=0";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=0")
+    @Where(clause = CLAUSE_PRIMARY_INDUSTRY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -435,16 +441,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyIndustryRecord> getPrimaryIndustry() {
-        return new BitemporalSet<>(this.primaryIndustry);
+    public BitemporalSet<CompanyIndustryRecord, CompanyUnitRecord> getPrimaryIndustry() {
+        return new BitemporalSet<>(this.primaryIndustry, this, CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, "index=0");
     }
 
 
     public static final String DB_FIELD_SECONDARY_INDUSTRY1 = "secondaryIndustry1";
     public static final String IO_FIELD_SECONDARY_INDUSTRY1 = "bibranche1";
+    public static final String CLAUSE_SECONDARY_INDUSTRY1 = CompanyIndustryRecord.DB_FIELD_INDEX + "=1";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=1")
+    @Where(clause = CLAUSE_SECONDARY_INDUSTRY1)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -476,16 +483,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyIndustryRecord> getSecondaryIndustry1() {
-        return new BitemporalSet<>(this.secondaryIndustry1);
+    public BitemporalSet<CompanyIndustryRecord, CompanyUnitRecord> getSecondaryIndustry1() {
+        return new BitemporalSet<>(this.secondaryIndustry1, this, CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, "index=1");
     }
 
 
     public static final String DB_FIELD_SECONDARY_INDUSTRY2 = "secondaryIndustry2";
     public static final String IO_FIELD_SECONDARY_INDUSTRY2 = "bibranche2";
+    public static final String CLAUSE_SECONDARY_INDUSTRY2 = CompanyIndustryRecord.DB_FIELD_INDEX + "=2";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=2")
+    @Where(clause = CLAUSE_SECONDARY_INDUSTRY2)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -517,16 +525,17 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyIndustryRecord> getSecondaryIndustry2() {
-        return new BitemporalSet<>(this.secondaryIndustry2);
+    public BitemporalSet<CompanyIndustryRecord, CompanyUnitRecord> getSecondaryIndustry2() {
+        return new BitemporalSet<>(this.secondaryIndustry2, this, CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, "index=2");
     }
 
 
     public static final String DB_FIELD_SECONDARY_INDUSTRY3 = "secondaryIndustry3";
     public static final String IO_FIELD_SECONDARY_INDUSTRY3 = "bibranche3";
+    public static final String CLAUSE_SECONDARY_INDUSTRY3 = CompanyIndustryRecord.DB_FIELD_INDEX + "=3";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CompanyIndustryRecord.DB_FIELD_INDEX + "=3")
+    @Where(clause = CLAUSE_SECONDARY_INDUSTRY3)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -558,8 +567,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyIndustryRecord> getSecondaryIndustry3() {
-        return new BitemporalSet<>(this.secondaryIndustry3);
+    public BitemporalSet<CompanyIndustryRecord, CompanyUnitRecord> getSecondaryIndustry3() {
+        return new BitemporalSet<>(this.secondaryIndustry3, this, CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, "index=3");
     }
 
 
@@ -596,8 +605,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyYearlyNumbersRecord> getYearlyNumbers() {
-        return new BitemporalSet<>(this.yearlyNumbers);
+    public BitemporalSet<CompanyYearlyNumbersRecord, CompanyUnitRecord> getYearlyNumbers() {
+        return new BitemporalSet<>(this.yearlyNumbers, this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANYUNIT);
     }
 
 
@@ -634,8 +643,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyQuarterlyNumbersRecord> getQuarterlyNumbers() {
-        return new BitemporalSet<>(this.quarterlyNumbers);
+    public BitemporalSet<CompanyQuarterlyNumbersRecord, CompanyUnitRecord> getQuarterlyNumbers() {
+        return new BitemporalSet<>(this.quarterlyNumbers, this, CompanyQuarterlyNumbersRecord.DB_FIELD_COMPANYUNIT);
     }
 
 
@@ -651,7 +660,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_COMPANYUNIT, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     private Set<AttributeRecord> attributes = new HashSet<>();
 
     public void setAttributes(Set<AttributeRecord> attributes) {
@@ -683,8 +692,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public AttributeRecordSet getAttributes() {
-        return new AttributeRecordSet(this.attributes);
+    public AttributeRecordSet<CompanyUnitRecord> getAttributes() {
+        return new AttributeRecordSet<>(this.attributes, this, AttributeRecord.DB_FIELD_COMPANYUNIT);
     }
 
 
@@ -735,8 +744,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         this.addParticipant(otherRecord);
     }
 
-    public BitemporalSet<CompanyParticipantRelationRecord> getParticipants() {
-        return new BitemporalSet<>(this.participantRelations);
+    public BitemporalSet<CompanyParticipantRelationRecord, CompanyUnitRecord> getParticipants() {
+        return new BitemporalSet<>(this.participantRelations, this, CompanyParticipantRelationRecord.DB_FIELD_COMPANYUNIT);
     }
 
 
@@ -773,8 +782,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<CompanyLinkRecord> getCompanyLinkRecords() {
-        return new BitemporalSet<>(this.companyLinkRecords);
+    public BitemporalSet<CompanyLinkRecord, CompanyUnitRecord> getCompanyLinkRecords() {
+        return new BitemporalSet<>(this.companyLinkRecords, this, CompanyLinkRecord.DB_FIELD_COMPANYUNIT);
     }
 
 
@@ -972,7 +981,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
@@ -992,5 +1001,37 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         this.getCompanyLinkRecords().traverse(setCallback, itemCallback);
         this.getMetadata().traverse(setCallback, itemCallback);
     }
+
+
+    @Override
+    public void closeRegistrations(Session session) {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.primaryIndustry));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry1));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry2));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry3));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyLinkRecords));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.lifecycle));
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        updated.addAll(this.metadata.closeRegistrations());
+        for (CvrBitemporalRecord bitemporalRecord : updated) {
+            if (bitemporalRecord.getId() == null) {
+                session.persist(bitemporalRecord);
+            } else if (!session.contains(bitemporalRecord)) {
+                session.merge(bitemporalRecord);
+            }
+        }
+    }
+
 
 }

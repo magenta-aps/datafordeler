@@ -11,15 +11,24 @@ import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class RecordSet<R extends CvrRecord> implements Set<R> {
+public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<R> {
 
     Set<R> inner;
+    P parent;
+    String field;
+    String clause;
 
-    public RecordSet(Set<R> inner) {
+    public RecordSet(Set<R> inner, P parent, String field) {
+        this(inner, parent, field, null);
+    }
+    public RecordSet(Set<R> inner, P parent, String field, String clause) {
         this.inner = inner;
+        this.parent = parent;
+        this.field = field;
+        this.clause = clause;
     }
 
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         for (R item : this.inner) {
             item.traverse(setCallback, itemCallback);
         }
@@ -28,6 +37,20 @@ public class RecordSet<R extends CvrRecord> implements Set<R> {
         }
     }
 
+    public P getParent() {
+        return this.parent;
+    }
+
+    public String getField() {
+        return this.field;
+    }
+
+    public String getClause() {
+        return this.clause;
+    }
+    //    public Class getRecordClass() {
+//        return this.inner.;
+//    }
 
     //--------------------------------------------------------------------------
     // passthrough methods

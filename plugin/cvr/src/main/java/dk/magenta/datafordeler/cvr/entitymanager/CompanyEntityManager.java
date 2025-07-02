@@ -367,4 +367,13 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
     public String getSpecificQuery(List<Integer> ids) {
         return finalizeQuery(queryFromCvrs(ids));
     }
+
+
+    public void cleanupBitemporalSets(Session session, Collection<CompanyRecord> companyRecords) {
+        for (CompanyRecord companyRecord : companyRecords) {
+            companyRecord.cleanupBitemporalSets(session);
+        }
+    }
+
+
 }
