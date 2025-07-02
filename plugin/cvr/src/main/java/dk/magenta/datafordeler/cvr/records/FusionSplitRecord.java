@@ -64,11 +64,11 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     public static final String IO_FIELD_ORGANIZATION_NAME = "organisationsNavn";
 
     @OneToMany(mappedBy = BaseNameRecord.DB_FIELD_FUSION, targetEntity = BaseNameRecord.class, cascade = CascadeType.ALL)
-        @JsonProperty(value = IO_FIELD_ORGANIZATION_NAME)
+    @JsonProperty(value = IO_FIELD_ORGANIZATION_NAME)
     private Set<BaseNameRecord> name;
 
-    public RecordSet<BaseNameRecord> getName() {
-        return new RecordSet<>(this.name);
+    public RecordSet<BaseNameRecord, FusionSplitRecord> getName() {
+        return new RecordSet<>(this.name, this, BaseNameRecord.DB_FIELD_FUSION);
     }
 
     public void setName(Set<BaseNameRecord> name) {
@@ -88,9 +88,10 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
 
     public static final String DB_FIELD_INCOMING = "incoming";
     public static final String IO_FIELD_INCOMING = "indgaaende";
+    public static final String CLAUSE_INCOMING = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=false")
+    @SQLRestriction(CLAUSE_INCOMING)
     @JsonProperty(value = IO_FIELD_INCOMING)
     private Set<AttributeRecord> incoming = new HashSet<>();
 
@@ -125,16 +126,17 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public AttributeRecordSet getIncoming() {
-        return new AttributeRecordSet(this.incoming);
+    public AttributeRecordSet<FusionSplitRecord> getIncoming() {
+        return new AttributeRecordSet<>(this.incoming, this, AttributeRecord.DB_FIELD_FUSION, CLAUSE_INCOMING);
     }
 
 
     public static final String DB_FIELD_OUTGOING = "outgoing";
     public static final String IO_FIELD_OUTGOING = "udgaaende";
+    public static final String CLAUSE_OUTGOING = AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true";
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_FUSION, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(AttributeRecord.DB_FIELD_FUSION_OUTGOING + "=true")
+    @SQLRestriction(CLAUSE_OUTGOING)
     @JsonProperty(value = IO_FIELD_OUTGOING)
     private Set<AttributeRecord> outgoing = new HashSet<>();
 
@@ -169,8 +171,8 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         }
     }
 
-    public AttributeRecordSet getOutgoing() {
-        return new AttributeRecordSet(this.outgoing);
+    public AttributeRecordSet<FusionSplitRecord> getOutgoing() {
+        return new AttributeRecordSet<>(this.outgoing, this, AttributeRecord.DB_FIELD_FUSION, CLAUSE_OUTGOING);
     }
 
 
@@ -217,10 +219,26 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getIncoming().traverse(setCallback, itemCallback);
         this.getOutgoing().traverse(setCallback, itemCallback);
         this.getName().traverse(setCallback, itemCallback);
+    }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.name));
+        for (AttributeRecord attribute : this.incoming) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        for (AttributeRecord attribute : this.outgoing) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        return updated;
     }
 }

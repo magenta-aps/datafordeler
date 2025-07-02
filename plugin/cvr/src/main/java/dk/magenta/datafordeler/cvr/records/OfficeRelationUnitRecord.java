@@ -47,6 +47,9 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         return this.unitNumber;
     }
 
+    public void setUnitNumber(long unitNumber) {
+        this.unitNumber = unitNumber;
+    }
 
     public static final String DB_FIELD_UNITTYPE = "unitType";
     public static final String IO_FIELD_UNITTYPE = "enhedsType";
@@ -59,6 +62,9 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         return this.unitType;
     }
 
+    public void setUnitType(String unitType) {
+        this.unitType = unitType;
+    }
 
     public static final String DB_FIELD_BUSINESS_KEY = "businessKey";
     public static final String IO_FIELD_BUSINESS_KEY = "forretningsnoegle";
@@ -71,6 +77,9 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         return this.businessKey;
     }
 
+    public void setBusinessKey(long businessKey) {
+        this.businessKey = businessKey;
+    }
 
     //This field is null for every single input
     public static final String IO_FIELD_ORGANIZATION_TYPE = "organisationstype";
@@ -83,6 +92,9 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         return this.organizationType;
     }
 
+    public void setOrganizationType(Integer organizationType) {
+        this.organizationType = organizationType;
+    }
 
     public static final String IO_FIELD_NAME = "navne";
 
@@ -90,8 +102,8 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     @JsonProperty(value = IO_FIELD_NAME)
     private Set<BaseNameRecord> names = new HashSet<>();
 
-    public BitemporalSet<BaseNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<BaseNameRecord, OfficeRelationUnitRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_OFFICE_UNIT);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -113,7 +125,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_OFFICE_UNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
+    @JsonProperty(value = IO_FIELD_LOCATION_ADDRESS)
     private Set<AddressRecord> locationAddress = new HashSet<>();
 
     public void setLocationAddress(Set<AddressRecord> locationAddress) {
@@ -132,9 +144,11 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress);
+    public BitemporalSet<AddressRecord, OfficeRelationUnitRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_OFFICE_UNIT);
     }
+
+    // TODO: Postadresse
 
     public void wire(Session session) {
         for (AddressRecord address : this.locationAddress) {
@@ -162,9 +176,40 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
+    }
+
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        return updated;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        OfficeRelationUnitRecord clone = (OfficeRelationUnitRecord) super.clone();
+        clone.setBusinessKey(this.businessKey);
+        clone.setUnitNumber(this.unitNumber);
+        clone.setUnitType(this.unitType);
+        clone.setOrganizationType(this.organizationType);
+
+        HashSet<AddressRecord> clonedAddresses = new HashSet<>();
+        for (AddressRecord addressRecord : this.locationAddress) {
+            clonedAddresses.add((AddressRecord) addressRecord.clone());
+        }
+        clone.setLocationAddress(clonedAddresses);
+
+        HashSet<BaseNameRecord> clonedNames = new HashSet<>();
+        for (BaseNameRecord nameRecord : this.names) {
+            clonedNames.add((BaseNameRecord) nameRecord.clone());
+        }
+        clone.setNames(clonedNames);
+
+        return clone;
     }
 }

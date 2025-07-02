@@ -23,7 +23,7 @@ import jakarta.persistence.Table;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyLinkRecord extends CvrBitemporalDataRecord {
+public class CompanyLinkRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_unit_link_company";
 
@@ -39,4 +39,18 @@ public class CompanyLinkRecord extends CvrBitemporalDataRecord {
     @JsonProperty(value = IO_FIELD_CVRNUMBER)
     private int cvrNumber;
 
+    public int getCvrNumber() {
+        return this.cvrNumber;
+    }
+
+    public void setCvrNumber(int cvrNumber) {
+        this.cvrNumber = cvrNumber;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CompanyLinkRecord clone = (CompanyLinkRecord) super.clone();
+        clone.setCvrNumber(this.cvrNumber);
+        return clone;
+    }
 }

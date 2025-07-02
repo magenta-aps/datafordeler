@@ -42,6 +42,9 @@ public class CompanyYearlyNumbersRecord extends CompanyNumbersRecord {
     @JsonProperty(value = IO_FIELD_YEAR)
     private int year;
 
+    public int getYear() {
+        return this.year;
+    }
 
     @Override
     public boolean equals(Object o) {

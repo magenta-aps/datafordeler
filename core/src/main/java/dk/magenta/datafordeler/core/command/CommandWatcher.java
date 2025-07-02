@@ -43,7 +43,6 @@ public class CommandWatcher {
      */
     @PostConstruct
     public void init() {
-        //this.session = this.sessionManager.getSessionFactory().openSession();
         this.mappedHandlers = new HashMap<>();
         for (CommandHandler commandHandler : this.commandHandlers) {
             for (String handledCommand : commandHandler.getHandledCommands()) {
@@ -102,6 +101,9 @@ public class CommandWatcher {
 
     private void startCommand(Command command) {
         CommandHandler commandHandler = this.getHandler(command.getCommandName());
+        if (commandHandler == null) {
+            log.error("Invalid command "+command.getCommandName()+", no commandhandler found");
+        }
         if (commandHandler.accept(command)) {
             try {
                 command.setStatus(Command.Status.PROCESSING);

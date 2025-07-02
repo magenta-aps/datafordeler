@@ -170,16 +170,18 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<SecNameRecord> getNames() {
-        return new BitemporalSet<>(this.names);
+    public BitemporalSet<SecNameRecord, ParticipantRecord> getNames() {
+        return new BitemporalSet<>(this.names, this, SecNameRecord.DB_FIELD_PARTICIPANT);
     }
 
 
     public static final String DB_FIELD_LOCATION_ADDRESS = "locationAddress";
     public static final String IO_FIELD_LOCATION_ADDRESS = "beliggenhedsadresse";
+    public static final String CLAUSE_ADDRESS_LOCATION = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION;
+
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_PARTICIPANT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION)
+    @SQLRestriction(CLAUSE_ADDRESS_LOCATION)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -211,16 +213,17 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress);
+    public BitemporalSet<AddressRecord, ParticipantRecord> getLocationAddress() {
+        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_LOCATION);
     }
 
 
     public static final String DB_FIELD_POSTAL_ADDRESS = "postalAddress";
     public static final String IO_FIELD_POSTAL_ADDRESS = "postadresse";
+    public static final String CLAUSE_ADDRESS_POSTAL = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL;
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_PARTICIPANT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL)
+    @SQLRestriction(CLAUSE_ADDRESS_POSTAL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -252,16 +255,18 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getPostalAddress() {
-        return new BitemporalSet<>(this.postalAddress);
+    public BitemporalSet<AddressRecord, ParticipantRecord> getPostalAddress() {
+        return new BitemporalSet<>(this.postalAddress, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_POSTAL);
     }
 
 
     public static final String DB_FIELD_BUSINESS_ADDRESS = "businessAddress";
     public static final String IO_FIELD_BUSINESS_ADDRESS = "forretningsadresse";
+    public static final String CLAUSE_ADDRESS_BUSINESS = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_BUSINESS;
+
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_PARTICIPANT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_BUSINESS)
+    @SQLRestriction(CLAUSE_ADDRESS_BUSINESS)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -293,16 +298,17 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<AddressRecord> getBusinessAddress() {
-        return new BitemporalSet<>(this.businessAddress);
+    public BitemporalSet<AddressRecord, ParticipantRecord> getBusinessAddress() {
+        return new BitemporalSet<>(this.businessAddress, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_BUSINESS);
     }
 
 
     public static final String DB_FIELD_PHONE = "phoneNumber";
     public static final String IO_FIELD_PHONE = "telefonNummer";
+    public static final String CLAUSE_CONTACT_PHONE = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_PARTICIPANT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER)
+    @SQLRestriction(CLAUSE_CONTACT_PHONE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -335,16 +341,17 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<ContactRecord> getPhoneNumber() {
-        return new BitemporalSet<>(this.phoneNumber);
+    public BitemporalSet<ContactRecord, ParticipantRecord> getPhoneNumber() {
+        return new BitemporalSet<>(this.phoneNumber, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_PHONE);
     }
 
 
     public static final String DB_FIELD_FAX = "faxNumber";
     public static final String IO_FIELD_FAX = "telefaxNummer";
+    public static final String CLAUSE_CONTACT_FAX = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_PARTICIPANT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER)
+    @SQLRestriction(CLAUSE_CONTACT_FAX)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -377,16 +384,17 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<ContactRecord> getFaxNumber() {
-        return new BitemporalSet<>(this.faxNumber);
+    public BitemporalSet<ContactRecord, ParticipantRecord> getFaxNumber() {
+        return new BitemporalSet<>(this.faxNumber, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_FAX);
     }
 
 
     public static final String DB_FIELD_EMAIL = "emailAddress";
     public static final String IO_FIELD_EMAIL = "elektroniskPost";
+    public static final String CLAUSE_CONTACT_EMAIL = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_PARTICIPANT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @SQLRestriction(ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE)
+    @SQLRestriction(CLAUSE_CONTACT_EMAIL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -419,8 +427,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public BitemporalSet<ContactRecord> getEmailAddress() {
-        return new BitemporalSet<>(this.emailAddress);
+    public BitemporalSet<ContactRecord, ParticipantRecord> getEmailAddress() {
+        return new BitemporalSet<>(this.emailAddress, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_EMAIL);
     }
 
 
@@ -429,7 +437,7 @@ public class ParticipantRecord extends CvrEntityRecord {
 
     @OneToMany(mappedBy = AttributeRecord.DB_FIELD_PARTICIPANT, targetEntity = AttributeRecord.class, cascade = CascadeType.ALL)
     @JsonProperty(value = IO_FIELD_ATTRIBUTES)
-        public Set<AttributeRecord> attributes = new HashSet<>();
+    public Set<AttributeRecord> attributes = new HashSet<>();
 
     public void setAttributes(Set<AttributeRecord> attributes) {
         this.attributes = attributes;
@@ -462,8 +470,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         }
     }
 
-    public AttributeRecordSet getAttributes() {
-        return new AttributeRecordSet(this.attributes);
+    public AttributeRecordSet<ParticipantRecord> getAttributes() {
+        return new AttributeRecordSet(this.attributes, this, AttributeRecord.DB_FIELD_PARTICIPANT);
     }
 
 
@@ -534,8 +542,8 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.addCompanyRelation(otherRecord);
     }
 
-    public BitemporalSet<CompanyParticipantRelationRecord> getCompanyRelation() {
-        return new BitemporalSet<>(this.companyRelation);
+    public BitemporalSet<CompanyParticipantRelationRecord, ParticipantRecord> getCompanyRelation() {
+        return new BitemporalSet<>(this.companyRelation, this, CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT);
     }
 
 
@@ -669,7 +677,7 @@ public class ParticipantRecord extends CvrEntityRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
         this.getPostalAddress().traverse(setCallback, itemCallback);
@@ -680,5 +688,35 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.getAttributes().traverse(setCallback, itemCallback);
         this.getCompanyRelation().traverse(setCallback, itemCallback);
         this.getMetadata().traverse(setCallback, itemCallback);
+    }
+
+
+    @Override
+    public void closeRegistrations(Session session) {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.businessAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
+        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        for (CompanyParticipantRelationRecord participantRelation : this.companyRelation) {
+            updated.addAll(participantRelation.closeRegistrations());
+        }
+        updated.addAll(this.metadata.closeRegistrations());
+
+        for (CvrBitemporalRecord bitemporalRecord : updated) {
+            if (bitemporalRecord.getId() == null) {
+                session.persist(bitemporalRecord);
+            } else if (!session.contains(bitemporalRecord)) {
+                session.merge(bitemporalRecord);
+            }
+        }
     }
 }

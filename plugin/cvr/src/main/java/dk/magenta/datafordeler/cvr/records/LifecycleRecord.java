@@ -21,7 +21,7 @@ import jakarta.persistence.*;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + LifecycleRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LifecycleRecord extends CvrBitemporalDataRecord {
+public class LifecycleRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_lifecycle";
 
@@ -41,4 +41,10 @@ public class LifecycleRecord extends CvrBitemporalDataRecord {
         this.relationCompanyRecord = relationCompanyRecord;
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        LifecycleRecord clone = (LifecycleRecord) super.clone();
+        clone.setRelationCompanyRecord(this.relationCompanyRecord);
+        return clone;
+    }
 }

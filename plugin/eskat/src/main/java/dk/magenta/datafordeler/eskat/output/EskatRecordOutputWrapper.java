@@ -38,7 +38,7 @@ public class EskatRecordOutputWrapper extends CompanyRecordOutputWrapper {
         if (!record.getNames().isEmpty()) {
             container.addNontemporal("navn", record.getNames().stream().reduce((first, second) -> second).get().getName());
         }
-        BitemporalSet<AddressRecord> addressSet = record.getLocationAddress();
+        BitemporalSet<AddressRecord, CompanyRecord> addressSet = record.getLocationAddress();
         if (addressSet.isEmpty()) {
             addressSet = record.getPostalAddress();
         }

@@ -68,7 +68,7 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
     public static final String IO_FIELD_ATTRIBUTES = "attributter";
 
     @OneToMany(targetEntity = AttributeRecord.class, mappedBy = AttributeRecord.DB_FIELD_OFFICE, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-        @JsonProperty(value = IO_FIELD_ATTRIBUTES)
+    @JsonProperty(value = IO_FIELD_ATTRIBUTES)
     private Set<AttributeRecord> attributes = new HashSet<>();
 
     public void setAttributes(Set<AttributeRecord> attributes) {
@@ -100,8 +100,8 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
         }
     }
 
-    public AttributeRecordSet getAttributes() {
-        return new AttributeRecordSet(this.attributes);
+    public AttributeRecordSet<OfficeRelationRecord> getAttributes() {
+        return new AttributeRecordSet<>(this.attributes, this, AttributeRecord.DB_FIELD_OFFICE);
     }
 
 
@@ -135,11 +135,22 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
         super.traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
         if (this.officeRelationUnitRecord != null) {
             this.officeRelationUnitRecord.traverse(setCallback, itemCallback);
         }
+    }
+
+    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+        updated.addAll(this.officeRelationUnitRecord.closeRegistrations());
+        for (AttributeRecord attribute : this.attributes) {
+            updated.addAll(
+                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+            );
+        }
+        return updated;
     }
 }

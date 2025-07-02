@@ -64,4 +64,13 @@ public abstract class CvrBitemporalDataMetaRecord extends CvrBitemporalDataRecor
     public ParticipantMetadataRecord getParticipantMetadataRecord() {
         return this.participantMetadataRecord;
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        CvrBitemporalDataMetaRecord clone = (CvrBitemporalDataMetaRecord) super.clone();
+        clone.setCompanyMetadataRecord((CompanyMetadataRecord) this.companyMetadataRecord);
+        clone.setUnitMetadataRecord((CompanyUnitMetadataRecord) this.unitMetadataRecord);
+        clone.setParticipantMetadataRecord(this.participantMetadataRecord);
+        return clone;
+    }
 }

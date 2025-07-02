@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
+public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord implements Cloneable {
 
     private static class Range {
         public int low;
@@ -34,6 +34,10 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     @JsonProperty(value = IO_FIELD_EMPLOYEES_BASE)
     private Integer employees;
 
+    public void setEmployees(Integer employees) {
+        this.employees = employees;
+    }
+
     public static final String DB_FIELD_EMPLOYEES_LOW = "employeeLow";
     public static final String IO_FIELD_EMPLOYEES_LOW = "antalAnsatteMin";
 
@@ -41,12 +45,20 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     @JsonProperty(value = IO_FIELD_EMPLOYEES_LOW)
     private Integer employeeLow;
 
+    public void setEmployeeLow(Integer employeeLow) {
+        this.employeeLow = employeeLow;
+    }
+
     public static final String DB_FIELD_EMPLOYEES_HIGH = "employeeHigh";
     public static final String IO_FIELD_EMPLOYEES_HIGH = "antalAnsatteMax";
 
     @Column(name = DB_FIELD_EMPLOYEES_HIGH)
     @JsonProperty(value = IO_FIELD_EMPLOYEES_HIGH)
     private Integer employeeHigh;
+
+    public void setEmployeeHigh(Integer employeeHigh) {
+        this.employeeHigh = employeeHigh;
+    }
 
     @JsonProperty(value = "intervalKodeAntalAnsatte")
     public void setEmployeeRange(String range) {
@@ -77,11 +89,23 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     @JsonProperty(value = "antalAarsvaerk")
     private Integer fulltimeEquivalent;
 
+    public void setFulltimeEquivalent(Integer fulltimeEquivalent) {
+        this.fulltimeEquivalent = fulltimeEquivalent;
+    }
+
     @JsonProperty(value = "antalAarsvaerkMin")
     private Integer fulltimeEquivalentLow;
 
+    public void setFulltimeEquivalentLow(Integer fulltimeEquivalentLow) {
+        this.fulltimeEquivalentLow = fulltimeEquivalentLow;
+    }
+
     @JsonProperty(value = "antalAarsvaerkMax")
     private Integer fulltimeEquivalentHigh;
+
+    public void setFulltimeEquivalentHigh(Integer fulltimeEquivalentHigh) {
+        this.fulltimeEquivalentHigh = fulltimeEquivalentHigh;
+    }
 
     @JsonProperty(value = "intervalKodeAntalAarsvaerk")
     public void setFulltimeEquivalentRange(String range) {
@@ -112,11 +136,23 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
     @JsonProperty(value = "antalInklusivEjere")
     private Integer includingOwners;
 
+    public void setIncludingOwners(Integer includingOwners) {
+        this.includingOwners = includingOwners;
+    }
+
     @JsonProperty(value = "antalInklusivEjereMin")
     private Integer includingOwnersLow;
 
+    public void setIncludingOwnersLow(Integer includingOwnersLow) {
+        this.includingOwnersLow = includingOwnersLow;
+    }
+
     @JsonProperty(value = "antalInklusivEjereMax")
     private Integer includingOwnersHigh;
+
+    public void setIncludingOwnersHigh(Integer includingOwnersHigh) {
+        this.includingOwnersHigh = includingOwnersHigh;
+    }
 
     @JsonProperty(value = "intervalKodeAntalInklusivEjere")
     public void setIncludingOwnersRange(String range) {
@@ -202,4 +238,19 @@ public abstract class CompanyNumbersRecord extends CvrBitemporalDataRecord {
                 Objects.equals(includingOwnersLow, that.includingOwnersLow) &&
                 Objects.equals(includingOwnersHigh, that.includingOwnersHigh);
     }*/
+
+    @Override
+    protected CompanyNumbersRecord clone() throws CloneNotSupportedException {
+        CompanyNumbersRecord clone = (CompanyNumbersRecord) super.clone();
+        clone.setEmployees(this.employees);
+        clone.setEmployeeLow(this.employeeLow);
+        clone.setEmployeeHigh(this.employeeHigh);
+        clone.setFulltimeEquivalent(this.fulltimeEquivalent);
+        clone.setFulltimeEquivalentLow(this.fulltimeEquivalentLow);
+        clone.setFulltimeEquivalentHigh(this.fulltimeEquivalentHigh);
+        clone.setIncludingOwners(this.includingOwners);
+        clone.setIncludingOwnersLow(this.includingOwnersLow);
+        clone.setIncludingOwnersHigh(this.includingOwnersHigh);
+        return clone;
+    }
 }

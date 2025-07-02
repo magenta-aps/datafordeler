@@ -43,6 +43,9 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
     @JsonProperty(value = IO_FIELD_YEAR)
     private int year;
 
+    public int getYear() {
+        return this.year;
+    }
 
     public static final String DB_FIELD_MONTH = "month";
     public static final String IO_FIELD_MONTH = "maaned";
@@ -51,6 +54,9 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
     @JsonProperty(value = IO_FIELD_MONTH)
     private int month;
 
+    public int getMonth() {
+        return this.month;
+    }
 
     @Override
     public boolean equals(Object o) {
