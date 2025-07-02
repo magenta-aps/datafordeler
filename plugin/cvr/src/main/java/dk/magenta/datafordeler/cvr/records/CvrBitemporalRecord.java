@@ -16,6 +16,8 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -243,7 +245,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
-                            clone.setEffectTo(next.getEffectFrom());
+                            clone.setEffectTo(next.getEffectFrom().minus(1, ChronoUnit.MICROS));
                             clone.setRegistrationFrom(registrationCut);
                             updated.add(clone);
                             records.add(clone);
