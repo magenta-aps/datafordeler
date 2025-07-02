@@ -3,7 +3,7 @@
   "info": {
     "title": "Datafordeler",
     "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til brug af data fra datafordeleren. For at få adgang til datafordelerens services skal brugeren indhente en adgangsgivende token fra datafordeleren. Det gøres ved f.eks. med cURL hvor <brugernavn> og <kodeord> udfyldes med de brugeroplysninger, som man tidligere har fået udleveret: curl -u <brugernavn>:<kodeord> -X GET https://sts.test.data.gl/get_token_passive Som respons får man en adgangsgivende token, som man skal sende med i headeren for ens forespørgsler til datafordelerens prismeservices.",
-    "version": "1.0.0"
+    "version": "{{COMMIT_TAG}}"
   },
   "servers": [
     {
