@@ -278,15 +278,16 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         for (CvrRecordPeriod period : effectGroups.keySet()) {
             ArrayList<T> effectGroup = effectGroups.get(period);
             if (effectGroup.size() > 1) {
-                effectGroup.sort(Comparator.comparing(T::getRegistrationFrom));
+                effectGroup.sort(Comparator.comparing(T::getRegistrationFrom).thenComparing(T::getDafoUpdated));
                 T previous = null;
                 for (T record : effectGroup) {
                     if (previous != null) {
                         if (record.getRegistrationFrom().equals(previous.getRegistrationFrom())) {
-                            System.out.println("Should delete " + record.getClass().getSimpleName() + " #" + record.getId());
+                            System.out.println("Should delete " + record.getClass().getSimpleName() + " #" + record.getId()+", is identical to " + previous.getId());
+
                             continue;
                         } else {
-                            System.out.println("Should set registrationTo for " + record.getClass().getSimpleName() + " #" + record.getId()+" to "+record.getRegistrationFrom());
+                            System.out.println("Should set registrationTo for " + previous.getClass().getSimpleName() + " #" + previous.getId()+" to "+record.getRegistrationFrom()+", to match with "+record.getId());
 //                            previous.setRegistrationTo(record.getRegistrationFrom());
 //                            updated.add(previous);
                         }
