@@ -3,9 +3,7 @@
   "info": {
     "title": "Datafordeler - abonnementsløsning",
     "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere der har brug for at trække data fra datafordeleren, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til ERP-projektet. For at få adgang til datafordelerens abonnementsløsning skal brugeren oprettes i Pitu. Der refereres i dette dokument til dafo-serverens endpoint, der findes tilsvarende for testmiljø og demomiljø",
-    "href": "./handelseskoder.pdf",
-    "url": "http://petstore.swagger.wordnik.com/oauth/requestToken",
-    "version": "1.0.0"
+    "version": "{{COMMIT_TAG}}"
   },
   "servers": [
     {

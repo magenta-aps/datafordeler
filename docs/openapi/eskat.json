@@ -3,7 +3,7 @@
   "info": {
     "title": "Datafordeler",
     "description": "Målgruppen for denne dokumentation er udviklere for systemer i E-skat, som benyttes som aftagere på data.",
-    "version": "1.0.0"
+    "version": "{{COMMIT_TAG}}"
   },
   "servers": [
     {

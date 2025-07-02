@@ -3,7 +3,7 @@
   "info": {
     "title": "Datafordeler",
     "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere. Der refereres i dette dokument til dafo-produktionsserverens endpoint; der findes tilsvarende for testmiljøet ved adgang til produktionsmiljøet skal .test – delen indgå i url’en. Den samlede url bliver dermed https://dafo.test.data.gl" ,
-    "version": "1.0.0"
+    "version": "{{COMMIT_TAG}}"
   },
   "servers": [
     {

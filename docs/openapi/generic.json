@@ -3,7 +3,7 @@
   "info": {
     "title": "Datafordeler",
     "description": "Generiske services i datafordeleren tillader opslag på personer, virksomheder og adressedata, sammenkørt med relevante relaterede adressedata.<br />Udgangspunktet er f.eks. personer, virksomheder, veje osv. som hver især kun har de absolut nødvendigste adressedata.<br />Disse beriges med kommunekode og -navn, lokalitetskode og -navn, vejnavn osv.<br /><br />For alle services under de generiske services gælder det at der er implementeret paginering.<br />pageSize definere hvor mange resultater, der returneres i hvert dataopslag<br />page definere hvilken side, der returneres<br />Hvis der ikke er nogen værdier for disse parametre sættes pageSize=10 og page=1 (Første side)",
-    "version": "1.0.0"
+    "version": "{{COMMIT_TAG}}"
   },
   "servers": [
     {
