@@ -11,6 +11,8 @@ RUN sphinx-build -D language="en" -b html /input/sphinx /output/en/
 
 
 FROM alpine:3.14 AS build_swagger
+ARG COMMIT_TAG
+ENV COMMIT_TAG=${COMMIT_TAG:-dev}
 WORKDIR /output
 RUN mkdir /swagger
 RUN mkdir -p /output/openapi
@@ -18,6 +20,7 @@ RUN wget https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.25.4.tar
 RUN mv /swagger/swagger-ui-5.25.4/dist/* /output
 COPY docs/openapi/swagger-initializer.js /output
 COPY docs/openapi/*.json /output/openapi
+RUN find /output/openapi -type f -name '*.json' | xargs sed -i "s/{{COMMIT_TAG}}/${COMMIT_TAG}/"
 
 
 FROM alpine:3.14

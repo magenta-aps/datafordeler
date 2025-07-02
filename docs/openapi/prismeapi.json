@@ -3,7 +3,7 @@
   "info": {
     "title": "Datafordeler",
     "description": "Målgruppen for denne dokumentation er primært udviklere og tekniske projektledere hos Fujitsu, sekundært Selvstyrets og Digitaliseringsstyrelsens medarbejdere med relation til ERP-projektet. For at få adgang til datafordelerens prismeservices skal brugeren indhente en adgangsgivende token fra datafordeleren. Det gøres ved f.eks. med cURL hvor <brugernavn> og <kodeord> udfyldes med de brugeroplysninger, som man tidligere har fået udleveret: curl -u <brugernavn>:<kodeord> -X GET https://sts.test.data.gl/get_token_passive Som respons får man en adgangsgivende token, som man skal sende med i headeren for ens forespørgsler til datafordelerens prismeservices. Headeren skal hedde Authorization og værdien skal være SAML efter fulgt af et mellemrum og dernæst den adgangsgivende token. F.eks: curl -H \"Authorization: SAML <token>\" -X GET https://dafo.test.data.gl/prisme/cvr/1/<cvrnummer> Der refereres i dette dokument til dafo-testserverens endpoint, der findes tilsvarende for prodmiljøet ved adgang til prodmiljøet skal .test – delen udelades i url’en",
-    "version": "2.0.0"
+    "version": "{{COMMIT_TAG}}"
   },
   "servers": [
     {
