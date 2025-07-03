@@ -70,7 +70,7 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
 
     @JsonIgnore
     public BitemporalSet<AddressRecord, ParticipantMetadataRecord> getNewestLocation() {
-        return new BitemporalSet<>(this.newestLocation, this, AddressRecord.DB_FIELD_PARTICIPANT_METADATA);
+        return new BitemporalSet<>(this.newestLocation, AddressRecord.class, this, AddressRecord.DB_FIELD_PARTICIPANT_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -129,7 +129,7 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
     }
 
     public RecordSet<MetadataContactRecord, ParticipantMetadataRecord> getMetadataContactRecords() {
-        return new RecordSet<>(this.metadataContactRecords, this, MetadataContactRecord.DB_FIELD_PARTICIPANT_METADATA);
+        return new RecordSet<>(this.metadataContactRecords, MetadataContactRecord.class, this, MetadataContactRecord.DB_FIELD_PARTICIPANT_METADATA);
     }
 
 

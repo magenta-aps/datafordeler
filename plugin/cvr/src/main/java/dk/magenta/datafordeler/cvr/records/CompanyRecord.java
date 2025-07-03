@@ -8,9 +8,8 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
-import dk.magenta.datafordeler.core.util.DoubleHashMap;
-import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
+import dk.magenta.datafordeler.cvr.BitemporalSetGroup;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.CompanyRecordService;
@@ -19,10 +18,10 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.Where;
-import org.opensaml.soap.wsfed.Address;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -112,7 +111,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyRegNumberRecord, CompanyRecord> getRegNumber() {
-        return new BitemporalSet<>(this.regNumber, this, CompanyRegNumberRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.regNumber, CompanyRegNumberRecord.class, this, CompanyRegNumberRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -186,7 +185,7 @@ public class CompanyRecord extends CvrEntityRecord {
     private Set<SecNameRecord> names = new HashSet<>();
 
     public BitemporalSet<SecNameRecord, CompanyRecord> getNames() {
-        return new BitemporalSet<>(this.names, this, SecNameRecord.DB_FIELD_COMPANY, CLAUSE_NAME_PRIMARY);
+        return new BitemporalSet<>(this.names, SecNameRecord.class, this, SecNameRecord.DB_FIELD_COMPANY, CLAUSE_NAME_PRIMARY);
     }
 
     public void setNames(Set<SecNameRecord> names) {
@@ -231,7 +230,7 @@ public class CompanyRecord extends CvrEntityRecord {
     private Set<SecNameRecord> secondaryNames = new HashSet<>();
 
     public BitemporalSet<SecNameRecord, CompanyRecord> getSecondaryNames() {
-        return new BitemporalSet<>(this.secondaryNames, this, SecNameRecord.DB_FIELD_COMPANY, CLAUSE_NAME_SECONDARY);
+        return new BitemporalSet<>(this.secondaryNames, SecNameRecord.class, this, SecNameRecord.DB_FIELD_COMPANY, CLAUSE_NAME_SECONDARY);
     }
 
     public void setSecondaryNames(Set<SecNameRecord> secondaryNames) {
@@ -295,7 +294,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<AddressRecord, CompanyRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_COMPANY, CLAUSE_ADDRESS_LOCATION);
+        return new BitemporalSet<>(this.locationAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_COMPANY, CLAUSE_ADDRESS_LOCATION);
     }
 
 
@@ -341,7 +340,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<AddressRecord, CompanyRecord> getPostalAddress() {
-        return new BitemporalSet<>(this.postalAddress, this, AddressRecord.DB_FIELD_COMPANY, CLAUSE_ADDRESS_POSTAL);
+        return new BitemporalSet<>(this.postalAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_COMPANY, CLAUSE_ADDRESS_POSTAL);
     }
 
 
@@ -380,7 +379,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getPhoneNumber() {
-        return new BitemporalSet<>(this.phoneNumber, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_PHONE_PRIMARY);
+        return new BitemporalSet<>(this.phoneNumber, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_PHONE_PRIMARY);
     }
 
 
@@ -419,7 +418,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getSecondaryPhoneNumber() {
-        return new BitemporalSet<>(this.secondaryPhoneNumber, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_PHONE_SECONDARY);
+        return new BitemporalSet<>(this.secondaryPhoneNumber, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_PHONE_SECONDARY);
     }
 
 
@@ -458,7 +457,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getFaxNumber() {
-        return new BitemporalSet<>(this.faxNumber, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_FAX_PRIMARY);
+        return new BitemporalSet<>(this.faxNumber, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_FAX_PRIMARY);
     }
 
 
@@ -497,7 +496,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getSecondaryFaxNumber() {
-        return new BitemporalSet<>(this.secondaryFaxNumber, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_FAX_SECONDARY);
+        return new BitemporalSet<>(this.secondaryFaxNumber, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_FAX_SECONDARY);
     }
 
 
@@ -535,7 +534,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getEmailAddress() {
-        return new BitemporalSet<>(this.emailAddress, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_EMAIL);
+        return new BitemporalSet<>(this.emailAddress, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_EMAIL);
     }
 
 
@@ -573,7 +572,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getHomepage() {
-        return new BitemporalSet<>(this.homepage, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_HOMEPAGE);
+        return new BitemporalSet<>(this.homepage, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_HOMEPAGE);
     }
 
 
@@ -611,7 +610,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, CompanyRecord> getMandatoryEmailAddress() {
-        return new BitemporalSet<>(this.mandatoryEmailAddress, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_MANDATORY_EMAIL);
+        return new BitemporalSet<>(this.mandatoryEmailAddress, ContactRecord.class, this, ContactRecord.DB_FIELD_COMPANY, CLAUSE_CONTACT_MANDATORY_EMAIL);
     }
 
     private void addContact(ContactRecord record, RecordSet<ContactRecord, CompanyRecord> set, int type, boolean secondary) {
@@ -672,7 +671,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<LifecycleRecord, CompanyRecord> getLifecycle() {
-        return new BitemporalSet<>(this.lifecycle, this, LifecycleRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.lifecycle, LifecycleRecord.class, this, LifecycleRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -717,7 +716,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyIndustryRecord, CompanyRecord> getPrimaryIndustry() {
-        return new BitemporalSet<>(this.primaryIndustry, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=0");
+        return new BitemporalSet<>(this.primaryIndustry, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=0");
     }
 
 
@@ -762,7 +761,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyIndustryRecord, CompanyRecord> getSecondaryIndustry1() {
-        return new BitemporalSet<>(this.secondaryIndustry1, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=1");
+        return new BitemporalSet<>(this.secondaryIndustry1, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=1");
     }
 
 
@@ -807,7 +806,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyIndustryRecord, CompanyRecord> getSecondaryIndustry2() {
-        return new BitemporalSet<>(this.secondaryIndustry2, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=2");
+        return new BitemporalSet<>(this.secondaryIndustry2, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=2");
     }
 
 
@@ -852,7 +851,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyIndustryRecord, CompanyRecord> getSecondaryIndustry3() {
-        return new BitemporalSet<>(this.secondaryIndustry3, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=3");
+        return new BitemporalSet<>(this.secondaryIndustry3, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY, "index=3");
     }
 
 
@@ -893,7 +892,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<StatusRecord, CompanyRecord> getStatus() {
-        return new BitemporalSet<>(this.status, this, StatusRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.status, StatusRecord.class, this, StatusRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -935,7 +934,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyStatusRecord, CompanyRecord> getCompanyStatus() {
-        return new BitemporalSet<>(this.companyStatus, this, CompanyStatusRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.companyStatus, CompanyStatusRecord.class, this, CompanyStatusRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -976,7 +975,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<FormRecord, CompanyRecord> getCompanyForm() {
-        return new BitemporalSet<>(this.companyForm, this, FormRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.companyForm, FormRecord.class, this, FormRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -1014,18 +1013,18 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyYearlyNumbersRecord, CompanyRecord> getYearlyNumbers() {
-        return new BitemporalSet<>(this.yearlyNumbers, this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.yearlyNumbers, CompanyYearlyNumbersRecord.class, this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANY);
     }
 
     @JsonIgnore
-    public HashMap<Integer, BitemporalSet<CompanyYearlyNumbersRecord, CompanyRecord>> getYearlyNumbersGrouped() {
-        HashMap<Integer, BitemporalSet<CompanyYearlyNumbersRecord, CompanyRecord>> groups = new HashMap<>();
+    public BitemporalSetGroup<CompanyYearlyNumbersRecord, CompanyRecord> getYearlyNumbersGrouped() {
+        BitemporalSetGroup<CompanyYearlyNumbersRecord, CompanyRecord> groups = new BitemporalSetGroup<>();
         for (CompanyYearlyNumbersRecord record : this.yearlyNumbers) {
             int year = record.getYear();
             if (!groups.containsKey(year)) {
-                groups.put(year, new BitemporalSet<>(new HashSet<>(), this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANY, CompanyYearlyNumbersRecord.DB_FIELD_YEAR + "=" + year));
+                groups.put(year, 0, new BitemporalSet<>(new HashSet<>(), CompanyYearlyNumbersRecord.class, this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANY, CompanyYearlyNumbersRecord.DB_FIELD_YEAR + "=" + year));
             }
-            groups.get(year).add(record);
+            groups.get(year, 0).add(record);
         }
         return groups;
     }
@@ -1065,18 +1064,19 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyQuarterlyNumbersRecord, CompanyRecord> getQuarterlyNumbers() {
-        return new BitemporalSet<>(this.quarterlyNumbers, this, CompanyQuarterlyNumbersRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.quarterlyNumbers, CompanyQuarterlyNumbersRecord.class, this, CompanyQuarterlyNumbersRecord.DB_FIELD_COMPANY);
     }
 
     @JsonIgnore
-    public DoubleHashMap<Integer, Integer, BitemporalSet<CompanyQuarterlyNumbersRecord, CompanyRecord>> getQuarterlyNumbersGrouped() {
-        DoubleHashMap<Integer, Integer, BitemporalSet<CompanyQuarterlyNumbersRecord, CompanyRecord>> groups = new DoubleHashMap<>();
+    public BitemporalSetGroup<CompanyQuarterlyNumbersRecord, CompanyRecord> getQuarterlyNumbersGrouped() {
+        BitemporalSetGroup<CompanyQuarterlyNumbersRecord, CompanyRecord> groups = new BitemporalSetGroup<>();
         for (CompanyQuarterlyNumbersRecord record : this.quarterlyNumbers) {
             int year = record.getYear();
             int quarter = record.getQuarter();
             if (!groups.containsKey(year, quarter)) {
                 groups.put(year, quarter, new BitemporalSet<>(
                         new HashSet<>(),
+                        CompanyQuarterlyNumbersRecord.class,
                         this,
                         CompanyQuarterlyNumbersRecord.DB_FIELD_COMPANY,
                         CompanyQuarterlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyQuarterlyNumbersRecord.DB_FIELD_QUARTER + "=" + quarter
@@ -1121,18 +1121,19 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyMonthlyNumbersRecord, CompanyRecord> getMonthlyNumbers() {
-        return new BitemporalSet<>(this.monthlyNumbers, this, CompanyMonthlyNumbersRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.monthlyNumbers, CompanyMonthlyNumbersRecord.class, this, CompanyMonthlyNumbersRecord.DB_FIELD_COMPANY);
     }
 
     @JsonIgnore
-    public DoubleHashMap<Integer, Integer, BitemporalSet<CompanyMonthlyNumbersRecord, CompanyRecord>> getMonthlyNumbersGrouped() {
-        DoubleHashMap<Integer, Integer, BitemporalSet<CompanyMonthlyNumbersRecord, CompanyRecord>> groups = new DoubleHashMap<>();
+    public BitemporalSetGroup<CompanyMonthlyNumbersRecord, CompanyRecord> getMonthlyNumbersGrouped() {
+        BitemporalSetGroup<CompanyMonthlyNumbersRecord, CompanyRecord> groups = new BitemporalSetGroup<>();
         for (CompanyMonthlyNumbersRecord record : this.monthlyNumbers) {
             int year = record.getYear();
             int month = record.getMonth();
             if (!groups.containsKey(year, month)) {
                 groups.put(year, month, new BitemporalSet<>(
                                 new HashSet<>(),
+                                CompanyMonthlyNumbersRecord.class,
                                 this,
                                 CompanyMonthlyNumbersRecord.DB_FIELD_COMPANY,
                                 CompanyMonthlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyMonthlyNumbersRecord.DB_FIELD_MONTH + "=" + month
@@ -1185,7 +1186,6 @@ public class CompanyRecord extends CvrEntityRecord {
         return new AttributeRecordSet<>(this.attributes, this, AttributeRecord.DB_FIELD_COMPANY);
     }
 
-
     public static final String DB_FIELD_P_UNITS = "productionUnits";
     public static final String IO_FIELD_P_UNITS = "penheder";
 
@@ -1223,7 +1223,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyUnitLinkRecord, CompanyRecord> getProductionUnits() {
-        return new BitemporalSet<>(this.productionUnits, this, CompanyUnitLinkRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.productionUnits, CompanyUnitLinkRecord.class, this, CompanyUnitLinkRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -1278,7 +1278,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyParticipantRelationRecord, CompanyRecord> getParticipants() {
-        return new BitemporalSet<>(this.participants, this, CompanyParticipantRelationRecord.DB_FIELD_COMPANY);
+        return new BitemporalSet<>(this.participants, CompanyParticipantRelationRecord.class, this, CompanyParticipantRelationRecord.DB_FIELD_COMPANY);
     }
 
 
@@ -1292,7 +1292,7 @@ public class CompanyRecord extends CvrEntityRecord {
     private Set<FusionSplitRecord> fusions = new HashSet<>();
 
     public RecordSet<FusionSplitRecord, CompanyRecord> getFusions() {
-        return new RecordSet<>(this.fusions, this, FusionSplitRecord.DB_FIELD_COMPANY, CLAUSE_FUSIONS);
+        return new RecordSet<>(this.fusions, FusionSplitRecord.class, this, FusionSplitRecord.DB_FIELD_COMPANY, CLAUSE_FUSIONS);
     }
 
     public void setFusions(Set<FusionSplitRecord> fusions) {
@@ -1334,7 +1334,7 @@ public class CompanyRecord extends CvrEntityRecord {
     private Set<FusionSplitRecord> splits = new HashSet<>();
 
     public RecordSet<FusionSplitRecord, CompanyRecord> getSplits() {
-        return new RecordSet<>(this.splits, this, FusionSplitRecord.DB_FIELD_COMPANY, CLAUSE_SPLITS);
+        return new RecordSet<>(this.splits, FusionSplitRecord.class, this, FusionSplitRecord.DB_FIELD_COMPANY, CLAUSE_SPLITS);
     }
 
     public void setSplits(Set<FusionSplitRecord> splits) {
@@ -1656,7 +1656,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback, boolean grouped) {
         this.getNames().traverse(setCallback, itemCallback);
         this.getSecondaryNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
@@ -1676,9 +1676,15 @@ public class CompanyRecord extends CvrEntityRecord {
         this.getStatus().traverse(setCallback, itemCallback);
         this.getCompanyStatus().traverse(setCallback, itemCallback);
         this.getCompanyForm().traverse(setCallback, itemCallback);
-        this.getYearlyNumbers().traverse(setCallback, itemCallback);
-        this.getQuarterlyNumbers().traverse(setCallback, itemCallback);
-        this.getMonthlyNumbers().traverse(setCallback, itemCallback);
+        if (grouped) {
+            this.getYearlyNumbersGrouped().traverse(setCallback, itemCallback);
+            this.getQuarterlyNumbersGrouped().traverse(setCallback, itemCallback);
+            this.getMonthlyNumbersGrouped().traverse(setCallback, itemCallback);
+        } else {
+            this.getYearlyNumbers().traverse(setCallback, itemCallback);
+            this.getQuarterlyNumbers().traverse(setCallback, itemCallback);
+            this.getMonthlyNumbers().traverse(setCallback, itemCallback);
+        }
         this.getAttributes().traverse(setCallback, itemCallback);
         this.getProductionUnits().traverse(setCallback, itemCallback);
         this.getParticipants().traverse(setCallback, itemCallback);
@@ -1686,61 +1692,5 @@ public class CompanyRecord extends CvrEntityRecord {
         this.getSplits().traverse(setCallback, itemCallback);
         this.getMetadata().traverse(setCallback, itemCallback);
     }
-
-    @Override
-    public void closeRegistrations(Session session) {
-        HashSet<CvrBitemporalRecord> updated = new HashSet<>();
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyForm));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.status));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.companyStatus));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.mandatoryEmailAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.homepage));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.primaryIndustry));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry1));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry2));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.secondaryIndustry3));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.regNumber));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.lifecycle));
-        updated.addAll(
-                CvrBitemporalRecord.closeRegistrationsGroup(this.getYearlyNumbersGrouped().values())
-        );
-        updated.addAll(
-                CvrBitemporalRecord.closeRegistrationsGroup(this.getQuarterlyNumbersGrouped().subvalues())
-        );
-        updated.addAll(
-                CvrBitemporalRecord.closeRegistrationsGroup(this.getMonthlyNumbersGrouped().subvalues())
-        );
-        for (AttributeRecord attribute : this.attributes) {
-            updated.addAll(
-                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
-            );
-        }
-        for (CompanyParticipantRelationRecord participantRelation : this.participants) {
-            updated.addAll(participantRelation.closeRegistrations());
-        }
-        for (FusionSplitRecord fusion : this.fusions) {
-            updated.addAll(fusion.closeRegistrations());
-        }
-        for (FusionSplitRecord split : this.splits) {
-            updated.addAll(split.closeRegistrations());
-        }
-        if (this.metadata != null) {
-            updated.addAll(this.metadata.closeRegistrations());
-        }
-        for (CvrBitemporalRecord bitemporalRecord : updated) {
-            if (bitemporalRecord.getId() == null) {
-                session.persist(bitemporalRecord);
-            } else if (!session.contains(bitemporalRecord)) {
-                session.merge(bitemporalRecord);
-            }
-        }
-    }
-
 
 }

@@ -66,7 +66,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<FormRecord, CompanyMetadataRecord> getNewestForm() {
-        return new RecordSet<>(this.newestForm, this, FormRecord.DB_FIELD_COMPANY_METADATA);
+        return new RecordSet<>(this.newestForm, FormRecord.class, this, FormRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_FORM)
@@ -117,7 +117,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<BaseNameRecord, CompanyMetadataRecord> getNewestName() {
-        return new RecordSet<>(this.newestName, this, BaseNameRecord.DB_FIELD_COMPANY_METADATA);
+        return new RecordSet<>(this.newestName, BaseNameRecord.class, this, BaseNameRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_NAME)
@@ -168,7 +168,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<AddressRecord, CompanyMetadataRecord> getNewestLocation() {
-        return new RecordSet<>(this.newestLocation, this, AddressRecord.DB_FIELD_COMPANY_METADATA);
+        return new RecordSet<>(this.newestLocation, AddressRecord.class, this, AddressRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     @JsonGetter(IO_FIELD_NEWEST_LOCATION)
@@ -222,7 +222,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestPrimaryIndustry() {
-        return new RecordSet<>(this.newestPrimaryIndustry, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=0");
+        return new RecordSet<>(this.newestPrimaryIndustry, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=0");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_PRIMARY_INDUSTRY)
@@ -277,7 +277,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestSecondaryIndustry1() {
-        return new RecordSet<>(this.newestSecondaryIndustry1, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=1");
+        return new RecordSet<>(this.newestSecondaryIndustry1, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=1");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY1)
@@ -332,7 +332,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestSecondaryIndustry2() {
-        return new RecordSet<>(this.newestSecondaryIndustry2, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=2");
+        return new RecordSet<>(this.newestSecondaryIndustry2, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=2");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY2)
@@ -387,7 +387,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
 
     @JsonIgnore
     public RecordSet<CompanyIndustryRecord, CompanyMetadataRecord> getNewestSecondaryIndustry3() {
-        return new RecordSet<>(this.newestSecondaryIndustry3, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=3");
+        return new RecordSet<>(this.newestSecondaryIndustry3, CompanyIndustryRecord.class, this, CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, "index=3");
     }
 
     @JsonGetter(IO_FIELD_NEWEST_SECONDARY_INDUSTRY3)
@@ -471,7 +471,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
         private Set<MetadataContactRecord> metadataContactRecords = new HashSet<>();
 
     public RecordSet<MetadataContactRecord, CompanyMetadataRecord> getMetadataContactRecords() {
-        return new RecordSet<>(this.metadataContactRecords, this, MetadataContactRecord.DB_FIELD_COMPANY_METADATA);
+        return new RecordSet<>(this.metadataContactRecords, MetadataContactRecord.class, this, MetadataContactRecord.DB_FIELD_COMPANY_METADATA);
     }
 
     public void setMetadataContactRecords(Set<MetadataContactRecord> metadataContactRecords) {

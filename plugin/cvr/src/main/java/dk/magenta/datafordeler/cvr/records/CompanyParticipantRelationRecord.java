@@ -101,7 +101,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
     public RecordSet<OfficeRelationRecord, CompanyParticipantRelationRecord> getOffices() {
-        return new RecordSet<>(this.offices, this, OfficeRelationRecord.DB_FIELD_COMPANY_RELATION);
+        return new RecordSet<>(this.offices, OfficeRelationRecord.class, this, OfficeRelationRecord.DB_FIELD_COMPANY_RELATION);
     }
 
 
@@ -127,7 +127,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     }
 
     public RecordSet<OrganizationRecord, CompanyParticipantRelationRecord> getOrganizations() {
-        return new RecordSet<>(this.organizations, this, OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION);
+        return new RecordSet<>(this.organizations, OrganizationRecord.class, this, OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION);
     }
 
 

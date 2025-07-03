@@ -68,7 +68,7 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
     private Set<BaseNameRecord> name;
 
     public RecordSet<BaseNameRecord, FusionSplitRecord> getName() {
-        return new RecordSet<>(this.name, this, BaseNameRecord.DB_FIELD_FUSION);
+        return new RecordSet<>(this.name, BaseNameRecord.class, this, BaseNameRecord.DB_FIELD_FUSION);
     }
 
     public void setName(Set<BaseNameRecord> name) {
@@ -226,7 +226,18 @@ public class FusionSplitRecord extends CvrNontemporalDataRecord {
         this.getName().traverse(setCallback, itemCallback);
     }
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+    public void traverseGrouped(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> groupCallback, Consumer<CvrRecord> itemCallback) {
+        super.traverse(groupCallback, itemCallback);
+        this.getName().traverse(groupCallback, itemCallback);
+        for (AttributeRecord attribute : this.incoming) {
+            attribute.getValues().traverse(groupCallback, itemCallback);
+        }
+        for (AttributeRecord attribute : this.outgoing) {
+            attribute.getValues().traverse(groupCallback, itemCallback);
+        }
+    }
+
+        public ArrayList<CvrBitemporalRecord> closeRegistrations() {
         ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
         updated.addAll(CvrBitemporalRecord.closeRegistrations(this.name));
         for (AttributeRecord attribute : this.incoming) {

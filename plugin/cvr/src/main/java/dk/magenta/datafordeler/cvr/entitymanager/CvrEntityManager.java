@@ -494,20 +494,14 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         return (registerType != null && registerType != CvrConfiguration.RegisterType.DISABLED);
     }
 
-
     public void cleanupBitemporalSets(Session session, Collection<T> records) {
-        for (T record : records) {
-            record.cleanupBitemporalSets(session);
-        }
+        log.info("Cleaning all bitemporal sets for "+records.size()+" items");
+        records.forEach(record -> record.cleanupBitemporalSets(session));
     }
 
-    public void closeAllEligibleRegistrations(Session session, List<T> items) {
-        log.info("Closing all eligible registrations for "+items.size()+" items");
-        objectMapper.setFilterProvider(new SimpleFilterProvider().addFilter(
-                "ParticipantRecordFilter",
-                SimpleBeanPropertyFilter.serializeAllExcept(ParticipantRecord.IO_FIELD_BUSINESS_KEY)
-        ));
-        items.forEach(t -> t.closeRegistrations(session));
+    public void closeAllEligibleRegistrations(Session session, Collection<T> records) {
+        log.info("Closing all eligible registrations for "+records.size()+" items");
+        records.forEach(record -> record.closeRegistrations(session));
     }
 
     protected String finalizeQuery(ObjectNode query) {

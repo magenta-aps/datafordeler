@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.cvr.BitemporalSet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -218,9 +219,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 unclosedCount++;
             }
         }
+
         if (unclosedCount > 1) {
             Comparator<T> comparator = Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
-                                       .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
+                    .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
             ArrayList<T> recordList = new ArrayList<>(records);
             for (T current : recordList) {
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
@@ -231,11 +233,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
                     if (current.getRegistrationFrom() != null) {
                         candidates = candidates.filter(record -> record.getRegistrationFrom() != null)
-                                               .filter(record -> record.getRegistrationFrom().isAfter(current.getRegistrationFrom()));
+                                .filter(record -> record.getRegistrationFrom().isAfter(current.getRegistrationFrom()));
                     }
                     if (current.getEffectFrom() != null) {
                         candidates = candidates.filter(record -> record.getEffectFrom() != null)
-                                               .filter(record -> record.getEffectFrom().isAfter(current.getEffectFrom()));
+                                .filter(record -> record.getEffectFrom().isAfter(current.getEffectFrom()));
                     }
                     T next = candidates.min(comparator).orElse(null);
                     if (next != null) {
@@ -265,7 +267,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(next.getRegistrationFrom());
                             }
                         }
-
                     }
                 }
             }
@@ -278,35 +279,61 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         for (CvrRecordPeriod period : effectGroups.keySet()) {
             ArrayList<T> effectGroup = effectGroups.get(period);
             if (effectGroup.size() > 1) {
-                effectGroup.sort(Comparator.comparing(T::getRegistrationFrom).thenComparing(T::getDafoUpdated));
+                effectGroup.sort(
+                        Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        .thenComparing(T::getDafoUpdated, Comparator.nullsFirst(Comparator.naturalOrder()))
+                );
                 T previous = null;
                 for (T record : effectGroup) {
                     if (previous != null) {
-                        if (record.getRegistrationFrom().equals(previous.getRegistrationFrom())) {
-                            System.out.println("Should delete " + record.getClass().getSimpleName() + " #" + record.getId()+", is identical to " + previous.getId());
-
-                            continue;
-                        } else {
-                            System.out.println("Should set registrationTo for " + previous.getClass().getSimpleName() + " #" + previous.getId()+" to "+record.getRegistrationFrom()+", to match with "+record.getId());
-//                            previous.setRegistrationTo(record.getRegistrationFrom());
-//                            updated.add(previous);
+                        if (!record.getRegistrationFrom().equals(previous.getRegistrationFrom())) {
+                            previous.setRegistrationTo(record.getRegistrationFrom());
+                            updated.add(previous);
                         }
                     }
                     previous = record;
                 }
             }
         }
-
         return updated;
     }
 
-    static <R extends CvrBitemporalRecord, P extends CvrRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R, P>> setCollection) {
-        ArrayList<R> updated = new ArrayList<>();
-        for (BitemporalSet<R, P> values : setCollection) {
-            updated.addAll(CvrBitemporalRecord.closeRegistrations(values));
-        }
-        return updated;
-    }
+//
+//    public static <T extends CvrBitemporalRecord> Collection<T> deduplicateRegistrations(Collection<T> records) {
+//        ArrayList<T> deleted = new ArrayList<>();
+//        ListHashMap<Bitemporality, T> effectGroups = new ListHashMap<>();
+//        for (T record : records) {
+//            effectGroups.add(record.getBitemporality(), record);
+//        }
+//        for (Bitemporality key : effectGroups.keySet()) {
+//            ArrayList<T> effectGroup = effectGroups.get(key);
+//            if (effectGroup.size() > 1) {
+//                System.out.println(effectGroup.get(0).getClass().getSimpleName()+"  effectGroup size: " + effectGroup.size());
+//                for (T record : effectGroup) {
+//                    System.out.println("    "+record.getId()+"    "+record.hashCode());
+//                }
+//                T previous = null;
+//                for (T record : effectGroup) {
+//                    if (previous != null) {
+//                        // TODO: Tjek data. Hvis en record har flere felter udfyldt, f.eks. adresseUUID, behold den og slet den anden
+//                        System.out.println("Should delete " + record.getClass().getSimpleName() + " #" + record.getId()+", is identical to " + previous.getId());
+//                        deleted.add(record);
+//                        continue;
+//                    }
+//                    previous = record;
+//                }
+//            }
+//        }
+//        return deleted;
+//    }
+//
+//    static <R extends CvrBitemporalRecord, P extends CvrRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R, P>> setCollection) {
+//        ArrayList<R> updated = new ArrayList<>();
+//        for (BitemporalSet<R, P> values : setCollection) {
+//            updated.addAll(CvrBitemporalRecord.closeRegistrations(values));
+//        }
+//        return updated;
+//    }
 
 
     @Override

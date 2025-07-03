@@ -81,6 +81,10 @@ public abstract class CvrRecord extends DatabaseEntry {
 
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+        this.traverse(setCallback, itemCallback, false);
+    }
+
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback, boolean grouped) {
         if (itemCallback != null) {
             itemCallback.accept(this);
         }

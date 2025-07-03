@@ -15,6 +15,8 @@ import org.hibernate.Session;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -181,8 +183,34 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         session.remove(this);
     }
 
-    public abstract void closeRegistrations(Session session);
+    public void closeRegistrations(Session session) {
+        HashSet<CvrBitemporalRecord> updated = new HashSet<>();
+        HashSet<Class<? extends CvrBitemporalRecord>> omitClasses = new HashSet<>();
+        omitClasses.add(CompanyParticipantRelationRecord.class);
+        this.traverse(
+            cvrRecords -> {
+                Class<? extends CvrRecord> recordClass = cvrRecords.getRecordClass();
+                if (CvrBitemporalRecord.class.isAssignableFrom(recordClass)) {
+                    if (!omitClasses.contains(recordClass)) {
+                        Set<CvrBitemporalRecord> bitemporalRecords = cvrRecords.stream()
+                                .map((Function<CvrRecord, CvrBitemporalRecord>) cvrRecord -> (CvrBitemporalRecord) cvrRecord)
+                                .collect(Collectors.toSet());
+                        updated.addAll(CvrBitemporalRecord.closeRegistrations(bitemporalRecords));
+                    }
+                }
+            },
+            null,
+            true
+        );
 
+        for (CvrBitemporalRecord bitemporalRecord : updated) {
+            if (bitemporalRecord.getId() == null) {
+                session.persist(bitemporalRecord);
+            } else if (!session.contains(bitemporalRecord)) {
+                session.merge(bitemporalRecord);
+            }
+        }
+    }
 
     public void cleanupBitemporalSets(Session session) {
         this.traverse(
@@ -213,7 +241,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                             CvrBitemporalRecord newest = groups.get(hash).stream().sorted(Comparator.comparing(CvrRecord::getDafoUpdated).reversed()).findFirst().get();
                             for (CvrBitemporalRecord record : groups.get(hash)) {
                                 if (record != newest) {
-                                    System.out.println("Should delete " + record.getClass().getSimpleName() + " " + record.getId());
                                     session.remove(record);
                                     recordSet.remove(record);
                                 }
@@ -222,7 +249,8 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                     }
                 }
             },
-            null
+            null,
+            true
         );
     }
 }

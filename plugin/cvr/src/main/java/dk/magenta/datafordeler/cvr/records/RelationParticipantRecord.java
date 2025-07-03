@@ -105,7 +105,7 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
     public BitemporalSet<BaseNameRecord, RelationParticipantRecord> getNames() {
-        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_PARTICIPANT_RELATION);
+        return new BitemporalSet<>(this.names, BaseNameRecord.class, this, BaseNameRecord.DB_FIELD_PARTICIPANT_RELATION);
     }
 
 
@@ -143,7 +143,7 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     }
 
     public BitemporalSet<AddressRecord, RelationParticipantRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_PARTICIPANT_RELATION);
+        return new BitemporalSet<>(this.locationAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_PARTICIPANT_RELATION);
     }
 
 

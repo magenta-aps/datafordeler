@@ -103,7 +103,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     private Set<BaseNameRecord> names = new HashSet<>();
 
     public BitemporalSet<BaseNameRecord, OfficeRelationUnitRecord> getNames() {
-        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_OFFICE_UNIT);
+        return new BitemporalSet<>(this.names, BaseNameRecord.class, this, BaseNameRecord.DB_FIELD_OFFICE_UNIT);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -145,7 +145,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     }
 
     public BitemporalSet<AddressRecord, OfficeRelationUnitRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_OFFICE_UNIT);
+        return new BitemporalSet<>(this.locationAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_OFFICE_UNIT);
     }
 
     // TODO: Postadresse
