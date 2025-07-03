@@ -111,7 +111,7 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
     }
 
     public BitemporalSet<AttributeValueRecord, AttributeRecord> getValues() {
-        return new BitemporalSet<>(this.values, this, AttributeValueRecord.DB_FIELD_ATTRIBUTE);
+        return new BitemporalSet<>(this.values, AttributeValueRecord.class, this, AttributeValueRecord.DB_FIELD_ATTRIBUTE);
     }
 
 
