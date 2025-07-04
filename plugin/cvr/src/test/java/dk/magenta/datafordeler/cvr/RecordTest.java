@@ -683,6 +683,7 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testUpdateParticipant() throws IOException, DataFordelerException {
+        System.out.println("testUpdateParticipant");
         loadParticipant("/person.json");
         loadParticipant("/person2.json");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -706,6 +707,9 @@ public class RecordTest extends TestBase {
             for (CompanyParticipantRelationRecord relationRecord : participantRecord.getCompanyRelation()) {
                 if (relationRecord.getCompanyUnitNumber() == 4001248508L) {
                     foundCompanyData = true;
+                    for (BaseNameRecord baseNameRecord : relationRecord.getRelationCompanyRecord().getNames()) {
+                        System.out.println(baseNameRecord.getName()+" "+baseNameRecord.getBitemporality());
+                    }
                     Assertions.assertEquals(3, relationRecord.getRelationCompanyRecord().getNames().size());
                     Assertions.assertEquals(0, relationRecord.getRelationCompanyRecord().getStatus().size());
                     Assertions.assertEquals(2, relationRecord.getRelationCompanyRecord().getCompanyStatus().size());
@@ -973,6 +977,7 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testCloseRegistration() {
+        System.out.println("testCloseRegistration");
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         CompanyRecord company = new CompanyRecord();
@@ -1004,6 +1009,9 @@ public class RecordTest extends TestBase {
         }
 
         List<SecNameRecord> nameRecords = company.getNames().ordered();
+        for (SecNameRecord nameRecord : nameRecords) {
+            System.out.println(nameRecord.getName()+" "+nameRecord.getBitemporality());
+        }
         Assertions.assertEquals(3, nameRecords.size());
 
         SecNameRecord actualName1 = nameRecords.get(0);
