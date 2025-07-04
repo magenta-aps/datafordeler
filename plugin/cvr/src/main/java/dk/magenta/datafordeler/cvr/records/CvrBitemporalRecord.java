@@ -266,7 +266,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     T next = candidates.min(comparator).orElse(null);
                     System.out.println("next: "+next);
                     if (next != null) {
-                        System.out.println("Cloning " + current);
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
@@ -279,6 +278,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             records.add(clone);
                             current.setRegistrationTo(registrationCut);
                             updated.add(current);
+                            System.out.println("Cloning " + current.getBitemporality()+" to");
+                            System.out.println("    "+current.getBitemporality());
+                            System.out.println("    "+clone.getBitemporality());
+
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
@@ -322,6 +325,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
+        System.out.println("records.size: "+records.size());
         return updated;
     }
 
