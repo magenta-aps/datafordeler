@@ -989,6 +989,8 @@ public class RecordTest extends TestBase {
             name1.setSecondary(false);
             name1.setName("Name1");
             name1.setRegistrationFrom(null);
+            name1.setRegistrationTo(null);
+            name1.setEffectFrom(null);
             name1.setEffectTo(null);
             company.addName(name1);
 
@@ -996,7 +998,9 @@ public class RecordTest extends TestBase {
             name2.setSecondary(false);
             name2.setName("Name2");
             name2.setRegistrationFrom(time);
+            name2.setRegistrationTo(null);
             name2.setEffectFrom(time);
+            name2.setEffectTo(null);
             company.addName(name2);
 
             session.save(company);
