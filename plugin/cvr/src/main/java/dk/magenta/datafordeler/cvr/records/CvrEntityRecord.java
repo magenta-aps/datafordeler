@@ -240,11 +240,19 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                             groups.add(hash, record);
                         }
                         for (Integer hash : groups.keySet()) {
-                            CvrBitemporalRecord newest = groups.get(hash).stream().sorted(Comparator.comparing(CvrRecord::getDafoUpdated).reversed()).findFirst().get();
-                            for (CvrBitemporalRecord record : groups.get(hash)) {
-                                if (record != newest) {
-                                    session.remove(record);
-                                    recordSet.remove(record);
+                            if (groups.get(hash).size() > 1) {
+                                CvrBitemporalRecord newest = groups.get(hash).stream()
+                                        .sorted(Comparator.comparing(CvrRecord::getDafoUpdated, Comparator.nullsFirst(Comparator.naturalOrder())).reversed())
+                                        .findFirst().get();
+                                for (CvrBitemporalRecord record : groups.get(hash)) {
+                                    if (record != newest) {
+                                        session.remove(record);
+                                        recordSet.remove(record);
+                                        records.remove(record);
+                                        if (recordSet.getParentRecordSet() != null) {
+                                            recordSet.getParentRecordSet().remove(record);
+                                        }
+                                    }
                                 }
                             }
                         }

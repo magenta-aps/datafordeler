@@ -618,7 +618,14 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         for (CompanyYearlyNumbersRecord record : this.yearlyNumbers) {
             int year = record.getYear();
             if (!groups.containsKey(year)) {
-                groups.put(year, 0, new BitemporalSet<>(new HashSet<>(), CompanyYearlyNumbersRecord.class, this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANYUNIT, CompanyYearlyNumbersRecord.DB_FIELD_YEAR + "=" + year));
+                groups.put(year, 0, new BitemporalSet<>(
+                        new HashSet<>(),
+                        CompanyYearlyNumbersRecord.class,
+                        this,
+                        CompanyYearlyNumbersRecord.DB_FIELD_COMPANYUNIT,
+                        CompanyYearlyNumbersRecord.DB_FIELD_YEAR + "=" + year,
+                        this.getYearlyNumbers()
+                ));
             }
             groups.get(year, 0).add(record);
         }
@@ -675,7 +682,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
                         CompanyQuarterlyNumbersRecord.class,
                         this,
                         CompanyQuarterlyNumbersRecord.DB_FIELD_COMPANYUNIT,
-                        CompanyQuarterlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyQuarterlyNumbersRecord.DB_FIELD_QUARTER + "=" + quarter
+                        CompanyQuarterlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyQuarterlyNumbersRecord.DB_FIELD_QUARTER + "=" + quarter,
+                        this.getQuarterlyNumbers()
                 ));
             }
             groups.get(year, quarter).add(record);

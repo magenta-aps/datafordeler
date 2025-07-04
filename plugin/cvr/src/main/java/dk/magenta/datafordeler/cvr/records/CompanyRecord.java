@@ -1022,7 +1022,17 @@ public class CompanyRecord extends CvrEntityRecord {
         for (CompanyYearlyNumbersRecord record : this.yearlyNumbers) {
             int year = record.getYear();
             if (!groups.containsKey(year)) {
-                groups.put(year, 0, new BitemporalSet<>(new HashSet<>(), CompanyYearlyNumbersRecord.class, this, CompanyYearlyNumbersRecord.DB_FIELD_COMPANY, CompanyYearlyNumbersRecord.DB_FIELD_YEAR + "=" + year));
+                groups.put(
+                        year, 0,
+                        new BitemporalSet<>(
+                                new HashSet<>(),
+                                CompanyYearlyNumbersRecord.class,
+                                this,
+                                CompanyYearlyNumbersRecord.DB_FIELD_COMPANY,
+                                CompanyYearlyNumbersRecord.DB_FIELD_YEAR + "=" + year,
+                                this.getYearlyNumbers()
+                        )
+                );
             }
             groups.get(year, 0).add(record);
         }
@@ -1079,7 +1089,8 @@ public class CompanyRecord extends CvrEntityRecord {
                         CompanyQuarterlyNumbersRecord.class,
                         this,
                         CompanyQuarterlyNumbersRecord.DB_FIELD_COMPANY,
-                        CompanyQuarterlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyQuarterlyNumbersRecord.DB_FIELD_QUARTER + "=" + quarter
+                        CompanyQuarterlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyQuarterlyNumbersRecord.DB_FIELD_QUARTER + "=" + quarter,
+                        this.getQuarterlyNumbers()
                 ));
             }
             groups.get(year, quarter).add(record);
@@ -1132,13 +1143,13 @@ public class CompanyRecord extends CvrEntityRecord {
             int month = record.getMonth();
             if (!groups.containsKey(year, month)) {
                 groups.put(year, month, new BitemporalSet<>(
-                                new HashSet<>(),
-                                CompanyMonthlyNumbersRecord.class,
-                                this,
-                                CompanyMonthlyNumbersRecord.DB_FIELD_COMPANY,
-                                CompanyMonthlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyMonthlyNumbersRecord.DB_FIELD_MONTH + "=" + month
-                        )
-                );
+                        new HashSet<>(),
+                        CompanyMonthlyNumbersRecord.class,
+                        this,
+                        CompanyMonthlyNumbersRecord.DB_FIELD_COMPANY,
+                        CompanyMonthlyNumbersRecord.DB_FIELD_YEAR + "=" + year + " AND " + CompanyMonthlyNumbersRecord.DB_FIELD_MONTH + "=" + month,
+                        this.getMonthlyNumbers()
+                ));
             }
             groups.get(year, month).add(record);
         }

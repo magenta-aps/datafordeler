@@ -19,6 +19,11 @@ public class BitemporalSet<R extends CvrBitemporalRecord, P extends CvrRecord> e
     public BitemporalSet(Set<R> inner, Class<R> recordClass, P parent, String field, String clause) {
         super(inner, recordClass, parent, field, clause);
     }
+    public BitemporalSet(Set<R> inner, Class<R> recordClass, P parent, String field, String clause, BitemporalSet<R, P> parentRecordSet) {
+        super(inner, recordClass, parent, field, clause, parentRecordSet);
+    }
+
+
 
     /**
      * Get the record that is current
