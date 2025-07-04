@@ -683,7 +683,6 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testUpdateParticipant() throws IOException, DataFordelerException {
-        System.out.println("testUpdateParticipant");
         loadParticipant("/person.json");
         loadParticipant("/person2.json");
         try (Session session = sessionManager.getSessionFactory().openSession()) {

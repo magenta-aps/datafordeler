@@ -224,23 +224,12 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             Comparator<T> comparator = Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
                     .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
             ArrayList<T> recordList = new ArrayList<>(records);
-            System.out.println("recordList.size: "+recordList.size());
-            for (T record : recordList) {
-                System.out.println(record.getBitemporality());
-            }
             for (T current : recordList) {
-                System.out.println("---------------");
-                System.out.println("current: "+current.getBitemporality());
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
                     // For every group there can only ever be one that has both registrationTo=null and effectTo=null
                     // Find records that have open bitemporality,
                     // and find other records that are registered and effected after them
                     Stream<T> candidates = recordList.stream().filter(c -> c != current);
-
-                    List<T> foo = candidates.toList();
-                    System.out.println("candidates.size: "+foo.size());
-                    candidates = foo.stream();
-
                     if (current.getRegistrationFrom() != null) {
                         candidates = candidates
                                 .filter(record -> record.getRegistrationFrom() != null)
@@ -248,11 +237,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                         current.getRegistrationFrom()
                                 ));
                     }
-
-                    foo = candidates.toList();
-                    System.out.println("candidates.size: "+foo.size());
-                    candidates = foo.stream();
-
                     if (current.getEffectFrom() != null) {
                         candidates = candidates
                                 .filter(record -> record.getEffectFrom() != null)
@@ -260,11 +244,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                         current.getEffectFrom()
                                 ));
                     }
-                    foo = candidates.toList();
-                    System.out.println("candidates.size: "+foo.size());
-                    candidates = foo.stream();
                     T next = candidates.min(comparator).orElse(null);
-                    System.out.println("next: "+next);
                     if (next != null) {
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
@@ -278,15 +258,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             records.add(clone);
                             current.setRegistrationTo(registrationCut);
                             updated.add(current);
-                            System.out.println("Cloning " + current.getBitemporality()+" to");
-                            System.out.println("    "+current.getBitemporality());
-                            System.out.println("    "+clone.getBitemporality());
 
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
                     } else {
-                        System.out.println("Not cloning");
                         if (current.getRegistrationFrom() != null) {
                             candidates = recordList.stream().filter(c -> c != current);
                             candidates = candidates
@@ -325,7 +301,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
-        System.out.println("records.size: "+records.size());
         return updated;
     }
 
