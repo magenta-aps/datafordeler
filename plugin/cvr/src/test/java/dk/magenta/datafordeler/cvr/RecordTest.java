@@ -977,6 +977,7 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testCloseRegistration() {
+        System.out.println("=====================");
         System.out.println("testCloseRegistration");
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
