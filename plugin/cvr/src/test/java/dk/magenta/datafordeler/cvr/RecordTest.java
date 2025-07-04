@@ -1012,6 +1012,7 @@ public class RecordTest extends TestBase {
         } catch (Exception e) {
             transaction.rollback();
         }
+        session.refresh(company);
 
         List<SecNameRecord> nameRecords = company.getNames().ordered();
         for (SecNameRecord nameRecord : nameRecords) {
