@@ -117,6 +117,11 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
         return this.inner.add(record);
     }
 
+    public boolean addSuper(CvrRecord record) throws ClassCastException {
+        return this.inner.add(this.recordClass.cast(record));
+    }
+
+
     @Override
     public boolean remove(Object o) {
         return this.inner.remove(o);
