@@ -225,12 +225,21 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
             ArrayList<T> recordList = new ArrayList<>(records);
             System.out.println("recordList.size: "+recordList.size());
+            for (T record : recordList) {
+                System.out.println(record.getBitemporality());
+            }
             for (T current : recordList) {
+                System.out.println("---------------");
+                System.out.println("current: "+current.getBitemporality());
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
                     // For every group there can only ever be one that has both registrationTo=null and effectTo=null
                     // Find records that have open bitemporality,
                     // and find other records that are registered and effected after them
                     Stream<T> candidates = recordList.stream().filter(c -> c != current);
+
+                    List<T> foo = candidates.toList();
+                    System.out.println("candidates.size: "+foo.size());
+                    candidates = foo.stream();
 
                     if (current.getRegistrationFrom() != null) {
                         candidates = candidates
@@ -239,6 +248,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                         current.getRegistrationFrom()
                                 ));
                     }
+
+                    foo = candidates.toList();
+                    System.out.println("candidates.size: "+foo.size());
+                    candidates = foo.stream();
+
                     if (current.getEffectFrom() != null) {
                         candidates = candidates
                                 .filter(record -> record.getEffectFrom() != null)
@@ -246,15 +260,15 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                         current.getEffectFrom()
                                 ));
                     }
-                    List<T> foo = candidates.toList();
-                    System.out.println("foo.size: "+foo.size());
+                    foo = candidates.toList();
+                    System.out.println("candidates.size: "+foo.size());
                     candidates = foo.stream();
                     T next = candidates.min(comparator).orElse(null);
                     System.out.println("next: "+next);
                     if (next != null) {
+                        System.out.println("Cloning " + current);
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
-                            System.out.println("Cloning " + current);
                             T clone = (T) current.clone();
                             OffsetDateTime effectCut = next.getEffectFrom();
                             if (effectCut != null) {
@@ -269,6 +283,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             throw new RuntimeException(e);
                         }
                     } else {
+                        System.out.println("Not cloning");
                         if (current.getRegistrationFrom() != null) {
                             candidates = recordList.stream().filter(c -> c != current);
                             candidates = candidates
