@@ -199,11 +199,11 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
                         System.out.println("original: "+cvrRecords);
                         System.out.println("updated : "+bitemporalRecords);
-                        /*cvrRecords.clear();
+                        cvrRecords.clear();
                         for (CvrBitemporalRecord record : bitemporalRecords) {
-                            cvrRecords.add(record);
+                            cvrRecords.addSuper(record);
                         }
-                        cvrRecords.addAll(bitemporalRecords.stream().map(
+                        /*cvrRecords.addAll(bitemporalRecords.stream().map(
                                 (Function<CvrBitemporalRecord, CvrRecord>) cvrRecord -> (CvrRecord) cvrRecord
                         ).collect(Collectors.toSet()));*/
                     }
