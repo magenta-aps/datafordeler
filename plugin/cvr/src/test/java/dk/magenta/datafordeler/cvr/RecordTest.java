@@ -977,8 +977,6 @@ public class RecordTest extends TestBase {
 
     @Test
     public void testCloseRegistration() {
-        System.out.println("=====================");
-        System.out.println("testCloseRegistration");
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         CompanyRecord company = new CompanyRecord();
@@ -1014,9 +1012,6 @@ public class RecordTest extends TestBase {
         }
 
         List<SecNameRecord> nameRecords = company.getNames().ordered();
-        for (SecNameRecord nameRecord : nameRecords) {
-            System.out.println(nameRecord.getName()+" "+nameRecord.getBitemporality());
-        }
         Assertions.assertEquals(3, nameRecords.size());
 
         SecNameRecord actualName1 = nameRecords.get(0);

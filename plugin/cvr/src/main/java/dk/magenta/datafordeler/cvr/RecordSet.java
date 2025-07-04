@@ -136,6 +136,15 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
     public boolean addAll(Collection<? extends R> collection) {
         return this.inner.addAll(collection);
     }
+    public boolean addAllSuper(Collection<? extends CvrRecord> collection) throws ClassCastException {
+        boolean changed = false;
+        for (CvrRecord record : collection) {
+            if (this.addSuper(record)) {
+                changed = true;
+            }
+        }
+        return changed;
+    }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
