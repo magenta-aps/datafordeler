@@ -196,18 +196,8 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                                 .map((Function<CvrRecord, CvrBitemporalRecord>) cvrRecord -> (CvrBitemporalRecord) cvrRecord)
                                 .collect(Collectors.toSet());
                         updated.addAll(CvrBitemporalRecord.closeRegistrations(bitemporalRecords));
-
-                        System.out.println("original: "+cvrRecords.size());
-                        System.out.println("updated : "+bitemporalRecords.size());
                         cvrRecords.clear();
-                        for (CvrBitemporalRecord record : bitemporalRecords) {
-                            cvrRecords.addSuper(record);
-                        }
-
-                        System.out.println("updated original: "+cvrRecords.size());
-                        /*cvrRecords.addAll(bitemporalRecords.stream().map(
-                                (Function<CvrBitemporalRecord, CvrRecord>) cvrRecord -> (CvrRecord) cvrRecord
-                        ).collect(Collectors.toSet()));*/
+                        cvrRecords.addAllSuper(bitemporalRecords);
                     }
                 }
             },
@@ -216,7 +206,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         );
 
         for (CvrBitemporalRecord bitemporalRecord : updated) {
-            System.out.println("persisting "+bitemporalRecord.getBitemporality());
             if (bitemporalRecord.getId() == null) {
                 session.persist(bitemporalRecord);
             } else if (!session.contains(bitemporalRecord)) {
