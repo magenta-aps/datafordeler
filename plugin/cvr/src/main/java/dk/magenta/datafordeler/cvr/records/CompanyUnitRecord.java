@@ -1016,14 +1016,8 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         return subs;
     }
 
-
-    @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
-        this.traverse(setCallback, itemCallback, false);
-    }
-
     public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback, boolean grouped) {
-        super.traverse(setCallback, itemCallback);
+        super.traverse(setCallback, itemCallback, grouped);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
         this.getPostalAddress().traverse(setCallback, itemCallback);

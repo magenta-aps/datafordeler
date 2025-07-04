@@ -298,43 +298,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return updated;
     }
 
-//
-//    public static <T extends CvrBitemporalRecord> Collection<T> deduplicateRegistrations(Collection<T> records) {
-//        ArrayList<T> deleted = new ArrayList<>();
-//        ListHashMap<Bitemporality, T> effectGroups = new ListHashMap<>();
-//        for (T record : records) {
-//            effectGroups.add(record.getBitemporality(), record);
-//        }
-//        for (Bitemporality key : effectGroups.keySet()) {
-//            ArrayList<T> effectGroup = effectGroups.get(key);
-//            if (effectGroup.size() > 1) {
-//                System.out.println(effectGroup.get(0).getClass().getSimpleName()+"  effectGroup size: " + effectGroup.size());
-//                for (T record : effectGroup) {
-//                    System.out.println("    "+record.getId()+"    "+record.hashCode());
-//                }
-//                T previous = null;
-//                for (T record : effectGroup) {
-//                    if (previous != null) {
-//                        // TODO: Tjek data. Hvis en record har flere felter udfyldt, f.eks. adresseUUID, behold den og slet den anden
-//                        System.out.println("Should delete " + record.getClass().getSimpleName() + " #" + record.getId()+", is identical to " + previous.getId());
-//                        deleted.add(record);
-//                        continue;
-//                    }
-//                    previous = record;
-//                }
-//            }
-//        }
-//        return deleted;
-//    }
-//
-//    static <R extends CvrBitemporalRecord, P extends CvrRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R, P>> setCollection) {
-//        ArrayList<R> updated = new ArrayList<>();
-//        for (BitemporalSet<R, P> values : setCollection) {
-//            updated.addAll(CvrBitemporalRecord.closeRegistrations(values));
-//        }
-//        return updated;
-//    }
-
 
     @Override
     public boolean equals(Object o) {

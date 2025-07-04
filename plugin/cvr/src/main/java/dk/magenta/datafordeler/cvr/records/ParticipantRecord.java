@@ -677,7 +677,8 @@ public class ParticipantRecord extends CvrEntityRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback, boolean grouped) {
+        super.traverse(setCallback, itemCallback, grouped);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
         this.getPostalAddress().traverse(setCallback, itemCallback);
