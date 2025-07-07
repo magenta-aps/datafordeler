@@ -5,9 +5,9 @@ WORKDIR /output
 RUN mkdir /input
 COPY docs /input
 
-RUN sphinx-build -D language="kl" -b html /input/sphinx /output/kl/ && \
-    sphinx-build -D language="da" -b html /input/sphinx /output/da/ && \
-    sphinx-build -D language="en" -b html /input/sphinx /output/en/
+RUN sphinx-build -D language="da" -b html /input/sphinx /output/da/
+#RUN sphinx-build -D language="kl" -b html /input/sphinx /output/kl/
+#RUN sphinx-build -D language="en" -b html /input/sphinx /output/en/
 
 
 FROM alpine:3.14 AS build_swagger
@@ -23,13 +23,10 @@ COPY docs/openapi/*.json /output/openapi/
 RUN find /output/openapi -type f -name '*.json' | xargs sed -i "s/{{COMMIT_TAG}}/${COMMIT_TAG}/"
 
 
-FROM alpine:3.14
+FROM halverneus/static-file-server
 
 VOLUME /output
-WORKDIR /doc
-COPY ./docker/entrypoint_doc.sh /entrypoint.sh
-
-COPY --from=build_sphinx /output /doc/html
-COPY --from=build_swagger /output /doc/swagger
-
-ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR /web
+COPY --from=build_sphinx /output /web
+COPY --from=build_swagger /output /web/swagger
+COPY /docs/index.html /web
