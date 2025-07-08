@@ -70,7 +70,7 @@ public class CprRecordFamilyRelationService {
 
     @RequestMapping(method = RequestMethod.GET, path = "/cpr/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
-            throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException {
+            throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException, InvalidClientInputException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -92,15 +92,11 @@ public class CprRecordFamilyRelationService {
 
             this.applyAreaRestrictionsToQuery(personQuery, user);
 
-            System.out.println(personQuery.toHql());
-
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             PersonEntity personEntity = null;
             if (!personEntities.isEmpty()) {
-                System.out.println("Query returned results");
                 personEntity = personEntities.get(0);
             } else {
-                System.out.println("Query returned no results");
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
@@ -146,9 +142,8 @@ public class CprRecordFamilyRelationService {
             ObjectNode obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
             return obj.toString();
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e);
-            throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
+            throw e;
         }
     }
 
