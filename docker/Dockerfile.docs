@@ -25,7 +25,6 @@ RUN find /output/openapi -type f -name '*.json' | xargs sed -i "s/{{COMMIT_TAG}}
 
 FROM halverneus/static-file-server
 
-VOLUME /output
 WORKDIR /web
 COPY --from=build_sphinx /output /web
 COPY --from=build_swagger /output /web/swagger
