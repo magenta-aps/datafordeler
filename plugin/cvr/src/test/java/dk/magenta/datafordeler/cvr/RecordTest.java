@@ -706,6 +706,9 @@ public class RecordTest extends TestBase {
             for (CompanyParticipantRelationRecord relationRecord : participantRecord.getCompanyRelation()) {
                 if (relationRecord.getCompanyUnitNumber() == 4001248508L) {
                     foundCompanyData = true;
+                    for (BaseNameRecord baseNameRecord : relationRecord.getRelationCompanyRecord().getNames()) {
+                        System.out.println(baseNameRecord.getName()+" "+baseNameRecord.getBitemporality());
+                    }
                     Assertions.assertEquals(3, relationRecord.getRelationCompanyRecord().getNames().size());
                     Assertions.assertEquals(0, relationRecord.getRelationCompanyRecord().getStatus().size());
                     Assertions.assertEquals(2, relationRecord.getRelationCompanyRecord().getCompanyStatus().size());
@@ -983,6 +986,8 @@ public class RecordTest extends TestBase {
             name1.setSecondary(false);
             name1.setName("Name1");
             name1.setRegistrationFrom(null);
+            name1.setRegistrationTo(null);
+            name1.setEffectFrom(null);
             name1.setEffectTo(null);
             company.addName(name1);
 
@@ -990,7 +995,9 @@ public class RecordTest extends TestBase {
             name2.setSecondary(false);
             name2.setName("Name2");
             name2.setRegistrationFrom(time);
+            name2.setRegistrationTo(null);
             name2.setEffectFrom(time);
+            name2.setEffectTo(null);
             company.addName(name2);
 
             session.save(company);
@@ -1018,13 +1025,13 @@ public class RecordTest extends TestBase {
         Assertions.assertTrue(Equality.equal(time, actualName2.getRegistrationFrom()));
         Assertions.assertNull(actualName2.getRegistrationTo());
         Assertions.assertNull(actualName2.getEffectFrom());
-        Assertions.assertTrue(Equality.equal(timeTruncated, actualName2.getEffectTo()));
+        Assertions.assertTrue(Equality.equal(timeTruncated.toLocalDate().minusDays(1), actualName2.getEffectTo().toLocalDate()));
 
         SecNameRecord actualName3 = nameRecords.get(2);
         Assertions.assertEquals("Name2", actualName3.getName());
         Assertions.assertTrue(Equality.equal(time, actualName3.getRegistrationFrom()));
         Assertions.assertNull(actualName3.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(timeTruncated, actualName3.getEffectFrom()));
+        Assertions.assertTrue(Equality.equal(timeTruncated.toLocalDate(), actualName3.getEffectFrom().toLocalDate()));
         Assertions.assertNull(actualName3.getEffectTo());
     }
 

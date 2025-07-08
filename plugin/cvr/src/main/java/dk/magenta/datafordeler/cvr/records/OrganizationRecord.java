@@ -85,7 +85,7 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
     public Set<BaseNameRecord> names;
 
     public BitemporalSet<BaseNameRecord, OrganizationRecord> getNames() {
-        return new BitemporalSet<>(this.names, this, BaseNameRecord.DB_FIELD_ORGANIZATION);
+        return new BitemporalSet<>(this.names, BaseNameRecord.class, this, BaseNameRecord.DB_FIELD_ORGANIZATION);
     }
 
     public void setNames(Set<BaseNameRecord> names) {
@@ -171,7 +171,7 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
     }
 
     public RecordSet<OrganizationMemberdataRecord, OrganizationRecord> getMemberData() {
-        return new RecordSet<>(this.memberData, this, OrganizationMemberdataRecord.DB_FIELD_ORGANIZATION);
+        return new RecordSet<>(this.memberData, OrganizationMemberdataRecord.class, this, OrganizationMemberdataRecord.DB_FIELD_ORGANIZATION);
     }
 
 

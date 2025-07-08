@@ -17,15 +17,23 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
     P parent;
     String field;
     String clause;
+    Class<R> recordClass;
+    RecordSet<R, P> parentRecordSet;
 
-    public RecordSet(Set<R> inner, P parent, String field) {
-        this(inner, parent, field, null);
+    public RecordSet(Set<R> inner, Class<R> recordClass, P parent, String field) {
+        this(inner, recordClass, parent, field, null);
     }
-    public RecordSet(Set<R> inner, P parent, String field, String clause) {
+    public RecordSet(Set<R> inner, Class<R> recordClass, P parent, String field, String clause) {
+        this(inner, recordClass, parent, field, clause, null);
+    }
+
+    public RecordSet(Set<R> inner, Class<R> recordClass, P parent, String field, String clause, RecordSet<R, P> parentRecordSet) {
         this.inner = inner;
+        this.recordClass = recordClass;
         this.parent = parent;
         this.field = field;
         this.clause = clause;
+        this.parentRecordSet = parentRecordSet;
     }
 
     public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
@@ -35,6 +43,10 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
         if (setCallback != null) {
             setCallback.accept(this);
         }
+    }
+
+    public Class<R> getRecordClass() {
+        return this.recordClass;
     }
 
     public P getParent() {
@@ -48,6 +60,11 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
     public String getClause() {
         return this.clause;
     }
+
+    public RecordSet<R, P> getParentRecordSet() {
+        return this.parentRecordSet;
+    }
+
     //    public Class getRecordClass() {
 //        return this.inner.;
 //    }
@@ -111,6 +128,11 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
         return this.inner.add(record);
     }
 
+    public boolean addSuper(CvrRecord record) throws ClassCastException {
+        return this.inner.add(this.recordClass.cast(record));
+    }
+
+
     @Override
     public boolean remove(Object o) {
         return this.inner.remove(o);
@@ -124,6 +146,15 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
     @Override
     public boolean addAll(Collection<? extends R> collection) {
         return this.inner.addAll(collection);
+    }
+    public boolean addAllSuper(Collection<? extends CvrRecord> collection) throws ClassCastException {
+        boolean changed = false;
+        for (CvrRecord record : collection) {
+            if (this.addSuper(record)) {
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     @Override

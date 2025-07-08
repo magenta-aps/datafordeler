@@ -51,7 +51,6 @@ public class CvrPlugin extends Plugin {
 
     @Autowired
     public void setRegisterManager(CvrRegisterManager registerManager) {
-        System.out.println("Setting registermanager in plugin");
         this.registerManager = registerManager;
     }
 
@@ -64,7 +63,6 @@ public class CvrPlugin extends Plugin {
 //    }
 
     public CvrPlugin() {
-        System.out.println("Initializing CVR plugin");
         this.rolesDefinition = new CvrRolesDefinition();
         this.areaRestrictionDefinition = new CvrAreaRestrictionDefinition(this);
 
