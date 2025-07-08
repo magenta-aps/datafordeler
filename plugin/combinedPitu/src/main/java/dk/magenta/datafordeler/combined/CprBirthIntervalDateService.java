@@ -90,7 +90,6 @@ public class CprBirthIntervalDateService {
                     "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
                     "JOIN " + BirthTimeDataRecord.class.getCanonicalName() + " birthDataRecord ON birthDataRecord." + BirthTimeDataRecord.DB_FIELD_ENTITY + "=personEntity" + " " +
                     "JOIN " + AddressDataRecord.class.getCanonicalName() + " addressDataRecord ON addressDataRecord." + AddressDataRecord.DB_FIELD_ENTITY + "=personEntity" + " " +
-
                     "JOIN " + AccessAddressRoadRecord.class.getCanonicalName() + " accessAddressRoadRecord ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_MUNICIPALITY_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_MUNICIPALITY_CODE +
                     " AND accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ROAD_CODE + "=addressDataRecord." + AddressDataRecord.DB_FIELD_ROAD_CODE + " " +
                     "JOIN " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity ON accessAddressRoadRecord." + AccessAddressRoadRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
@@ -98,7 +97,7 @@ public class CprBirthIntervalDateService {
 
             String condition = " WHERE addressDataRecord." + CprBitemporalRecord.DB_FIELD_EFFECT_TO + " IS null " +
                     "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO + " IS null " +
-                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE + " = 0 AND " +
+                    "AND addressDataRecord." + CprBitemporalRecord.DB_FIELD_UNDONE + " = false AND " +
                     " birthDataRecord.birthDatetime <= :btb AND birthDataRecord.birthDatetime >= :bta ";
             if (localityCode != null && municipalitycode != null) {
                 condition += "AND accessAddressLocalityRecord.code = :locality AND addressDataRecord.municipalityCode = :municipality";
