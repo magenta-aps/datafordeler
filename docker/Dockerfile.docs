@@ -1,7 +1,5 @@
 FROM sphinxdoc/sphinx:8.2.3 AS build_sphinx
 
-WORKDIR /output
-
 RUN mkdir /input
 COPY docs /input
 
@@ -13,7 +11,6 @@ RUN sphinx-build -D language="da" -b html /input/sphinx /output/da/
 FROM alpine:3.14 AS build_swagger
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-dev}
-WORKDIR /output
 RUN mkdir /swagger && \
     mkdir -p /output/openapi && \
     wget https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.25.4.tar.gz -O - | tar xzf - -C /swagger && \
@@ -25,8 +22,6 @@ RUN find /output/openapi -type f -name '*.json' | xargs sed -i "s/{{COMMIT_TAG}}
 
 FROM halverneus/static-file-server
 
-VOLUME /output
-WORKDIR /web
 COPY --from=build_sphinx /output /web
 COPY --from=build_swagger /output /web/swagger
 COPY /docs/index.html /web
