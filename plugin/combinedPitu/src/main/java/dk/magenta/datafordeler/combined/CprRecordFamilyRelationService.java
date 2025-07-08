@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.combined;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
@@ -69,7 +70,7 @@ public class CprRecordFamilyRelationService {
 
     @RequestMapping(method = RequestMethod.GET, path = "/cpr/{cprNummer}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public String getSingle(@PathVariable("cprNummer") String cprNummer, HttpServletRequest request)
-            throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException {
+            throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException, InvalidClientInputException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
         LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
@@ -116,32 +117,33 @@ public class CprRecordFamilyRelationService {
                 motherEntity = QueryManager.getAllEntitiesAsStream(session, personQuery, PersonEntity.class).findFirst().orElse(null);
             }
 
-            Boolean motherhasCustody = true;
-            Boolean fatherhasCustody = true;
+            boolean motherhasCustody = true;
+            boolean fatherhasCustody = true;
             List<CustodyDataRecord> currentCustodyList = personEntity.getCustody().current();
             if (LocalDateTime.now().minusYears(18).isAfter(PersonCustodyRelationsManager.findNewestUnclosed(personEntity.getBirthTime().current()).getBirthDatetime())) {
                 motherhasCustody = false;
                 fatherhasCustody = false;
-            } else if (currentCustodyList.size() != 0) {
+            } else if (!currentCustodyList.isEmpty()) {
                 motherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType() == 3);
                 fatherhasCustody = currentCustodyList.stream().anyMatch(r -> r.getRelationType() == 4);
             }
 
             String hql = "SELECT personEntity " +
                     "FROM " + PersonEntity.class.getCanonicalName() + " personEntity " +
-                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" + " " +
-                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity." + "id" + " " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " mother ON mother." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity" + " " +
+                    "JOIN " + ParentDataRecord.class.getCanonicalName() + " father ON father." + ParentDataRecord.DB_FIELD_ENTITY + "=personEntity" + " " +
                     " WHERE mother." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=:motherPnr" +
                     " AND father." + ParentDataRecord.DB_FIELD_CPR_NUMBER + "=:fatherPnr";
 
-            Query siblingQuery = session.createQuery(hql);
+            Query<PersonEntity> siblingQuery = session.createQuery(hql, PersonEntity.class);
             siblingQuery.setParameter("motherPnr", motherPnr);
             siblingQuery.setParameter("fatherPnr", fatherPnr);
             List<PersonEntity> siblingList = siblingQuery.getResultList();
-            Object obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
+            ObjectNode obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
             return obj.toString();
         } catch (Exception e) {
-            throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
+            log.error(e);
+            throw e;
         }
     }
 
