@@ -142,6 +142,7 @@ public class CloseCommandHandler extends CommandHandler {
                             e.printStackTrace();
                             transaction.rollback();
                         }
+                        System.out.println("Command completed");
                     }
                 }
             };

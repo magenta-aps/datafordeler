@@ -13,12 +13,17 @@ import java.util.stream.Stream;
 
 public class BitemporalSet<R extends CvrBitemporalRecord, P extends CvrRecord> extends RecordSet<R, P> implements Set<R> {
 
-    public BitemporalSet(Set<R> inner, P parent, String field) {
-        super(inner, parent, field);
+    public BitemporalSet(Set<R> inner, Class<R> recordClass, P parent, String field) {
+        super(inner, recordClass, parent, field);
     }
-    public BitemporalSet(Set<R> inner, P parent, String field, String clause) {
-        super(inner, parent, field, clause);
+    public BitemporalSet(Set<R> inner, Class<R> recordClass, P parent, String field, String clause) {
+        super(inner, recordClass, parent, field, clause);
     }
+    public BitemporalSet(Set<R> inner, Class<R> recordClass, P parent, String field, String clause, BitemporalSet<R, P> parentRecordSet) {
+        super(inner, recordClass, parent, field, clause, parentRecordSet);
+    }
+
+
 
     /**
      * Get the record that is current

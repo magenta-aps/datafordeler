@@ -171,7 +171,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<SecNameRecord, ParticipantRecord> getNames() {
-        return new BitemporalSet<>(this.names, this, SecNameRecord.DB_FIELD_PARTICIPANT);
+        return new BitemporalSet<>(this.names, SecNameRecord.class, this, SecNameRecord.DB_FIELD_PARTICIPANT);
     }
 
 
@@ -214,7 +214,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<AddressRecord, ParticipantRecord> getLocationAddress() {
-        return new BitemporalSet<>(this.locationAddress, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_LOCATION);
+        return new BitemporalSet<>(this.locationAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_LOCATION);
     }
 
 
@@ -256,7 +256,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<AddressRecord, ParticipantRecord> getPostalAddress() {
-        return new BitemporalSet<>(this.postalAddress, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_POSTAL);
+        return new BitemporalSet<>(this.postalAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_POSTAL);
     }
 
 
@@ -299,7 +299,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<AddressRecord, ParticipantRecord> getBusinessAddress() {
-        return new BitemporalSet<>(this.businessAddress, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_BUSINESS);
+        return new BitemporalSet<>(this.businessAddress, AddressRecord.class, this, AddressRecord.DB_FIELD_PARTICIPANT, CLAUSE_ADDRESS_BUSINESS);
     }
 
 
@@ -342,7 +342,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, ParticipantRecord> getPhoneNumber() {
-        return new BitemporalSet<>(this.phoneNumber, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_PHONE);
+        return new BitemporalSet<>(this.phoneNumber, ContactRecord.class, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_PHONE);
     }
 
 
@@ -385,7 +385,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, ParticipantRecord> getFaxNumber() {
-        return new BitemporalSet<>(this.faxNumber, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_FAX);
+        return new BitemporalSet<>(this.faxNumber, ContactRecord.class, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_FAX);
     }
 
 
@@ -428,7 +428,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<ContactRecord, ParticipantRecord> getEmailAddress() {
-        return new BitemporalSet<>(this.emailAddress, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_EMAIL);
+        return new BitemporalSet<>(this.emailAddress, ContactRecord.class, this, ContactRecord.DB_FIELD_PARTICIPANT, CLAUSE_CONTACT_EMAIL);
     }
 
 
@@ -543,7 +543,7 @@ public class ParticipantRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyParticipantRelationRecord, ParticipantRecord> getCompanyRelation() {
-        return new BitemporalSet<>(this.companyRelation, this, CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT);
+        return new BitemporalSet<>(this.companyRelation, CompanyParticipantRelationRecord.class, this, CompanyParticipantRelationRecord.DB_FIELD_PARTICIPANT);
     }
 
 
@@ -677,7 +677,8 @@ public class ParticipantRecord extends CvrEntityRecord {
 
 
     @Override
-    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
+    public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback, boolean grouped) {
+        super.traverse(setCallback, itemCallback, grouped);
         this.getNames().traverse(setCallback, itemCallback);
         this.getLocationAddress().traverse(setCallback, itemCallback);
         this.getPostalAddress().traverse(setCallback, itemCallback);
@@ -690,33 +691,4 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.getMetadata().traverse(setCallback, itemCallback);
     }
 
-
-    @Override
-    public void closeRegistrations(Session session) {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.businessAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.phoneNumber));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.emailAddress));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.faxNumber));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.postalAddress));
-        for (AttributeRecord attribute : this.attributes) {
-            updated.addAll(
-                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
-            );
-        }
-        for (CompanyParticipantRelationRecord participantRelation : this.companyRelation) {
-            updated.addAll(participantRelation.closeRegistrations());
-        }
-        updated.addAll(this.metadata.closeRegistrations());
-
-        for (CvrBitemporalRecord bitemporalRecord : updated) {
-            if (bitemporalRecord.getId() == null) {
-                session.persist(bitemporalRecord);
-            } else if (!session.contains(bitemporalRecord)) {
-                session.merge(bitemporalRecord);
-            }
-        }
-    }
 }

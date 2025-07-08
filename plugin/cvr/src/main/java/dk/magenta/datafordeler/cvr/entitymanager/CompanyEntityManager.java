@@ -368,12 +368,4 @@ public class CompanyEntityManager extends CvrEntityManager<CompanyRecord> {
         return finalizeQuery(queryFromCvrs(ids));
     }
 
-
-    public void cleanupBitemporalSets(Session session, Collection<CompanyRecord> companyRecords) {
-        for (CompanyRecord companyRecord : companyRecords) {
-            companyRecord.cleanupBitemporalSets(session);
-        }
-    }
-
-
 }

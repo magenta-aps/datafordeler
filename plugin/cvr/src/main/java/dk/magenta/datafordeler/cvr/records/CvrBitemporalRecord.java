@@ -11,15 +11,15 @@ import dk.magenta.datafordeler.cvr.BitemporalSet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Objects;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
@@ -219,9 +219,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 unclosedCount++;
             }
         }
+
         if (unclosedCount > 1) {
             Comparator<T> comparator = Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
-                                       .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
+                    .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
             ArrayList<T> recordList = new ArrayList<>(records);
             for (T current : recordList) {
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
@@ -229,26 +230,35 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     // Find records that have open bitemporality,
                     // and find other records that are registered and effected after them
                     Stream<T> candidates = recordList.stream().filter(c -> c != current);
-
                     if (current.getRegistrationFrom() != null) {
-                        candidates = candidates.filter(record -> record.getRegistrationFrom() != null)
-                                               .filter(record -> record.getRegistrationFrom().isAfter(current.getRegistrationFrom()));
+                        candidates = candidates
+                                .filter(record -> record.getRegistrationFrom() != null)
+                                .filter(record -> record.getRegistrationFrom().isAfter(
+                                        current.getRegistrationFrom()
+                                ));
                     }
                     if (current.getEffectFrom() != null) {
-                        candidates = candidates.filter(record -> record.getEffectFrom() != null)
-                                               .filter(record -> record.getEffectFrom().isAfter(current.getEffectFrom()));
+                        candidates = candidates
+                                .filter(record -> record.getEffectFrom() != null)
+                                .filter(record -> record.getEffectFrom().isAfter(
+                                        current.getEffectFrom()
+                                ));
                     }
                     T next = candidates.min(comparator).orElse(null);
                     if (next != null) {
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
-                            clone.setEffectTo(next.getEffectFrom());
+                            OffsetDateTime effectCut = next.getEffectFrom();
+                            if (effectCut != null) {
+                                clone.setEffectTo(effectCut.minus(1, ChronoUnit.MICROS));
+                            }
                             clone.setRegistrationFrom(registrationCut);
                             updated.add(clone);
                             records.add(clone);
                             current.setRegistrationTo(registrationCut);
                             updated.add(current);
+
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
@@ -263,18 +273,33 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(next.getRegistrationFrom());
                             }
                         }
-
                     }
                 }
             }
         }
-        return updated;
-    }
 
-    static <R extends CvrBitemporalRecord, P extends CvrRecord> Collection<R> closeRegistrationsGroup(Collection<BitemporalSet<R, P>> setCollection) {
-        ArrayList<R> updated = new ArrayList<>();
-        for (BitemporalSet<R, P> values : setCollection) {
-            updated.addAll(CvrBitemporalRecord.closeRegistrations(values));
+        ListHashMap<CvrRecordPeriod, T> effectGroups = new ListHashMap<>();
+        for (T record : records) {
+            effectGroups.add(record.getValidity(), record);
+        }
+        for (CvrRecordPeriod period : effectGroups.keySet()) {
+            ArrayList<T> effectGroup = effectGroups.get(period);
+            if (effectGroup.size() > 1) {
+                effectGroup.sort(
+                        Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                        .thenComparing(T::getDafoUpdated, Comparator.nullsFirst(Comparator.naturalOrder()))
+                );
+                T previous = null;
+                for (T record : effectGroup) {
+                    if (previous != null) {
+                        if (!record.getRegistrationFrom().equals(previous.getRegistrationFrom())) {
+                            previous.setRegistrationTo(record.getRegistrationFrom());
+                            updated.add(previous);
+                        }
+                    }
+                    previous = record;
+                }
+            }
         }
         return updated;
     }
