@@ -91,11 +91,15 @@ public class CprRecordFamilyRelationService {
 
             this.applyAreaRestrictionsToQuery(personQuery, user);
 
+            System.out.println(personQuery.toHql());
+
             List<PersonEntity> personEntities = QueryManager.getAllEntities(session, personQuery, PersonEntity.class);
             PersonEntity personEntity = null;
             if (!personEntities.isEmpty()) {
+                System.out.println("Query returned results");
                 personEntity = personEntities.get(0);
             } else {
+                System.out.println("Query returned no results");
                 throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
             }
 
@@ -141,6 +145,8 @@ public class CprRecordFamilyRelationService {
             Object obj = personOutputWrapper.wrapRecordResultFilteredInfo(personEntity, fatherEntity, fatherhasCustody, motherEntity, motherhasCustody, siblingList);
             return obj.toString();
         } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
             throw new HttpNotFoundException("No entity with CPR number " + cprNummer + " was found");
         }
     }
