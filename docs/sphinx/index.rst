@@ -17,6 +17,7 @@ Datafordeleren er en del af `Grunddata-programmet <http://digitalimik.gl/da/Losn
 
 Koden er open source og kan findes på `Github. <https://github.com/magenta-aps/datafordeler/>`_
 
+OpenAPI-spec kan `navigeres med Swagger </swagger>`_
 
 Indholdsfortegnelse
 ^^^^^^^^^^^^^^^^^^^

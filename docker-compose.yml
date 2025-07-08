@@ -87,14 +87,9 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.docs
-    volumes:
-      - datafordeler-doc:/output
-
-  doc-web:
-    container_name: doc-web
-    image: halverneus/static-file-server
-    volumes:
-      - datafordeler-doc:/web
+    environment:
+      - ALLOW_INDEX=true
+      - SHOW_LISTING=false
     ports:
       - "8081:8080"
 
