@@ -109,6 +109,7 @@ public class CloseCommandHandler extends CommandHandler {
                                     CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
                                     if (!commandData.ids.contains("all")) {
                                         companyRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
+                                        companyRecordQuery.setPageSize(10000000);
                                     }
                                     List<CompanyRecord> companies = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
                                     if (!companies.isEmpty()) {
@@ -120,6 +121,7 @@ public class CloseCommandHandler extends CommandHandler {
                                     CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
                                     if (!commandData.ids.contains("all")) {
                                         companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
+                                        companyUnitRecordQuery.setPageSize(10000000);
                                     }
                                     List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
                                     if (!units.isEmpty()) {
@@ -130,6 +132,7 @@ public class CloseCommandHandler extends CommandHandler {
                                     ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
                                     if (!commandData.ids.contains("all")) {
                                         participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
+                                        participantRecordQuery.setPageSize(10000000);
                                     }
                                     List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
                                     if (!participants.isEmpty()) {
