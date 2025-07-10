@@ -330,7 +330,7 @@ public class QueryManager {
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
         databaseQuery.setFetchSize(1000);
         List<String> classNames = query.getEntityClassnames();
-        Stream<E> results = databaseQuery.stream().map(object -> {
+        return databaseQuery.stream().map(object -> {
             try {
                 return new ResultSet<E>(object, classNames).getPrimaryEntity();
             } catch (ClassNotFoundException e) {
@@ -338,7 +338,6 @@ public class QueryManager {
             }
             return null;
         });
-        return results;
     }
 
     /**
