@@ -12,6 +12,7 @@ import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
+import dk.magenta.datafordeler.core.util.FinalWrapper;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyUnitEntityManager;
 import dk.magenta.datafordeler.cvr.entitymanager.CvrEntityManager;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Component
 public class CloseCommandHandler extends CommandHandler {
@@ -104,40 +106,55 @@ public class CloseCommandHandler extends CommandHandler {
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
                         Transaction transaction = session.beginTransaction();
                         try {
+                            final FinalWrapper<Integer> counter = new FinalWrapper<>(0);
                             switch (commandData.type) {
                                 case "company":
                                     CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
                                     if (!commandData.ids.contains("all")) {
                                         companyRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
+                                    } else {
                                         companyRecordQuery.setPageSize(10000000);
                                     }
-                                    List<CompanyRecord> companies = QueryManager.getAllEntities(session, companyRecordQuery, CompanyRecord.class);
-                                    if (!companies.isEmpty()) {
-                                        CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, companies);
-                                        CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, companies);
-                                    }
+                                    Stream<CompanyRecord> companies = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class);
+                                    companies.forEach(companyRecord -> {
+                                        System.out.println(counter.getInner()+" "+companyRecord.getCvrNumber());
+                                        CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyRecord));
+                                        CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyRecord));
+                                        session.flush();
+                                        counter.setInner(counter.getInner() + 1);
+                                    });
                                     break;
                                 case "unit":
                                     CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
                                     if (!commandData.ids.contains("all")) {
                                         companyUnitRecordQuery.addParameter(CompanyUnitRecordQuery.P_NUMBER, commandData.ids);
+                                    } else {
                                         companyUnitRecordQuery.setPageSize(10000000);
                                     }
-                                    List<CompanyUnitRecord> units = QueryManager.getAllEntities(session, companyUnitRecordQuery, CompanyUnitRecord.class);
-                                    if (!units.isEmpty()) {
-                                        CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, units);
-                                    }
+                                    Stream<CompanyUnitRecord> units = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
+                                    units.forEach(companyUnitRecord -> {
+                                        System.out.println(counter.getInner()+" "+companyUnitRecord.getUnitNumber());
+                                        CloseCommandHandler.this.companyUnitEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyUnitRecord));
+                                        CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyUnitRecord));
+                                        session.flush();
+                                        counter.setInner(counter.getInner() + 1);
+                                    });
                                     break;
                                 case "participant":
                                     ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
                                     if (!commandData.ids.contains("all")) {
                                         participantRecordQuery.addParameter(ParticipantRecordQuery.UNITNUMBER, commandData.ids);
+                                    } else {
                                         participantRecordQuery.setPageSize(10000000);
                                     }
-                                    List<ParticipantRecord> participants = QueryManager.getAllEntities(session, participantRecordQuery, ParticipantRecord.class);
-                                    if (!participants.isEmpty()) {
-                                        CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, participants);
-                                    }
+                                    Stream<ParticipantRecord> participants = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
+                                    participants.forEach(participantRecord -> {
+                                        System.out.println(counter.getInner()+" "+participantRecord.getBusinessKey());
+                                        CloseCommandHandler.this.participantEntityManager.cleanupBitemporalSets(session, Collections.singleton(participantRecord));
+                                        CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(participantRecord));
+                                        session.flush();
+                                        counter.setInner(counter.getInner() + 1);
+                                    });
                                     break;
                             }
                             transaction.commit();
