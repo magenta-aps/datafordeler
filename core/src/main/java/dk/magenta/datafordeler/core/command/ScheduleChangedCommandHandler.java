@@ -31,7 +31,6 @@ public class ScheduleChangedCommandHandler extends CommandHandler {
                 case "dump_config":
                     return DUMP;
 
-                case "gladdrreg_config":
                 case "cpr_config":
                 case "cvr_config":
                     return PULL;

@@ -19,7 +19,7 @@ Hvilke kommandoer, der kan anvendes på et API, findes på :ref:`API-deklaration
 Her er trinene i at få offentlige data hjem uden autorisation og autentificering:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1. Systemet sender en besked med de søgte oplysninger - for eksempel ``https://data.gl/gladdrreg/locality/1/rest/search?lokalitetskode=*&pageSize=100000``
+1. Systemet sender en besked med de søgte oplysninger - for eksempel ``https://data.gl/geo/locality/1/rest/search?lokalitetskode=*&pageSize=100000``
 2. Resultatet kommer tilbage i et :ref:`JSON-format. <json-results>` Herfra kan anvender-systemet læse og bruge de ønskede oplysninger i henhold til :ref:`betingelser <agreements>` for både datafordeler og det aktuelle register.
 3. Bemærk at eksemplet sætter resultatafgrænsningen til 100000. Søgningen er pagineret, og standardstørrelsen er 10 resultater.
 

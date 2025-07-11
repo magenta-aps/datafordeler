@@ -307,15 +307,6 @@ System: DAFO-admin - Datafordelerens administrationsprogram
 * URL: 
 
 
-System: Gladdrreg - Greenlandic Adress Reference Register Administation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Fuldt navn: 
-* Kort navn: 
-* Forkortelse:
-* URL:
-
-
 System: DAFO Ops
 ^^^^^^^^^^^^^^^^
 
