@@ -660,7 +660,7 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
         clone.setRoadName(this.getRoadName());
         clone.setSupplementalCityName(this.getSupplementalCityName());
         clone.setType(this.getType());
-        clone.setMunicipality(this.getMunicipality());
+        clone.setMunicipality((AddressMunicipalityRecord) this.getMunicipality().clone());
         clone.setOfficeUnitRecord(this.getOfficeUnitRecord());
         clone.setRelationParticipantRecord(this.getRelationParticipantRecord());
         clone.setParticipantRecord(this.getParticipantRecord());
