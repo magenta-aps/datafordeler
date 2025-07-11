@@ -56,7 +56,6 @@ public abstract class TestBase {
         this.loadGeoData(sessionManager, unitAddressEntityManager, "/unit.json");
     }
 
-
     protected void cleanup(SessionManager sessionManager, Class[] classes) {
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
