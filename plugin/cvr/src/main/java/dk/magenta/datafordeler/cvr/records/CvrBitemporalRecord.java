@@ -291,11 +291,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 );
                 T previous = null;
                 for (T record : effectGroup) {
-                    if (previous != null) {
-                        if (!record.getRegistrationFrom().equals(previous.getRegistrationFrom())) {
-                            previous.setRegistrationTo(record.getRegistrationFrom());
-                            updated.add(previous);
-                        }
+                    if (previous != null && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationFrom())) {
+                        previous.setRegistrationTo(record.getRegistrationFrom());
+                        updated.add(previous);
                     }
                     previous = record;
                 }
