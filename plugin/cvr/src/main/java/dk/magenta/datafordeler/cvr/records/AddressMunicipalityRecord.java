@@ -20,7 +20,7 @@ import org.hibernate.Session;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressMunicipalityRecord extends CvrBitemporalRecord {
+public class AddressMunicipalityRecord extends CvrBitemporalRecord implements Cloneable {
 
     public static final String TABLE_NAME = "cvr_record_address_municipality";
 
@@ -81,5 +81,13 @@ public class AddressMunicipalityRecord extends CvrBitemporalRecord {
         }
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        AddressMunicipalityRecord clone = (AddressMunicipalityRecord) super.clone();
+        clone.setMunicipalityCode(this.getMunicipalityCode());
+        clone.setMunicipalityName(this.getMunicipalityName());
+        clone.municipality = this.getMunicipality();
+        return clone;
+    }
 
 }

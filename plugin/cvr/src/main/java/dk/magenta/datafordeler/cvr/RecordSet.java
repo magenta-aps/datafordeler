@@ -2,10 +2,7 @@ package dk.magenta.datafordeler.cvr;
 
 import dk.magenta.datafordeler.cvr.records.CvrRecord;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -135,7 +132,24 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
 
     @Override
     public boolean remove(Object o) {
-        return this.inner.remove(o);
+        if (this.recordClass.isInstance(o)) {
+            R record = this.recordClass.cast(o);
+            return this.remove(record);
+        }
+        return false;
+    }
+
+    public boolean remove(R o) {
+        if (this.inner.remove(o)) {
+            return true;
+        }
+        if (this.inner.removeAll(Collections.singletonList(o))) {
+            return true;
+        }
+        if (this.inner.removeIf(r -> Objects.equals(r.getId(), o.getId()))) {
+            return true;
+        }
+        return false;
     }
 
     @Override
