@@ -111,6 +111,10 @@ public abstract class StatisticsService {
      * @throws InvalidCertificateException
      */
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response, ServiceName serviceName) throws AccessDeniedException, AccessRequiredException, InvalidTokenException, IOException, MissingParameterException, InvalidClientInputException, HttpNotFoundException, InvalidCertificateException {
+
+        System.out.println(request.getHeader("X-Forwarded-Host"));
+        System.out.println(request.getHeader("Host"));
+
         DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
         if (user.isAnonymous() && request.getParameter("token") != null) {
             String formToken = request.getParameter("token");

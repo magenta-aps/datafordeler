@@ -460,6 +460,8 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         if (dafobackendserver != null) {
             paramAppender += "dafobackendserver=" + dafobackendserver + "&";
         }
+        System.out.println(request.getHeader("X-Forwarded-Host"));
+        System.out.println(request.getHeader("Host"));
         response.sendRedirect("/statistik/collective_report/reportlist/?" + paramAppender + "token=" + formTokenEncoded);
 
     }
