@@ -112,8 +112,11 @@ public abstract class StatisticsService {
      */
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response, ServiceName serviceName) throws AccessDeniedException, AccessRequiredException, InvalidTokenException, IOException, MissingParameterException, InvalidClientInputException, HttpNotFoundException, InvalidCertificateException {
 
-        System.out.println(request.getHeader("X-Forwarded-Host"));
-        System.out.println(request.getHeader("Host"));
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            System.out.println(headerName+": "+request.getHeader(headerName));
+        }
 
         DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
         if (user.isAnonymous() && request.getParameter("token") != null) {
