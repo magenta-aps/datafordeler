@@ -85,6 +85,11 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         super.handleRequest(request, response, ServiceName.COLLECTIVE);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/foo")
+    public void testRedir(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect("/statistik/");
+    }
+
     /**
      * Return a list of reports which is either started, running or done
      * Done reports is only returned if there is no started or running reports found
