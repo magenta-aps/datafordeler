@@ -1703,7 +1703,9 @@ public class CompanyRecord extends CvrEntityRecord {
         this.getParticipants().traverse(setCallback, itemCallback);
         this.getFusions().traverse(setCallback, itemCallback);
         this.getSplits().traverse(setCallback, itemCallback);
-        this.getMetadata().traverse(setCallback, itemCallback);
+        if (this.getMetadata() != null) {
+            this.getMetadata().traverse(setCallback, itemCallback);
+        }
     }
 
 }

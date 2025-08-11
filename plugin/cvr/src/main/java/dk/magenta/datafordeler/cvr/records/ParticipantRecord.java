@@ -688,7 +688,9 @@ public class ParticipantRecord extends CvrEntityRecord {
         this.getEmailAddress().traverse(setCallback, itemCallback);
         this.getAttributes().traverse(setCallback, itemCallback);
         this.getCompanyRelation().traverse(setCallback, itemCallback);
-        this.getMetadata().traverse(setCallback, itemCallback);
+        if (this.getMetadata() != null) {
+            this.getMetadata().traverse(setCallback, itemCallback);
+        }
     }
 
 }

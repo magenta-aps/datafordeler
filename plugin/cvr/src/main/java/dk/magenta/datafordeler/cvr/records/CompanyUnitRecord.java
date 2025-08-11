@@ -1047,7 +1047,10 @@ public class CompanyUnitRecord extends CvrEntityRecord {
         this.getAttributes().traverse(setCallback, itemCallback);
         this.getParticipants().traverse(setCallback, itemCallback);
         this.getCompanyLinkRecords().traverse(setCallback, itemCallback);
-        this.getMetadata().traverse(setCallback, itemCallback);
+        if (this.getMetadata() != null) {
+            this.getMetadata().traverse(setCallback, itemCallback);
+        }
+
     }
 
 }

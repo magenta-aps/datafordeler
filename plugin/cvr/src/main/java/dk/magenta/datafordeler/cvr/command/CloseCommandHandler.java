@@ -151,9 +151,9 @@ public class CloseCommandHandler extends CommandHandler {
                                             if (!commandData.ids.contains("all")) {
                                                 companyUnitRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
                                             }
-                                            Stream<CompanyUnitRecord> companies = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
+                                            Stream<CompanyUnitRecord> units = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
                                             final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
-                                            companies.forEach(companyUnitRecord -> {
+                                            units.forEach(companyUnitRecord -> {
                                                 System.out.println(totalCounter.getInner()+" "+companyUnitRecord.getpNumber());
                                                 CloseCommandHandler.this.companyUnitEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyUnitRecord));
                                                 CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyUnitRecord));
@@ -183,9 +183,9 @@ public class CloseCommandHandler extends CommandHandler {
                                             if (!commandData.ids.contains("all")) {
                                                 participantRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
                                             }
-                                            Stream<ParticipantRecord> companies = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
+                                            Stream<ParticipantRecord> participants = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
                                             final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
-                                            companies.forEach(participantRecord -> {
+                                            participants.forEach(participantRecord -> {
                                                 System.out.println(totalCounter.getInner()+" "+participantRecord.getBusinessKey());
                                                 CloseCommandHandler.this.participantEntityManager.cleanupBitemporalSets(session, Collections.singleton(participantRecord));
                                                 CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(participantRecord));
