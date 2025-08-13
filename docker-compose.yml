@@ -27,9 +27,9 @@ services:
     environment:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:
-      - 8080:8000
-#      - 7012:7012
-#    command: java -Xms8g -Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Djava.rmi.server.hostname=127.0.0.1 -XX:HeapDumpPath=/app/log -Dcom.sun.management.jmxremote.rmi.port=7012 -Dcom.sun.management.jmxremote.port=7012 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dloader.path=/app/plugin/ -cp /app/core/datafordeler-core-exec.jar org.springframework.boot.loader.launch.PropertiesLauncher
+      - "8080:8000"
+    networks:
+      - default
 
   datafordeler-db:
 #    profiles:
@@ -40,7 +40,7 @@ services:
       dockerfile: docker/Dockerfile.sqlserver
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=testTEST1
+      - MSSQL_SA_PASSWORD=testTEST1
       - TZ=Europe/Copenhagen
     ports:
       - "1434:1433"
@@ -48,6 +48,8 @@ services:
       - ./docker/dev-env/local:/app/dev-env/local
       - ./docker/dev-env/db/initiate-db.sql:/app/initiate-db.sql
       - ./docker/manual_initiate.sh:/app/manual_initiate.sh
+    networks:
+      - default
 
   test:
     container_name: datafordeler-test
@@ -96,3 +98,6 @@ services:
 volumes:
   datafordeler-gl:
   datafordeler-doc:
+
+networks:
+  default:
