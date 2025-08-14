@@ -97,3 +97,6 @@ services:
 volumes:
   datafordeler-gl:
   datafordeler-doc:
+
+networks:
+  default:
