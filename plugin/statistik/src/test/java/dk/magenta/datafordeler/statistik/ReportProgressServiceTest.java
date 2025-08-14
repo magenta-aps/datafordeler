@@ -171,5 +171,21 @@ public class ReportProgressServiceTest extends TestBase {
         }
     }
 
+    @Test
+    public void testReportList() throws Exception {
+        birthDataService.setWriteToLocalFile(true);
+        birthDataService.setUseTimeintervallimit(false);
+
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(StatistikRolesDefinition.EXECUTE_STATISTIK_ROLE);
+        this.applyAccess(testUserDetails);
+
+
+        ResponseEntity<String> response = restTemplate.exchange("/statistik/collective_report/reportlist/?collectionUuid=", HttpMethod.GET, new HttpEntity<>("", new HttpHeaders()), String.class);
+        System.out.println(response.getStatusCode());
+
+    }
+
 
 }

@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.statistik.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
@@ -27,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.jpa.QueryHints;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +101,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
     public void getReportList(HttpServletRequest request, HttpServletResponse response) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, AccessRequiredException {
 
         DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-        OffsetDateTime cutoff = OffsetDateTime.now().minusDays(7);
+        LocalDateTime cutoff = LocalDateTime.now().minusDays(7);
         String formToken = request.getParameter("token");
         if (formToken != null) {
             user = this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
@@ -119,15 +119,12 @@ public class CollectiveReportDataService extends PersonStatisticsService {
             String collectionUuidRunning = null;
             String collectionUuidLastRunning = null;
 
-            CriteriaBuilder builder = reportProgressSession.getCriteriaBuilder();
-            CriteriaQuery<ReportAssignment> criteria = builder.createQuery(ReportAssignment.class);
-            Root<ReportAssignment> page = criteria.from(ReportAssignment.class);
-            criteria.select(page);
-            criteria.where(builder.equal(page.get(ReportAssignment.DB_FIELD_REPORT_STATUS), ReportProgressStatus.started));
-            criteria.where(builder.greaterThan(page.get(ReportAssignment.DB_FIELD_CREATE_DATETIME), cutoff));
-
-            TypedQuery<ReportAssignment> query = reportProgressSession.createQuery(criteria);
-            query.setHint(QueryHints.HINT_CACHEABLE, true);
+            String hql = "from "+ReportAssignment.class.getCanonicalName()+
+                        " where "+ReportAssignment.DB_FIELD_REPORT_STATUS+" = :status"+
+                        " and "+ReportAssignment.DB_FIELD_CREATE_DATETIME+" > :cutoff";
+            Query<ReportAssignment> query = reportProgressSession.createQuery(hql, ReportAssignment.class);
+            query.setParameter("status", ReportProgressStatus.started);
+            query.setParameter("cutoff", cutoff);
 
             String reportListResponse = "Started: <br>";
 
@@ -137,11 +134,11 @@ public class CollectiveReportDataService extends PersonStatisticsService {
                 collectionUuidStarted = assignment.getCollectionUuid();
             }
 
+            query = reportProgressSession.createQuery(hql, ReportAssignment.class);
+            query.setParameter("status", ReportProgressStatus.running);
+            query.setParameter("cutoff", cutoff);
+
             reportListResponse += "<br><br>Running: <br>";
-            criteria.where(builder.equal(page.get(ReportAssignment.DB_FIELD_REPORT_STATUS), ReportProgressStatus.running));
-            criteria.where(builder.greaterThan(page.get(ReportAssignment.DB_FIELD_CREATE_DATETIME), cutoff));
-            query = reportProgressSession.createQuery(criteria);
-            query.setHint(QueryHints.HINT_CACHEABLE, true);
 
             for (ReportAssignment assignment : query.getResultList()) {
                 String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
@@ -151,11 +148,9 @@ public class CollectiveReportDataService extends PersonStatisticsService {
 
             if (collectionUuidStarted == null && collectionUuidRunning == null) {
                 reportListResponse += "<br><br>Last done report: <br>";
-                criteria.where(builder.equal(page.get(ReportAssignment.DB_FIELD_REPORT_STATUS), ReportProgressStatus.done));
-                criteria.where(builder.greaterThan(page.get(ReportAssignment.DB_FIELD_CREATE_DATETIME), cutoff));
-
-                query = reportProgressSession.createQuery(criteria);
-                query.setHint(QueryHints.HINT_CACHEABLE, true);
+                query = reportProgressSession.createQuery(hql, ReportAssignment.class);
+                query.setParameter("status", ReportProgressStatus.done);
+                query.setParameter("cutoff", cutoff);
                 for (ReportAssignment assignment : query.getResultList()) {
                     String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
                     reportListResponse += element;

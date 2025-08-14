@@ -6,7 +6,7 @@ services:
     image: datafordeler:latest
     build:
       context: .
-      dockerfile: docker/Dockerfile.jre
+      dockerfile: docker/Dockerfile.jdk
     depends_on:
       - datafordeler-db
     env_file:
@@ -28,8 +28,7 @@ services:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql
     ports:
       - "8080:8000"
-    networks:
-      - default
+    command: java -Xms8g -Xmx16g -XX:+HeapDumpOnOutOfMemoryError -Djava.rmi.server.hostname=127.0.0.1 -XX:HeapDumpPath=/app/log -Dcom.sun.management.jmxremote.rmi.port=7012 -Dcom.sun.management.jmxremote.port=7012 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dloader.path=/app/plugin/ -cp /app/core/datafordeler-core-exec.jar org.springframework.boot.loader.launch.PropertiesLauncher
 
   datafordeler-db:
 #    profiles:
@@ -98,6 +97,3 @@ services:
 volumes:
   datafordeler-gl:
   datafordeler-doc:
-
-networks:
-  default:
