@@ -1,11 +1,15 @@
 package dk.magenta.datafordeler.statistik.utils;
 
-import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
+import net.lingala.zip4j.model.enums.AesKeyStrength;
+import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
+import net.lingala.zip4j.model.enums.EncryptionMethod;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,24 +26,17 @@ public class ReportValidationAndConversion {
 
 
     public static synchronized void convertFileToEncryptedZip(File reportName, ArrayList<File> filesToAdd, String password) throws ZipException {
-        //This is name and path of zip file to be created
-        ZipFile zipFile = new ZipFile(reportName);
-
         ZipParameters parameters = new ZipParameters();
-        parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE); // set compression method to deflate compression
-        parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-
+        parameters.setCompressionMethod(CompressionMethod.DEFLATE); // set compression method to deflate compression
+        parameters.setCompressionLevel(CompressionLevel.NORMAL);
         parameters.setEncryptFiles(true);
-
-        //Set the encryption method to AES Zip Encryption
-        parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
-        parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
-
-        //Set password
-        parameters.setPassword(password);
-
-        //Now add files to the zip file
-        zipFile.addFiles(filesToAdd, parameters);
+        parameters.setEncryptionMethod(EncryptionMethod.ZIP_STANDARD);
+        parameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256);
+        try (ZipFile zipFile = new ZipFile(reportName, password.toCharArray())) {
+            zipFile.addFiles(filesToAdd, parameters);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
