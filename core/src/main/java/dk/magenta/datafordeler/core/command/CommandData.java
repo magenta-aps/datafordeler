@@ -1,5 +1,7 @@
 package dk.magenta.datafordeler.core.command;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 import java.util.StringJoiner;
 
@@ -8,6 +10,13 @@ import java.util.StringJoiner;
  * A POST request to the command service should include a body, which a CommandHandler will parse into an object of this type
  */
 public abstract class CommandData {
+
+    @JsonProperty
+    private String targetServer;
+
+    public String getTargetServer() {
+        return this.targetServer;
+    }
 
     /**
      * Should determine if an incoming request matches what is needed for a CommandRole
