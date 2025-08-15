@@ -17,10 +17,6 @@
     <name>datafordeler-plugin-statistik</name>
     <description>Statistics plugin for Magenta's Greenlandic System</description>
 
-
-    <properties>
-    </properties>
-
     <repositories>
         <repository>
             <id>central</id>
@@ -100,12 +96,6 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
-        <dependency>
-            <groupId>net.lingala.zip4j</groupId>
-            <artifactId>zip4j</artifactId>
-            <version>1.3.2</version>
-        </dependency>
 
         <!-- Jackson (JSON) -->
         <dependency>
@@ -170,6 +160,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.lingala.zip4j</groupId>
+            <artifactId>zip4j</artifactId>
+            <version>2.11.5</version>
+            <scope>compile</scope>
         </dependency>
 
 
