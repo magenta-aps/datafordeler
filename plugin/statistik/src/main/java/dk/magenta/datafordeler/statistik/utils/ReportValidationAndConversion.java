@@ -26,20 +26,13 @@ public class ReportValidationAndConversion {
 
 
     public static synchronized void convertFileToEncryptedZip(File reportName, ArrayList<File> filesToAdd, String password) throws ZipException {
-        //This is name and path of zip file to be created
-
         ZipParameters parameters = new ZipParameters();
         parameters.setCompressionMethod(CompressionMethod.DEFLATE); // set compression method to deflate compression
         parameters.setCompressionLevel(CompressionLevel.NORMAL);
-
         parameters.setEncryptFiles(true);
-
-        //Set the encryption method to AES Zip Encryption
         parameters.setEncryptionMethod(EncryptionMethod.ZIP_STANDARD);
         parameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256);
-
         try (ZipFile zipFile = new ZipFile(reportName, password.toCharArray())) {
-            //Now add files to the zip file
             zipFile.addFiles(filesToAdd, parameters);
         } catch (IOException e) {
             throw new RuntimeException(e);
