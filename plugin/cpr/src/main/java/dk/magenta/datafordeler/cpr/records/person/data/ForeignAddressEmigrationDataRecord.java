@@ -12,7 +12,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -58,7 +57,6 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     public static final String IO_FIELD_IN_COUNTRY_CODE = "indrejseLandekode";
     @Column(name = DB_FIELD_IN_COUNTRY_CODE)
     @JsonProperty(value = IO_FIELD_IN_COUNTRY_CODE)
-    @XmlElement(name = IO_FIELD_IN_COUNTRY_CODE)
     private int immigrationCountryCode;
 
     public int getImmigrationCountryCode() {
@@ -75,7 +73,6 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     public static final String IO_FIELD_OUT_COUNTRY_CODE = "udrejseLandekode";
     @Column(name = DB_FIELD_OUT_COUNTRY_CODE)
     @JsonProperty(value = IO_FIELD_OUT_COUNTRY_CODE)
-    @XmlElement(name = IO_FIELD_OUT_COUNTRY_CODE)
     private int emigrationCountryCode;
 
     public int getEmigrationCountryCode() {
@@ -92,14 +89,12 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     public static final String IO_FIELD_EXIT_REGISTRATION = "udrejseRegistrering";
     @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
-    @XmlElement(name = IO_FIELD_EXIT_REGISTRATION)
     private OffsetDateTime emigrationRegistration;
 
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
     @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_RETURN_REGISTRATION)
     private OffsetDateTime immigrationRegistration;
 
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)

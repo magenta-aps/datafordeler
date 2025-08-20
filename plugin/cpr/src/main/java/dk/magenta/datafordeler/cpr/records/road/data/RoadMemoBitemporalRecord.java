@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -34,7 +33,6 @@ public class RoadMemoBitemporalRecord extends CprBitemporalRoadRecord<RoadMemoBi
     public static final String IO_FIELD_NOTE_NUMBER = "notatNummer";
     @Column(name = DB_FIELD_NOTE_NUMBER)
     @JsonProperty(value = IO_FIELD_NOTE_NUMBER)
-    @XmlElement(name = IO_FIELD_NOTE_NUMBER)
     private int noteNumber;
 
     public int getNoteNumber() {
@@ -50,7 +48,6 @@ public class RoadMemoBitemporalRecord extends CprBitemporalRoadRecord<RoadMemoBi
     public static final String IO_FIELD_NOTE_LINE = "notatLinie";
     @Column(name = DB_FIELD_NOTE_LINE)
     @JsonProperty(value = IO_FIELD_NOTE_LINE)
-    @XmlElement(name = IO_FIELD_NOTE_LINE)
     private String noteLine;
 
     public String getNoteLine() {

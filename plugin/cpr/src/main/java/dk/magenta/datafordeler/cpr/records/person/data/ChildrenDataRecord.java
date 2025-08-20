@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -46,7 +45,6 @@ public class ChildrenDataRecord extends CprBitemporalPersonRecord<ChildrenDataRe
     public static final String IO_FIELD_CHILD_CPR_NUMBER = "barnpersonnummer";
     @Column(name = DB_FIELD_CHILD_CPR_NUMBER)
     @JsonProperty(value = IO_FIELD_CHILD_CPR_NUMBER)
-    @XmlElement(name = IO_FIELD_CHILD_CPR_NUMBER)
     private String childCprNumber;
 
     public String getChildCprNumber() {

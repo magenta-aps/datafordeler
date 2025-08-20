@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -44,7 +43,6 @@ public class CitizenshipDataRecord extends CprBitemporalPersonRecord<Citizenship
     public static final String IO_FIELD_COUNTRY_CODE = "landekode";
     @Column(name = DB_FIELD_COUNTRY_CODE)
     @JsonProperty(value = IO_FIELD_COUNTRY_CODE)
-    @XmlElement(name = IO_FIELD_COUNTRY_CODE)
     private int countryCode;
 
     public int getCountryCode() {

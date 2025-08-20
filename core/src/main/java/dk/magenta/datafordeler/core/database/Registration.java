@@ -3,16 +3,8 @@ package dk.magenta.datafordeler.core.database;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import dk.magenta.datafordeler.core.util.Equality;
-import dk.magenta.datafordeler.core.util.OffsetDateTimeAdapter;
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlTransient;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
@@ -32,7 +24,6 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
  * associated. Generally, there should not be stored other data in the object.
  */
 @MappedSuperclass
-@XmlAccessorType(XmlAccessType.PUBLIC_MEMBER)
 @JsonPropertyOrder({"sequenceNumber", "registrationFromBefore", "registrationToBefore", "checksum", "effects"})
 public abstract class Registration<E extends Entity, R extends Registration, V extends Effect> extends DatabaseEntry implements Comparable<Registration> {
 
@@ -87,7 +78,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     protected E entity;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @XmlTransient
     public E getEntity() {
         return this.entity;
     }
@@ -117,9 +107,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
      * Effect class (usually by startDate)
      */
     @JsonProperty(value = "virkninger", access = JsonProperty.Access.READ_ONLY)
-    @XmlElement(name = "virkning")
-    @JacksonXmlProperty(localName = "virkning")
-    @JacksonXmlElementWrapper(useWrapping = false)
     public ArrayList<V> getSortedEffects() {
         ArrayList<V> sortedEffects = new ArrayList<V>(this.effects);
         Collections.sort(sortedEffects);
@@ -221,8 +208,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
-    @XmlElement
-    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     public OffsetDateTime getRegistrationFrom() {
         return fixOffsetOut(this.registrationFrom);
     }
@@ -240,8 +225,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     protected OffsetDateTime registrationTo;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
-    @XmlElement
-    @XmlJavaTypeAdapter(type = OffsetDateTime.class, value = OffsetDateTimeAdapter.class)
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
     }
@@ -258,7 +241,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     protected int sequenceNumber;
 
     @JsonProperty(value = IO_FIELD_SEQUENCE_NUMBER)
-    @XmlElement
     public int getSequenceNumber() {
         return this.sequenceNumber;
     }

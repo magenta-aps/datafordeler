@@ -8,14 +8,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 @MappedSuperclass
 public abstract class UnversionedEntity extends DatabaseEntry {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
-    @XmlTransient
     private Identification identification;
 
     public Identification getIdentification() {

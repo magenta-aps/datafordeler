@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,6 @@ public class CvrPostCode extends DatabaseEntry {
     public static final String IO_FIELD_CODE = "postnummer";
 
     @JsonProperty(value = IO_FIELD_CODE)
-    @XmlElement(name = IO_FIELD_CODE)
     @Column(nullable = false, unique = false, name = DB_FIELD_CODE)
     private int postCode;
 
@@ -52,7 +50,6 @@ public class CvrPostCode extends DatabaseEntry {
     public static final String IO_FIELD_DISTRICT = "postdistrikt";
 
     @JsonProperty(value = IO_FIELD_DISTRICT)
-    @XmlElement(name = IO_FIELD_DISTRICT)
     @Column
     private String postDistrict;
 

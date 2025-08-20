@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -50,7 +49,6 @@ public class BirthTimeDataRecord extends CprBitemporalPersonRecord<BirthTimeData
     public static final String IO_FIELD_BIRTH_DATETIME = "fødselsdato";
     @Column(name = DB_FIELD_BIRTH_DATETIME)
     @JsonProperty(value = IO_FIELD_BIRTH_DATETIME)
-    @XmlElement(name = IO_FIELD_BIRTH_DATETIME)
     private LocalDateTime birthDatetime;
 
     public LocalDateTime getBirthDatetime() {
@@ -66,7 +64,6 @@ public class BirthTimeDataRecord extends CprBitemporalPersonRecord<BirthTimeData
     public static final String IO_FIELD_BIRTH_DATETIME_UNCERTAIN = "fødselsdatoUsikkerhedsmarkering";
     @Column(name = DB_FIELD_BIRTH_DATETIME_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_BIRTH_DATETIME_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_BIRTH_DATETIME_UNCERTAIN)
     private boolean birthDatetimeUncertain;
 
     public boolean isBirthDatetimeUncertain() {

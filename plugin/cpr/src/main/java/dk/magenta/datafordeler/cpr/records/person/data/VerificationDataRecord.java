@@ -6,7 +6,6 @@ import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 
@@ -24,7 +23,6 @@ public abstract class VerificationDataRecord<S extends VerificationDataRecord<S>
     public static final String IO_FIELD_VERIFIED = "verificeret";
     @Column(name = DB_FIELD_VERIFIED)
     @JsonProperty(value = IO_FIELD_VERIFIED)
-    @XmlElement(name = IO_FIELD_VERIFIED)
     private boolean verified;
 
     public boolean isVerified() {

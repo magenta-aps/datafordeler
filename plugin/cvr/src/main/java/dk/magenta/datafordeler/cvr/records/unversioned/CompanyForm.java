@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +35,6 @@ public class CompanyForm extends DatabaseEntry {
     public static final String IO_FIELD_DESC_SHORT = "kortBeskrivelse";
 
     @JsonProperty(value = IO_FIELD_DESC_SHORT)
-    @XmlElement(name = IO_FIELD_DESC_SHORT)
     @Column(nullable = true)
     private String shortDescription;
 
@@ -54,7 +52,6 @@ public class CompanyForm extends DatabaseEntry {
     public static final String IO_FIELD_DESC_LONG = "langBeskrivelse";
 
     @JsonProperty(value = IO_FIELD_DESC_LONG)
-    @XmlElement(name = IO_FIELD_DESC_LONG)
     @Column(nullable = true)
     private String longDescription;
 
@@ -72,7 +69,6 @@ public class CompanyForm extends DatabaseEntry {
     public static final String IO_FIELD_CODE = "formkode";
 
     @JsonProperty(value = IO_FIELD_CODE)
-    @XmlElement(name = IO_FIELD_CODE)
     @Column(nullable = false, unique = true)
     private String companyFormCode;
 
@@ -90,7 +86,6 @@ public class CompanyForm extends DatabaseEntry {
     public static final String IO_FIELD_SOURCE = "dataleverandør";
 
     @JsonProperty(value = IO_FIELD_SOURCE)
-    @XmlElement(name = IO_FIELD_SOURCE)
     @Column
     private String responsibleDataSource;
 

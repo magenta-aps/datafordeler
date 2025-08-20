@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 /**
@@ -49,7 +48,6 @@ public class AddressNameDataRecord extends CprBitemporalPersonRecord<AddressName
     public static final String IO_FIELD_ADDRESS_NAME = "adressenavn";
     @Column(name = DB_FIELD_ADDRESS_NAME)
     @JsonProperty(value = IO_FIELD_ADDRESS_NAME)
-    @XmlElement(name = IO_FIELD_ADDRESS_NAME)
     private String addressName;
 
     public String getAddressName() {
@@ -62,7 +60,6 @@ public class AddressNameDataRecord extends CprBitemporalPersonRecord<AddressName
 
     @Column
     @JsonIgnore
-    @XmlElement
     private boolean rapportnavne;
 
     public boolean isRapportnavne() {

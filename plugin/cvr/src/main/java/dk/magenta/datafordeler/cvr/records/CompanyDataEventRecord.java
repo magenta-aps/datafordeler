@@ -5,8 +5,6 @@ import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -65,28 +63,24 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     public static final String DB_FIELD_FIELD = "field";
     @Column(name = DB_FIELD_FIELD)
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_FIELD)
     private String field;
 
 
     public static final String DB_FIELD_TEXT = "text";
     @Column(name = DB_FIELD_TEXT)
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_TEXT)
     private String text;
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
     @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;
 
 
     public static final String DB_FIELD_OLD_ITEM = "oldItem";
     @Column(name = DB_FIELD_OLD_ITEM)
     @JsonIgnore
-    @XmlTransient
     private Long oldItem;
 
     public String getField() {

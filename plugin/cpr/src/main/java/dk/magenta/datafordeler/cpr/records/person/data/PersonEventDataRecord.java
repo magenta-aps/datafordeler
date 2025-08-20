@@ -9,8 +9,6 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 
@@ -43,7 +41,6 @@ public class PersonEventDataRecord extends CprRecordEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = PersonEventDataRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
     @JsonIgnore
-    @XmlTransient
     private PersonEntity entity;
 
     public PersonEntity getEntity() {
@@ -70,7 +67,6 @@ public class PersonEventDataRecord extends CprRecordEntity {
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
     @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     @JsonIgnore
-    @XmlElement(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;
 
     public void setTimestamp(OffsetDateTime timestamp) {
@@ -81,13 +77,11 @@ public class PersonEventDataRecord extends CprRecordEntity {
     public static final String IO_FIELD_EVENT = "eventId";
     @Column(name = DB_FIELD_EVENT)
     @JsonIgnore
-    @XmlTransient
     private String eventId;
 
     public static final String DB_FIELD_DERIVED = "derived";
     @Column(name = DB_FIELD_DERIVED)
     @JsonIgnore
-    @XmlTransient
     private String derived;
 
     @JsonProperty(value = "id")

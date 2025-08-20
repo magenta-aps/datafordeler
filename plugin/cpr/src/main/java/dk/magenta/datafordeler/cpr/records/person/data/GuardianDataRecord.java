@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -60,7 +59,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_GUARDIAN_RELATION_TYPE = "værgeRelationsType";
     @Column(name = DB_FIELD_GUARDIAN_RELATION_TYPE)
     @JsonProperty(value = IO_FIELD_GUARDIAN_RELATION_TYPE)
-    @XmlElement(name = IO_FIELD_GUARDIAN_RELATION_TYPE)
     private int guardianRelationType;
 
     public int getGuardianRelationType() {
@@ -76,7 +74,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TYPE1 = "relationsType1";
     @Column(name = DB_FIELD_RELATION_TYPE1)
     @JsonProperty(value = IO_FIELD_RELATION_TYPE1)
-    @XmlElement(name = IO_FIELD_RELATION_TYPE1)
     private int relationType1;
 
     public int getRelationType1() {
@@ -91,7 +88,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_AUTHORITY1 = "relationsMyndighed1";
     @Column(name = DB_FIELD_RELATION_AUTHORITY1)
     @JsonProperty(value = IO_FIELD_RELATION_AUTHORITY1)
-    @XmlElement(name = IO_FIELD_RELATION_AUTHORITY1)
     private int relationAuthority1;
 
     public int getRelationAuthority1() {
@@ -106,7 +102,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_PNR = "relationsPnr";
     @Column(name = DB_FIELD_RELATION_PNR)
     @JsonProperty(value = IO_FIELD_RELATION_PNR)
-    @XmlElement(name = IO_FIELD_RELATION_PNR)
     private String relationPnr;
 
 
@@ -122,7 +117,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_PNR_START = "relationsPnrStart";
     @Column(name = DB_FIELD_RELATION_PNR_START)
     @JsonProperty(value = IO_FIELD_RELATION_PNR_START)
-    @XmlElement(name = IO_FIELD_RELATION_PNR_START)
     private LocalDate relationPnrStart;
 
     public LocalDate getRelationPnrStart() {
@@ -137,7 +131,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TYPE2 = "relationsType2";
     @Column(name = DB_FIELD_RELATION_TYPE2)
     @JsonProperty(value = IO_FIELD_RELATION_TYPE2)
-    @XmlElement(name = IO_FIELD_RELATION_TYPE2)
     private int relationType2;
 
     public int getRelationType2() {
@@ -152,7 +145,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_AUTHORITY2 = "relationsMyndighed2";
     @Column(name = DB_FIELD_RELATION_AUTHORITY2)
     @JsonProperty(value = IO_FIELD_RELATION_AUTHORITY2)
-    @XmlElement(name = IO_FIELD_RELATION_AUTHORITY2)
     private int relationAuthority2;
 
     public int getRelationAuthority2() {
@@ -167,7 +159,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_GUARDIAN_NAME = "værgeNavn";
     @Column(name = DB_FIELD_GUARDIAN_NAME)
     @JsonProperty(value = IO_FIELD_GUARDIAN_NAME)
-    @XmlElement(name = IO_FIELD_GUARDIAN_NAME)
     private String guardianName;
 
     public String getGuardianName() {
@@ -182,7 +173,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_GUARDIAN_ADDRESS_DATE = "værgeAdresseStartDato";
     @Column(name = DB_FIELD_GUARDIAN_ADDRESS_DATE)
     @JsonProperty(value = IO_FIELD_GUARDIAN_ADDRESS_DATE)
-    @XmlElement(name = IO_FIELD_GUARDIAN_ADDRESS_DATE)
     private LocalDate guardianAddressStartDate;
 
     public LocalDate getGuardianAddressStartDate() {
@@ -197,7 +187,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TEXT_1 = "relationsTekst1";
     @Column(name = DB_FIELD_RELATION_TEXT_1)
     @JsonProperty(value = IO_FIELD_RELATION_TEXT_1)
-    @XmlElement(name = IO_FIELD_RELATION_TEXT_1)
     private String relationText1;
 
     public String getRelationText1() {
@@ -212,7 +201,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TEXT_2 = "relationsTekst2";
     @Column(name = DB_FIELD_RELATION_TEXT_2)
     @JsonProperty(value = IO_FIELD_RELATION_TEXT_2)
-    @XmlElement(name = IO_FIELD_RELATION_TEXT_2)
     private String relationText2;
 
     public String getRelationText2() {
@@ -227,7 +215,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TEXT_3 = "relationsTekst3";
     @Column(name = DB_FIELD_RELATION_TEXT_3)
     @JsonProperty(value = IO_FIELD_RELATION_TEXT_3)
-    @XmlElement(name = IO_FIELD_RELATION_TEXT_3)
     private String relationText3;
 
     public String getRelationText3() {
@@ -242,7 +229,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TEXT_4 = "relationsTekst4";
     @Column(name = DB_FIELD_RELATION_TEXT_4)
     @JsonProperty(value = IO_FIELD_RELATION_TEXT_4)
-    @XmlElement(name = IO_FIELD_RELATION_TEXT_4)
     private String relationText4;
 
     public String getRelationText4() {
@@ -257,7 +243,6 @@ public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRe
     public static final String IO_FIELD_RELATION_TEXT_5 = "relationsTekst5";
     @Column(name = DB_FIELD_RELATION_TEXT_5)
     @JsonProperty(value = IO_FIELD_RELATION_TEXT_5)
-    @XmlElement(name = IO_FIELD_RELATION_TEXT_5)
     private String relationText5;
 
     public String getRelationText5() {

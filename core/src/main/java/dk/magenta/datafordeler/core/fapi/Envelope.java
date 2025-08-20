@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.xml.bind.annotation.XmlElement;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,7 +25,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private String path;
 
     public void setPath(String path) {
@@ -34,7 +32,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private URL terms;
 
     public void setTerms(URL terms) {
@@ -42,7 +39,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private OffsetDateTime requestTimestamp;
 
     public void setRequestTimestamp(OffsetDateTime requestTimestamp) {
@@ -50,7 +46,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private OffsetDateTime responseTimestamp;
 
     public void setResponseTimestamp(OffsetDateTime responseTimestamp) {
@@ -58,7 +53,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private OffsetDateTime newestResultTimestamp;
 
@@ -67,7 +61,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private String username;
 
     public void setUsername(String username) {
@@ -75,7 +68,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private int page;
 
     public void setPage(int page) {
@@ -83,7 +75,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private int pageSize;
 
     public void setPageSize(int pageSize) {
@@ -91,7 +82,6 @@ public class Envelope {
     }
 
     @JsonProperty
-    @XmlElement
     private List<?> results = Collections.emptyList();
 
     public void setResults(Collection<?> results) {

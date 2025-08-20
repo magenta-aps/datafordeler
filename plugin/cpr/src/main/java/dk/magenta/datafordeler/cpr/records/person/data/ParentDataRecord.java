@@ -8,8 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -52,11 +50,9 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public static final String DB_FIELD_IS_MOTHER = "isMother";
     @Column(name = DB_FIELD_IS_MOTHER)
     @JsonIgnore
-    @XmlTransient
     private boolean isMother;
 
     @JsonIgnore
-    @XmlTransient
     public boolean isMother() {
         return this.isMother;
     }
@@ -70,7 +66,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public static final String IO_FIELD_CPR_NUMBER = "personnummer";
     @Column(name = DB_FIELD_CPR_NUMBER)
     @JsonProperty(value = IO_FIELD_CPR_NUMBER)
-    @XmlElement(name = IO_FIELD_CPR_NUMBER)
     private String cprNumber;
 
     public String getCprNumber() {
@@ -86,7 +81,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public static final String IO_FIELD_BIRTHDATE = "foedselsdato";
     @Column(name = DB_FIELD_BIRTHDATE)
     @JsonProperty(value = IO_FIELD_BIRTHDATE)
-    @XmlElement(name = IO_FIELD_BIRTHDATE)
     private LocalDate birthDate;
 
     public LocalDate getBirthDate() {
@@ -102,7 +96,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public static final String IO_FIELD_BIRTHDATE_UNCERTAIN = "foedselsdatoUsikker";
     @Column(name = DB_FIELD_BIRTHDATE_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_BIRTHDATE_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_BIRTHDATE_UNCERTAIN)
     private boolean birthDateUncertain;
 
     public boolean isBirthDateUncertain() {
@@ -118,7 +111,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public static final String IO_FIELD_NAME = "navn";
     @Column(name = DB_FIELD_NAME)
     @JsonProperty(value = IO_FIELD_NAME)
-    @XmlElement(name = IO_FIELD_NAME)
     private String name;
 
     public String getName() {
@@ -134,7 +126,6 @@ public class ParentDataRecord extends CprBitemporalPersonRecord<ParentDataRecord
     public static final String IO_FIELD_NAME_MARKING = "navneMarkering";
     @Column(name = DB_FIELD_NAME_MARKING)
     @JsonProperty(value = IO_FIELD_NAME_MARKING)
-    @XmlElement(name = IO_FIELD_NAME_MARKING)
     private boolean nameMarking;
 
     public boolean hasNameMarking() {

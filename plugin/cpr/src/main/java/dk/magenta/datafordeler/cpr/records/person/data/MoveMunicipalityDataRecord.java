@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -53,7 +52,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public static final String IO_FIELD_OUT_DATETIME = "fraflytningsdatoKommune";
     @Column(name = DB_FIELD_OUT_DATETIME)
     @JsonProperty(value = IO_FIELD_OUT_DATETIME)
-    @XmlElement(name = IO_FIELD_OUT_DATETIME)
     private LocalDateTime outDatetime;
 
     public LocalDateTime getOutDatetime() {
@@ -69,7 +67,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public static final String IO_FIELD_OUT_DATETIME_UNCERTAIN = "fraflytningsdatoKommuneUsikkerhedsmarkering";
     @Column(name = DB_FIELD_OUT_DATETIME_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_OUT_DATETIME_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_OUT_DATETIME_UNCERTAIN)
     private boolean outDatetimeUncertain;
 
     public boolean isOutDatetimeUncertain() {
@@ -85,7 +82,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public static final String IO_FIELD_OUT_MUNICIPALITY = "fraflytningskommunekode";
     @Column(name = DB_FIELD_OUT_MUNICIPALITY)
     @JsonProperty(value = IO_FIELD_OUT_MUNICIPALITY)
-    @XmlElement(name = IO_FIELD_OUT_MUNICIPALITY)
     private int outMunicipality;
 
     public int getOutMunicipality() {
@@ -101,7 +97,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public static final String IO_FIELD_IN_DATETIME = "tilflytningsdatoKommune";
     @Column(name = DB_FIELD_IN_DATETIME)
     @JsonProperty(value = IO_FIELD_IN_DATETIME)
-    @XmlElement(name = IO_FIELD_IN_DATETIME)
     private LocalDateTime inDatetime;
 
     public LocalDateTime getInDatetime() {
@@ -117,7 +112,6 @@ public class MoveMunicipalityDataRecord extends CprBitemporalPersonRecord<MoveMu
     public static final String IO_FIELD_IN_DATETIME_UNCERTAIN = "tilflytningsdatoKommuneUsikkerhedsmarkering";
     @Column(name = DB_FIELD_IN_DATETIME_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_IN_DATETIME_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_IN_DATETIME_UNCERTAIN)
     private boolean inDatetimeUncertain;
 
     public boolean isInDatetimeUncertain() {
