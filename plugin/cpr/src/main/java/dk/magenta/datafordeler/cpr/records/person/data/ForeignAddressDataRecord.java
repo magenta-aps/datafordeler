@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 import java.util.StringJoiner;
 
@@ -53,7 +52,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public static final String IO_FIELD_ADDRESS_LINE1 = "adresselinie1";
     @Column(name = DB_FIELD_ADDRESS_LINE1)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE1)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE1)
     private String addressLine1;
 
     public String getAddressLine1() {
@@ -69,7 +67,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public static final String IO_FIELD_ADDRESS_LINE2 = "adresselinie2";
     @Column(name = DB_FIELD_ADDRESS_LINE2)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE2)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE2)
     private String addressLine2;
 
     public String getAddressLine2() {
@@ -85,7 +82,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public static final String IO_FIELD_ADDRESS_LINE3 = "adresselinie3";
     @Column(name = DB_FIELD_ADDRESS_LINE3)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE3)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE3)
     private String addressLine3;
 
     public String getAddressLine3() {
@@ -101,7 +97,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public static final String IO_FIELD_ADDRESS_LINE4 = "adresselinie4";
     @Column(name = DB_FIELD_ADDRESS_LINE4)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE4)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE4)
     private String addressLine4;
 
     public String getAddressLine4() {
@@ -117,7 +112,6 @@ public class ForeignAddressDataRecord extends CprBitemporalPersonRecord<ForeignA
     public static final String IO_FIELD_ADDRESS_LINE5 = "adresselinie5";
     @Column(name = DB_FIELD_ADDRESS_LINE5)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE5)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE5)
     private String addressLine5;
 
     public String getAddressLine5() {

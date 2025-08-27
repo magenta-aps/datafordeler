@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -55,7 +54,6 @@ public class PersonCoreDataRecord extends CprBitemporalPersonRecord<PersonCoreDa
     public static final String IO_FIELD_GENDER = "køn";
     @Column(name = DB_FIELD_GENDER)
     @JsonProperty(value = IO_FIELD_GENDER)
-    @XmlElement(name = IO_FIELD_GENDER)
     private Koen gender;
 
     public Koen getGender() {

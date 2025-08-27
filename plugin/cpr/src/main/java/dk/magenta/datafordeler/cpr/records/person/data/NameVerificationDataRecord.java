@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 /**
@@ -49,7 +48,6 @@ public class NameVerificationDataRecord extends VerificationDataRecord<NameVerif
     public static final String IO_FIELD_CORRECTION_MARKING = "retFortrydMarkering";
     @Column(name = DB_FIELD_CORRECTION_MARKING, length = 1)
     @JsonProperty(value = IO_FIELD_CORRECTION_MARKING)
-    @XmlElement(name = IO_FIELD_CORRECTION_MARKING)
     private String correctionMarking;
 
     public String getCorrectionMarking() {

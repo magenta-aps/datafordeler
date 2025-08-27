@@ -11,8 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.*;
 
 /**
@@ -27,7 +25,6 @@ import java.util.*;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_DAFO_UPDATED, columnList = RoadEntity.DB_FIELD_DAFO_UPDATED)
 })
-@XmlAccessorType(XmlAccessType.FIELD)
 public class RoadEntity extends CprRecordEntity {
 
 

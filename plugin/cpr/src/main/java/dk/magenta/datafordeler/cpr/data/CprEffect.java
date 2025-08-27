@@ -9,7 +9,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporality;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAccessor;
 
@@ -39,7 +38,6 @@ public abstract class CprEffect<R extends Registration, V extends CprEffect, D e
     }
 
     @JsonProperty("virkningFraUsikkerhedsmarkering")
-    @XmlElement(name = "virkningFraUsikkerhedsmarkering")
     public boolean getEffectFromUncertain() {
         return this.effectFromUncertain;
     }
@@ -49,7 +47,6 @@ public abstract class CprEffect<R extends Registration, V extends CprEffect, D e
     }
 
     @JsonProperty("virkningTilUsikkerhedsmarkering")
-    @XmlElement(name = "virkningTilUsikkerhedsmarkering")
     public boolean getEffectToUncertain() {
         return this.effectToUncertain;
     }

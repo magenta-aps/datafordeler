@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -38,7 +37,6 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     public static final String IO_FIELD_TO_HOUSENUMBER = "tilHusnummer";
     @Column(name = DB_FIELD_TO_HOUSENUMBER)
     @JsonProperty(value = IO_FIELD_TO_HOUSENUMBER)
-    @XmlElement(name = IO_FIELD_TO_HOUSENUMBER)
     private String toHousenumber;
 
     public String getToHousenumber() {
@@ -54,7 +52,6 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     public static final String IO_FIELD_FROM_HOUSENUMBER = "fraHusnummer";
     @Column(name = DB_FIELD_FROM_HOUSENUMBER)
     @JsonProperty(value = IO_FIELD_FROM_HOUSENUMBER)
-    @XmlElement(name = IO_FIELD_FROM_HOUSENUMBER)
     private String fromHousenumber;
 
     public String getFromHousenumber() {
@@ -70,7 +67,6 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     public static final String IO_FIELD_EVEN = "lige";
     @Column(name = DB_FIELD_EVEN)
     @JsonProperty(value = IO_FIELD_EVEN)
-    @XmlElement(name = IO_FIELD_EVEN)
     private boolean even;
 
     public boolean getEven() {
@@ -86,7 +82,6 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     public static final String IO_FIELD_POSTAL_CODE = "postnummer";
     @Column(name = DB_FIELD_POSTAL_CODE)
     @JsonProperty(value = IO_FIELD_POSTAL_CODE)
-    @XmlElement(name = IO_FIELD_POSTAL_CODE)
     private int postalCode;
 
     public int getPostalCode() {
@@ -102,7 +97,6 @@ public class RoadPostalcodeBitemporalRecord extends RoadSegmentDataRecord<RoadPo
     public static final String IO_FIELD_POSTAL_DISTRICT = "postDistrikt";
     @Column(name = DB_FIELD_POSTAL_DISTRICT)
     @JsonProperty(value = IO_FIELD_POSTAL_DISTRICT)
-    @XmlElement(name = IO_FIELD_POSTAL_DISTRICT)
     private String postalDistrict;
 
     public String getPostalDistrict() {

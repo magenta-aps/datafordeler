@@ -492,26 +492,6 @@ public class FapiTest {
         }
     }
 */
-    @Test
-    @Order(order = 11)
-    public void restLookupXMLByUUIDTest() throws IOException, DataFordelerException {
-        this.setupUser();
-        UUID uuid = this.addTestObject();
-        try {
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", "application/xml");
-            HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-            ResponseEntity<String> resp = this.restTemplate.exchange("/demo/postnummer/1/rest/" + uuid.toString(), HttpMethod.GET, httpEntity, String.class);
-            Assertions.assertEquals(200, resp.getStatusCode().value());
-
-            String xmlBody = resp.getBody();
-            Assertions.assertTrue(xmlBody.contains(uuid.toString()));
-            Assertions.assertTrue(xmlBody.contains("fapitest"));
-        } finally {
-            this.removeTestObject(uuid);
-        }
-    }
 
     private void testRegistrationFilter(String urlBase, int[][] expected, String registerOverlapStart, String registerOverlapEnd, String effectOverlapStart, String effectOverlapEnd) throws IOException, URISyntaxException {
         ResponseEntity<String> resp = getRegistrationFilterRequest(urlBase,

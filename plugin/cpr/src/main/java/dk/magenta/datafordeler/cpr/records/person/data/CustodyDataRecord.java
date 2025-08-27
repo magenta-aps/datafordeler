@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -51,7 +50,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     public static final String IO_FIELD_RELATION_TYPE = "relationsType";
     @Column(name = DB_FIELD_RELATION_TYPE)
     @JsonProperty(value = IO_FIELD_RELATION_TYPE)
-    @XmlElement(name = IO_FIELD_RELATION_TYPE)
     private int relationType;
 
     public int getRelationType() {
@@ -67,7 +65,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     public static final String IO_FIELD_AUTHORITY_CODE_START = "startMyndighedskodeVaerge";
     @Column(name = DB_FIELD_AUTHORITY_CODE_START)
     @JsonProperty(value = IO_FIELD_AUTHORITY_CODE_START)
-    @XmlElement(name = IO_FIELD_AUTHORITY_CODE_START)
     private int startAuthoritycodeCustody;
 
     public int getStartAuthoritycodeCustody() {
@@ -82,7 +79,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     public static final String IO_FIELD_RELATION_AUTHORITY = "relationsMyndighed";
     @Column(name = DB_FIELD_RELATION_AUTHORITY)
     @JsonProperty(value = IO_FIELD_RELATION_AUTHORITY)
-    @XmlElement(name = IO_FIELD_RELATION_AUTHORITY)
     private int relationAuthority;
 
     public int getRelationAuthority() {
@@ -97,7 +93,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     public static final String IO_FIELD_RELATION_PNR = "relationsPnr";
     @Column(name = DB_FIELD_RELATION_PNR)
     @JsonProperty(value = IO_FIELD_RELATION_PNR)
-    @XmlElement(name = IO_FIELD_RELATION_PNR)
     private String relationPnr;
 
 
@@ -113,7 +108,6 @@ public class CustodyDataRecord extends CprBitemporalPersonRecord<CustodyDataReco
     public static final String IO_FIELD_RELATION_PNR_START = "relationsPnrStart";
     @Column(name = DB_FIELD_RELATION_PNR_START)
     @JsonProperty(value = IO_FIELD_RELATION_PNR_START)
-    @XmlElement(name = IO_FIELD_RELATION_PNR_START)
     private LocalDate relationPnrStart;
 
     public LocalDate getRelationPnrStart() {

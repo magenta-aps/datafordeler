@@ -6,7 +6,6 @@ import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 
@@ -22,7 +21,6 @@ public abstract class AuthorityTextDataRecord<S extends AuthorityTextDataRecord<
     public static final String IO_FIELD_TEXT = "tekst";
     @Column(name = DB_FIELD_TEXT)
     @JsonProperty(value = IO_FIELD_TEXT)
-    @XmlElement(name = IO_FIELD_TEXT)
     private String text;
 
     protected AuthorityTextDataRecord() {
@@ -42,7 +40,6 @@ public abstract class AuthorityTextDataRecord<S extends AuthorityTextDataRecord<
     public static final String IO_FIELD_CORRECTION_MARKING = "retFortrydMarkering";
     @Column(name = DB_FIELD_CORRECTION_MARKING, length = 1)
     @JsonProperty(value = IO_FIELD_CORRECTION_MARKING)
-    @XmlElement(name = IO_FIELD_CORRECTION_MARKING)
     private String correctionMarking;
 
     public String getCorrectionMarking() {

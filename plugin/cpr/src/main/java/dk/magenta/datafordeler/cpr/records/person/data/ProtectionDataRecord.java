@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -52,7 +51,6 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     public static final String IO_FIELD_TYPE = "beskyttelsestype";
     @Column(name = DB_FIELD_TYPE)
     @JsonProperty(value = IO_FIELD_TYPE)
-    @XmlElement(name = IO_FIELD_TYPE)
     private int protectionType;
 
     public int getProtectionType() {
@@ -68,7 +66,6 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     public static final String IO_FIELD_REPORTMARKING = "rapportMarkering";
     @Column(name = DB_FIELD_REPORTMARKING)
     @JsonProperty(value = IO_FIELD_REPORTMARKING)
-    @XmlElement(name = IO_FIELD_REPORTMARKING)
     private boolean reportMarking;
 
     public boolean getReportMarking() {
@@ -84,7 +81,6 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     public static final String IO_FIELD_DELETION_DATE = "sletteDato";
     @Column(name = DB_FIELD_DELETION_DATE)
     @JsonProperty(value = IO_FIELD_DELETION_DATE)
-    @XmlElement(name = IO_FIELD_DELETION_DATE)
     private LocalDate deletionDate;
 
     public LocalDate getDeletionDate() {
@@ -100,7 +96,6 @@ public class ProtectionDataRecord extends CprBitemporalPersonRecord<ProtectionDa
     public static final String IO_FIELD_END_AUTHORITY = "slutmyndighed";
     @Column(name = DB_FIELD_END_AUTHORITY)
     @JsonProperty(value = IO_FIELD_END_AUTHORITY)
-    @XmlElement(name = IO_FIELD_END_AUTHORITY)
     private int endAuthority;
 
     public int getEndAuthority() {

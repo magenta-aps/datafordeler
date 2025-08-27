@@ -7,7 +7,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -45,11 +44,9 @@ public class ParentVerificationDataRecord extends VerificationDataRecord<ParentV
     public static final String DB_FIELD_IS_MOTHER = "isMother";
     @Column(name = DB_FIELD_IS_MOTHER)
     @JsonIgnore
-    @XmlTransient
     private boolean isMother;
 
     @JsonIgnore
-    @XmlTransient
     public boolean isMother() {
         return this.isMother;
     }

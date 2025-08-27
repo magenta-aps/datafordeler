@@ -159,7 +159,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param requestParams url parameters
      * @return Found Entity, or null if none found.
      */
-    @RequestMapping(path = {"/{uuid}", "/{uuid}/"}, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(path = {"/{uuid}", "/{uuid}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Envelope getRest(@PathVariable("uuid") String uuid, @RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request)
             throws DataFordelerException {
         Envelope envelope = new Envelope();
@@ -277,7 +277,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param requestParams Request Parameters from spring boot
      * @return Found Entities
      */
-    @RequestMapping(path = {"/search", "/search/"}, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(path = {"/search", "/search/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Envelope searchRest(@RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request) throws DataFordelerException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         Envelope envelope = new Envelope();

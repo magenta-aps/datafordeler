@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -44,7 +43,6 @@ public class AddressConameDataRecord extends CprBitemporalPersonRecord<AddressCo
     public static final String IO_FIELD_CONAME = "conavn";
     @Column(name = DB_FIELD_CONAME)
     @JsonProperty(value = IO_FIELD_CONAME)
-    @XmlElement(name = IO_FIELD_CONAME)
     private String coname;
 
     public String getConame() {

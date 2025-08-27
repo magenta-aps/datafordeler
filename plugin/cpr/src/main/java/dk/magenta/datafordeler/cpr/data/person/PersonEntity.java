@@ -25,9 +25,6 @@ import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 import org.hibernate.annotations.Where;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,7 +39,6 @@ import java.util.stream.Collectors;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED)
 })
-@XmlAccessorType(XmlAccessType.FIELD)
 public class PersonEntity extends CprRecordEntity {
 
     public static final String TABLE_NAME = "cpr_person_entity";
@@ -67,7 +63,6 @@ public class PersonEntity extends CprRecordEntity {
 
     @Column(name = DB_FIELD_CPR_NUMBER)
     @JsonProperty(IO_FIELD_CPR_NUMBER)
-    @XmlElement(name = (IO_FIELD_CPR_NUMBER))
     private String personnummer;
 
     public String getPersonnummer() {

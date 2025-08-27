@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -39,7 +38,6 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     public static final String IO_FIELD_TO_MUNIPALITY_CODE = "tilKommuneKode";
     @Column(name = DB_FIELD_TO_MUNIPALITY_CODE)
     @JsonProperty(value = IO_FIELD_TO_MUNIPALITY_CODE)
-    @XmlElement(name = IO_FIELD_TO_MUNIPALITY_CODE)
     private int toMunicipalityCode;
 
     public int getToMunicipalityCode() {
@@ -55,7 +53,6 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     public static final String IO_FIELD_TO_ROAD_CODE = "tilVejKode";
     @Column(name = DB_FIELD_TO_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_TO_ROAD_CODE)
-    @XmlElement(name = IO_FIELD_TO_ROAD_CODE)
     private int toRoadCode;
 
     public int getToRoadCode() {
@@ -72,7 +69,6 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     public static final String IO_FIELD_FROM_MUNIPALITY_CODE = "fraKommuneKode";
     @Column(name = DB_FIELD_FROM_MUNIPALITY_CODE)
     @JsonProperty(value = IO_FIELD_FROM_MUNIPALITY_CODE)
-    @XmlElement(name = IO_FIELD_FROM_MUNIPALITY_CODE)
     private int fromMunicipalityCode;
 
     public int getFromMunicipalityCode() {
@@ -88,7 +84,6 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     public static final String IO_FIELD_FROM_ROAD_CODE = "fraVejKode";
     @Column(name = DB_FIELD_FROM_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_FROM_ROAD_CODE)
-    @XmlElement(name = IO_FIELD_FROM_ROAD_CODE)
     private int fromRoadCode;
 
     public int getFromRoadCode() {
@@ -105,7 +100,6 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     public static final String IO_FIELD_ADDRESS_NAME = "addressenavn";
     @Column(name = DB_FIELD_ADDRESS_NAME)
     @JsonProperty(value = IO_FIELD_ADDRESS_NAME)
-    @XmlElement(name = IO_FIELD_ADDRESS_NAME)
     private String roadAdddressName;
 
     public String getRoadAdddressName() {
@@ -121,7 +115,6 @@ public class RoadNameBitemporalRecord extends CprBitemporalRoadRecord<RoadNameBi
     public static final String IO_FIELD_ROADNAME = "vejnavn";
     @Column(name = DB_FIELD_ROADNAME)
     @JsonProperty(value = IO_FIELD_ROADNAME)
-    @XmlElement(name = IO_FIELD_ROADNAME)
     private String roadName;
 
     public String getRoadName() {

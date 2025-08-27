@@ -10,8 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
@@ -23,7 +21,6 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
     public static final String DB_FIELD_ENTITY = "entity";
 
     @JsonIgnore
-    @XmlTransient
     @ManyToOne(optional = false)
     private E entity;
 
@@ -43,7 +40,6 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
     public static final String DB_FIELD_UPDATED = "dafoUpdated";
     public static final String IO_FIELD_UPDATED = "sidstOpdateret";
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
     @JsonProperty(value = IO_FIELD_UPDATED)

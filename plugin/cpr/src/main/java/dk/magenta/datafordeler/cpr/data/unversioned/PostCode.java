@@ -9,7 +9,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -27,7 +26,6 @@ public class PostCode extends UnversionedEntity {
 
     @Column(name = DB_FIELD_POSTNUMBER)
     @JsonProperty(value = IO_FIELD_POSTNUMBER)
-    @XmlElement(name = IO_FIELD_POSTNUMBER)
     private int postnummer;
 
     public int getPostnummer() {
@@ -44,7 +42,6 @@ public class PostCode extends UnversionedEntity {
 
     @Column(name = DB_FIELD_POSTDISTRICT)
     @JsonProperty(value = IO_FIELD_POSTDISTRICT)
-    @XmlElement(name = IO_FIELD_POSTDISTRICT)
     private String postdistrikt;
 
     public String getPostdistrikt() {
