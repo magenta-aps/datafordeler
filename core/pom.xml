@@ -121,11 +121,6 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-csv</artifactId>
             <version>${jackson.version}</version>
         </dependency>
@@ -134,16 +129,6 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.jaxrs</groupId>-->
-<!--            <artifactId>jackson-jaxrs-json-provider</artifactId>-->
-<!--            <version>${jackson.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.jaxrs</groupId>-->
-<!--            <artifactId>jackson-jaxrs-xml-provider</artifactId>-->
-<!--            <version>${jackson.version}</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate6</artifactId>
@@ -375,12 +360,6 @@
             <version>6.2.1</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>jakarta.xml.bind</groupId>-->
-<!--            <artifactId>jakarta.xml.bind-api</artifactId>-->
-<!--            <version>4.0.2</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
 
 
     </dependencies>
