@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,6 @@ public class Municipality extends DatabaseEntry {
     public static final String IO_FIELD_CODE = "kommunekode";
 
     @JsonProperty(value = IO_FIELD_CODE)
-    @XmlElement(name = IO_FIELD_CODE)
     @Column(nullable = false, unique = false)
     private int code;
 
@@ -51,7 +49,6 @@ public class Municipality extends DatabaseEntry {
     public static final String IO_FIELD_NAME = "kommunenavn";
 
     @JsonProperty(value = IO_FIELD_NAME)
-    @XmlElement(name = IO_FIELD_NAME)
     @Column(nullable = false)
     private String name;
 

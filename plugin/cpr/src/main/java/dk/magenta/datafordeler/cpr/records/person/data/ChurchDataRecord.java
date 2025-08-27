@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -43,7 +42,6 @@ public class ChurchDataRecord extends CprBitemporalPersonRecord<ChurchDataRecord
     public static final String IO_FIELD_CHURCH_RELATION = "folkekirkeforhold";
     @Column(name = DB_FIELD_CHURCH_RELATION)
     @JsonProperty(value = IO_FIELD_CHURCH_RELATION)
-    @XmlElement(name = IO_FIELD_CHURCH_RELATION)
     private Character churchRelation;
 
     public Character getChurchRelation() {

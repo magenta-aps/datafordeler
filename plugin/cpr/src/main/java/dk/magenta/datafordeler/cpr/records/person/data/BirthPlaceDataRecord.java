@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 /**
@@ -48,7 +47,6 @@ public class BirthPlaceDataRecord extends CprBitemporalPersonRecord<BirthPlaceDa
     public static final String IO_FIELD_BIRTH_PLACE_CODE = "cprFødselsregistreringsstedskode";
     @Column(name = DB_FIELD_BIRTH_PLACE_CODE)
     @JsonProperty(value = IO_FIELD_BIRTH_PLACE_CODE)
-    @XmlElement(name = IO_FIELD_BIRTH_PLACE_CODE)
     private Integer birthPlaceCode;
 
     public Integer getBirthPlaceCode() {
@@ -65,7 +63,6 @@ public class BirthPlaceDataRecord extends CprBitemporalPersonRecord<BirthPlaceDa
     public static final String IO_FIELD_BIRTH_PLACE_NAME = "cprFødselsregistreringsstedsnavn";
     @Column(name = DB_FIELD_BIRTH_PLACE_NAME)
     @JsonProperty(value = IO_FIELD_BIRTH_PLACE_NAME)
-    @XmlElement(name = IO_FIELD_BIRTH_PLACE_NAME)
     private String birthPlaceName;
 
     public String getBirthPlaceName() {

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import jakarta.persistence.*;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 
 import java.time.OffsetDateTime;
 
@@ -53,7 +51,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
 
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
@@ -71,7 +68,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
@@ -92,7 +88,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
     @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
@@ -109,7 +104,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_EFFECT_TO = Bitemporal.DB_FIELD_EFFECT_TO;
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
     @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
@@ -124,7 +118,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     @Override
     @JsonIgnore
-    @XmlTransient
     public Bitemporality getBitemporality() {
         return new Bitemporality(this.getRegistrationFrom(), this.getRegistrationTo(), this.getEffectFrom(), this.getEffectTo());
     }
@@ -134,7 +127,6 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
     @JsonProperty(value = IO_FIELD_UPDATED)

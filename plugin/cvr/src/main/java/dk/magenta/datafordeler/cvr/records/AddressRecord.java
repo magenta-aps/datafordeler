@@ -14,7 +14,6 @@ import dk.magenta.datafordeler.cvr.records.unversioned.CvrPostCode;
 import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -112,7 +111,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_ID = "adresseId";
 
     @JsonProperty(value = IO_FIELD_ID)
-    @XmlElement(name = IO_FIELD_ID)
     @Column(name = DB_FIELD_ID, columnDefinition = "binary(16)")
     private UUID addressId;
 
@@ -130,7 +128,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_ROADCODE = "vejkode";
 
     @JsonProperty(value = IO_FIELD_ROADCODE)
-    @XmlElement(name = IO_FIELD_ROADCODE)
     @Column(name = DB_FIELD_ROADCODE)
     private int roadCode;
 
@@ -152,7 +149,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_CITY = "bynavn";
 
     @JsonProperty(value = IO_FIELD_CITY)
-    @XmlElement(name = IO_FIELD_CITY)
     @Column(name = DB_FIELD_CITY)
     private String cityName;
 
@@ -170,7 +166,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_SUPPLEMENTAL_CITY = "supplerendeBynavn";
 
     @JsonProperty(value = IO_FIELD_SUPPLEMENTAL_CITY)
-    @XmlElement(name = IO_FIELD_SUPPLEMENTAL_CITY)
     @Column(name = DB_FIELD_SUPPLEMENTAL_CITY)
     private String supplementalCityName;
 
@@ -188,7 +183,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_ROADNAME = "vejnavn";
 
     @JsonProperty(value = IO_FIELD_ROADNAME)
-    @XmlElement(name = IO_FIELD_ROADNAME)
     @Column(name = DB_FIELD_ROADNAME)
     private String roadName;
 
@@ -206,7 +200,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_HOUSE_FROM = "husnummerFra";
 
     @JsonProperty(value = IO_FIELD_HOUSE_FROM)
-    @XmlElement(name = IO_FIELD_HOUSE_FROM)
     @Column(name = DB_FIELD_HOUSE_FROM)
     private int houseNumberFrom;
 
@@ -224,7 +217,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_HOUSE_TO = "husnummerTil";
 
     @JsonProperty(value = IO_FIELD_HOUSE_TO)
-    @XmlElement(name = IO_FIELD_HOUSE_TO)
     @Column(name = DB_FIELD_HOUSE_TO)
     private int houseNumberTo;
 
@@ -242,7 +234,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_LETTER_FROM = "bogstavFra";
 
     @JsonProperty(value = IO_FIELD_LETTER_FROM)
-    @XmlElement(name = IO_FIELD_LETTER_FROM)
     @Column(name = DB_FIELD_LETTER_FROM)
     private String letterFrom;
 
@@ -260,7 +251,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_LETTER_TO = "bogstavTil";
 
     @JsonProperty(value = IO_FIELD_LETTER_TO)
-    @XmlElement(name = IO_FIELD_LETTER_TO)
     @Column(name = DB_FIELD_LETTER_TO)
     private String letterTo;
 
@@ -278,7 +268,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_FLOOR = "etage";
 
     @JsonProperty(value = IO_FIELD_FLOOR)
-    @XmlElement(name = IO_FIELD_FLOOR)
     @Column(name = DB_FIELD_FLOOR)
     private String floor;
 
@@ -296,7 +285,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_DOOR = "sidedoer";
 
     @JsonProperty(value = IO_FIELD_DOOR)
-    @XmlElement(name = IO_FIELD_DOOR)
     @Column(name = DB_FIELD_DOOR)
     private String door;
 
@@ -316,7 +304,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String DB_FIELD_MUNICIPALITY = "municipality";
     public static final String IO_FIELD_MUNICIPALITY = "kommune";
 
-    @XmlElement(name = IO_FIELD_MUNICIPALITY)
     @JsonProperty(value = IO_FIELD_MUNICIPALITY)
     @OneToOne(cascade = CascadeType.ALL)
     private AddressMunicipalityRecord municipality;
@@ -342,7 +329,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String DB_FIELD_POSTCODE_REF = "post";
     public static final String IO_FIELD_POSTCODE_REF = "post";
 
-    @XmlElement(name = IO_FIELD_POSTCODE_REF)
     @ManyToOne(targetEntity = CvrPostCode.class)
     @JoinColumn(name = DB_FIELD_POSTCODE_REF + DatabaseEntry.REF)
     @JsonIgnore
@@ -373,7 +359,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     }
 
     @JsonProperty(value = IO_FIELD_POSTCODE)
-    @XmlElement(name = IO_FIELD_POSTCODE)
     public void setPostnummer(int code) {
         this.postnummer = code;
     }
@@ -394,7 +379,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
         return this.postdistrikt;
     }
 
-    @XmlElement(name = IO_FIELD_POSTDISTRICT)
     @JsonProperty(value = IO_FIELD_POSTDISTRICT)
     public void setPostdistrikt(String district) {
         this.postdistrikt = district;
@@ -406,7 +390,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_POSTBOX = "postboks";
 
     @JsonProperty(value = IO_FIELD_POSTBOX)
-    @XmlElement(name = IO_FIELD_POSTBOX)
     @Column(name = DB_FIELD_POSTBOX)
     private String postBox;
 
@@ -424,7 +407,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_CONAME = "conavn";
 
     @JsonProperty(value = IO_FIELD_CONAME)
-    @XmlElement(name = IO_FIELD_CONAME)
     @Column(name = DB_FIELD_CONAME)
     private String coName;
 
@@ -442,7 +424,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_COUNTRYCODE = "landekode";
 
     @JsonProperty(value = IO_FIELD_COUNTRYCODE)
-    @XmlElement(name = IO_FIELD_COUNTRYCODE)
     @Column(name = DB_FIELD_COUNTRYCODE)
     private String countryCode;
 
@@ -460,7 +441,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_TEXT = "adresseFritekst";
 
     @JsonProperty(value = IO_FIELD_TEXT)
-    @XmlElement(name = IO_FIELD_TEXT)
     @Column(name = DB_FIELD_TEXT)
     private String addressText;
 
@@ -478,7 +458,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_VALIDATED = "sidstValideret";
 
     @JsonProperty(value = IO_FIELD_VALIDATED)
-    @XmlElement(name = IO_FIELD_VALIDATED)
     @Column(name = DB_FIELD_VALIDATED)
     private String lastValidated;
 
@@ -497,7 +476,6 @@ public class AddressRecord extends CvrBitemporalDataMetaRecord implements Clonea
     public static final String IO_FIELD_FREETEXT = "fritekst";
 
     @JsonProperty(value = IO_FIELD_FREETEXT)
-    @XmlElement(name = IO_FIELD_FREETEXT)
     @Column(name = DB_FIELD_FREETEXT, length = 8000)
     private String freeText;
 

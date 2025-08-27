@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -56,7 +55,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     @Column(name = DB_FIELD_CORRECTION_MARKING, length = 1)
     @JsonIgnore
     //@JsonProperty(value = IO_FIELD_CORRECTION_MARKING)
-    @XmlElement(name = IO_FIELD_CORRECTION_MARKING)
     private String correctionMarking;
 
     public String getCorrectionMarking() {
@@ -83,7 +81,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public static final String IO_FIELD_CIVIL_STATUS = "civilstand";
     @Column(name = DB_FIELD_CIVIL_STATUS)
     @JsonProperty(value = IO_FIELD_CIVIL_STATUS)
-    @XmlElement(name = IO_FIELD_CIVIL_STATUS)
     private String civilStatus;
 
     public String getCivilStatus() {
@@ -98,7 +95,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public static final String IO_FIELD_SPOUSE_CPR = "ægtefælleCpr";
     @Column(name = DB_FIELD_SPOUSE_CPR)
     @JsonProperty(value = IO_FIELD_SPOUSE_CPR)
-    @XmlElement(name = IO_FIELD_SPOUSE_CPR)
     private String spouseCpr;
 
     public String getSpouseCpr() {
@@ -114,7 +110,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public static final String IO_FIELD_SPOUSE_BIRTHDATE = "ægtefælleFødselsdato";
     @Column(name = DB_FIELD_SPOUSE_BIRTHDATE)
     @JsonProperty(value = IO_FIELD_SPOUSE_BIRTHDATE)
-    @XmlElement(name = IO_FIELD_SPOUSE_BIRTHDATE)
     private LocalDate spouseBirthdate;
 
     public LocalDate getSpouseBirthdate() {
@@ -130,7 +125,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public static final String IO_FIELD_SPOUSE_BIRTHDATE_UNCERTAIN = "ægtefælleFødselsdatoUsikker";
     @Column(name = DB_FIELD_SPOUSE_BIRTHDATE_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_SPOUSE_BIRTHDATE_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_SPOUSE_BIRTHDATE_UNCERTAIN)
     private boolean spouseBirthdateUncertain;
 
     public boolean getSpouseBirthdateUncertain() {
@@ -146,7 +140,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public static final String IO_FIELD_SPOUSE_NAME = "ægtefælleNavn";
     @Column(name = DB_FIELD_SPOUSE_NAME)
     @JsonProperty(value = IO_FIELD_SPOUSE_NAME)
-    @XmlElement(name = IO_FIELD_SPOUSE_NAME)
     private String spouseName;
 
     public String isSpouseName() {
@@ -162,7 +155,6 @@ public class CivilStatusDataRecord extends CprBitemporalPersonRecord<CivilStatus
     public static final String IO_FIELD_SPOUSE_NAME_MARKING = "ægtefælleNavnMarkering";
     @Column(name = DB_FIELD_SPOUSE_NAME_MARKING)
     @JsonProperty(value = IO_FIELD_SPOUSE_NAME_MARKING)
-    @XmlElement(name = IO_FIELD_SPOUSE_NAME_MARKING)
     private boolean spouseNameMarking;
 
     public boolean isSpouseNameMarking() {

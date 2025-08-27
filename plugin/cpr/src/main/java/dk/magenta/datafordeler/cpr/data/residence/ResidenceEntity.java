@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.UUID;
 
 /**
@@ -20,7 +18,6 @@ import java.util.UUID;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_residence_identification", columnList = "identification_id", unique = true)
 })
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ResidenceEntity extends CprEntity<ResidenceEntity, ResidenceRegistration> {
 
     public ResidenceEntity() {

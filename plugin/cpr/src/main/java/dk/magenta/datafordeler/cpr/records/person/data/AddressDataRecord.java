@@ -12,7 +12,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.*;
 
 @Entity
@@ -64,7 +63,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_MUNICIPALITY_CODE = "kommunekode";
     @Column(name = DB_FIELD_MUNICIPALITY_CODE)
     @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
-    @XmlElement(name = IO_FIELD_MUNICIPALITY_CODE)
     private int municipalityCode;
 
     public int getMunicipalityCode() {
@@ -80,7 +78,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_ROAD_CODE)
-    @XmlElement(name = IO_FIELD_ROAD_CODE)
     private int roadCode;
 
     public int getRoadCode() {
@@ -96,7 +93,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_BUILDING_NUMBER = "bnr";
     @Column(name = DB_FIELD_BUILDING_NUMBER)
     @JsonProperty(value = IO_FIELD_BUILDING_NUMBER)
-    @XmlElement(name = IO_FIELD_BUILDING_NUMBER)
     private String buildingNumber;
 
     public String getBuildingNumber() {
@@ -112,7 +108,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_HOUSENUMBER = "husnummer";
     @Column(name = DB_FIELD_HOUSENUMBER)
     @JsonProperty(value = IO_FIELD_HOUSENUMBER)
-    @XmlElement(name = IO_FIELD_HOUSENUMBER)
     private String houseNumber;
 
     public String getHouseNumber() {
@@ -127,7 +122,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_FLOOR = "etage";
     @Column(name = DB_FIELD_FLOOR)
     @JsonProperty(value = IO_FIELD_FLOOR)
-    @XmlElement(name = IO_FIELD_FLOOR)
     private String floor;
 
     public String getFloor() {
@@ -143,7 +137,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_DOOR = "sidedør";
     @Column(name = DB_FIELD_DOOR)
     @JsonProperty(value = IO_FIELD_DOOR)
-    @XmlElement(name = IO_FIELD_DOOR)
     private String door;
 
     public String getDoor() {
@@ -159,7 +152,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ADDRESS_LINE1 = "adresselinie1";
     @Column(name = DB_FIELD_ADDRESS_LINE1)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE1)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE1)
     private String roadAddressLine1;
 
     public String getRoadAddressLine1() {
@@ -177,7 +169,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ADDRESS_LINE2 = "adresselinie2";
     @Column(name = DB_FIELD_ADDRESS_LINE2)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE2)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE2)
     private String roadAddressLine2;
 
     public String getRoadAddressLine2() {
@@ -195,7 +186,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ADDRESS_LINE3 = "adresselinie3";
     @Column(name = DB_FIELD_ADDRESS_LINE3)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE3)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE3)
     private String roadAddressLine3;
 
     public String getRoadAddressLine3() {
@@ -213,7 +203,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ADDRESS_LINE4 = "adresselinie4";
     @Column(name = DB_FIELD_ADDRESS_LINE4)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE4)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE4)
     private String roadAddressLine4;
 
     public String getRoadAddressLine4() {
@@ -231,7 +220,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ADDRESS_LINE5 = "adresselinie5";
     @Column(name = DB_FIELD_ADDRESS_LINE5)
     @JsonProperty(value = IO_FIELD_ADDRESS_LINE5)
-    @XmlElement(name = IO_FIELD_ADDRESS_LINE5)
     private String roadAddressLine5;
 
     public String getRoadAddressLine5() {
@@ -249,7 +237,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_ADDRESS_TEXT_TYPE = "adressetekststype";
     @Column(name = DB_FIELD_ADDRESS_TEXT_TYPE)
     @JsonProperty(value = IO_FIELD_ADDRESS_TEXT_TYPE)
-    @XmlElement(name = IO_FIELD_ADDRESS_TEXT_TYPE)
     private int addressTextType = 0;
 
     public int getAddressTextType() {
@@ -264,7 +251,6 @@ public class AddressDataRecord extends CprBitemporalPersonRecord<AddressDataReco
     public static final String IO_FIELD_START_AUTHORITY = "startautoritet";
     @Column(name = DB_FIELD_START_AUTHORITY)
     @JsonProperty(value = IO_FIELD_START_AUTHORITY)
-    @XmlElement(name = IO_FIELD_START_AUTHORITY)
     private int startAuthority = 0;
 
     public int getStartAuthority() {

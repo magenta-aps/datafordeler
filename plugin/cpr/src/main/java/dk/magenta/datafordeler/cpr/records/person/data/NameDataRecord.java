@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 /**
@@ -55,7 +54,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_ADDRESSING_NAME = "adresseringsnavn";
     @Column(name = DB_FIELD_ADDRESSING_NAME)
     @JsonProperty(value = IO_FIELD_ADDRESSING_NAME)
-    @XmlElement(name = IO_FIELD_ADDRESSING_NAME)
     private String addressingName;
 
     public String getAddressingName() {
@@ -71,7 +69,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_FIRST_NAMES = "fornavn";
     @Column(name = DB_FIELD_FIRST_NAMES)
     @JsonProperty(value = IO_FIELD_FIRST_NAMES)
-    @XmlElement(name = IO_FIELD_FIRST_NAMES)
     private String firstNames;
 
     public String getFirstNames() {
@@ -87,7 +84,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_FIRST_NAMES_MARKING = "fornavnMarkering";
     @Column(name = DB_FIELD_FIRST_NAMES_MARKING)
     @JsonProperty(value = IO_FIELD_FIRST_NAMES_MARKING)
-    @XmlElement(name = IO_FIELD_FIRST_NAMES_MARKING)
     private boolean firstNamesMarking;
 
     public boolean isFirstNamesMarking() {
@@ -103,7 +99,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_MIDDLE_NAME = "mellemnavn";
     @Column(name = DB_FIELD_MIDDLE_NAME)
     @JsonProperty(value = IO_FIELD_MIDDLE_NAME)
-    @XmlElement(name = IO_FIELD_MIDDLE_NAME)
     private String middleName;
 
     public String getMiddleName() {
@@ -119,7 +114,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_MIDDLE_NAME_MARKING = "mellemnavnMarkering";
     @Column(name = DB_FIELD_MIDDLE_NAME_MARKING)
     @JsonProperty(value = IO_FIELD_MIDDLE_NAME_MARKING)
-    @XmlElement(name = IO_FIELD_MIDDLE_NAME_MARKING)
     private boolean middleNameMarking;
 
     public boolean isMiddleNameMarking() {
@@ -135,7 +129,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_LAST_NAME = "efternavn";
     @Column(name = DB_FIELD_LAST_NAME)
     @JsonProperty(value = IO_FIELD_LAST_NAME)
-    @XmlElement(name = IO_FIELD_LAST_NAME)
     private String lastName;
 
     public String getLastName() {
@@ -151,7 +144,6 @@ public class NameDataRecord extends CprBitemporalPersonRecord<NameDataRecord> {
     public static final String IO_FIELD_LAST_NAME_MARKING = "efternavnMarkering";
     @Column(name = DB_FIELD_LAST_NAME_MARKING)
     @JsonProperty(value = IO_FIELD_LAST_NAME_MARKING)
-    @XmlElement(name = IO_FIELD_LAST_NAME_MARKING)
     private boolean lastNameMarking;
 
     public boolean isLastNameMarking() {

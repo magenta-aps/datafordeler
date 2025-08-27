@@ -11,7 +11,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
     public static final String IO_FIELD_MUNICIPALITY_CODE = "kommunekode";
     @Column(name = DB_FIELD_MUNICIPALITY_CODE)
     @JsonProperty(value = IO_FIELD_MUNICIPALITY_CODE)
-    @XmlElement(name = IO_FIELD_MUNICIPALITY_CODE)
     private int municipalityCode;
 
     public int getKommunekode() {
@@ -69,7 +67,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
     public static final String IO_FIELD_ROAD_CODE = "vejkode";
     @Column(name = DB_FIELD_ROAD_CODE)
     @JsonProperty(value = IO_FIELD_ROAD_CODE)
-    @XmlElement(name = IO_FIELD_ROAD_CODE)
     private int roadCode;
 
     public int getVejkode() {
@@ -85,7 +82,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
     public static final String IO_FIELD_HOUSENUMBER = "husnummer";
     @Column(name = DB_FIELD_HOUSENUMBER)
     @JsonProperty(value = IO_FIELD_HOUSENUMBER)
-    @XmlElement(name = IO_FIELD_HOUSENUMBER)
     private String houseNumber;
 
     public String getHusnummer() {
@@ -101,7 +97,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
     public static final String IO_FIELD_FLOOR = "etage";
     @Column(name = DB_FIELD_FLOOR)
     @JsonProperty(value = IO_FIELD_FLOOR)
-    @XmlElement(name = IO_FIELD_FLOOR)
     private String floor;
 
     public String getEtage() {
@@ -117,7 +112,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
     public static final String IO_FIELD_DOOR = "sidedør";
     @Column(name = DB_FIELD_DOOR)
     @JsonProperty(value = IO_FIELD_DOOR)
-    @XmlElement(name = IO_FIELD_DOOR)
     private String door;
 
     public String getSideDoer() {
@@ -133,7 +127,6 @@ public class ResidenceBaseData extends CprData<ResidenceEffect, ResidenceBaseDat
     public static final String IO_FIELD_LOCALITY = "lokalitet";
     @Column(name = DB_FIELD_LOCALITY)
     @JsonProperty(value = IO_FIELD_LOCALITY)
-    @XmlElement(name = IO_FIELD_LOCALITY)
     private String locality;
 
     public String getLokalitet() {

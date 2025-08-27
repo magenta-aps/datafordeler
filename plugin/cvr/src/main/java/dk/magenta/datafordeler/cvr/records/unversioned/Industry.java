@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,6 @@ public class Industry extends DatabaseEntry {
     public static final String IO_FIELD_CODE = "branchekode";
 
     @JsonProperty(value = IO_FIELD_CODE)
-    @XmlElement(name = IO_FIELD_CODE)
     @Column(nullable = false, unique = false, name = DB_FIELD_CODE)
     private String industryCode;
 
@@ -53,7 +51,6 @@ public class Industry extends DatabaseEntry {
     public static final String IO_FIELD_NAME = "branchetekst";
 
     @JsonProperty(value = IO_FIELD_NAME)
-    @XmlElement(name = IO_FIELD_NAME)
     @Column
     private String industryText;
 

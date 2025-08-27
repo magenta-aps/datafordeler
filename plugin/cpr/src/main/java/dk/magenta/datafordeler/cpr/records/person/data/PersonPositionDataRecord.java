@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import jakarta.persistence.*;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -46,7 +45,6 @@ public class PersonPositionDataRecord extends CprBitemporalPersonRecord<PersonPo
     public static final String IO_FIELD_POSITION = "stilling";
     @Column(name = DB_FIELD_POSITION)
     @JsonProperty(value = IO_FIELD_POSITION)
-    @XmlElement(name = IO_FIELD_POSITION)
     private String position;
 
     public String getPosition() {

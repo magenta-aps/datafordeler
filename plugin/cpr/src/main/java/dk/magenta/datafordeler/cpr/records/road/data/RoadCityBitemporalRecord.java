@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Objects;
 
 @Entity
@@ -36,7 +35,6 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     public static final String IO_FIELD_TO_HOUSENUMBER = "tilHusnummer";
     @Column(name = DB_FIELD_TO_HOUSENUMBER)
     @JsonProperty(value = IO_FIELD_TO_HOUSENUMBER)
-    @XmlElement(name = IO_FIELD_TO_HOUSENUMBER)
     private String toHousenumber;
 
     public String getToHousenumber() {
@@ -52,7 +50,6 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     public static final String IO_FIELD_FROM_HOUSENUMBER = "fraHusnummer";
     @Column(name = DB_FIELD_FROM_HOUSENUMBER)
     @JsonProperty(value = IO_FIELD_FROM_HOUSENUMBER)
-    @XmlElement(name = IO_FIELD_FROM_HOUSENUMBER)
     private String fromHousenumber;
 
     public String getFromHousenumber() {
@@ -68,7 +65,6 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     public static final String IO_FIELD_EQUAL_UNEQUAL = "lige";
     @Column(name = DB_FIELD_EQUAL_UNEQUAL)
     @JsonProperty(value = IO_FIELD_EQUAL_UNEQUAL)
-    @XmlElement(name = IO_FIELD_EQUAL_UNEQUAL)
     private boolean even;
 
     public boolean getEven() {
@@ -84,7 +80,6 @@ public class RoadCityBitemporalRecord extends RoadSegmentDataRecord<RoadCityBite
     public static final String IO_FIELD_CITY_NAME = "byNavn";
     @Column(name = DB_FIELD_CITY_NAME)
     @JsonProperty(value = IO_FIELD_CITY_NAME)
-    @XmlElement(name = IO_FIELD_CITY_NAME)
     private String cityName;
 
     public String getCityName() {

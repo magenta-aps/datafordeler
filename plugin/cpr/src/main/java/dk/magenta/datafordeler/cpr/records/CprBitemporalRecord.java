@@ -8,10 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
 
@@ -34,7 +31,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
     @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
-    @XmlElement(name = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
     public OffsetDateTime getEffectFrom() {
@@ -49,7 +45,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String IO_FIELD_EFFECT_FROM_UNCERTAIN = "virkningFraUsikker";
     @Column(name = DB_FIELD_EFFECT_FROM_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_EFFECT_FROM_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_EFFECT_FROM_UNCERTAIN)
     private boolean effectFromUncertain;
 
     public boolean isEffectFromUncertain() {
@@ -64,7 +59,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
     @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
-    @XmlElement(name = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
     public OffsetDateTime getEffectTo() {
@@ -79,7 +73,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String IO_FIELD_EFFECT_TO_UNCERTAIN = "virkningTilUsikker";
     @Column(name = DB_FIELD_EFFECT_TO_UNCERTAIN)
     @JsonProperty(value = IO_FIELD_EFFECT_TO_UNCERTAIN)
-    @XmlElement(name = IO_FIELD_EFFECT_TO_UNCERTAIN)
     private boolean effectToUncertain;
 
     public boolean isEffectToUncertain() {
@@ -93,7 +86,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     // Whether this record should replace any equal records? (equal except effectTo)
     @JsonIgnore
-    @XmlTransient
     private boolean historic = false;
 
     public CprBitemporalRecord setHistoric() {

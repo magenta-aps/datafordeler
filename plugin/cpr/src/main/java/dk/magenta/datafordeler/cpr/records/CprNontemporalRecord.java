@@ -10,8 +10,6 @@ import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -36,7 +34,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = CprNontemporalRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
     @JsonIgnore
-    @XmlTransient
     private E entity;
 
     public E getEntity() {
@@ -188,7 +185,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public static final String IO_FIELD_AUTHORITY = "myndighed";
     @Column(name = DB_FIELD_AUTHORITY)
     @JsonProperty(value = IO_FIELD_AUTHORITY)
-    @XmlElement(name = IO_FIELD_AUTHORITY)
     private int authority;
 
     public int getAuthority() {
@@ -206,7 +202,6 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
     @JsonProperty(value = IO_FIELD_UPDATED)

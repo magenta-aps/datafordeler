@@ -6,7 +6,6 @@ import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -27,7 +26,6 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
 
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_REGISTRATION_FROM)
     protected OffsetDateTime registrationFrom;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
@@ -45,7 +43,6 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @XmlElement(name = IO_FIELD_REGISTRATION_TO)
     protected OffsetDateTime registrationTo;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
