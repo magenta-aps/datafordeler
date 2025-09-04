@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.subscription.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
@@ -38,8 +39,6 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FetchEventsTest extends TestBase {
-
-    private final OffsetDateTime timestampInitial = OffsetDateTime.now(ZoneOffset.UTC);
 
     private static final HashMap<String, String> schemaMap = new HashMap<>();
 
@@ -86,6 +85,7 @@ public class FetchEventsTest extends TestBase {
             DataEventSubscription subscriptionDE7 = new DataEventSubscription("DE6", "cvr.dataevent.cvr_record_address", subscriber);
             DataEventSubscription subscriptionDE6 = new DataEventSubscription("DE7", "cvr.dataevent.cvr_record_address.before.kommunekode=956", subscriber);
             DataEventSubscription subscriptionDE8 = new DataEventSubscription("DE8", "cvr.dataevent.cvr_record_address.after.kommunekode=956", subscriber);
+            DataEventSubscription subscriptionDE9 = new DataEventSubscription("DE9", "cpr.dataevent.anything", subscriber);
 
             CprList cprList = new CprList("L1");
             cprList.addCprString("0101011235");
@@ -106,9 +106,13 @@ public class FetchEventsTest extends TestBase {
             cprList.addCprString("0101011250");
             session.persist(cprList);
 
+
             CvrList cvrList = new CvrList("L2");
             cvrList.addCvrString("25052943");
             session.persist(cvrList);
+
+            CprList cprListAny = new CprList("L3");
+            cprListAny.setAnyCpr(true);
 
             subscriptionT1.setCprList(cprList);
             subscriptionT2.setCprList(cprList);
@@ -124,6 +128,8 @@ public class FetchEventsTest extends TestBase {
             subscriptionDE7.setCvrList(cvrList);
             subscriptionDE8.setCvrList(cvrList);
 
+            subscriptionDE9.setCprList(cprList);
+
             subscriber.addBusinessEventSubscription(subscriptionT1);
             subscriber.addBusinessEventSubscription(subscriptionT2);
             subscriber.addBusinessEventSubscription(subscriptionT3);
@@ -136,6 +142,7 @@ public class FetchEventsTest extends TestBase {
             subscriber.addDataEventSubscription(subscriptionDE6);
             subscriber.addDataEventSubscription(subscriptionDE7);
             subscriber.addDataEventSubscription(subscriptionDE8);
+            subscriber.addDataEventSubscription(subscriptionDE9);
             session.persist(subscriber);
             tx.commit();
         } catch (IOException e) {
@@ -613,6 +620,30 @@ public class FetchEventsTest extends TestBase {
         );
         Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
+    }
+
+    public void testGetAllCpr() throws JsonProcessingException {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
+
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", httpHeaders);
+        TestUserDetails testUserDetails = new TestUserDetails();
+        testUserDetails.giveAccess(CprRolesDefinition.READ_CPR_ROLE);
+        testUserDetails.giveAccess(CvrRolesDefinition.READ_CVR_ROLE);
+        testUserDetails.setIdentity("PITU/GOV/DIA/magenta_services");
+        this.applyAccess(testUserDetails);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE9&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
+        JsonNode results = responseContent.get("results");
+
+        Assertions.assertEquals(17, results.size());
     }
 
     /**

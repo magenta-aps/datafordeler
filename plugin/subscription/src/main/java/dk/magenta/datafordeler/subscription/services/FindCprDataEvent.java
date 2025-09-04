@@ -73,9 +73,6 @@ public class FindCprDataEvent {
     private RecordMetadataWrapper personRecordOutputWrapper;
 
 
-    @Autowired
-    protected MonitorService monitorService;
-
     private final Logger log = LogManager.getLogger(FindCprDataEvent.class.getCanonicalName());
 
 
@@ -143,20 +140,30 @@ public class FindCprDataEvent {
                 if (cprList == null) {
                     return this.getErrorMessage("No cprlist for subscription", HttpStatus.NOT_FOUND);
                 }
-                String listId = cprList.getListId();
+                String queryString;
+                String listId = null;
+                if (cprList.getAnyCpr()) {
+                    queryString = "SELECT DISTINCT person from " + PersonEntity.class.getCanonicalName() + " person " +
+                            "INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
+                            "WHERE (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) " +
+                            "AND (dataeventDataRecord.timestamp IS NOT NULL) " +
+                            "AND (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) " +
+                            "AND (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                } else {
+                    listId = cprList.getListId();
+                    // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
+                    queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
+                            " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
+                            " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
+                            " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
+                            " where (list.listId=:listId OR :listId IS NULL) AND" +
+                            " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
+                            " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                }
 
-                // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
-                String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
-                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
-                        " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
-                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
-                        " where (list.listId=:listId OR :listId IS NULL) AND" +
-                        " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                        " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
-
-                Query query = session.createQuery(queryString);
+                Query<PersonEntity> query = session.createQuery(queryString, PersonEntity.class);
                 if (pageSize != null) {
                     query.setMaxResults(Integer.valueOf(pageSize));
                 } else {
@@ -175,11 +182,13 @@ public class FindCprDataEvent {
                 if (!"anything".equals(subscriptionKodeId[2])) {
                     fieldType = subscriptionKodeId[2];
                 }
+                if (listId != null) {
+                    query.setParameter("listId", listId);
+                }
 
                 Stream<PersonEntity> personStream = query
                         .setParameter("offsetTimestampGTE", offsetTimestampGTE)
                         .setParameter("offsetTimestampLTE", offsetTimestampLTE)
-                        .setParameter("listId", listId)
                         .setParameter("fieldEntity", fieldType)
                         .stream();
 
