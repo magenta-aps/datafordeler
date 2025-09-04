@@ -622,6 +622,7 @@ public class FetchEventsTest extends TestBase {
 
     }
 
+    @Test
     public void testGetAllCpr() throws JsonProcessingException {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
@@ -642,6 +643,7 @@ public class FetchEventsTest extends TestBase {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
+        System.out.println(results.toString());
 
         Assertions.assertEquals(17, results.size());
     }
