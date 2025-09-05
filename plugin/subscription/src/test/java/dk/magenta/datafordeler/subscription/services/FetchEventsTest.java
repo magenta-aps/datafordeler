@@ -130,7 +130,7 @@ public class FetchEventsTest extends TestBase {
             subscriptionDE7.setCvrList(cvrList);
             subscriptionDE8.setCvrList(cvrList);
 
-            subscriptionDE9.setCprList(cprList);
+            subscriptionDE9.setCprList(cprListAny);
 
             subscriber.addBusinessEventSubscription(subscriptionT1);
             subscriber.addBusinessEventSubscription(subscriptionT2);
