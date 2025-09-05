@@ -142,6 +142,7 @@ public class FindCprDataEvent {
                 String queryString;
                 String listId = null;
                 if (cprList.getAnyCpr()) {
+                    System.out.println("ANY");
                     queryString = "SELECT DISTINCT person from " + PersonEntity.class.getCanonicalName() + " person " +
                             "INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                             "WHERE (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) " +
@@ -150,6 +151,7 @@ public class FindCprDataEvent {
                             "AND (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
                 } else {
                     listId = cprList.getListId();
+                    System.out.println("NOT ANY");
                     // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                     queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
                             " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
@@ -196,7 +198,9 @@ public class FindCprDataEvent {
                 List<Object> returnValues = null;
 
                 if (!includeMeta) {
-
+                    List<PersonEntity> pList = personStream.toList();
+                    System.out.println("personStream size: "+pList.size());
+                    personStream = pList.stream();
                     returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
                     envelope.setResults(returnValues);
                 } else {

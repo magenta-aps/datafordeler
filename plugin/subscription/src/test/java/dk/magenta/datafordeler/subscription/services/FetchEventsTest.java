@@ -638,6 +638,12 @@ public class FetchEventsTest extends TestBase {
                 entities.add(record.getEntity());
             }
             System.out.println(entities.size()+" unique entities");
+
+            hql = "from " + PersonEntity.class.getCanonicalName();
+            Query<PersonEntity> query2 = session.createQuery(hql, PersonEntity.class);
+            for (PersonEntity personEntity : query2.getResultList()) {
+                System.out.println("PersonEntity: "+personEntity.getPersonnummer());
+            }
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
