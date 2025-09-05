@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.subscription.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dk.magenta.datafordeler.core.MonitorService;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.AccessDeniedException;
@@ -27,7 +26,6 @@ import dk.magenta.datafordeler.subscription.data.subscriptionModel.CprList;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.DataEventSubscription;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.SubscribedCprNumber;
 import dk.magenta.datafordeler.subscription.queries.GeneralQuery;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,7 +36,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,9 +70,6 @@ public class FindCprDataEvent {
     private RecordMetadataWrapper personRecordOutputWrapper;
 
 
-    @Autowired
-    protected MonitorService monitorService;
-
     private final Logger log = LogManager.getLogger(FindCprDataEvent.class.getCanonicalName());
 
 
@@ -86,7 +80,6 @@ public class FindCprDataEvent {
      */
     @RequestMapping(path = {"/fetchEvents", "/fetchEvents/"})
     public ResponseEntity<Envelope> findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
-
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
         String dataEventId = requestParams.getFirst("subscription");
@@ -103,12 +96,12 @@ public class FindCprDataEvent {
             this.checkAndLogAccess(loggerHelper);
 
             String hql = "SELECT max(event.timestamp) FROM " + PersonDataEventDataRecord.class.getCanonicalName() + " event ";
-            Query timestampQuery = session.createQuery(hql);
-            OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
+            Query<OffsetDateTime> timestampQuery = session.createQuery(hql, OffsetDateTime.class);
+            OffsetDateTime newestEventTimestamp = timestampQuery.getResultList().get(0);
 
-            Query eventQuery = session.createQuery(" from " + DataEventSubscription.class.getName() + " where dataEventId = :dataEventId", DataEventSubscription.class);
+            Query<DataEventSubscription> eventQuery = session.createQuery(" from " + DataEventSubscription.class.getName() + " where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
-            if (eventQuery.getResultList().size() == 0) {
+            if (eventQuery.getResultList().isEmpty()) {
                 return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscription = (DataEventSubscription) eventQuery.getResultList().get(0);
@@ -143,27 +136,37 @@ public class FindCprDataEvent {
                 if (cprList == null) {
                     return this.getErrorMessage("No cprlist for subscription", HttpStatus.NOT_FOUND);
                 }
-                String listId = cprList.getListId();
+                String queryString;
+                String listId = null;
+                if (cprList.getAnyCpr()) {
+                    queryString = "SELECT DISTINCT person from " + PersonEntity.class.getCanonicalName() + " person " +
+                            "INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
+                            "WHERE (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) " +
+                            "AND (dataeventDataRecord.timestamp IS NOT NULL) " +
+                            "AND (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) " +
+                            "AND (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                } else {
+                    listId = cprList.getListId();
+                    // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
+                    queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
+                            " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
+                            " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
+                            " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
+                            " where (list.listId=:listId OR :listId IS NULL) AND" +
+                            " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
+                            " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                            " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                }
 
-                // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
-                String queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
-                        " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
-                        " INNER JOIN " + PersonEntity.class.getCanonicalName() + " person ON (person.personnummer = numbers.cprNumber) " +
-                        " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
-                        " where (list.listId=:listId OR :listId IS NULL) AND" +
-                        " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                        " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
-
-                Query query = session.createQuery(queryString);
+                Query<PersonEntity> query = session.createQuery(queryString, PersonEntity.class);
                 if (pageSize != null) {
-                    query.setMaxResults(Integer.valueOf(pageSize));
+                    query.setMaxResults(Integer.parseInt(pageSize));
                 } else {
                     query.setMaxResults(10);
                 }
                 if (page != null) {
-                    int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
+                    int pageIndex = (Integer.parseInt(page) - 1) * query.getMaxResults();
                     query.setFirstResult(pageIndex);
                 } else {
                     query.setFirstResult(0);
@@ -175,11 +178,13 @@ public class FindCprDataEvent {
                 if (!"anything".equals(subscriptionKodeId[2])) {
                     fieldType = subscriptionKodeId[2];
                 }
+                if (listId != null) {
+                    query.setParameter("listId", listId);
+                }
 
                 Stream<PersonEntity> personStream = query
                         .setParameter("offsetTimestampGTE", offsetTimestampGTE)
                         .setParameter("offsetTimestampLTE", offsetTimestampLTE)
-                        .setParameter("listId", listId)
                         .setParameter("fieldEntity", fieldType)
                         .stream();
 
@@ -187,14 +192,13 @@ public class FindCprDataEvent {
                 List<Object> returnValues = null;
 
                 if (!includeMeta) {
-
-                    returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
+                    List<PersonEntity> pList = personStream.toList();
+                    personStream = pList.stream();
+                    returnValues = personStream.map(PersonEntity::getPersonnummer).collect(Collectors.toList());
                     envelope.setResults(returnValues);
                 } else {
-                    List otherList = new ArrayList<ObjectNode>();
-                    List<PersonEntity> entities = personStream.collect(Collectors.toList());
-
-                    for (PersonEntity entity : entities) {
+                    ArrayList<ObjectNode> otherList = new ArrayList<>();
+                    for (PersonEntity entity : personStream.toList()) {
                         CprBitemporalPersonRecord oldValues = null;
                         CprBitemporalPersonRecord newValues = getActualValueRecord(subscriptionKodeId[2], entity);
                         PersonDataEventDataRecord eventRecord = entity.getDataEvent(subscriptionKodeId[2]);
