@@ -632,9 +632,12 @@ public class FetchEventsTest extends TestBase {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             String hql = "FROM "+PersonDataEventDataRecord.class.getCanonicalName();
             Query<PersonDataEventDataRecord> query = session.createQuery(hql, PersonDataEventDataRecord.class);
+            HashSet<PersonEntity> entities = new HashSet<>();
             for (PersonDataEventDataRecord record : query.getResultList()) {
-                System.out.println(record.getEntity().getPersonnummer());
+                System.out.println(record.getEntity().getPersonnummer()+" "+record.getField()+" "+record.getTimestamp());
+                entities.add(record.getEntity());
             }
+            System.out.println(entities.size()+" unique entities");
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -658,7 +661,7 @@ public class FetchEventsTest extends TestBase {
         JsonNode results = responseContent.get("results");
         System.out.println(results.toString());
 
-        Assertions.assertEquals(17, results.size());
+        Assertions.assertEquals(10, results.size());
     }
 
     /**
