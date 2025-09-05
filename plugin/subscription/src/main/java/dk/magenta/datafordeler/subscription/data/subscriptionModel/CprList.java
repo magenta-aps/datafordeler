@@ -82,7 +82,6 @@ public class CprList extends DatabaseEntry {
         return cprs;
     }
 
-
     public void addCprStrings(List<String> cprs) throws ConflictException {
         for (String cpr : cprs) {
             this.addCprString(cpr);

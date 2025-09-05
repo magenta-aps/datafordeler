@@ -654,9 +654,6 @@ public class FetchEventsTest extends TestBase {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-        System.out.println(results.toString());
-        System.out.println("===================================");
-
         Assertions.assertEquals(totalCount, results.size());
     }
 
