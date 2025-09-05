@@ -660,6 +660,7 @@ public class FetchEventsTest extends TestBase {
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
         System.out.println(results.toString());
+        System.out.println("===================================");
 
         Assertions.assertEquals(10, results.size());
     }
