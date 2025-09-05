@@ -115,6 +115,7 @@ public class FetchEventsTest extends TestBase {
 
             CprList cprListAny = new CprList("L3");
             cprListAny.setAnyCpr(true);
+            session.persist(cprListAny);
 
             subscriptionT1.setCprList(cprList);
             subscriptionT2.setCprList(cprList);
