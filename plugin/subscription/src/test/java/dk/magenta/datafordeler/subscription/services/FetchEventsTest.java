@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.cpr.CprRolesDefinition;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
+import dk.magenta.datafordeler.cpr.records.person.data.PersonDataEventDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.entitymanager.CompanyEntityManager;
 import dk.magenta.datafordeler.cvr.records.CompanyRecord;
@@ -19,6 +20,7 @@ import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import dk.magenta.datafordeler.subscription.data.subscriptionModel.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -624,6 +626,17 @@ public class FetchEventsTest extends TestBase {
 
     @Test
     public void testGetAllCpr() throws JsonProcessingException {
+        System.out.println("=============");
+        System.out.println("testGetAllCpr");
+
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            String hql = "select from "+PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ";
+            Query<PersonDataEventDataRecord> query = session.createQuery(hql, PersonDataEventDataRecord.class);
+            for (PersonDataEventDataRecord record : query.getResultList()) {
+                System.out.println(record.getEntity().getPersonnummer());
+            }
+        }
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("uxp-client", "PITU/GOV/DIA/magenta_services");
 
@@ -635,7 +648,7 @@ public class FetchEventsTest extends TestBase {
         this.applyAccess(testUserDetails);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE9&timestamp.GTE=2010-11-26T12:00-06:00&pageSize=100",
+                "/subscription/1/findCprDataEvent/fetchEvents?subscription=DE9&pageSize=100",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
