@@ -98,12 +98,12 @@ public class FindCprDataEvent {
             this.checkAndLogAccess(loggerHelper);
 
             String hql = "SELECT max(event.timestamp) FROM " + PersonDataEventDataRecord.class.getCanonicalName() + " event ";
-            Query timestampQuery = session.createQuery(hql);
-            OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
+            Query<OffsetDateTime> timestampQuery = session.createQuery(hql, OffsetDateTime.class);
+            OffsetDateTime newestEventTimestamp = timestampQuery.getResultList().get(0);
 
-            Query eventQuery = session.createQuery(" from " + DataEventSubscription.class.getName() + " where dataEventId = :dataEventId", DataEventSubscription.class);
+            Query<DataEventSubscription> eventQuery = session.createQuery(" from " + DataEventSubscription.class.getName() + " where dataEventId = :dataEventId", DataEventSubscription.class);
             eventQuery.setParameter("dataEventId", dataEventId);
-            if (eventQuery.getResultList().size() == 0) {
+            if (eventQuery.getResultList().isEmpty()) {
                 return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
             } else {
                 DataEventSubscription subscription = (DataEventSubscription) eventQuery.getResultList().get(0);
@@ -163,12 +163,12 @@ public class FindCprDataEvent {
 
                 Query<PersonEntity> query = session.createQuery(queryString, PersonEntity.class);
                 if (pageSize != null) {
-                    query.setMaxResults(Integer.valueOf(pageSize));
+                    query.setMaxResults(Integer.parseInt(pageSize));
                 } else {
                     query.setMaxResults(10);
                 }
                 if (page != null) {
-                    int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
+                    int pageIndex = (Integer.parseInt(page) - 1) * query.getMaxResults();
                     query.setFirstResult(pageIndex);
                 } else {
                     query.setFirstResult(0);
@@ -196,13 +196,11 @@ public class FindCprDataEvent {
                 if (!includeMeta) {
                     List<PersonEntity> pList = personStream.toList();
                     personStream = pList.stream();
-                    returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
+                    returnValues = personStream.map(PersonEntity::getPersonnummer).collect(Collectors.toList());
                     envelope.setResults(returnValues);
                 } else {
-                    List otherList = new ArrayList<ObjectNode>();
-                    List<PersonEntity> entities = personStream.collect(Collectors.toList());
-
-                    for (PersonEntity entity : entities) {
+                    ArrayList<ObjectNode> otherList = new ArrayList<>();
+                    for (PersonEntity entity : personStream.toList()) {
                         CprBitemporalPersonRecord oldValues = null;
                         CprBitemporalPersonRecord newValues = getActualValueRecord(subscriptionKodeId[2], entity);
                         PersonDataEventDataRecord eventRecord = entity.getDataEvent(subscriptionKodeId[2]);

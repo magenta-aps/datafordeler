@@ -34,6 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
@@ -627,11 +628,11 @@ public class FetchEventsTest extends TestBase {
 
     @Test
     public void testGetAllCpr() throws JsonProcessingException {
-        long totalCount;
+        int totalCount;
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             String hql = "FROM "+PersonDataEventDataRecord.class.getCanonicalName();
             Query<PersonDataEventDataRecord> query = session.createQuery(hql, PersonDataEventDataRecord.class);
-            totalCount = query.getResultCount();
+            totalCount = query.getResultStream().map(r -> r.getEntity().getPersonnummer()).collect(Collectors.toSet()).size();
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -653,6 +654,9 @@ public class FetchEventsTest extends TestBase {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
+        System.out.println(results.toString());
+        System.out.println("===================================");
+
         Assertions.assertEquals(totalCount, results.size());
     }
 
