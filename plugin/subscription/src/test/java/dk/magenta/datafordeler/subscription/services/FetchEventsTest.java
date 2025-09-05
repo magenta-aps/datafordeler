@@ -630,7 +630,7 @@ public class FetchEventsTest extends TestBase {
         System.out.println("testGetAllCpr");
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
-            String hql = "select from "+PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ";
+            String hql = "FROM "+PersonDataEventDataRecord.class.getCanonicalName();
             Query<PersonDataEventDataRecord> query = session.createQuery(hql, PersonDataEventDataRecord.class);
             for (PersonDataEventDataRecord record : query.getResultList()) {
                 System.out.println(record.getEntity().getPersonnummer());
