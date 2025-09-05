@@ -106,4 +106,17 @@ public class CprList extends DatabaseEntry {
         }
     }
 
+    public static final String DB_FIELD_ANY_CPR = "anyCpr";
+    @JsonIgnore
+    @Column(name = DB_FIELD_ANY_CPR, nullable = false)
+    private boolean anyCpr = false;
+
+    @JsonIgnore
+    public boolean getAnyCpr() {
+        return this.anyCpr;
+    }
+
+    public void setAnyCpr(boolean anyCpr) {
+        this.anyCpr = anyCpr;
+    }
 }
