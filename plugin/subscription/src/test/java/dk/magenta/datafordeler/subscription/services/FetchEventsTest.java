@@ -627,24 +627,11 @@ public class FetchEventsTest extends TestBase {
 
     @Test
     public void testGetAllCpr() throws JsonProcessingException {
-        System.out.println("=============");
-        System.out.println("testGetAllCpr");
-
+        long totalCount;
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             String hql = "FROM "+PersonDataEventDataRecord.class.getCanonicalName();
             Query<PersonDataEventDataRecord> query = session.createQuery(hql, PersonDataEventDataRecord.class);
-            HashSet<PersonEntity> entities = new HashSet<>();
-            for (PersonDataEventDataRecord record : query.getResultList()) {
-                System.out.println(record.getEntity().getPersonnummer()+" "+record.getField()+" "+record.getTimestamp());
-                entities.add(record.getEntity());
-            }
-            System.out.println(entities.size()+" unique entities");
-
-            hql = "from " + PersonEntity.class.getCanonicalName();
-            Query<PersonEntity> query2 = session.createQuery(hql, PersonEntity.class);
-            for (PersonEntity personEntity : query2.getResultList()) {
-                System.out.println("PersonEntity: "+personEntity.getPersonnummer());
-            }
+            totalCount = query.getResultCount();
         }
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -666,10 +653,7 @@ public class FetchEventsTest extends TestBase {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         JsonNode results = responseContent.get("results");
-        System.out.println(results.toString());
-        System.out.println("===================================");
-
-        Assertions.assertEquals(10, results.size());
+        Assertions.assertEquals(totalCount, results.size());
     }
 
     /**

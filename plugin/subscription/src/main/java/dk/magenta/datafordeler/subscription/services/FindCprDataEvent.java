@@ -130,7 +130,6 @@ public class FindCprDataEvent {
                 }
 
                 String[] subscriptionKodeId = subscription.getKodeId().split("[.]");
-                System.out.println("subscription.getKodeId():" + subscription.getKodeId());
                 if (!"cpr".equals(subscriptionKodeId[0]) && !"dataevent".equals(subscriptionKodeId[1])) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
@@ -142,7 +141,6 @@ public class FindCprDataEvent {
                 String queryString;
                 String listId = null;
                 if (cprList.getAnyCpr()) {
-                    System.out.println("ANY");
                     queryString = "SELECT DISTINCT person from " + PersonEntity.class.getCanonicalName() + " person " +
                             "INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                             "WHERE (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) " +
@@ -151,7 +149,6 @@ public class FindCprDataEvent {
                             "AND (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
                 } else {
                     listId = cprList.getListId();
-                    System.out.println("NOT ANY");
                     // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
                     queryString = "SELECT DISTINCT person FROM " + CprList.class.getCanonicalName() + " list " +
                             " INNER JOIN " + SubscribedCprNumber.class.getCanonicalName() + " numbers ON (list = numbers.cprList) " +
@@ -172,7 +169,6 @@ public class FindCprDataEvent {
                 }
                 if (page != null) {
                     int pageIndex = (Integer.valueOf(page) - 1) * query.getMaxResults();
-                    System.out.println("pageIndex: "+pageIndex);
                     query.setFirstResult(pageIndex);
                 } else {
                     query.setFirstResult(0);
@@ -199,7 +195,6 @@ public class FindCprDataEvent {
 
                 if (!includeMeta) {
                     List<PersonEntity> pList = personStream.toList();
-                    System.out.println("personStream size: "+pList.size());
                     personStream = pList.stream();
                     returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
                     envelope.setResults(returnValues);
@@ -208,8 +203,6 @@ public class FindCprDataEvent {
                     List<PersonEntity> entities = personStream.collect(Collectors.toList());
 
                     for (PersonEntity entity : entities) {
-                        System.out.println("Processing entity "+entity.getPersonnummer());
-                        boolean added = false;
                         CprBitemporalPersonRecord oldValues = null;
                         CprBitemporalPersonRecord newValues = getActualValueRecord(subscriptionKodeId[2], entity);
                         PersonDataEventDataRecord eventRecord = entity.getDataEvent(subscriptionKodeId[2]);
@@ -224,30 +217,20 @@ public class FindCprDataEvent {
                             if (subscriptionKodeId[3].equals("before")) {
                                 if (this.validateIt(subscriptionKodeId[2], subscriptionKodeId[4], oldValues)) {
                                     ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscriptionKodeId[2], oldValues, newValues);
-                                    System.out.println("adding");
                                     otherList.add(node);
-                                    added = true;
                                 }
                             } else if (subscriptionKodeId[3].equals("after")) {
                                 if (this.validateIt(subscriptionKodeId[2], subscriptionKodeId[4], newValues)) {
                                     ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscriptionKodeId[2], oldValues, newValues);
-                                    System.out.println("adding");
                                     otherList.add(node);
-                                    added = true;
                                 }
                             }
                         } else {
                             ObjectNode node = personRecordOutputWrapper.fillContainer(entity.getPersonnummer(), subscriptionKodeId[2], oldValues, newValues);
-                            System.out.println("adding");
                             otherList.add(node);
-                            added = true;
-                        }
-                        if (!added) {
-                            System.out.println("not added");
                         }
                     }
                     envelope.setResults(otherList);
-                    System.out.println("outputting "+otherList.size()+" items");
                 }
 
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
