@@ -61,6 +61,9 @@ public class CloseCommandHandler extends CommandHandler {
         @JsonProperty(required = true)
         public List<String> ids;
 
+        @JsonProperty
+        public Integer batch = null;
+
         @Override
         public boolean containsAll(Map<String, Object> data) {
             for (String key : data.keySet()) {
@@ -106,10 +109,15 @@ public class CloseCommandHandler extends CommandHandler {
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
                             final FinalWrapper<Integer> totalCounter = new FinalWrapper<>(0);
+                            int startBatch = 1;
+                            if (commandData.batch != null) {
+                                startBatch = commandData.batch;
+                            }
                             switch (commandData.type) {
 
                                 case "company":
-                                    for (int batch=1; batch<1000; batch++) {
+                                    for (int batch=startBatch; batch<1000; batch++) {
+                                        System.out.println("Processing batch "+batch);
                                         Transaction transaction = session.beginTransaction();
                                         try {
                                             CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
@@ -141,7 +149,8 @@ public class CloseCommandHandler extends CommandHandler {
                                     break;
 
                                 case "unit":
-                                    for (int batch=1; batch<1000; batch++) {
+                                    for (int batch=startBatch; batch<1000; batch++) {
+                                        System.out.println("Processing batch "+batch);
                                         Transaction transaction = session.beginTransaction();
                                         try {
                                             CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
@@ -173,7 +182,8 @@ public class CloseCommandHandler extends CommandHandler {
                                     break;
 
                                 case "participant":
-                                    for (int batch=1; batch<1000; batch++) {
+                                    for (int batch=startBatch; batch<1000; batch++) {
+                                        System.out.println("Processing batch "+batch);
                                         Transaction transaction = session.beginTransaction();
                                         try {
                                             ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
