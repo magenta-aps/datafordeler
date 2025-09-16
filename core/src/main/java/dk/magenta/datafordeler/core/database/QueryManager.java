@@ -290,7 +290,12 @@ public class QueryManager {
                         resultSet.addAssociatedEntities(subResult.all());
                     }
                 }
-                identitySetList.put(resultSet.getPrimaryEntity().getIdentification().getUuid(), resultSet);
+                E primaryEntity = resultSet.getPrimaryEntity();
+                if (primaryEntity.getIdentification() != null) {
+                    identitySetList.put(primaryEntity.getIdentification().getUuid(), resultSet);
+                } else {
+                    log.error("No identification for " + primaryEntity.getClass().getCanonicalName() + " " + session.getIdentifier(primaryEntity));
+                }
             } catch (ClassNotFoundException e) {
                 log.error(e);
             }
