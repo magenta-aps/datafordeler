@@ -290,11 +290,11 @@ public class QueryManager {
                         resultSet.addAssociatedEntities(subResult.all());
                     }
                 }
-                Identification indication = resultSet.getPrimaryEntity().getIdentification();
-                if (indication != null) {
-                identitySetList.put(resultSet.getPrimaryEntity().getIdentification().getUuid(), resultSet);
+                E primaryEntity = resultSet.getPrimaryEntity();
+                if (primaryEntity.getIdentification() != null) {
+                    identitySetList.put(primaryEntity.getIdentification().getUuid(), resultSet);
                 } else {
-                    System.out.println("No identification for " + resultSet.getPrimaryEntity().getClass().getCanonicalName() + " " + resultSet.getPrimaryEntity());
+                    log.error("No identification for " + primaryEntity.getClass().getCanonicalName() + " " + session.getIdentifier(primaryEntity));
                 }
             } catch (ClassNotFoundException e) {
                 log.error(e);
