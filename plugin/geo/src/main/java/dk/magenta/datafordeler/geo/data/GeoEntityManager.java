@@ -287,9 +287,9 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                     session.getTransaction().rollback();
                     throw e;
                 }
+                session.getTransaction().commit();
             }
 
-            session.getTransaction().commit();
         }
     }
 
