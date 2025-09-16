@@ -230,6 +230,8 @@ public class FindCprDataEvent {
                 }
 
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
+                envelope.setPage(query.getFirstResult());
+                envelope.setPageSize(query.getMaxResults());
                 loggerHelper.urlInvokePersistablelogs("fetchEvents done");
                 return ResponseEntity.ok(envelope);
             }

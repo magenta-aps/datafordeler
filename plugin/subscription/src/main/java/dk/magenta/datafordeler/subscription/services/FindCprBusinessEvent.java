@@ -172,8 +172,9 @@ public class FindCprBusinessEvent {
 
                 List<Object> returnValues = personStream.map(f -> f.getPersonnummer()).collect(Collectors.toList());
                 envelope.setResults(returnValues);
-
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
+                envelope.setPage(query.getFirstResult());
+                envelope.setPageSize(query.getMaxResults());
                 loggerHelper.urlInvokePersistablelogs("fetchEvents done");
                 return ResponseEntity.ok(envelope);
             }
