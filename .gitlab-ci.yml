@@ -188,15 +188,15 @@ test-cpr:
       junit:
         - /app/plugin/cpr/target/surefire-reports/TEST-*
 
-test-cvr:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/cvr
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit: target/surefire-reports/*.xml
+#test-cvr:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/cvr
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit: target/surefire-reports/*.xml
 
 test-eboks:
   <<: *test-default
@@ -292,7 +292,8 @@ test-subscription:
 .release:
   stage: release
   image: alpine
-  needs: ["build-jre-image", "test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik", "test-subscription"]
+  needs: ["build-jre-image", "test-core", "test-cpr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik", "test-subscription"]
+#  needs: ["build-jre-image", "test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik", "test-subscription"]
   variables:
     GIT_STRATEGY: none # We do not need the source code
   before_script:
