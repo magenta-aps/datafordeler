@@ -366,7 +366,7 @@ public class QueryManager {
      * @return
      */
     public static <E extends IdentifiedEntity> E getEntity(Session session, Identification identification, Class<E> eClass) {
-        log.debug("Get Entity of class " + eClass.getCanonicalName() + " by identification " + identification.getUuid());
+        log.debug("Get Entity of class " + eClass.getCanonicalName() + " by identification " + (identification != null ? identification.getUuid() : null));
         Query<E> databaseQuery = session.createQuery("select " + ENTITY + " from " + eClass.getCanonicalName() + " " + ENTITY + " where " + ENTITY + ".identification = :identification", eClass);
         databaseQuery.setParameter("identification", identification);
         databaseQuery.setFlushMode(FlushModeType.COMMIT);
