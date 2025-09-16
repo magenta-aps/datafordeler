@@ -1,12 +1,10 @@
 package dk.magenta.datafordeler.geo.data;
 
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
+import dk.magenta.datafordeler.geo.data.common.GeoNontemporalRecord;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
@@ -26,14 +24,14 @@ public class MonotemporalSet<R extends GeoMonotemporalRecord> implements Set<R> 
      * @return
      */
     public R current() {
-        return this.stream().filter(r -> r.getRegistrationTo() == null).findFirst().orElse(null);
+        return this.stream().filter(r -> r.getRegistrationTo() == null).max(Comparator.comparing(GeoNontemporalRecord::getDafoUpdated)).orElse(null);
     }
 
     public R at(OffsetDateTime dateTime) {
         return this.stream().filter(
                 r -> (r.getRegistrationFrom() == null || r.getRegistrationFrom().isBefore(dateTime) || r.getRegistrationFrom().isEqual(dateTime))
                         && (r.getRegistrationTo() == null || r.getRegistrationTo().isAfter(dateTime) || r.getRegistrationTo().isEqual(dateTime))
-        ).findFirst().orElse(null);
+        ).max(Comparator.comparing(GeoNontemporalRecord::getDafoUpdated)).orElse(null);
     }
 
 
