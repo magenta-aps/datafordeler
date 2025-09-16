@@ -262,7 +262,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 long deletionTime = jsonNode.get("attributes").get("DeletedDate").asLong(); // Epoch millisecond
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
                 if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
-                    log.info("Duplicate UUID in deletion for" + GeoEntityManager.this.getEntityClass().getSimpleName()+": " + uuid);
+                    log.info("Duplicate UUID in deletion for" + this.getEntityClass().getSimpleName()+": " + uuid);
                     return;
                 }
                 uuids.put(uuid, deletionTime);
