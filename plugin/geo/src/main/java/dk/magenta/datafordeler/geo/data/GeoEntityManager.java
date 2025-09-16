@@ -255,27 +255,35 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
     public void parseDeletionData(InputStream jsonData) throws DataStreamException {
         Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
-        Session session = sessionManager.getSessionFactory().openSession();
-        session.beginTransaction();
-        try {
+        try (Session session = sessionManager.getSessionFactory().openSession()) {
+            HashMap<UUID, Long> uuids = new HashMap<>();
             GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
                 String globalId = jsonNode.get("attributes").get("GlobalID").asText();
                 long deletionTime = jsonNode.get("attributes").get("DeletedDate").asLong(); // Epoch millisecond
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
-                E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
-                if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
-                    session.remove(entity);
+                if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
+                    log.info("Duplicate UUID in deletion for" + this.managedEntityClass.getSimpleName()+": " + uuid);
+                    return;
                 }
+                uuids.put(uuid, deletionTime);
             });
+            session.beginTransaction();
+            try {
+                for (UUID uuid : uuids.keySet()) {
+                    long deletionTime = uuids.get(uuid);
+                    E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
+                    if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
+                        log.info("Deleting " + this.getEntityClass().getSimpleName() + " with UUID " + uuid + " and edit date " + entity.getEditDate());
+                        session.remove(entity);
+                    }
+                }
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw e;
+            }
             session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            session.close();
         }
     }
-
 
     protected void updateEntity(E entity, T rawData, ImportMetadata importMetadata) {
         if (rawData instanceof SumiffiikRawData) {
