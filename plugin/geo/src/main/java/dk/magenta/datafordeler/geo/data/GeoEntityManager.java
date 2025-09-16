@@ -261,26 +261,27 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 String globalId = jsonNode.get("attributes").get("GlobalID").asText();
                 long deletionTime = jsonNode.get("attributes").get("DeletedDate").asLong(); // Epoch millisecond
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
-                if (uuids.containsKey(uuid)) {
+                if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
                     System.out.println("Duplicate UUID: " + uuid);
+                    return;
                 }
                 uuids.put(uuid, deletionTime);
             });
-            for (UUID uuid : uuids.keySet()) {
-                session.beginTransaction();
-                try {
+            session.beginTransaction();
+            try {
+                for (UUID uuid : uuids.keySet()) {
                     long deletionTime = uuids.get(uuid);
                     E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
                     if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
                         System.out.println("Deleting " + this.getEntityClass().getSimpleName() + " with UUID " + uuid + " and edit date " + entity.getEditDate());
                         session.remove(entity);
                     }
-                } catch (Exception e) {
-                    session.getTransaction().rollback();
-                    throw e;
                 }
-                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw e;
             }
+            session.getTransaction().commit();
         }
     }
 
