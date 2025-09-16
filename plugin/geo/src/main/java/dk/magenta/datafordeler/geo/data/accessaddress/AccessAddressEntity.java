@@ -300,21 +300,23 @@ public class AccessAddressEntity extends SumiffiikEntity implements IdentifiedEn
         ArrayList<BaseQuery> queries = new ArrayList<>();
         HashMap<String, String> map = new HashMap<>();
         AccessAddressRoadRecord roadRecord = this.getRoad().current();
-        map.put("municipalitycode", Integer.toString(roadRecord.getMunicipalityCode()));
-        map.put("roadcode", Integer.toString(roadRecord.getRoadCode()));
+        if (roadRecord != null && roadRecord.getRoadCode() != null && roadRecord.getMunicipalityCode() != null) {
+            map.put("municipalitycode", Integer.toString(roadRecord.getMunicipalityCode()));
+            map.put("roadcode", Integer.toString(roadRecord.getRoadCode()));
 
-        Plugin geoPlugin = pluginManager.getPluginByName("geo");
-        try {
-            if (geoPlugin != null) {
-                queries.addAll(geoPlugin.getQueries(map));
+            Plugin geoPlugin = pluginManager.getPluginByName("geo");
+            try {
+                if (geoPlugin != null) {
+                    queries.addAll(geoPlugin.getQueries(map));
+                }
+                Plugin cprPlugin = pluginManager.getPluginByName("cpr");
+                if (cprPlugin != null) {
+                    queries.addAll(cprPlugin.getQueries(map));
+                }
+            } catch (InvalidClientInputException e) {
+                // All inputs are stringified integers, and exception is only thrown when it's a string we can't parse as int
+                throw new RuntimeException(e);
             }
-            Plugin cprPlugin = pluginManager.getPluginByName("cpr");
-            if (cprPlugin != null) {
-                queries.addAll(cprPlugin.getQueries(map));
-            }
-        } catch (InvalidClientInputException e) {
-            // All inputs are stringified integers, and exception is only thrown when it's a string we can't parse as int
-            throw new RuntimeException(e);
         }
 
         return queries;
