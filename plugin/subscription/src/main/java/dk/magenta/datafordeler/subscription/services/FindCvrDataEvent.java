@@ -226,6 +226,8 @@ public class FindCvrDataEvent {
                     envelope.setResults(otherList);
                 }
 
+                envelope.setPage(query.getFirstResult());
+                envelope.setPageSize(query.getMaxResults());
                 envelope.setNewestResultTimestamp(newestEventTimestamp);
                 loggerHelper.urlInvokePersistablelogs("fetchEvents done");
                 return ResponseEntity.ok(envelope);
