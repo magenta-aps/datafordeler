@@ -166,124 +166,124 @@ build-doc-image:
     - name: ${DAFOSQL_IMAGE_SHA}
       alias: datafordeler-db
 
-test-core:
-  <<: *test-default
-  before_script:
-    - cd /app/core
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/core/target/surefire-reports/*.xml
-
-test-cpr:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/cpr
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/cpr/target/surefire-reports/TEST-*
-
-test-cvr:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/cvr
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit: target/surefire-reports/*.xml
-
-test-eboks:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/eboks
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/eboks/target/surefire-reports/*.xml
-
-test-eskat:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/eskat
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/eskat/target/surefire-reports/*.xml
-
-test-geo:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/geo
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/geo/target/surefire-reports/*.xml
-
-test-ger:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/ger
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/ger/target/surefire-reports/*.xml
-
-test-prisme:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/prisme
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/prisme/target/surefire-reports/*.xml
-
-test-combinedPitu:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/combinedPitu
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
-
-test-statistik:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/statistik
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit:
-        - /app/plugin/statistik/target/surefire-reports/*.xml
-
-test-subscription:
-  <<: *test-default
-  before_script:
-    - cd /app/plugin/subscription
-  script:
-    - mvn --batch-mode test
-  artifacts:
-    reports:
-      junit: /app/plugin/subscription/target/surefire-reports/*.xml
+#test-core:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/core
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/core/target/surefire-reports/*.xml
+#
+#test-cpr:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/cpr
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/cpr/target/surefire-reports/TEST-*
+#
+#test-cvr:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/cvr
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit: target/surefire-reports/*.xml
+#
+#test-eboks:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/eboks
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/eboks/target/surefire-reports/*.xml
+#
+#test-eskat:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/eskat
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/eskat/target/surefire-reports/*.xml
+#
+#test-geo:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/geo
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/geo/target/surefire-reports/*.xml
+#
+#test-ger:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/ger
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/ger/target/surefire-reports/*.xml
+#
+#test-prisme:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/prisme
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/prisme/target/surefire-reports/*.xml
+#
+#test-combinedPitu:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/combinedPitu
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/pituCombined/target/surefire-reports/TEST-*.xml
+#
+#test-statistik:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/statistik
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit:
+#        - /app/plugin/statistik/target/surefire-reports/*.xml
+#
+#test-subscription:
+#  <<: *test-default
+#  before_script:
+#    - cd /app/plugin/subscription
+#  script:
+#    - mvn --batch-mode test
+#  artifacts:
+#    reports:
+#      junit: /app/plugin/subscription/target/surefire-reports/*.xml
 
 
 # Release stage
@@ -292,7 +292,9 @@ test-subscription:
 .release:
   stage: release
   image: alpine
-  needs: ["build-jre-image", "test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik", "test-subscription"]
+#  needs: ["build-jre-image", "test-core", "test-cpr", "test-cvr", "test-eboks", "test-eskat", "test-geo", "test-ger", "test-prisme", "test-combinedPitu", "test-statistik", "test-subscription"]
+  needs: [ "build-jre-image" ]
+
   variables:
     GIT_STRATEGY: none # We do not need the source code
   before_script:

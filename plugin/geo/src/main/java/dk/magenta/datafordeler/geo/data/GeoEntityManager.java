@@ -262,20 +262,27 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 long deletionTime = jsonNode.get("attributes").get("DeletedDate").asLong(); // Epoch millisecond
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
                 if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
-                    log.info("Duplicate UUID in deletion for" + this.getEntityClass().getSimpleName()+": " + uuid);
+                    log.info("Duplicate UUID in deletion for " + this.getEntityClass().getSimpleName()+": " + uuid);
                     return;
                 }
                 uuids.put(uuid, deletionTime);
             });
+            ArrayList<E> entitiesToDelete = new ArrayList<>();
             session.beginTransaction();
+
+            for (UUID uuid : uuids.keySet()) {
+                long deletionTime = uuids.get(uuid);
+                E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
+                if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
+                    entitiesToDelete.add(entity);
+                }
+            }
+            log.info("Found " + entitiesToDelete.size() + " " + this.getEntityClass().getSimpleName() + " to delete");
+
             try {
-                for (UUID uuid : uuids.keySet()) {
-                    long deletionTime = uuids.get(uuid);
-                    E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
-                    if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
-                        log.info("Deleting " + this.getEntityClass().getSimpleName() + " with UUID " + uuid + " and edit date " + entity.getEditDate());
-                        session.remove(entity);
-                    }
+                for (E entity : entitiesToDelete) {
+                    log.info("Deleting " + this.getEntityClass().getSimpleName() + " "+session.getIdentifier(entity));
+                    session.remove(entity);
                 }
             } catch (Exception e) {
                 session.getTransaction().rollback();
