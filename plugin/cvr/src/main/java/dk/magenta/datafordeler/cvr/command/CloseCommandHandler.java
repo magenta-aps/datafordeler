@@ -106,6 +106,7 @@ public class CloseCommandHandler extends CommandHandler {
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }
+                    CloseCommandHandler.this.getLog().info("batch: "+commandData.batch);
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
                             final FinalWrapper<Integer> totalCounter = new FinalWrapper<>(0);
@@ -226,6 +227,7 @@ public class CloseCommandHandler extends CommandHandler {
 
     public CloseCommandData getCommandData(String commandBody) throws InvalidClientInputException {
         try {
+            this.getLog().info("Parsing command data "+commandBody);
             CloseCommandData commandData = this.objectMapper.readValue(commandBody, CloseCommandData.class);
             this.getLog().info("Command data parsed");
             return commandData;
