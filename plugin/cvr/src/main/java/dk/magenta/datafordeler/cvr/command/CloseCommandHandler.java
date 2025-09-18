@@ -109,11 +109,12 @@ public class CloseCommandHandler extends CommandHandler {
                     CloseCommandHandler.this.getLog().info("batch: "+commandData.batch);
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
-                            final FinalWrapper<Integer> totalCounter = new FinalWrapper<>(0);
                             int startBatch = 1;
+                            int pageSize = 100;
                             if (commandData.batch != null) {
                                 startBatch = commandData.batch;
                             }
+                            final FinalWrapper<Integer> totalCounter = new FinalWrapper<>((startBatch-1)*pageSize);
                             switch (commandData.type) {
 
                                 case "company":
@@ -122,7 +123,7 @@ public class CloseCommandHandler extends CommandHandler {
                                         Transaction transaction = session.beginTransaction();
                                         try {
                                             CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-                                            companyRecordQuery.setPageSize(100);
+                                            companyRecordQuery.setPageSize(pageSize);
                                             companyRecordQuery.setPage(batch);
                                             companyRecordQuery.addOrderField(companyRecordQuery.getEntityIdentifier(), CompanyRecord.DB_FIELD_CVR_NUMBER);
                                             if (!commandData.ids.contains("all")) {
