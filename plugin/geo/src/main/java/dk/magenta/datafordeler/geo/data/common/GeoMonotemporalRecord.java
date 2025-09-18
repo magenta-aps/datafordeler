@@ -131,7 +131,8 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
         GeoMonotemporalRecord that = (GeoMonotemporalRecord) o;
         if (!this.equalData(that)) return false;
         return Objects.equals(registrationFrom, that.registrationFrom) &&
-                Objects.equals(registrationTo, that.registrationTo);
+                Objects.equals(registrationTo, that.registrationTo) &&
+                Objects.equals(dafoUpdated, that.dafoUpdated);
     }
 
     @Override
