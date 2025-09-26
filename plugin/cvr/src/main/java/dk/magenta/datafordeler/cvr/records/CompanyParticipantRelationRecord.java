@@ -108,7 +108,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
     public static final String DB_FIELD_ORGANIZATIONS = "organizations";
     public static final String IO_FIELD_ORGANIZATIONS = "organisationer";
 
-    @OneToMany(mappedBy = OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION, targetEntity = OrganizationRecord.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = OrganizationRecord.class, mappedBy = OrganizationRecord.DB_FIELD_PARTICIPANT_RELATION, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonProperty(value = IO_FIELD_ORGANIZATIONS)
     private Set<OrganizationRecord> organizations;
 

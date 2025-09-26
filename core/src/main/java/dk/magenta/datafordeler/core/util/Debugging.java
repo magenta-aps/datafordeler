@@ -8,6 +8,8 @@ import org.hibernate.engine.spi.*;
 import org.hibernate.internal.util.collections.IdentityMap;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Debugging {
@@ -21,7 +23,9 @@ public class Debugging {
             Field entityEntriesField = StatefulPersistenceContext.class.getDeclaredField("entitiesByKey");
             entityEntriesField.setAccessible(true);
             HashMap<EntityKey, EntityHolder> map = (HashMap<EntityKey, EntityHolder>) entityEntriesField.get(persistenceContext);
-            for (EntityKey key : map.keySet()) {
+            ArrayList<EntityKey> keys = new ArrayList<>(map.keySet());
+            keys.sort(Comparator.comparing(EntityKey::getEntityName).thenComparing(e -> e.getIdentifier().toString()));
+            for (EntityKey key : keys) {
                 EntityHolder holder = map.get(key);
                 EntityEntry entry = holder.getEntityEntry();
                 System.out.println(key.getEntityName()+"#"+key.getIdentifier() + ": " + holder.getEntity().getClass().getSimpleName()+" (initialized: "+holder.isInitialized()+", detached: "+holder.isDetached()+", isDeletedOrGone: "+entry.getStatus().isDeletedOrGone()+")");

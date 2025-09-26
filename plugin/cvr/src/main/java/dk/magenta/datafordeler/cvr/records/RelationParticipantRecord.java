@@ -156,6 +156,9 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
     public void setCompanyParticipantRelationRecord(CompanyParticipantRelationRecord companyParticipantRelationRecord) {
         this.companyParticipantRelationRecord = companyParticipantRelationRecord;
     }
+    public CompanyParticipantRelationRecord getCompanyParticipantRelationRecord() {
+        return this.companyParticipantRelationRecord;
+    }
 
 
     public UUID generateUUID() {
