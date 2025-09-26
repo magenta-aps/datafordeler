@@ -107,22 +107,22 @@ public class CloseCommandHandler extends CommandHandler {
                         throw new RuntimeException(e);
                     }
 
-                    final FinalWrapper<Integer> totalCounter = new FinalWrapper<>(0);
-                    int startBatch = 1;
-                    if (commandData.batch != null) {
-                        startBatch = commandData.batch;
-                    }
-                    switch (commandData.type) {
+                    try (Session session = sessionManager.getSessionFactory().openSession()) {
+                        int startBatch = 1;
+                        int batchSize = 100;
+                        if (commandData.batch != null) {
+                            startBatch = commandData.batch;
+                        }
+                        final FinalWrapper<Integer> totalCounter = new FinalWrapper<>((startBatch-1)*batchSize);
+                        switch (commandData.type) {
 
-                        case "company":
-                            for (int batch=startBatch; batch<100000; batch++) {
-                                try (Session session = sessionManager.getSessionFactory().openSession()) {
-
-                                    System.out.println("Processing batch " + batch);
+                            case "company":
+                                for (int batch=startBatch; batch<100000; batch++) {
+                                    System.out.println("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
                                         CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-                                        companyRecordQuery.setPageSize(100);
+                                        companyRecordQuery.setPageSize(batchSize);
                                         companyRecordQuery.setPage(batch);
                                         companyRecordQuery.addOrderField(companyRecordQuery.getEntityIdentifier(), CompanyRecord.DB_FIELD_CVR_NUMBER);
                                         if (!commandData.ids.contains("all")) {
@@ -131,10 +131,9 @@ public class CloseCommandHandler extends CommandHandler {
                                         Stream<CompanyRecord> companies = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class);
                                         final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
                                         companies.forEach(companyRecord -> {
-                                            System.out.println(totalCounter.getInner() + " " + companyRecord.getCvrNumber());
+                                            System.out.println(totalCounter.getInner()+" "+companyRecord.getCvrNumber());
                                             CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyRecord));
                                             CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyRecord));
-                                            session.flush();
                                             batchCounter.setInner(batchCounter.getInner() + 1);
                                             totalCounter.setInner(totalCounter.getInner() + 1);
                                         });
@@ -146,15 +145,14 @@ public class CloseCommandHandler extends CommandHandler {
                                         e.printStackTrace();
                                         transaction.rollback();
                                     }
+                                    session.flush();
+                                    session.clear();
                                 }
-                            }
-                            break;
+                                break;
 
-                        case "unit":
-                            for (int batch=startBatch; batch<100000; batch++) {
-                                try (Session session = sessionManager.getSessionFactory().openSession()) {
-
-                                    System.out.println("Processing batch " + batch);
+                            case "unit":
+                                for (int batch=startBatch; batch<100000; batch++) {
+                                    System.out.println("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
                                         CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
@@ -167,10 +165,9 @@ public class CloseCommandHandler extends CommandHandler {
                                         Stream<CompanyUnitRecord> units = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
                                         final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
                                         units.forEach(companyUnitRecord -> {
-                                            System.out.println(totalCounter.getInner() + " " + companyUnitRecord.getpNumber());
+                                            System.out.println(totalCounter.getInner()+" "+companyUnitRecord.getpNumber());
                                             CloseCommandHandler.this.companyUnitEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyUnitRecord));
                                             CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyUnitRecord));
-                                            session.flush();
                                             batchCounter.setInner(batchCounter.getInner() + 1);
                                             totalCounter.setInner(totalCounter.getInner() + 1);
                                         });
@@ -182,15 +179,14 @@ public class CloseCommandHandler extends CommandHandler {
                                         e.printStackTrace();
                                         transaction.rollback();
                                     }
+                                    session.flush();
+                                    session.clear();
                                 }
-                            }
-                            break;
+                                break;
 
-                        case "participant":
-                            for (int batch=startBatch; batch<100000; batch++) {
-                                try (Session session = sessionManager.getSessionFactory().openSession()) {
-
-                                    System.out.println("Processing batch " + batch);
+                            case "participant":
+                                for (int batch=startBatch; batch<100000; batch++) {
+                                    System.out.println("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
                                         ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
@@ -203,10 +199,9 @@ public class CloseCommandHandler extends CommandHandler {
                                         Stream<ParticipantRecord> participants = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
                                         final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
                                         participants.forEach(participantRecord -> {
-                                            System.out.println(totalCounter.getInner() + " " + participantRecord.getBusinessKey());
+                                            System.out.println(totalCounter.getInner()+" "+participantRecord.getBusinessKey());
                                             CloseCommandHandler.this.participantEntityManager.cleanupBitemporalSets(session, Collections.singleton(participantRecord));
                                             CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(participantRecord));
-                                            session.flush();
                                             batchCounter.setInner(batchCounter.getInner() + 1);
                                             totalCounter.setInner(totalCounter.getInner() + 1);
                                         });
@@ -218,13 +213,14 @@ public class CloseCommandHandler extends CommandHandler {
                                         e.printStackTrace();
                                         transaction.rollback();
                                     }
+                                    session.flush();
+                                    session.clear();
                                 }
-                            }
-                            break;
+                                break;
+                        }
+                        System.out.println("Command completed");
                     }
-                    System.out.println("Command completed");
                 }
-
             };
 
         }
