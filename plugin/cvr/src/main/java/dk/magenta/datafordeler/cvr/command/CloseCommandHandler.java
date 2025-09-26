@@ -109,7 +109,7 @@ public class CloseCommandHandler extends CommandHandler {
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
                         int startBatch = 1;
-                        int batchSize = 100;
+                        int batchSize = 1;
                         if (commandData.batch != null) {
                             startBatch = commandData.batch;
                         }
@@ -140,12 +140,12 @@ public class CloseCommandHandler extends CommandHandler {
                                         if (batchCounter.getInner() == 0) {
                                             break;
                                         }
+                                        session.flush();
                                         transaction.commit();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         transaction.rollback();
                                     }
-                                    session.flush();
                                     session.clear();
                                 }
                                 break;
@@ -156,7 +156,7 @@ public class CloseCommandHandler extends CommandHandler {
                                     Transaction transaction = session.beginTransaction();
                                     try {
                                         CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
-                                        companyUnitRecordQuery.setPageSize(100);
+                                        companyUnitRecordQuery.setPageSize(batchSize);
                                         companyUnitRecordQuery.setPage(batch);
                                         companyUnitRecordQuery.addOrderField(companyUnitRecordQuery.getEntityIdentifier(), CompanyUnitRecord.DB_FIELD_P_NUMBER);
                                         if (!commandData.ids.contains("all")) {
@@ -174,12 +174,12 @@ public class CloseCommandHandler extends CommandHandler {
                                         if (batchCounter.getInner() == 0) {
                                             break;
                                         }
+                                        session.flush();
                                         transaction.commit();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         transaction.rollback();
                                     }
-                                    session.flush();
                                     session.clear();
                                 }
                                 break;
@@ -190,11 +190,11 @@ public class CloseCommandHandler extends CommandHandler {
                                     Transaction transaction = session.beginTransaction();
                                     try {
                                         ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-                                        participantRecordQuery.setPageSize(100);
+                                        participantRecordQuery.setPageSize(batchSize);
                                         participantRecordQuery.setPage(batch);
                                         participantRecordQuery.addOrderField(participantRecordQuery.getEntityIdentifier(), ParticipantRecord.DB_FIELD_BUSINESS_KEY);
                                         if (!commandData.ids.contains("all")) {
-                                            participantRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
+                                            participantRecordQuery.addParameter(ParticipantRecordQuery.FORRETNINGSNOEGLE, commandData.ids);
                                         }
                                         Stream<ParticipantRecord> participants = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
                                         final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
@@ -208,12 +208,12 @@ public class CloseCommandHandler extends CommandHandler {
                                         if (batchCounter.getInner() == 0) {
                                             break;
                                         }
+                                        session.flush();
                                         transaction.commit();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         transaction.rollback();
                                     }
-                                    session.flush();
                                     session.clear();
                                 }
                                 break;
