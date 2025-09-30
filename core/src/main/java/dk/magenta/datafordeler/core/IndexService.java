@@ -11,6 +11,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Controller
 @ResponseBody
-@RequestMapping("/")
+@RequestMapping(method = RequestMethod.GET, "/")
 public class IndexService {
 
     @Autowired
@@ -75,12 +76,12 @@ public class IndexService {
 
     }
 
-    @RequestMapping(path = "", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, path = "", produces = "application/json")
     public String json() {
         return this.preparedJsonResponse;
     }
 
-    @RequestMapping(path = "", produces = "text/html")
+    @RequestMapping(method = RequestMethod.GET, path = "", produces = "text/html")
     public ModelAndView html() {
         HashMap<String, Object> model = new HashMap<>();
         model.put("serviceDescriptors", this.serviceDescriptors);

@@ -78,7 +78,7 @@ public class FindCprDataEvent {
      *
      * @return
      */
-    @RequestMapping(path = {"/fetchEvents", "/fetchEvents/"})
+    @RequestMapping(method = RequestMethod.GET, path = {"/fetchEvents", "/fetchEvents/"})
     public ResponseEntity<Envelope> findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException {
         String pageSize = requestParams.getFirst("pageSize");
         String page = requestParams.getFirst("page");
