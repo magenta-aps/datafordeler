@@ -135,7 +135,7 @@ public class CprRecordCombinedPersonLookupService {
         }
     }
 
-    @GetMapping("/cpr")
+    @RequestMapping(method = RequestMethod.GET, path={"/cpr", "/cpr/"})
     public ResponseEntity<String> findAll(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, InvalidDataInputException, QueryBuildException, InvalidClientInputException {
 
         List<String> cprs = requestParams.get("cpr");

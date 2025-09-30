@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @ResponseBody
-@RequestMapping("dump")
+@RequestMapping(method = RequestMethod.GET, path={"dump"})
 public class IndexDumpService {
 
     @Autowired
@@ -81,7 +82,7 @@ public class IndexDumpService {
         }
     }
 
-    @RequestMapping(path = "list", produces = "text/html")
+    @RequestMapping(method = RequestMethod.GET, path = "list", produces = "text/html")
     public ModelAndView html(HttpServletRequest request)
             throws InvalidTokenException, AccessRequiredException, AccessDeniedException, InvalidCertificateException {
 
@@ -117,7 +118,7 @@ public class IndexDumpService {
         return new ModelAndView("dumpList", model);
     }
 
-    @RequestMapping(path = "by-id/{id}")
+    @RequestMapping(method = RequestMethod.GET, path = "by-id/{id}")
     public void get(@PathVariable("id") Long id,
                     HttpServletRequest request,
                     HttpServletResponse response)
@@ -128,7 +129,7 @@ public class IndexDumpService {
         getDump(request, response, filter);
     }
 
-    @RequestMapping(path = "by-name/{name}")
+    @RequestMapping(method = RequestMethod.GET, path = "by-name/{name}")
     public void get(@PathVariable("name") String name,
                     HttpServletRequest request,
                     HttpServletResponse response)
