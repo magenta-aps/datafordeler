@@ -108,113 +108,116 @@ public class CloseCommandHandler extends CommandHandler {
                     }
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
-                            final FinalWrapper<Integer> totalCounter = new FinalWrapper<>(0);
-                            int startBatch = 1;
-                            if (commandData.batch != null) {
-                                startBatch = commandData.batch;
-                            }
-                            switch (commandData.type) {
+                        int startBatch = 1;
+                        int batchSize = 1;
+                        if (commandData.batch != null) {
+                            startBatch = commandData.batch;
+                        }
+                        final FinalWrapper<Integer> totalCounter = new FinalWrapper<>((startBatch-1)*batchSize);
+                        switch (commandData.type) {
 
-                                case "company":
-                                    for (int batch=startBatch; batch<1000; batch++) {
-                                        System.out.println("Processing batch "+batch);
-                                        Transaction transaction = session.beginTransaction();
-                                        try {
-                                            CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
-                                            companyRecordQuery.setPageSize(100);
-                                            companyRecordQuery.setPage(batch);
-                                            companyRecordQuery.addOrderField(companyRecordQuery.getEntityIdentifier(), CompanyRecord.DB_FIELD_CVR_NUMBER);
-                                            if (!commandData.ids.contains("all")) {
-                                                companyRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
-                                            }
-                                            Stream<CompanyRecord> companies = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class);
-                                            final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
-                                            companies.forEach(companyRecord -> {
-                                                System.out.println(totalCounter.getInner()+" "+companyRecord.getCvrNumber());
-                                                CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyRecord));
-                                                CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyRecord));
-                                                session.flush();
-                                                batchCounter.setInner(batchCounter.getInner() + 1);
-                                                totalCounter.setInner(totalCounter.getInner() + 1);
-                                            });
-                                            if (batchCounter.getInner() == 0) {
-                                                break;
-                                            }
-                                            transaction.commit();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            transaction.rollback();
+                            case "company":
+                                for (int batch=startBatch; batch<100000; batch++) {
+                                    System.out.println("Processing batch "+batch);
+                                    Transaction transaction = session.beginTransaction();
+                                    try {
+                                        CompanyRecordQuery companyRecordQuery = new CompanyRecordQuery();
+                                        companyRecordQuery.setPageSize(batchSize);
+                                        companyRecordQuery.setPage(batch);
+                                        companyRecordQuery.addOrderField(companyRecordQuery.getEntityIdentifier(), CompanyRecord.DB_FIELD_CVR_NUMBER);
+                                        if (!commandData.ids.contains("all")) {
+                                            companyRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
                                         }
-                                    }
-                                    break;
-
-                                case "unit":
-                                    for (int batch=startBatch; batch<1000; batch++) {
-                                        System.out.println("Processing batch "+batch);
-                                        Transaction transaction = session.beginTransaction();
-                                        try {
-                                            CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
-                                            companyUnitRecordQuery.setPageSize(100);
-                                            companyUnitRecordQuery.setPage(batch);
-                                            companyUnitRecordQuery.addOrderField(companyUnitRecordQuery.getEntityIdentifier(), CompanyUnitRecord.DB_FIELD_P_NUMBER);
-                                            if (!commandData.ids.contains("all")) {
-                                                companyUnitRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
-                                            }
-                                            Stream<CompanyUnitRecord> units = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
-                                            final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
-                                            units.forEach(companyUnitRecord -> {
-                                                System.out.println(totalCounter.getInner()+" "+companyUnitRecord.getpNumber());
-                                                CloseCommandHandler.this.companyUnitEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyUnitRecord));
-                                                CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyUnitRecord));
-                                                session.flush();
-                                                batchCounter.setInner(batchCounter.getInner() + 1);
-                                                totalCounter.setInner(totalCounter.getInner() + 1);
-                                            });
-                                            if (batchCounter.getInner() == 0) {
-                                                break;
-                                            }
-                                            transaction.commit();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            transaction.rollback();
+                                        Stream<CompanyRecord> companies = QueryManager.getAllEntitiesAsStream(session, companyRecordQuery, CompanyRecord.class);
+                                        final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
+                                        companies.forEach(companyRecord -> {
+                                            System.out.println(totalCounter.getInner()+" "+companyRecord.getCvrNumber());
+                                            CloseCommandHandler.this.companyEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyRecord));
+                                            CloseCommandHandler.this.companyEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyRecord));
+                                            batchCounter.setInner(batchCounter.getInner() + 1);
+                                            totalCounter.setInner(totalCounter.getInner() + 1);
+                                        });
+                                        if (batchCounter.getInner() == 0) {
+                                            break;
                                         }
+                                        session.flush();
+                                        transaction.commit();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        transaction.rollback();
                                     }
-                                    break;
+                                    session.clear();
+                                }
+                                break;
 
-                                case "participant":
-                                    for (int batch=startBatch; batch<1000; batch++) {
-                                        System.out.println("Processing batch "+batch);
-                                        Transaction transaction = session.beginTransaction();
-                                        try {
-                                            ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
-                                            participantRecordQuery.setPageSize(100);
-                                            participantRecordQuery.setPage(batch);
-                                            participantRecordQuery.addOrderField(participantRecordQuery.getEntityIdentifier(), ParticipantRecord.DB_FIELD_BUSINESS_KEY);
-                                            if (!commandData.ids.contains("all")) {
-                                                participantRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
-                                            }
-                                            Stream<ParticipantRecord> participants = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
-                                            final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
-                                            participants.forEach(participantRecord -> {
-                                                System.out.println(totalCounter.getInner()+" "+participantRecord.getBusinessKey());
-                                                CloseCommandHandler.this.participantEntityManager.cleanupBitemporalSets(session, Collections.singleton(participantRecord));
-                                                CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(participantRecord));
-                                                session.flush();
-                                                batchCounter.setInner(batchCounter.getInner() + 1);
-                                                totalCounter.setInner(totalCounter.getInner() + 1);
-                                            });
-                                            if (batchCounter.getInner() == 0) {
-                                                break;
-                                            }
-                                            transaction.commit();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                            transaction.rollback();
+                            case "unit":
+                                for (int batch=startBatch; batch<100000; batch++) {
+                                    System.out.println("Processing batch "+batch);
+                                    Transaction transaction = session.beginTransaction();
+                                    try {
+                                        CompanyUnitRecordQuery companyUnitRecordQuery = new CompanyUnitRecordQuery();
+                                        companyUnitRecordQuery.setPageSize(batchSize);
+                                        companyUnitRecordQuery.setPage(batch);
+                                        companyUnitRecordQuery.addOrderField(companyUnitRecordQuery.getEntityIdentifier(), CompanyUnitRecord.DB_FIELD_P_NUMBER);
+                                        if (!commandData.ids.contains("all")) {
+                                            companyUnitRecordQuery.addParameter(CompanyRecordQuery.CVRNUMMER, commandData.ids);
                                         }
+                                        Stream<CompanyUnitRecord> units = QueryManager.getAllEntitiesAsStream(session, companyUnitRecordQuery, CompanyUnitRecord.class);
+                                        final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
+                                        units.forEach(companyUnitRecord -> {
+                                            System.out.println(totalCounter.getInner()+" "+companyUnitRecord.getpNumber());
+                                            CloseCommandHandler.this.companyUnitEntityManager.cleanupBitemporalSets(session, Collections.singleton(companyUnitRecord));
+                                            CloseCommandHandler.this.companyUnitEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(companyUnitRecord));
+                                            batchCounter.setInner(batchCounter.getInner() + 1);
+                                            totalCounter.setInner(totalCounter.getInner() + 1);
+                                        });
+                                        if (batchCounter.getInner() == 0) {
+                                            break;
+                                        }
+                                        session.flush();
+                                        transaction.commit();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        transaction.rollback();
                                     }
-                                    break;
-                            }
+                                    session.clear();
+                                }
+                                break;
 
+                            case "participant":
+                                for (int batch=startBatch; batch<100000; batch++) {
+                                    System.out.println("Processing batch "+batch);
+                                    Transaction transaction = session.beginTransaction();
+                                    try {
+                                        ParticipantRecordQuery participantRecordQuery = new ParticipantRecordQuery();
+                                        participantRecordQuery.setPageSize(batchSize);
+                                        participantRecordQuery.setPage(batch);
+                                        participantRecordQuery.addOrderField(participantRecordQuery.getEntityIdentifier(), ParticipantRecord.DB_FIELD_BUSINESS_KEY);
+                                        if (!commandData.ids.contains("all")) {
+                                            participantRecordQuery.addParameter(ParticipantRecordQuery.FORRETNINGSNOEGLE, commandData.ids);
+                                        }
+                                        Stream<ParticipantRecord> participants = QueryManager.getAllEntitiesAsStream(session, participantRecordQuery, ParticipantRecord.class);
+                                        final FinalWrapper<Integer> batchCounter = new FinalWrapper<>(0);
+                                        participants.forEach(participantRecord -> {
+                                            System.out.println(totalCounter.getInner()+" "+participantRecord.getBusinessKey());
+                                            CloseCommandHandler.this.participantEntityManager.cleanupBitemporalSets(session, Collections.singleton(participantRecord));
+                                            CloseCommandHandler.this.participantEntityManager.closeAllEligibleRegistrations(session, Collections.singleton(participantRecord));
+                                            batchCounter.setInner(batchCounter.getInner() + 1);
+                                            totalCounter.setInner(totalCounter.getInner() + 1);
+                                        });
+                                        if (batchCounter.getInner() == 0) {
+                                            break;
+                                        }
+                                        session.flush();
+                                        transaction.commit();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        transaction.rollback();
+                                    }
+                                    session.clear();
+                                }
+                                break;
+                        }
                         System.out.println("Command completed");
                     }
                 }

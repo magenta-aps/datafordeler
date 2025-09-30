@@ -165,7 +165,7 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
     public static final String IO_FIELD_STATUS = "status";
 
     @JsonProperty(value = IO_FIELD_STATUS)
-    @OneToMany(targetEntity = StatusRecord.class, mappedBy = CompanyStatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = StatusRecord.class, mappedBy = StatusRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StatusRecord> status = new HashSet<>();
 
     public void setStatus(Set<StatusRecord> status) {
@@ -246,6 +246,9 @@ public class RelationCompanyRecord extends CvrBitemporalRecord {
 
     public void setCompanyParticipantRelationRecord(CompanyParticipantRelationRecord companyParticipantRelationRecord) {
         this.companyParticipantRelationRecord = companyParticipantRelationRecord;
+    }
+    public CompanyParticipantRelationRecord getCompanyParticipantRelationRecord() {
+        return this.companyParticipantRelationRecord;
     }
 
 

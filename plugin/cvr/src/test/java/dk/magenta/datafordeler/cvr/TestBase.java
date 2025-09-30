@@ -2,33 +2,26 @@ package dk.magenta.datafordeler.cvr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.Engine;
+import dk.magenta.datafordeler.core.database.InterruptedPull;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.util.Debugging;
-import dk.magenta.datafordeler.cvr.records.*;
+import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.CompanyUnitRecord;
+import dk.magenta.datafordeler.cvr.records.ParticipantRecord;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.TransientObjectException;
-import org.hibernate.query.Query;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import dk.magenta.datafordeler.core.database.InterruptedPull;
-
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import static dk.magenta.datafordeler.core.util.Debugging.dumpHibernateSession;
 
 @Component
 public abstract class TestBase {

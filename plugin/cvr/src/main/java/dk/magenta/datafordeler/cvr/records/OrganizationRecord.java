@@ -43,6 +43,9 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
         this.companyParticipantRelationRecord = companyParticipantRelationRecord;
     }
 
+    public CompanyParticipantRelationRecord getCompanyParticipantRelationRecord() {
+        return this.companyParticipantRelationRecord;
+    }
 
     public static final String DB_FIELD_UNIT_NUMBER = "unitNumber";
     public static final String IO_FIELD_UNIT_NUMBER = "enhedsNummerOrganisation";
