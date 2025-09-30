@@ -73,7 +73,7 @@ public class AccessAddressEntityManager extends GeoEntityManager<AccessAddressEn
     }
 
     @Override
-    protected Class<AccessAddressEntity> getEntityClass() {
+    public Class<AccessAddressEntity> getManagedEntityClass() {
         return AccessAddressEntity.class;
     }
 

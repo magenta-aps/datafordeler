@@ -4,13 +4,26 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.geo.data.SumiffiikRawData;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UnitAddressRawData extends SumiffiikRawData {
+
+    public Map<String, Integer> usageMap = Map.of(
+            "Ukendt", 0,
+            "Boligenhed", 1,
+            "Erhvervsenhed", 2,
+            "Liberal erhvervsenhed", 3,
+            "Teknikenhed", 4
+    );
+
+    protected Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class UnitAddressRawProperties extends RawProperties {
@@ -22,7 +35,7 @@ public class UnitAddressRawData extends SumiffiikRawData {
         public String unitNumber;
 
         @JsonProperty("Enhedsanvendelse")
-        public Integer usage;
+        public String usage;
 
         @JsonProperty("Etage")
         public String floor;
@@ -65,9 +78,13 @@ public class UnitAddressRawData extends SumiffiikRawData {
         records.add(
                 new UnitAddressDoorRecord(this.properties.door)
         );
-        records.add(
-                new UnitAddressUsageRecord(this.properties.usage)
-        );
+        if (usageMap.containsKey(this.properties.usage)) {
+            records.add(
+                    new UnitAddressUsageRecord(usageMap.get(this.properties.usage))
+            );
+        } else {
+            log.error("Unknown usage: " + this.properties.usage + " at objectId "+this.properties.objectId);
+        }
         records.add(
                 new UnitAddressNumberRecord(this.properties.unitNumber)
         );

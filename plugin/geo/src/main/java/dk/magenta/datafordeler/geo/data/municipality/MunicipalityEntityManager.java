@@ -51,7 +51,7 @@ public class MunicipalityEntityManager extends GeoEntityManager<GeoMunicipalityE
 
 
     @Override
-    protected Class<GeoMunicipalityEntity> getEntityClass() {
+    public Class<GeoMunicipalityEntity> getManagedEntityClass() {
         return GeoMunicipalityEntity.class;
     }
 

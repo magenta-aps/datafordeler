@@ -119,7 +119,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     private static final String TASK_CHUNK_HANDLE = "GeoChunk";
 
 
-    protected abstract Class<E> getEntityClass();
+    public abstract Class<E> getManagedEntityClass();
 
     protected abstract Class<T> getRawClass();
 
@@ -155,7 +155,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                     E entity = entityCache.get(uuid);
                     if (entity == null) {
                         Identification identification = QueryManager.getOrCreateIdentification(session, uuid, this.getDomain());
-                        entity = QueryManager.getEntity(session, identification, this.getEntityClass());
+                        entity = QueryManager.getEntity(session, identification, this.getManagedEntityClass());
                         if (entity == null) {
                             entity = this.createBasicEntity(rawData, session);
                             entity.setIdentification(identification);
@@ -173,7 +173,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                     timer.measure(TASK_SAVE);
 
                 } catch (IOException e) {
-                    log.error("Error importing " + this.getEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
+                    log.error("Error importing " + this.getManagedEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
                 }
             });
 
@@ -258,11 +258,12 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             HashMap<UUID, Long> uuids = new HashMap<>();
             GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
-                String globalId = jsonNode.get("attributes").get("GlobalID").asText();
-                long deletionTime = jsonNode.get("attributes").get("DeletedDate").asLong(); // Epoch millisecond
+                JsonNode dataNode = jsonNode.get("attributes");
+                String globalId = dataNode.get("GlobalID").asText();
+                long deletionTime = dataNode.get("DeletedDate").asLong(); // Epoch millisecond
                 UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
                 if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
-                    log.info("Duplicate UUID in deletion for " + this.getEntityClass().getSimpleName()+": " + uuid);
+//                    log.info("Duplicate UUID in deletion for " + this.getEntityClass().getSimpleName()+": " + uuid);
                     return;
                 }
                 uuids.put(uuid, deletionTime);
@@ -271,17 +272,17 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
             for (UUID uuid : uuids.keySet()) {
                 long deletionTime = uuids.get(uuid);
-                E entity = QueryManager.getEntity(session, uuid, this.getEntityClass());
+                E entity = QueryManager.getEntity(session, uuid, this.getManagedEntityClass());
                 if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
                     entitiesToDelete.add(entity);
                 }
             }
-            log.info("Found " + entitiesToDelete.size() + " " + this.getEntityClass().getSimpleName() + " to delete");
+            log.info("Found " + entitiesToDelete.size() + " " + this.getManagedEntityClass().getSimpleName() + " to delete");
 
             session.beginTransaction();
             try {
                 for (E entity : entitiesToDelete) {
-                        log.info("Deleting " + this.getEntityClass().getSimpleName() + " " + session.getIdentifier(entity));
+                        log.info("Deleting " + this.getManagedEntityClass().getSimpleName() + " " + session.getIdentifier(entity));
                         session.remove(entity);
 
                 }
@@ -342,7 +343,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     }
 
     protected void wireAll(Session session, WireCache wireCache) {
-        List<E> items = QueryManager.getAllEntities(session, this.getEntityClass());
+        List<E> items = QueryManager.getAllEntities(session, this.getManagedEntityClass());
         for (E item : items) {
             item.wire(session, wireCache);
             session.persist(item);

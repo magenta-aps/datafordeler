@@ -51,7 +51,7 @@ public class BuildingEntityManager extends GeoEntityManager<BuildingEntity, Buil
     }
 
     @Override
-    protected Class<BuildingEntity> getEntityClass() {
+    public Class<BuildingEntity> getManagedEntityClass() {
         return BuildingEntity.class;
     }
 
