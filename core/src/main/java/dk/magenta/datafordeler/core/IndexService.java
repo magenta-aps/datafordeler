@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @ResponseBody
-@RequestMapping(method = RequestMethod.GET, "/")
+@RequestMapping("/")
 public class IndexService {
 
     @Autowired
