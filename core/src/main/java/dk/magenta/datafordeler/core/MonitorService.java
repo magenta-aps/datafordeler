@@ -37,6 +37,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.net.ssl.SSLContext;
 import java.io.File;
@@ -56,7 +57,7 @@ import java.util.HashSet;
 import java.util.StringJoiner;
 
 @Controller
-@RequestMapping(path = "/monitor")
+@RequestMapping(method = RequestMethod.GET, path = "/monitor")
 public class MonitorService {
 
     @Autowired
@@ -73,7 +74,7 @@ public class MonitorService {
 
     private final Logger log = LogManager.getLogger(MonitorService.class.getName());
 
-    @RequestMapping(path = {"/database", "/database/"})
+    @RequestMapping(method = RequestMethod.GET, path = {"/database", "/database/"})
     public void checkDatabaseConnections(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = sessionManager.getSessionFactory().openSession();
         Query query = session.createQuery("select 1 from Identification").setMaxResults(1);
@@ -93,7 +94,7 @@ public class MonitorService {
         response.setStatus(200);
     }
 
-    @RequestMapping(path = {"/pull", "/pull/"})
+    @RequestMapping(method = RequestMethod.GET, path = {"/pull", "/pull/"})
     public void checkPulls(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, DataFordelerException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkPulls");
@@ -143,7 +144,7 @@ public class MonitorService {
     @Value("${dafo.error_file:cache/log/dafo.err}")
     private String errorFileConfig;
 
-    @RequestMapping(path = {"/errors", "/errors/"})
+    @RequestMapping(method = RequestMethod.GET, path = {"/errors", "/errors/"})
     public void checkErrors(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkErrors");
@@ -209,7 +210,7 @@ public class MonitorService {
     @Value("${server.port}")
     private int accessPort;
 
-    @RequestMapping(path = {"/access","/access/"})
+    @RequestMapping(method = RequestMethod.GET, path = {"/access","/access/"})
     public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
         LoggerHelper loggerHelper = new LoggerHelper(log, request);
         loggerHelper.urlInvokePersistablelogs("checkAccess");

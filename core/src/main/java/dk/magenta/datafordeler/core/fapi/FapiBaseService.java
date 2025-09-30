@@ -27,6 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
@@ -122,7 +123,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         return null;
     }
 
-    @RequestMapping(path = "", produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, path = "", produces = "application/json")
     public String index(HttpServletRequest request) throws JsonProcessingException {
         String servletPath = request.getServletPath();
         return this.objectMapper.writeValueAsString(this.getServiceDescriptor(servletPath));
@@ -159,7 +160,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param requestParams url parameters
      * @return Found Entity, or null if none found.
      */
-    @RequestMapping(path = {"/{uuid}", "/{uuid}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/{uuid}", "/{uuid}/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Envelope getRest(@PathVariable("uuid") String uuid, @RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request)
             throws DataFordelerException {
         Envelope envelope = new Envelope();
@@ -220,7 +221,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      *
      * @see #getRest(String, MultiValueMap, HttpServletRequest)
      */
-    @RequestMapping(path = {"/{id}","/{id}/"}, produces = {
+    @RequestMapping(method = RequestMethod.GET, path = {"/{id}","/{id}/"}, produces = {
             "text/csv",
             "text/tsv",
     })
@@ -277,7 +278,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      * @param requestParams Request Parameters from spring boot
      * @return Found Entities
      */
-    @RequestMapping(path = {"/search", "/search/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(method = RequestMethod.GET, path = {"/search", "/search/"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public Envelope searchRest(@RequestParam MultiValueMap<String, String> requestParams, HttpServletRequest request) throws DataFordelerException {
         Session session = this.getSessionManager().getSessionFactory().openSession();
         Envelope envelope = new Envelope();
@@ -327,7 +328,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
      *
      * @see #searchRest(MultiValueMap, HttpServletRequest)
      */
-    @RequestMapping(path = {"/search", "/search/"}, produces = {
+    @RequestMapping(method = RequestMethod.GET, path = {"/search", "/search/"}, produces = {
             "text/csv",
             "text/tsv",
     })

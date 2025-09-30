@@ -29,6 +29,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -104,7 +105,7 @@ public class GenericUnitAddressService {
     private final Logger log = LogManager.getLogger(AdresseService.class.getCanonicalName());
 
 
-    @RequestMapping(path={"/search", "/search/"})
+    @RequestMapping(method = RequestMethod.GET, path={"/search", "/search/"})
     public Envelope getLocalities(HttpServletRequest request, @RequestParam MultiValueMap<String, String> requestParams, HttpServletResponse response) throws DataFordelerException, IOException {
 
         //This was supposed to use the BaseQuery from core, but it was not completely supported
