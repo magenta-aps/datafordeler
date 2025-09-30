@@ -232,6 +232,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                         }
                         Query q = session.createQuery(hql.toString(), first.getClass());
                         q.setParameter("parent", parent);
+                        q.setFlushMode(FlushModeType.COMMIT);
                         List<CvrBitemporalRecord> records = q.getResultList();
 
                         ListHashMap<Integer, CvrBitemporalRecord> groups = new ListHashMap<>();

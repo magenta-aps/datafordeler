@@ -41,6 +41,9 @@ public class OfficeRelationRecord extends CvrNontemporalRecord {
         this.companyParticipantRelationRecord = companyParticipantRelationRecord;
     }
 
+    public CompanyParticipantRelationRecord getCompanyParticipantRelationRecord() {
+        return this.companyParticipantRelationRecord;
+    }
 
     public static final String DB_FIELD_UNIT = "officeRelationUnitRecord";
     public static final String IO_FIELD_UNIT = "penhed";
