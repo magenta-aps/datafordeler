@@ -117,7 +117,7 @@ public class CloseCommandHandler extends CommandHandler {
                         switch (commandData.type) {
 
                             case "company":
-                                for (int batch=startBatch; batch<100000*batchSize; batch++) {
+                                for (int batch=startBatch; batch<10000000; batch++) {
                                     System.out.println("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
@@ -151,7 +151,7 @@ public class CloseCommandHandler extends CommandHandler {
                                 break;
 
                             case "unit":
-                                for (int batch=startBatch; batch<100000*batchSize; batch++) {
+                                for (int batch=startBatch; batch<10000000; batch++) {
                                     System.out.println("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
@@ -185,7 +185,7 @@ public class CloseCommandHandler extends CommandHandler {
                                 break;
 
                             case "participant":
-                                for (int batch=startBatch; batch<100000*batchSize; batch++) {
+                                for (int batch=startBatch; batch<10000000; batch++) {
                                     System.out.println("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
