@@ -11,6 +11,8 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CvrEntityRecord extends CvrBitemporalRecord implements IdentifiedEntity {
 
+    protected Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
     public abstract List<CvrRecord> getAll();
 
     public List<CvrRecord> getSince(OffsetDateTime time) {
@@ -184,7 +187,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         session.remove(this);
     }
 
-    public void closeRegistrations(Session session) {
+    public int closeRegistrations(Session session) {
         HashSet<CvrBitemporalRecord> updated = new HashSet<>();
         HashSet<Class<? extends CvrBitemporalRecord>> omitClasses = new HashSet<>();
         omitClasses.add(CompanyParticipantRelationRecord.class);
@@ -213,10 +216,10 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                 session.merge(bitemporalRecord);
             }
         }
-        System.out.println("Closed registrations for " + updated.size() + " records.");
+        return updated.size();
     }
 
-    public void cleanupBitemporalSets(Session session) {
+    public int cleanupBitemporalSets(Session session) {
         final FinalWrapper<Integer> removalCounter = new FinalWrapper<>(0);
         this.traverse(
             recordSet -> {
@@ -267,6 +270,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             null,
             true
         );
-        System.out.println("Removed " + removalCounter.getInner() + " records from bitemporal sets.");
+        return removalCounter.getInner();
     }
 }
