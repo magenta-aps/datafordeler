@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class CvrEntityRecord extends CvrBitemporalRecord implements IdentifiedEntity {
 
-    protected Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
     public abstract List<CvrRecord> getAll();
 
     public List<CvrRecord> getSince(OffsetDateTime time) {
