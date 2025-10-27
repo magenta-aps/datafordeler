@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.InterruptedPull;
 import dk.magenta.datafordeler.core.database.QueryManager;
@@ -496,12 +494,20 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     public void cleanupBitemporalSets(Session session, Collection<T> records) {
         log.info("Cleaning all bitemporal sets for "+records.size()+" items");
-        records.forEach(record -> record.cleanupBitemporalSets(session));
+        int count = 0;
+        for (T record : records) {
+            count += record.cleanupBitemporalSets(session);
+        }
+        log.info("Cleaned "+count+" bitemporal sets");
     }
 
     public void closeAllEligibleRegistrations(Session session, Collection<T> records) {
         log.info("Closing all eligible registrations for "+records.size()+" items");
-        records.forEach(record -> record.closeRegistrations(session));
+        int count = 0;
+        for (T record : records) {
+            count += record.closeRegistrations(session);
+        }
+        log.info("Closed "+count+" registrations");
     }
 
     protected String finalizeQuery(ObjectNode query) {
@@ -556,9 +562,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         query.set("terms", termsNode);
         return query;
     }
-
-
-
 
     protected ObjectNode queryFromUnitMunicipalities(List<Integer> municipalities) {
         return queryFromIntegerTerms(

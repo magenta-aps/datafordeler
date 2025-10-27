@@ -6,10 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.util.FinalWrapper;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
@@ -183,7 +186,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         session.remove(this);
     }
 
-    public void closeRegistrations(Session session) {
+    public int closeRegistrations(Session session) {
         HashSet<CvrBitemporalRecord> updated = new HashSet<>();
         HashSet<Class<? extends CvrBitemporalRecord>> omitClasses = new HashSet<>();
         omitClasses.add(CompanyParticipantRelationRecord.class);
@@ -212,9 +215,11 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                 session.merge(bitemporalRecord);
             }
         }
+        return updated.size();
     }
 
-    public void cleanupBitemporalSets(Session session) {
+    public int cleanupBitemporalSets(Session session) {
+        final FinalWrapper<Integer> removalCounter = new FinalWrapper<>(0);
         this.traverse(
             recordSet -> {
                 if (recordSet instanceof BitemporalSet<?, ?>) {
@@ -253,6 +258,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                                         if (recordSet.getParentRecordSet() != null) {
                                             recordSet.getParentRecordSet().remove(record);
                                         }
+                                        removalCounter.setInner(removalCounter.getInner() + 1);
                                     }
                                 }
                             }
@@ -263,5 +269,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             null,
             true
         );
+        return removalCounter.getInner();
     }
 }
