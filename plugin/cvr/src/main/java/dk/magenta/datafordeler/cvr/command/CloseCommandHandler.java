@@ -113,7 +113,7 @@ public class CloseCommandHandler extends CommandHandler {
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
                         int startBatch = 1;
-                        int batchSize = 1;
+                        int batchSize = 100;
                         if (commandData.batch != null) {
                             startBatch = commandData.batch;
                         }
