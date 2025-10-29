@@ -63,7 +63,7 @@ public class UnitAddressEntityManager extends GeoEntityManager<UnitAddressEntity
     }
 
     @Override
-    protected Class<UnitAddressEntity> getEntityClass() {
+    public Class<UnitAddressEntity> getManagedEntityClass() {
         return UnitAddressEntity.class;
     }
 

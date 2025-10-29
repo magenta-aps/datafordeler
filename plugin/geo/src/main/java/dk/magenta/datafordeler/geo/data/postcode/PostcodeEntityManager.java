@@ -50,7 +50,7 @@ public class PostcodeEntityManager extends GeoEntityManager<PostcodeEntity, Post
     }
 
     @Override
-    protected Class<PostcodeEntity> getEntityClass() {
+    public Class<PostcodeEntity> getManagedEntityClass() {
         return PostcodeEntity.class;
     }
 

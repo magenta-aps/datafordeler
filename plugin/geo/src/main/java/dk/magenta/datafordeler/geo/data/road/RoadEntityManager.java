@@ -41,7 +41,7 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
     }
 
     @Override
-    protected Class<GeoRoadEntity> getEntityClass() {
+    public Class<GeoRoadEntity> getManagedEntityClass() {
         return GeoRoadEntity.class;
     }
 
