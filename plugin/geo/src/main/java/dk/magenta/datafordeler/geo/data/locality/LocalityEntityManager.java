@@ -58,7 +58,7 @@ public class LocalityEntityManager extends GeoEntityManager<GeoLocalityEntity, L
     }
 
     @Override
-    protected Class<GeoLocalityEntity> getEntityClass() {
+    public Class<GeoLocalityEntity> getManagedEntityClass() {
         return GeoLocalityEntity.class;
     }
 

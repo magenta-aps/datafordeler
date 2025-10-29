@@ -23,6 +23,7 @@ services:
       - ./plugin/geo/src/test/resources/unit.json:/app/dev-env/local/geo/unit.json
       - ./plugin/geo/src/test/resources/building.json:/app/dev-env/local/geo/building.json
       - ./conf/sts_metadata.test.xml:/tmp/sts_metadata.test.xml:ro
+      - ./conf/geo_cacert.crt:/app/conf/geo_cacert.crt:ro
       - ./docker/createdbs.sql:/app/createdbs.sql
     environment:
       - DATABASE_IMPORT_FILES=/app/createdbs.sql

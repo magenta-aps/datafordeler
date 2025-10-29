@@ -14,6 +14,7 @@ import dk.magenta.datafordeler.core.util.ItemInputStream;
 import dk.magenta.datafordeler.geo.configuration.GeoConfiguration;
 import dk.magenta.datafordeler.geo.configuration.GeoConfigurationManager;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -107,6 +108,11 @@ public class GeoRegisterManager extends RegisterManager {
         return this.objectMapper;
     }
 
+    private String formatDate(OffsetDateTime dateTime) {
+        // return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        return "DATE '"+dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE)+" "+dateTime.format(DateTimeFormatter.ISO_LOCAL_TIME)+"'";
+    }
+
     @Override
     public URI getEventInterface(EntityManager entityManager) throws DataFordelerException {
         Session session = this.sessionManager.getSessionFactory().openSession();
@@ -114,7 +120,11 @@ public class GeoRegisterManager extends RegisterManager {
         session.close();
 
         if (lastUpdateTime == null) {
-            lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
+            if (entityManager.getManagedEntityClass() == UnitAddressEntity.class) {
+                lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
+            } else {
+                lastUpdateTime = OffsetDateTime.now().minusDays(30);
+            }
             log.info("Last update time not found");
         } else {
             log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));
@@ -124,7 +134,7 @@ public class GeoRegisterManager extends RegisterManager {
         if (address == null || address.isEmpty()) {
             throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address);
         }
-        address = address.replace("%{editDate}", lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        address = address.replace("%{editDate}", this.formatDate(lastUpdateTime));
 
         try {
             URL url = new URL(address);
@@ -150,7 +160,7 @@ public class GeoRegisterManager extends RegisterManager {
         if (address == null || address.isEmpty()) {
             throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address);
         }
-        address = address.replace("%{editDate}", lastUpdateTime.minusDays(30).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        address = address.replace("%{editDate}", this.formatDate(lastUpdateTime.minusDays(30)));
 
         try {
             URL url = new URL(address);
@@ -221,7 +231,13 @@ public class GeoRegisterManager extends RegisterManager {
                             String token = this.getToken(tokenUrl, configuration.getUsername(), configuration.getPassword());
                             Map<String, String> headers = Collections.singletonMap("Authorization", "Bearer " + token);
                             for (int offset = 0; offset < 1000000000; offset += count) {
-                                String offsetQuery = URLDecoder.decode(query.replace("%{offset}", Integer.toString(offset)), StandardCharsets.UTF_8);
+                                boolean hasOffset = query.contains("%{offset}");
+                                String offsetQuery;
+                                if (hasOffset) {
+                                    offsetQuery = URLDecoder.decode(query.replace("%{offset}", Integer.toString(offset)), StandardCharsets.UTF_8);
+                                } else {
+                                    offsetQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
+                                }
                                 eventInterface = new URI(eventInterface.getScheme(), eventInterface.getUserInfo(), eventInterface.getHost(), eventInterface.getPort(), eventInterface.getPath(), offsetQuery, eventInterface.getFragment());
 
                                 responseBody = communicator.get(eventInterface, headers);
@@ -240,6 +256,9 @@ public class GeoRegisterManager extends RegisterManager {
                                     }
                                 } finally {
                                     responseBody.close();
+                                }
+                                if (!hasOffset) {
+                                    break;
                                 }
                             }
                             log.info("Loaded into cache file");
