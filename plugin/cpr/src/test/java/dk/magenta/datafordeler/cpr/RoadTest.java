@@ -233,7 +233,6 @@ public class RoadTest extends TestBase {
         try {
             configuration.setPersonRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setRoadRegisterType(CprConfiguration.RegisterType.REMOTE_FTP);
-            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setRoadRegisterFtpAddress("ftps://localhost:" + port);
             configuration.setRoadRegisterFtpDownloadFolder("/");
             configuration.setRoadRegisterFtpUsername(username);

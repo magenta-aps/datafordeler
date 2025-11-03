@@ -61,7 +61,6 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         File encryptionFile = new File(configuration.getEncryptionKeyFileName());
         configuration.setPersonRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setRoadRegisterPasswordEncryptionFile(encryptionFile);
-        configuration.setResidenceRegisterPasswordEncryptionFile(encryptionFile);
         configuration.setDirectPasswordPasswordEncryptionFile(encryptionFile);
         return configuration;
     }

@@ -28,12 +28,6 @@ public class QueryTest extends TestBase {
         testData.close();
     }
 
-    public void loadResidence(ImportMetadata importMetadata) throws Exception {
-        InputStream testData = QueryTest.class.getResourceAsStream("/roaddata.txt");
-        residenceEntityManager.parseData(testData, importMetadata);
-        testData.close();
-    }
-
     public void loadRoad(ImportMetadata importMetadata) throws Exception {
         InputStream testData = QueryTest.class.getResourceAsStream("/roaddata.txt");
         roadEntityManager.parseData(testData, importMetadata);

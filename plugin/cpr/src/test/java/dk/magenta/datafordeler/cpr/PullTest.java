@@ -163,7 +163,6 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterFtpUsername(username);
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
             Pull pull = new Pull(engine, plugin, importconfig);
             pull.run();
@@ -283,7 +282,6 @@ public class PullTest extends TestBase {
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
             configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             Pull pull = new Pull(engine, plugin);
             pull.run();
         } finally {

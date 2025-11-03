@@ -7,7 +7,6 @@ import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.util.Encryption;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
 import jakarta.persistence.*;
 
@@ -145,48 +144,6 @@ public class CprConfiguration implements Configuration {
         this.roadRegisterPasswordEncryptionFile = roadRegisterPasswordEncryptionFile;
     }
 
-
-    @Column
-    private String residenceRegisterPullCronSchedule = null;
-
-    @Column
-    @Enumerated(EnumType.ORDINAL)
-    private RegisterType residenceRegisterType = RegisterType.DISABLED;
-
-    @Column
-    private String residenceRegisterFtpAddress = null;
-
-    @Column
-    private String residenceRegisterFtpDownloadFolder = "/";
-
-    @Column
-    private String residenceRegisterFtpUploadFolder = "/";
-
-    @Column
-    private String residenceRegisterFtpUsername = null;
-
-    @Column
-    private String residenceRegisterFtpPassword = null;
-
-    @Column
-    private String residenceRegisterLocalFile = "data/cprroaddata.txt";
-
-    @Column
-    @Enumerated(EnumType.ORDINAL)
-    private Charset residenceRegisterDataCharset = Charset.ISO_8859_1;
-
-
-    @Column
-    private byte[] residenceRegisterPasswordEncrypted;
-
-    @Transient
-    private File residenceRegisterPasswordEncryptionFile;
-
-    public void setResidenceRegisterPasswordEncryptionFile(File residenceRegisterPasswordEncryptionFile) {
-        this.residenceRegisterPasswordEncryptionFile = residenceRegisterPasswordEncryptionFile;
-    }
-
-
     @Column
     private String directTransactionCode = "OFF4";
 
@@ -315,62 +272,12 @@ public class CprConfiguration implements Configuration {
     }
 
 
-    public String getResidenceRegisterPullCronSchedule() {
-        return this.residenceRegisterPullCronSchedule;
-    }
-
-    public RegisterType getResidenceRegisterType() {
-        return this.residenceRegisterType;
-    }
-
-    public String getResidenceRegisterFtpAddress() {
-        return this.residenceRegisterFtpAddress;
-    }
-
-    public String getResidenceRegisterFtpUsername() {
-        return this.residenceRegisterFtpUsername;
-    }
-
-    public String getResidenceRegisterFtpPassword() throws GeneralSecurityException, IOException {
-        return Encryption.decrypt(this.residenceRegisterPasswordEncryptionFile, this.residenceRegisterPasswordEncrypted);
-    }
-
-    public String getResidenceRegisterLocalFile() {
-        return this.residenceRegisterLocalFile;
-    }
-
-    public String getResidenceRegisterCharset() {
-        return this.formatCharset(this.residenceRegisterDataCharset);
-    }
-
-    public URI getResidenceRegisterURI() throws ConfigurationException {
-        return this.formatURI(
-                this.residenceRegisterType,
-                this.residenceRegisterLocalFile,
-                (this.residenceRegisterFtpAddress != null && this.residenceRegisterFtpDownloadFolder != null) ?
-                        (this.residenceRegisterFtpAddress + this.residenceRegisterFtpDownloadFolder) : null
-        );
-    }
-
-    public URI getResidenceRegisterSubscriptionURI() throws ConfigurationException {
-        return this.formatURI(
-                this.residenceRegisterType,
-                this.residenceRegisterLocalFile,
-                (this.residenceRegisterFtpAddress != null && this.residenceRegisterFtpUploadFolder != null) ?
-                        (this.residenceRegisterFtpAddress + this.residenceRegisterFtpUploadFolder) : null
-        );
-    }
-
-
     public String getRegisterPullCronSchedule(EntityManager entityManager) {
         if (entityManager instanceof PersonEntityManager) {
             return this.getPersonRegisterPullCronSchedule();
         }
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterPullCronSchedule();
-        }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterPullCronSchedule();
         }
         return null;
     }
@@ -382,9 +289,6 @@ public class CprConfiguration implements Configuration {
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterType();
         }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterType();
-        }
         return null;
     }
 
@@ -394,9 +298,6 @@ public class CprConfiguration implements Configuration {
         }
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterFtpAddress();
-        }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterFtpAddress();
         }
         return null;
     }
@@ -408,9 +309,6 @@ public class CprConfiguration implements Configuration {
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterFtpUsername();
         }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterFtpUsername();
-        }
         return null;
     }
 
@@ -420,9 +318,6 @@ public class CprConfiguration implements Configuration {
         }
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterFtpPassword();
-        }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterFtpPassword();
         }
         return null;
     }
@@ -434,9 +329,6 @@ public class CprConfiguration implements Configuration {
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterLocalFile();
         }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterLocalFile();
-        }
         return null;
     }
 
@@ -446,9 +338,6 @@ public class CprConfiguration implements Configuration {
         }
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterCharset();
-        }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterCharset();
         }
         return null;
     }
@@ -460,9 +349,6 @@ public class CprConfiguration implements Configuration {
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterURI();
         }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterURI();
-        }
         return null;
     }
 
@@ -472,9 +358,6 @@ public class CprConfiguration implements Configuration {
         }
         if (entityManager instanceof RoadEntityManager) {
             return this.getRoadRegisterSubscriptionURI();
-        }
-        if (entityManager instanceof ResidenceEntityManager) {
-            return this.getResidenceRegisterSubscriptionURI();
         }
         return null;
     }
@@ -615,34 +498,6 @@ public class CprConfiguration implements Configuration {
         this.roadRegisterDataCharset = roadRegisterDataCharset;
     }
 
-    public void setResidenceRegisterPullCronSchedule(String residenceRegisterPullCronSchedule) {
-        this.residenceRegisterPullCronSchedule = residenceRegisterPullCronSchedule;
-    }
-
-    public void setResidenceRegisterType(RegisterType residenceRegisterType) {
-        this.residenceRegisterType = residenceRegisterType;
-    }
-
-    public void setResidenceRegisterFtpAddress(String residenceRegisterFtpAddress) {
-        this.residenceRegisterFtpAddress = residenceRegisterFtpAddress;
-    }
-
-    public void setResidenceRegisterFtpUsername(String residenceRegisterFtpUsername) {
-        this.residenceRegisterFtpUsername = residenceRegisterFtpUsername;
-    }
-
-    public void setResidenceRegisterFtpPassword(String residenceRegisterFtpPassword) throws GeneralSecurityException, IOException {
-        this.residenceRegisterPasswordEncrypted = Encryption.encrypt(this.residenceRegisterPasswordEncryptionFile, residenceRegisterFtpPassword);
-    }
-
-    public void setResidenceRegisterLocalFile(String residenceRegisterLocalFile) {
-        this.residenceRegisterLocalFile = residenceRegisterLocalFile;
-    }
-
-    public void setResidenceRegisterDataCharset(Charset residenceRegisterDataCharset) {
-        this.residenceRegisterDataCharset = residenceRegisterDataCharset;
-    }
-
     public void setDirectTransactionCode(String directTransactionCode) {
         this.directTransactionCode = directTransactionCode;
     }
@@ -693,23 +548,6 @@ public class CprConfiguration implements Configuration {
         ) {
             try {
                 this.roadRegisterPasswordEncrypted = Encryption.encrypt(this.roadRegisterPasswordEncryptionFile, this.roadRegisterFtpPassword);
-                return true;
-            } catch (GeneralSecurityException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-
-    public boolean encryptResidenceRegisterPassword() {
-        if (
-                this.residenceRegisterPasswordEncryptionFile != null &&
-                        !(this.residenceRegisterFtpPassword == null || this.residenceRegisterFtpPassword.isEmpty()) &&
-                        (this.residenceRegisterPasswordEncrypted == null || this.residenceRegisterPasswordEncrypted.length == 0)
-        ) {
-            try {
-                this.residenceRegisterPasswordEncrypted = Encryption.encrypt(this.residenceRegisterPasswordEncryptionFile, this.residenceRegisterFtpPassword);
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();

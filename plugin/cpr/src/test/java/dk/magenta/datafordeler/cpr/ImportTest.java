@@ -20,7 +20,6 @@ public class ImportTest extends TestBase {
         CprConfiguration configuration = ((CprConfigurationManager) plugin.getConfigurationManager()).getConfiguration();
         when(configurationManager.getConfiguration()).thenReturn(configuration);
         configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-        configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
         configuration.setPersonRegisterType(CprConfiguration.RegisterType.LOCAL_FILE);
         configuration.setPersonRegisterLocalFile("data/test.txt");
 

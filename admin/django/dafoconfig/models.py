@@ -102,20 +102,6 @@ class CprConfig(DafoConfig, models.Model):
         max_length=255, null=True,
         default=DEFAULT_CRON_SCHEDULE,
         verbose_name=u"CRON-tidsangivelse for automatisk hentning")
-
-    residenceregistertype = models.IntegerField(blank=True, null=True, verbose_name=u"Kildetype", choices=type_choices)
-    residenceregisterdatacharset = models.IntegerField(blank=True, null=True, verbose_name=u"Forventet inputdata-tegnkodning", choices=charset_choices)
-    residenceregisterftpaddress = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"FTP adresse")
-    residenceregisterftpdownloadfolder = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"FTP download-mappe")
-    residenceregisterftpuploadfolder = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"FTP upload-mappe")
-    residenceregisterftpusername = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"FTP brugernavn")
-    residenceregisterftppassword = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"FTP password")
-    residenceregisterlocalfile = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"Lokal fil")
-    residenceregisterpullcronschedule = CronField(
-        max_length=255, null=True,
-        default=DEFAULT_CRON_SCHEDULE,
-        verbose_name=u"CRON-tidsangivelse for automatisk hentning")
-
     roadregistertype = models.IntegerField(blank=True, null=True, verbose_name=u"Kildetype", choices=type_choices)
     roadregisterdatacharset = models.IntegerField(blank=True, null=True, verbose_name=u"Forventet inputdata-tegnkodning", choices=charset_choices)
     roadregisterftpaddress = models.CharField(max_length=255, blank=True, null=True, verbose_name=u"FTP adresse")
