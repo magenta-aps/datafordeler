@@ -20,7 +20,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonCustodyRelationsManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonSubscription;
-import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.cpr.records.output.PersonRecordOutputWrapper;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
@@ -97,9 +96,6 @@ public abstract class TestBase {
 
     @Autowired
     protected RoadEntityManager roadEntityManager;
-
-    @Autowired
-    protected ResidenceEntityManager residenceEntityManager;
 
     @Autowired
     protected PersonRecordOutputWrapper personRecordOutputWrapper;

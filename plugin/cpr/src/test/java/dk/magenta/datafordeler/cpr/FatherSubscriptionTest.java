@@ -106,7 +106,6 @@ public class FatherSubscriptionTest extends TestBase {
             configuration.setPersonRegisterFtpPassword(password);
             configuration.setPersonRegisterDataCharset(CprConfiguration.Charset.UTF_8);
             configuration.setRoadRegisterType(CprConfiguration.RegisterType.DISABLED);
-            configuration.setResidenceRegisterType(CprConfiguration.RegisterType.DISABLED);
             pull.run();
         } finally {
             personFtp.stopServer();

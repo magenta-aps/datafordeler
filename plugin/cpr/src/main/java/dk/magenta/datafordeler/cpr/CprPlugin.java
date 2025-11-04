@@ -8,7 +8,6 @@ import dk.magenta.datafordeler.core.plugin.RegisterManager;
 import dk.magenta.datafordeler.core.plugin.RolesDefinition;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
-import dk.magenta.datafordeler.cpr.data.residence.ResidenceEntityManager;
 import dk.magenta.datafordeler.cpr.data.road.RoadEntityManager;
 import dk.magenta.datafordeler.cpr.records.road.RoadRecordQuery;
 import dk.magenta.datafordeler.cpr.records.road.data.RoadEntity;
@@ -44,9 +43,6 @@ public class CprPlugin extends Plugin {
     private PersonEntityManager personEntityManager;
 
     @Autowired
-    private ResidenceEntityManager residenceEntityManager;
-
-    @Autowired
     private RoadEntityManager roadEntityManager;
 
     private final CprRolesDefinition rolesDefinition = new CprRolesDefinition();
@@ -64,7 +60,6 @@ public class CprPlugin extends Plugin {
     public void init() throws IOException {
         this.registerManager.setPlugin(this);
         this.registerManager.addEntityManager(this.personEntityManager);
-        this.registerManager.addEntityManager(this.residenceEntityManager);
         this.registerManager.addEntityManager(this.roadEntityManager);
     }
 

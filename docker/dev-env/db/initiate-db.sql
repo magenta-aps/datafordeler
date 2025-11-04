@@ -8,11 +8,10 @@ BEGIN
         directPort,
         personRegisterDataCharset,
         roadRegisterDataCharset,
-        residenceRegisterDataCharset
         ) VALUES (
         'dk.magenta.datafordeler.cpr.CprPlugin',
         1, '/app/dev-env/local/cpr/download/d170608.l534902', 'ftp://dummy',
-        0, 0, 1, 1, 1
+        0, 0, 1, 1
         )
         END
     ELSE

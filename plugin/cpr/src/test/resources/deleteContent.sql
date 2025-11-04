@@ -41,16 +41,6 @@ DELETE
 DELETE
 [Datafordeler_Test].[dbo].[cpr_postcode];
 DELETE
-[Datafordeler_Test].[dbo].[cpr_residence_data];
-DELETE
-[Datafordeler_Test].[dbo].[cpr_residence_effect];
-DELETE
-[Datafordeler_Test].[dbo].[cpr_residence_effect_cpr_residence_data];
-DELETE
-[Datafordeler_Test].[dbo].[cpr_residence_entity];
-DELETE
-[Datafordeler_Test].[dbo].[cpr_residence_registration];
-DELETE
 [Datafordeler_Test].[dbo].[cpr_road_city_record];
 DELETE
 [Datafordeler_Test].[dbo].[cpr_road_entity];
