@@ -64,7 +64,7 @@ public class SamlMetadataConfiguration {
         }
         File metadataFile = new File(path);
         FilesystemMetadataResolver resolver = new FilesystemMetadataResolver(metadataFile);
-        resolver.setMinRefreshDelay(Duration.of(4, ChronoUnit.HOURS));
+        resolver.setMinRefreshDelay(Duration.ofHours(4L));
         resolver.setRequireValidMetadata(false);
         resolver.setParserPool(parserPool);
         resolver.setId("sts-metadata");
