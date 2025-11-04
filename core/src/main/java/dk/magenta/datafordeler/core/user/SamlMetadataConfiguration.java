@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import net.shibboleth.shared.component.ComponentInitializationException;
-import net.shibboleth.shared.primitive.TimerSupport;
 import net.shibboleth.shared.resolver.ResolverException;
 import net.shibboleth.shared.xml.ParserPool;
 import net.shibboleth.shared.xml.impl.BasicParserPool;
@@ -24,8 +23,6 @@ import org.springframework.context.annotation.PropertySource;
 
 import java.io.File;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.Timer;
 
 @org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(TokenConfigProperties.class)
