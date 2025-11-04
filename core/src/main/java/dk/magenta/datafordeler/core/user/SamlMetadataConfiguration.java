@@ -5,6 +5,8 @@ import net.shibboleth.shared.component.ComponentInitializationException;
 import net.shibboleth.shared.resolver.ResolverException;
 import net.shibboleth.shared.xml.ParserPool;
 import net.shibboleth.shared.xml.impl.BasicParserPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.opensaml.core.config.InitializationException;
 import org.opensaml.core.config.InitializationService;
 import org.opensaml.saml.metadata.resolver.MetadataResolver;
@@ -20,11 +22,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 
 import java.io.File;
+import java.time.Duration;
 
 @org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties(TokenConfigProperties.class)
 @PropertySource("classpath:/application.properties")
 public class SamlMetadataConfiguration {
+
+    private final Logger log = LogManager.getLogger(SamlMetadataConfiguration.class.getCanonicalName());
 
     static {
         try {
@@ -56,10 +61,12 @@ public class SamlMetadataConfiguration {
         }
         File metadataFile = new File(path);
         FilesystemMetadataResolver resolver = new FilesystemMetadataResolver(metadataFile);
+        resolver.setMinRefreshDelay(Duration.ofHours(4L));
         resolver.setRequireValidMetadata(false);
         resolver.setParserPool(parserPool);
         resolver.setId("sts-metadata");
         resolver.initialize();
+        log.info("STS Metadata expiration: {}, path: {}", resolver.getExpirationTime(), path);
         return resolver;
     }
 
