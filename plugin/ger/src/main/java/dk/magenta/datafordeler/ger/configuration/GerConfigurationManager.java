@@ -22,12 +22,10 @@ public class GerConfigurationManager extends ConfigurationManager<GerConfigurati
     @PostConstruct
     public void init() {
         try {
-            System.out.println("Initializing GerConfigurationManager");
             // Very important to call init() on ConfigurationManager, or the config will not be loaded
             super.init();
             this.sqlServerDriver = new SQLServerDriver();
         } catch (Exception e) {
-            System.out.println("Error initializing GerConfigurationManager: ");
             e.printStackTrace();
             throw e;
         }

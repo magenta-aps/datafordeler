@@ -23,14 +23,10 @@ import java.util.Map;
 public class ScheduleChangedCommandHandler extends CommandHandler {
 
     private enum ScheduleType {
-        DUMP,
         PULL;
 
         static ScheduleType forData(ScheduleChangedCommandData data) {
             switch (data.table) {
-                case "dump_config":
-                    return DUMP;
-
                 case "cpr_config":
                 case "cvr_config":
                     return PULL;
@@ -89,9 +85,6 @@ public class ScheduleChangedCommandHandler extends CommandHandler {
                 ScheduleType scheduleType = ScheduleType.forData(this.getCommandData(command.getCommandBody()));
                 if (scheduleType != null) {
                     switch (scheduleType) {
-                        case DUMP:
-                            return engine.isDumpEnabled();
-
                         case PULL:
                             return engine.isPullEnabled();
                     }
@@ -117,10 +110,6 @@ public class ScheduleChangedCommandHandler extends CommandHandler {
             public void run() {
                 // TODO: be more granular rather than reloading everything
                 switch (ScheduleType.forData(data)) {
-                    case DUMP:
-                        engine.setupDumpSchedules();
-                        return;
-
                     case PULL:
                         engine.setupPullSchedules();
                         return;
