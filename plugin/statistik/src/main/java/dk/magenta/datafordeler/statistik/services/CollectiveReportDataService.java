@@ -99,79 +99,84 @@ public class CollectiveReportDataService extends PersonStatisticsService {
      */
     @RequestMapping(method = RequestMethod.GET, path = "/reportlist/")
     public void getReportList(HttpServletRequest request, HttpServletResponse response) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, AccessRequiredException {
-
-        DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-        LocalDateTime cutoff = LocalDateTime.now().minusDays(7);
-        String formToken = request.getParameter("token");
-        if (formToken != null) {
-            user = this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
-        }
-        // Check that the user has access to CPR data
-        //DafoUserDetails user = this.getUser(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
-        this.checkAndLogAccess(loggerHelper);
-
-        try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
-
-            String collectionUuidParam = request.getParameter("collectionUuid");
-            String collectionUuidStarted = null;
-            String collectionUuidRunning = null;
-            String collectionUuidLastRunning = null;
-
-            String hql = "from "+ReportAssignment.class.getCanonicalName()+
-                        " where "+ReportAssignment.DB_FIELD_REPORT_STATUS+" = :status"+
-                        " and "+ReportAssignment.DB_FIELD_CREATE_DATETIME+" > :cutoff";
-            Query<ReportAssignment> query = reportProgressSession.createQuery(hql, ReportAssignment.class);
-            query.setParameter("status", ReportProgressStatus.started);
-            query.setParameter("cutoff", cutoff);
-
-            String reportListResponse = "Started: <br>";
-
-            for (ReportAssignment assignment : query.getResultList()) {
-                String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
-                reportListResponse += element;
-                collectionUuidStarted = assignment.getCollectionUuid();
+        try {
+            DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
+            LocalDateTime cutoff = LocalDateTime.now().minusDays(7);
+            String formToken = request.getParameter("token");
+            if (formToken != null) {
+                user = this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
             }
+            // Check that the user has access to CPR data
+            //DafoUserDetails user = this.getUser(request);
+            LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
+            loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
+            this.checkAndLogAccess(loggerHelper);
 
-            query = reportProgressSession.createQuery(hql, ReportAssignment.class);
-            query.setParameter("status", ReportProgressStatus.running);
-            query.setParameter("cutoff", cutoff);
+            try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
 
-            reportListResponse += "<br><br>Running: <br>";
+                String collectionUuidParam = request.getParameter("collectionUuid");
+                String collectionUuidStarted = null;
+                String collectionUuidRunning = null;
+                String collectionUuidLastRunning = null;
 
-            for (ReportAssignment assignment : query.getResultList()) {
-                String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
-                reportListResponse += element;
-                collectionUuidRunning = assignment.getCollectionUuid();
-            }
-
-            if (collectionUuidStarted == null && collectionUuidRunning == null) {
-                reportListResponse += "<br><br>Last done report: <br>";
-                query = reportProgressSession.createQuery(hql, ReportAssignment.class);
-                query.setParameter("status", ReportProgressStatus.done);
+                String hql = "from " + ReportAssignment.class.getCanonicalName() +
+                        " where " + ReportAssignment.DB_FIELD_REPORT_STATUS + " = :status" +
+                        " and " + ReportAssignment.DB_FIELD_CREATE_DATETIME + " > :cutoff";
+                Query<ReportAssignment> query = reportProgressSession.createQuery(hql, ReportAssignment.class);
+                query.setParameter("status", ReportProgressStatus.started);
                 query.setParameter("cutoff", cutoff);
+
+                String reportListResponse = "Started: <br>";
+
                 for (ReportAssignment assignment : query.getResultList()) {
                     String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
                     reportListResponse += element;
-                    collectionUuidLastRunning = assignment.getCollectionUuid();
+                    collectionUuidStarted = assignment.getCollectionUuid();
                 }
+
+                query = reportProgressSession.createQuery(hql, ReportAssignment.class);
+                query.setParameter("status", ReportProgressStatus.running);
+                query.setParameter("cutoff", cutoff);
+
+                reportListResponse += "<br><br>Running: <br>";
+
+                for (ReportAssignment assignment : query.getResultList()) {
+                    String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
+                    reportListResponse += element;
+                    collectionUuidRunning = assignment.getCollectionUuid();
+                }
+
+                if (collectionUuidStarted == null && collectionUuidRunning == null) {
+                    reportListResponse += "<br><br>Last done report: <br>";
+                    query = reportProgressSession.createQuery(hql, ReportAssignment.class);
+                    query.setParameter("status", ReportProgressStatus.done);
+                    query.setParameter("cutoff", cutoff);
+                    for (ReportAssignment assignment : query.getResultList()) {
+                        String element = String.format(reportTemplateLink, assignment.getTemplateName(), assignment.getCollectionUuid());
+                        reportListResponse += element;
+                        collectionUuidLastRunning = assignment.getCollectionUuid();
+                    }
+                }
+
+                //TODO: this could be done much better
+                String listpage = IOUtils.resourceToString("/listServiceForm.html", StandardCharsets.UTF_8);
+
+                String token = request.getParameter("token");
+                String urlAttributesExecute = collectionUuidStarted;
+
+                String urlAttributesDownload = Optional.ofNullable(Optional.ofNullable(collectionUuidLastRunning).orElse(collectionUuidRunning)).orElse(collectionUuidStarted);
+
+                if (token != null) {
+                    String formTokenEncoded = URLEncoder.encode(token, StandardCharsets.UTF_8);
+                    urlAttributesExecute += "&token=" + formTokenEncoded;
+                    urlAttributesDownload += "&token=" + formTokenEncoded;
+                }
+                response.getOutputStream().write((String.format(listpage, reportListResponse, urlAttributesExecute, urlAttributesDownload)).getBytes());
             }
-
-            //TODO: this could be done much better
-            String listpage = IOUtils.resourceToString("/listServiceForm.html", StandardCharsets.UTF_8);
-
-            String token = request.getParameter("token");
-            String urlAttributesExecute = collectionUuidStarted;
-
-            String urlAttributesDownload = Optional.ofNullable(Optional.ofNullable(collectionUuidLastRunning).orElse(collectionUuidRunning)).orElse(collectionUuidStarted);
-
-            if (token != null) {
-                String formTokenEncoded = URLEncoder.encode(token, StandardCharsets.UTF_8);
-                urlAttributesExecute += "&token=" + formTokenEncoded;
-                urlAttributesDownload += "&token=" + formTokenEncoded;
-            }
-            response.getOutputStream().write((String.format(listpage, reportListResponse, urlAttributesExecute, urlAttributesDownload)).getBytes());
+        } catch (Exception e) {
+            log.error("Error in getReportList", e);
+            e.printStackTrace();
+            throw e;
         }
     }
 
