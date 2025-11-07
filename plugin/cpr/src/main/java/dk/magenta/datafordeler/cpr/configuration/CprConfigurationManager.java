@@ -73,7 +73,7 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
             CprConfiguration cprConfiguration = session.createQuery("select c from " + CprConfiguration.class.getCanonicalName() + " c", CprConfiguration.class).getSingleResult();
             cprConfiguration.setDirectPasswordPasswordEncryptionFile(new File(cprConfiguration.getEncryptionKeyFileName()));
             cprConfiguration.setDirectPassword(password);
-            session.saveOrUpdate(cprConfiguration);
+            session.persist(cprConfiguration);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();

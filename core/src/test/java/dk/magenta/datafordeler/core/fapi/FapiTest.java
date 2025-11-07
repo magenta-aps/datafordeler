@@ -577,7 +577,7 @@ public class FapiTest {
 
             DemoEntityRecord demoEntityRecord = new DemoEntityRecord(uuid, "fapitest");
             demoEntityRecord.setPostnr(8000);
-            session.saveOrUpdate(demoEntityRecord);
+            session.persist(demoEntityRecord);
 
             DemoDataRecord demoDataRecord1 = new DemoDataRecord("Århus C");
             demoDataRecord1.setBitemporality("2017-02-21T16:02:50+01:00", "2017-05-01T15:06:22+01:00", "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");

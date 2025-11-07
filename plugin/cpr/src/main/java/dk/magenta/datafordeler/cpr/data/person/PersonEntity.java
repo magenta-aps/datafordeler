@@ -15,15 +15,15 @@ import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.CprNontemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
 import dk.magenta.datafordeler.cpr.records.person.data.*;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -546,7 +546,7 @@ public class PersonEntity extends CprRecordEntity {
     public static final String DB_FIELD_MOTHER = "mother";
     public static final String IO_FIELD_MOTHER = "mor";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @Where(clause = ParentDataRecord.DB_FIELD_IS_MOTHER + "=true")
+    @SQLRestriction(ParentDataRecord.DB_FIELD_IS_MOTHER + "=true")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -569,7 +569,7 @@ public class PersonEntity extends CprRecordEntity {
     public static final String DB_FIELD_MOTHER_VERIFICATION = "motherVerification";
     public static final String IO_FIELD_MOTHER_VERIFICATION = "mor_verifikation";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @Where(clause = ParentDataRecord.DB_FIELD_IS_MOTHER + "=true")
+    @SQLRestriction(ParentDataRecord.DB_FIELD_IS_MOTHER + "=true")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -592,7 +592,7 @@ public class PersonEntity extends CprRecordEntity {
     public static final String DB_FIELD_FATHER = "father";
     public static final String IO_FIELD_FATHER = "far";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @Where(clause = ParentDataRecord.DB_FIELD_IS_MOTHER + "=false")
+    @SQLRestriction(ParentDataRecord.DB_FIELD_IS_MOTHER + "=false")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -615,7 +615,7 @@ public class PersonEntity extends CprRecordEntity {
     public static final String DB_FIELD_FATHER_VERIFICATION = "fatherVerification";
     public static final String IO_FIELD_FATHER_VERIFICATION = "far_verifikation";
     @OneToMany(mappedBy = CprBitemporalPersonRecord.DB_FIELD_ENTITY, cascade = CascadeType.ALL)
-    @Where(clause = ParentDataRecord.DB_FIELD_IS_MOTHER + "=false")
+    @SQLRestriction(ParentDataRecord.DB_FIELD_IS_MOTHER + "=false")
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = Bitemporal.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -987,12 +987,12 @@ public class PersonEntity extends CprRecordEntity {
                     // Annkor: A
                     // Acording to responses from CPR-office in denmark corrections can not be made to records that is not historic
                     oldItem.setUndone(true);
-                    session.saveOrUpdate(oldItem);
+                    session.persist(oldItem);
                     if (oldItem.getClosesRecordId() != null) {
                         CprBitemporalRecord previousClosedRecord = items.stream().filter(item -> oldItem.getClosesRecordId().equals(item.getId())).findFirst().orElse(null);
                         if (previousClosedRecord != null) {
                             previousClosedRecord.setRegistrationTo(null);
-                            session.saveOrUpdate(previousClosedRecord);
+                            session.persist(previousClosedRecord);
                         }
                     }
                     return false;
@@ -1016,7 +1016,7 @@ public class PersonEntity extends CprRecordEntity {
                         oldItem.setReplacedby(newItem);
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
                         newItem.setSameAs(oldItem);
-                        session.saveOrUpdate(oldItem);
+                        session.persist(oldItem);
                         boolean success = set.add((E) newItem);
                         return success;
                     } else if (
@@ -1049,7 +1049,7 @@ public class PersonEntity extends CprRecordEntity {
                             Equality.cprDomainBafterA(newItem.getEffectFrom(), oldItem.getEffectTo())) {
                         // If we strike a historic record, which is unclosed, and has a effectTo ending after a new active record of same type, it needs to be closed
                         oldItem.setRegistrationTo(newItem.getRegistrationFrom());
-                        session.saveOrUpdate(oldItem);
+                        session.persist(oldItem);
                     }
                 }
             }
@@ -1112,7 +1112,7 @@ public class PersonEntity extends CprRecordEntity {
                             //if (olderRecord.getEffectFrom() != null && olderRecord.getEffectFrom().equals(newItem.getEffectFrom())) {
                             newItem.setCorrectionof(olderRecord);
                             olderRecord.setEntity(entity);
-                            session.saveOrUpdate(olderRecord);
+                            session.persist(olderRecord);
                             return set.add((E) newItem);
                             //}
                         }
@@ -1126,7 +1126,7 @@ public class PersonEntity extends CprRecordEntity {
                     //if (correctedRecord.getCorrector() == null) {
                     correctedRecord.setRegistrationTo(newItem.getRegistrationFrom());
                     correctingRecord.setCorrectionof(correctedRecord);
-                    session.saveOrUpdate(correctingRecord);
+                    session.persist(correctingRecord);
                     //}
                 }
             } else {
