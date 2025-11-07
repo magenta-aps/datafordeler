@@ -206,9 +206,9 @@ public class CommandWatcher {
     public synchronized void saveCommand(Command command) {
         Session session = this.sessionManager.getSessionFactory().openSession();
         try {
-            command = (Command) session.merge(command);
+            command = session.merge(command);
             Transaction transaction = session.beginTransaction();
-            session.saveOrUpdate(command);
+            session.persist(command);
             transaction.commit();
         } finally {
             session.close();

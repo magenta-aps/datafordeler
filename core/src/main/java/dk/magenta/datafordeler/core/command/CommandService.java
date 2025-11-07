@@ -404,7 +404,7 @@ public class CommandService {
     public synchronized void saveCommand(Command command) {
         Session session = this.sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.saveOrUpdate(command);
+        session.persist(command);
         transaction.commit();
         session.close();
     }

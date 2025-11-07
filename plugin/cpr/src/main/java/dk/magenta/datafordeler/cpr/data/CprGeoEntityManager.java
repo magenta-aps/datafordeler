@@ -243,7 +243,7 @@ public abstract class CprGeoEntityManager<T extends CprGeoRecord<V, D>, E extend
                             for (UUID uuid : uuids) {
                                 E entity = entityCache.get(uuid);
                                 List<T> records = recordMap.get(entity);
-                                session.saveOrUpdate(entity);
+                                session.persist(entity);
 //                                this.parseRVD(entity, records, importMetadata);
                             }
 

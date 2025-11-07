@@ -210,7 +210,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
                         Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
                         progressSession.beginTransaction();
-                        progressSession.saveOrUpdate(progress);
+                        progressSession.persist(progress);
                         progressSession.getTransaction().commit();
                         progressSession.close();
 
@@ -336,7 +336,7 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         personQuery.applyFilters(session);
         List<CompanyRecord> companyEntities = QueryManager.getAllEntities(session, personQuery, CompanyRecord.class);
         for (CompanyRecord companyForDeletion : companyEntities) {
-            session.delete(companyForDeletion);
+            session.remove(companyForDeletion);
         }
         session.getTransaction().commit();
     }
