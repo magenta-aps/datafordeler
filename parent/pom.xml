@@ -18,12 +18,12 @@
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
         <junit.version>4.13.2</junit.version>
-        <jackson.version>2.18.3</jackson.version>
-        <spring.boot.version>3.4.5</spring.boot.version>
-        <cxf.spring.boot.starter.version>3.4.5</cxf.spring.boot.starter.version>
-        <commons.io.version>2.18.0</commons.io.version>
-        <hibernate.version>6.6.8.Final</hibernate.version>
-        <quartz.version>2.3.2</quartz.version>
+        <jackson.version>2.19.4</jackson.version>
+        <spring.boot.version>3.5.7</spring.boot.version>
+        <cxf.spring.boot.starter.version>3.5.7</cxf.spring.boot.starter.version>
+        <commons.io.version>2.20.0</commons.io.version>
+        <hibernate.version>6.6.34.Final</hibernate.version>
+        <quartz.version>2.5.1</quartz.version>
         <!-- Don't let the jre11 fool you, the package is compatible with jre >= 11 -->
         <com.microsoft.sqlserver.version>12.8.1.jre11</com.microsoft.sqlserver.version>
     </properties>

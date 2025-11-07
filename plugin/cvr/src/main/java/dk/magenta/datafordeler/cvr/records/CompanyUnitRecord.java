@@ -16,12 +16,10 @@ import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Base record for CompanyUnit data, parsed from JSON into a tree of objects
@@ -161,7 +159,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_ADDRESS_LOCATION = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_LOCATION;
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_COMPANYUNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_ADDRESS_LOCATION)
+    @SQLRestriction(CLAUSE_ADDRESS_LOCATION)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -203,7 +201,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_ADDRESS_POSTAL = AddressRecord.DB_FIELD_TYPE + "=" + AddressRecord.TYPE_POSTAL;
 
     @OneToMany(mappedBy = AddressRecord.DB_FIELD_COMPANYUNIT, targetEntity = AddressRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_ADDRESS_POSTAL)
+    @SQLRestriction(CLAUSE_ADDRESS_POSTAL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -246,7 +244,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_CONTACT_PHONE = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFONNUMMER;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_COMPANYUNIT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_CONTACT_PHONE)
+    @SQLRestriction(CLAUSE_CONTACT_PHONE)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -289,7 +287,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_CONTACT_FAX = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_TELEFAXNUMMER;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_COMPANYUNIT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_CONTACT_FAX)
+    @SQLRestriction(CLAUSE_CONTACT_FAX)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -332,7 +330,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_CONTACT_EMAIL = ContactRecord.DB_FIELD_TYPE + "=" + ContactRecord.TYPE_EMAILADRESSE;
 
     @OneToMany(mappedBy = ContactRecord.DB_FIELD_COMPANYUNIT, targetEntity = ContactRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_CONTACT_EMAIL)
+    @SQLRestriction(CLAUSE_CONTACT_EMAIL)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -412,7 +410,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_PRIMARY_INDUSTRY = CompanyIndustryRecord.DB_FIELD_INDEX + "=0";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_PRIMARY_INDUSTRY)
+    @SQLRestriction(CLAUSE_PRIMARY_INDUSTRY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -454,7 +452,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_SECONDARY_INDUSTRY1 = CompanyIndustryRecord.DB_FIELD_INDEX + "=1";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_SECONDARY_INDUSTRY1)
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY1)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -496,7 +494,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_SECONDARY_INDUSTRY2 = CompanyIndustryRecord.DB_FIELD_INDEX + "=2";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_SECONDARY_INDUSTRY2)
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY2)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -538,7 +536,7 @@ public class CompanyUnitRecord extends CvrEntityRecord {
     public static final String CLAUSE_SECONDARY_INDUSTRY3 = CompanyIndustryRecord.DB_FIELD_INDEX + "=3";
 
     @OneToMany(mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANYUNIT, targetEntity = CompanyIndustryRecord.class, cascade = CascadeType.ALL)
-    @Where(clause = CLAUSE_SECONDARY_INDUSTRY3)
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY3)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),

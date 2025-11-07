@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -188,7 +188,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public static final String CLAUSE_PRIMARY_INDUSTRY = CompanyIndustryRecord.DB_FIELD_INDEX + "=0";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CLAUSE_PRIMARY_INDUSTRY)
+    @SQLRestriction(CLAUSE_PRIMARY_INDUSTRY)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -242,7 +242,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public static final String CLAUSE_SECONDARY_INDUSTRY1 = CompanyIndustryRecord.DB_FIELD_INDEX + "=1";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CLAUSE_SECONDARY_INDUSTRY1)
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY1)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -297,7 +297,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public static final String CLAUSE_SECONDARY_INDUSTRY2 = CompanyIndustryRecord.DB_FIELD_INDEX + "=2";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CLAUSE_SECONDARY_INDUSTRY2)
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY2)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),
@@ -352,7 +352,7 @@ public class CompanyMetadataRecord extends MetadataRecord {
     public static final String CLAUSE_SECONDARY_INDUSTRY3 = CompanyIndustryRecord.DB_FIELD_INDEX + "=3";
 
     @OneToMany(targetEntity = CompanyIndustryRecord.class, mappedBy = CompanyIndustryRecord.DB_FIELD_COMPANY_METADATA, cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @Where(clause = CLAUSE_SECONDARY_INDUSTRY3)
+    @SQLRestriction(CLAUSE_SECONDARY_INDUSTRY3)
     @Filters({
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_AFTER, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_AFTER),
             @Filter(name = Bitemporal.FILTER_EFFECTFROM_BEFORE, condition = CvrBitemporalRecord.FILTERLOGIC_EFFECTFROM_BEFORE),

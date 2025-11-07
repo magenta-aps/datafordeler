@@ -1000,9 +1000,9 @@ public class RecordTest extends TestBase {
             name2.setEffectTo(null);
             company.addName(name2);
 
-            session.save(company);
+            session.persist(company);
             for (SecNameRecord nameRecord : company.getNames()) {
-                session.save(nameRecord);
+                session.persist(nameRecord);
             }
             company.closeRegistrations(session);
             transaction.commit();
