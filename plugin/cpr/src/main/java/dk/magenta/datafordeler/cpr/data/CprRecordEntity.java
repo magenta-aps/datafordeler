@@ -60,6 +60,9 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated;
 
+    @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
+    private OffsetDateTime dafoUpdatedNew;
+
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
         return fixOffsetOut(this.dafoUpdated);
@@ -67,6 +70,7 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
 

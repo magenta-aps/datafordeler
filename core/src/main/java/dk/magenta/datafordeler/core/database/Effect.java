@@ -121,12 +121,16 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
+    @Column(name = DB_FIELD_EFFECT_FROM+"_new", nullable = true, insertable = true, updatable = false)
+    private OffsetDateTime effectFromNew;
+
     public OffsetDateTime getEffectFrom() {
         return fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
         this.effectFrom = fixOffsetIn(effectFrom);
+        this.effectFromNew = effectFrom;
     }
 
 
@@ -137,12 +141,16 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     private OffsetDateTime effectTo;
 
+    @Column(name = DB_FIELD_EFFECT_TO+"_new", nullable = true, insertable = true, updatable = false)
+    private OffsetDateTime effectToNew;
+
     public OffsetDateTime getEffectTo() {
         return fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
         this.effectTo = fixOffsetIn(effectTo);
+        this.effectToNew = effectTo;
     }
 
 

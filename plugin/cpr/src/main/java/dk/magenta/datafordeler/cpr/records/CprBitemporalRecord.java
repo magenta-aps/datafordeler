@@ -33,12 +33,16 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
+    @Column(name = DB_FIELD_EFFECT_FROM+"_new")
+    private OffsetDateTime effectFromNew;
+
     public OffsetDateTime getEffectFrom() {
         return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
         this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
+        this.effectFromNew = effectFrom;
     }
 
     public static final String DB_FIELD_EFFECT_FROM_UNCERTAIN = "effectFromUncertain";
@@ -61,12 +65,16 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
+    @Column(name = DB_FIELD_EFFECT_TO+"_new")
+    private OffsetDateTime effectToNew;
+
     public OffsetDateTime getEffectTo() {
         return Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
         this.effectTo = Bitemporal.fixOffsetIn(effectTo);
+        this.effectToNew = effectTo;
     }
 
     public static final String DB_FIELD_EFFECT_TO_UNCERTAIN = "effectToUncertain";

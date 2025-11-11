@@ -33,12 +33,17 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
+    @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
+    private OffsetDateTime registrationFromNew;
+
+
     public OffsetDateTime getRegistrationFrom() {
         return fixOffsetOut(this.registrationFrom);
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
         this.registrationFrom = fixOffsetIn(registrationFrom);
+        this.registrationFromNew = registrationFrom;
     }
 
     public void setRegistrationFrom(long registrationFrom) {
@@ -55,12 +60,16 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
+    @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
+    private OffsetDateTime registrationToNew;
+
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationToNew = registrationTo;
     }
 
     public void setRegistrationTo(long registrationTo) {

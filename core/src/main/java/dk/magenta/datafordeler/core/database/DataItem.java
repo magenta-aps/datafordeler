@@ -92,12 +92,16 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime lastUpdated;
 
+    @Column(name = DB_FIELD_LAST_UPDATED+"_new")
+    private OffsetDateTime lastUpdatedNew;
+
     public OffsetDateTime getLastUpdated() {
         return fixOffsetOut(this.lastUpdated);
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
         this.lastUpdated = fixOffsetIn(lastUpdated);
+        this.lastUpdatedNew = lastUpdated;
     }
 
     public void setUpdated(OffsetDateTime lastUpdated) {
