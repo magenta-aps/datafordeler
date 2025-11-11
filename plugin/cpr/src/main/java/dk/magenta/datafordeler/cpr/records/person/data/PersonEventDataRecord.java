@@ -33,6 +33,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
         this.timestamp = fixOffsetIn(timestamp);
         this.eventId = eventId;
         this.derived = derived;
+        this.timestampNew = timestamp;
     }
 
 
@@ -69,8 +70,12 @@ public class PersonEventDataRecord extends CprRecordEntity {
     @JsonIgnore
     private OffsetDateTime timestamp;
 
+    @Column(name = DB_FIELD_TIMESTAMP+"_new")
+    private OffsetDateTime timestampNew;
+
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
     }
 
     public static final String DB_FIELD_EVENT = "eventId";

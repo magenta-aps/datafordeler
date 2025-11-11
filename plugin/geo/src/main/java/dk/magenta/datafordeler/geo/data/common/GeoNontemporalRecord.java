@@ -41,6 +41,8 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
     public static final String IO_FIELD_UPDATED = "sidstOpdateret";
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     public OffsetDateTime dafoUpdated;
+    @Column(name = DB_FIELD_UPDATED+"_new")
+    public OffsetDateTime dafoUpdatedNew;
 
     @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
@@ -50,10 +52,12 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
     @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
     protected static void copy(GeoNontemporalRecord from, GeoNontemporalRecord to) {
         to.dafoUpdated = from.dafoUpdated;
+        to.dafoUpdatedNew = from.dafoUpdatedNew;
     }
 
     public boolean equalData(Object o) {

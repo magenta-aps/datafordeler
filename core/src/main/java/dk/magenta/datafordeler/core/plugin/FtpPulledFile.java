@@ -27,6 +27,7 @@ public class FtpPulledFile extends DatabaseEntry {
         this.type = type;
         this.filename = filename;
         this.timestamp = fixOffsetIn(OffsetDateTime.now());
+        this.timestampNew = OffsetDateTime.now();
     }
 
     @Column(name = DB_FIELD_TYPE)
@@ -37,5 +38,8 @@ public class FtpPulledFile extends DatabaseEntry {
 
     @Column(name = DB_FIELD_TIMESTAMP, nullable = false, updatable = false, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
+
+    @Column(name = DB_FIELD_TIMESTAMP+"_new", nullable = false, updatable = false)
+    private OffsetDateTime timestampNew;
 
 }

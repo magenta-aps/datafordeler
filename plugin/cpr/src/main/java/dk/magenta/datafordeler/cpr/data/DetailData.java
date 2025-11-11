@@ -26,6 +26,9 @@ public abstract class DetailData extends DatabaseEntry {
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
+    @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
+    private OffsetDateTime dafoUpdatedNew = null;
+
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
         return fixOffsetOut(this.dafoUpdated);
@@ -33,6 +36,7 @@ public abstract class DetailData extends DatabaseEntry {
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
     public abstract Map<String, Object> asMap();

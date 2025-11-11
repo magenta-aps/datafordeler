@@ -206,6 +206,9 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationFrom;
 
+    @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false)
+    protected OffsetDateTime registrationFromNew;
+
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
@@ -215,6 +218,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
         this.registrationFrom = fixOffsetIn(registrationFrom);
+        this.registrationFromNew = registrationFrom;
     }
 
 
@@ -224,6 +228,9 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @Column(name = DB_FIELD_REGISTRATION_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationTo;
 
+    @Column(name = DB_FIELD_REGISTRATION_TO+"_new", nullable = true, insertable = true, updatable = false)
+    protected OffsetDateTime registrationToNew;
+
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
@@ -232,6 +239,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationToNew = registrationTo;
     }
 
 
@@ -271,6 +279,9 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @Column(nullable = true, insertable = true, updatable = true, columnDefinition = "datetime2")
     protected OffsetDateTime lastImportTime;
 
+    @Column(name="lastImportTime"+"_new", nullable = true, insertable = true, updatable = true)
+    protected OffsetDateTime lastImportTimeNew;
+
     @JsonProperty("sidstImporteret")
     public OffsetDateTime getLastImportTime() {
         return fixOffsetOut(this.lastImportTime);
@@ -278,6 +289,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     public void setLastImportTime(OffsetDateTime lastImportTime) {
         this.lastImportTime = fixOffsetIn(lastImportTime);
+        this.lastImportTimeNew = lastImportTime;
     }
 
     public void setLastImportTime() {

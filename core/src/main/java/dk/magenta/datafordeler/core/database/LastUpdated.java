@@ -30,6 +30,8 @@ public class LastUpdated extends DatabaseEntry {
     @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
+    @Column(name = DB_FIELD_TIMESTAMP+"_new")
+    private OffsetDateTime timestampNew;
 
     public String getPlugin() {
         return this.plugin;
@@ -53,5 +55,6 @@ public class LastUpdated extends DatabaseEntry {
 
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
     }
 }

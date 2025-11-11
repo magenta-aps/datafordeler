@@ -75,6 +75,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     @JsonProperty(value = IO_FIELD_LAST_UPDATED)
     private OffsetDateTime lastUpdated;
 
+    @Column(name = DB_FIELD_LAST_UPDATED+"_new")
+    protected OffsetDateTime lastUpdatedNew;
+
+
     @JsonIgnore
     public OffsetDateTime getLastUpdated() {
         return fixOffsetOut(this.lastUpdated);
@@ -91,6 +95,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         // Hvis vi går væk fra datetime2 skal vi ændre tilbage til at der bare står
         // this.lastUpdated = lastUpdated
         this.lastUpdated = fixOffsetIn(lastUpdated);
+        this.lastUpdatedNew = lastUpdated;
     }
 
 
@@ -101,6 +106,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     @JsonProperty(value = IO_FIELD_LAST_LOADED)
     private OffsetDateTime lastLoaded;
 
+    @Column(name = DB_FIELD_LAST_LOADED+"_new")
+    private OffsetDateTime lastLoadedNew;
+
     @JsonIgnore
     public OffsetDateTime getLastLoaded() {
         return fixOffsetOut(this.lastLoaded);
@@ -109,6 +117,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public void setLastLoaded(OffsetDateTime lastLoaded) {
         // Samme som setLastUpdated
         this.lastLoaded = fixOffsetIn(lastLoaded);
+        this.lastLoadedNew = lastLoaded;
     }
 
     @JsonIgnore
@@ -178,12 +187,17 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     @Column(columnDefinition = "datetime2")
     private OffsetDateTime registrationTo;
 
+    @Column(name="registrationTo"+"_new")
+    private OffsetDateTime registrationToNew;
+
+
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationToNew = registrationTo;
     }
 
 

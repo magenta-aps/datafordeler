@@ -39,8 +39,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     public ForeignAddressEmigrationDataRecord(int immigrationCountryCode, int emigrationCountryCode, OffsetDateTime emigrationRegistration, OffsetDateTime immigrationRegistration) {
         this.immigrationCountryCode = immigrationCountryCode;
         this.emigrationCountryCode = emigrationCountryCode;
-        this.emigrationRegistration = emigrationRegistration;
-        this.immigrationRegistration = immigrationRegistration;
+        this.setEmigrationRegistration(emigrationRegistration);
+        this.setImmigrationRegistration(immigrationRegistration);
     }
 
     public ForeignAddressEmigrationDataRecord(int emigrationCountryCode) {
@@ -91,11 +91,23 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
     private OffsetDateTime emigrationRegistration;
 
+    @Column(name = DB_FIELD_EXIT_REGISTRATION+"_new")
+    private OffsetDateTime emigrationRegistrationNew;
+
+    @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
+    public void setEmigrationRegistration(OffsetDateTime emigrationRegistration) {
+        this.emigrationRegistration = Bitemporal.fixOffsetIn(emigrationRegistration);
+        this.emigrationRegistrationNew = emigrationRegistration;
+    }
+
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
     @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
     private OffsetDateTime immigrationRegistration;
+
+    @Column(name = DB_FIELD_RETURN_REGISTRATION+"_new")
+    private OffsetDateTime immigrationRegistrationNew;
 
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public OffsetDateTime getImmigrationRegistration() {
@@ -105,6 +117,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public void setImmigrationRegistration(OffsetDateTime immigrationRegistration) {
         this.immigrationRegistration = Bitemporal.fixOffsetIn(immigrationRegistration);
+        this.immigrationRegistrationNew = immigrationRegistration;
     }
 
 

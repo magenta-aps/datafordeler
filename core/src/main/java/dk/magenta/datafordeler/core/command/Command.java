@@ -50,8 +50,14 @@ public final class Command extends DatabaseEntry implements Configuration {
     @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime received;
 
+    @Column(nullable = true)
+    private OffsetDateTime receivedNew;
+
     @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime handled;
+
+    @Column(nullable = true)
+    private OffsetDateTime handledNew;
 
     @Column(nullable = true)
     @JsonIgnore
@@ -121,7 +127,7 @@ public final class Command extends DatabaseEntry implements Configuration {
     }
 
     public void setReceived() {
-        this.received = OffsetDateTime.now();
+        this.received = this.receivedNew = OffsetDateTime.now();
     }
 
     public OffsetDateTime getHandled() {
@@ -129,7 +135,7 @@ public final class Command extends DatabaseEntry implements Configuration {
     }
 
     public void setHandled() {
-        this.handled = OffsetDateTime.now();
+        this.handled = this.handledNew = OffsetDateTime.now();
     }
 
     public Status getStatus() {

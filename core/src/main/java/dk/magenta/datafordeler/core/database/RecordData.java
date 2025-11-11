@@ -21,6 +21,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
 
     public RecordData(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
     }
 
     @ManyToOne
@@ -41,6 +42,9 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     public OffsetDateTime getTimestamp() {
         return fixOffsetOut(this.timestamp);
     }
+
+    @Column(name="timestamp"+"_new")
+    private OffsetDateTime timestampNew;
 
 
     @Lob

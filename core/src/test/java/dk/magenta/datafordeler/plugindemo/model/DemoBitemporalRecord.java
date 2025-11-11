@@ -53,6 +53,9 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
     private OffsetDateTime registrationFrom;
 
+    @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
+    private OffsetDateTime registrationFromNew;
+
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
         return Bitemporal.fixOffsetOut(this.registrationFrom);
@@ -61,6 +64,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
         this.registrationFrom = Bitemporal.fixOffsetIn(registrationFrom);
+        this.registrationFromNew = registrationFrom;
     }
 
 
@@ -69,6 +73,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
     private OffsetDateTime registrationTo;
+    @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
+    private OffsetDateTime registrationToNew;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
@@ -78,6 +84,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = Bitemporal.fixOffsetIn(registrationTo);
+        this.registrationToNew = registrationTo;
     }
 
 
@@ -89,6 +96,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
     @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
     private OffsetDateTime effectFrom;
+    @Column(name = DB_FIELD_EFFECT_FROM+"_new")
+    private OffsetDateTime effectFromNew;
 
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public OffsetDateTime getEffectFrom() {
@@ -98,6 +107,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public void setEffectFrom(OffsetDateTime effectFrom) {
         this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
+        this.effectFromNew = effectFrom;
     }
 
 
@@ -105,6 +115,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
     @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
     private OffsetDateTime effectTo;
+    @Column(name = DB_FIELD_EFFECT_TO+"_new")
+    private OffsetDateTime effectToNew;
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     public OffsetDateTime getEffectTo() {
@@ -114,6 +126,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     public void setEffectTo(OffsetDateTime effectTo) {
         this.effectTo = Bitemporal.fixOffsetIn(effectTo);
+        this.effectToNew = effectTo;
     }
 
     @Override
@@ -128,6 +141,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     public OffsetDateTime dafoUpdated;
+    @Column(name = DB_FIELD_UPDATED+"_new")
+    public OffsetDateTime dafoUpdatedNew;
 
     @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
@@ -138,6 +153,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = Bitemporal.fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
 

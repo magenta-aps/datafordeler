@@ -42,6 +42,9 @@ public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated;
 
+    @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
+    private OffsetDateTime dafoUpdatedNew;
+
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
         return this.dafoUpdated;
@@ -49,6 +52,7 @@ public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = dafoUpdated;
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
 }

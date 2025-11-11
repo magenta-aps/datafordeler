@@ -60,6 +60,8 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
     @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
     private OffsetDateTime creationDate;
+    @Column(name = DB_FIELD_CREATION_DATE+"_new")
+    private OffsetDateTime creationDateNew;
 
     public OffsetDateTime getCreationDate() {
         return fixOffsetOut(this.creationDate);
@@ -68,6 +70,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     @JsonProperty(value = "CreationDate")
     public void setCreationDate(OffsetDateTime creationDate) {
         this.creationDate = fixOffsetIn(creationDate);
+        this.creationDateNew = creationDate;
     }
 
     @JsonProperty(value = "CreationDate")
@@ -78,6 +81,8 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_EDIT_DATE = "editDate";
     @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
     private OffsetDateTime editDate;
+    @Column(name = DB_FIELD_EDIT_DATE+"_new")
+    private OffsetDateTime editDateNew;
 
     public OffsetDateTime getEditDate() {
         return fixOffsetOut(this.editDate);
@@ -86,6 +91,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     @JsonProperty(value = "EditDate")
     public void setEditDate(OffsetDateTime editDate) {
         this.editDate = fixOffsetIn(editDate);
+        this.editDateNew = editDate;
     }
 
     @JsonProperty(value = "EditDate")
@@ -99,6 +105,9 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
+    @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
+    private OffsetDateTime dafoUpdatedNew = null;
+
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
         return this.dafoUpdated;
@@ -106,6 +115,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
 

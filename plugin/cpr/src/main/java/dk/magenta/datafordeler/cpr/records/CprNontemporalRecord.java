@@ -203,6 +203,8 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     public OffsetDateTime dafoUpdated;
+    @Column(name = DB_FIELD_UPDATED+"_new")
+    public OffsetDateTime dafoUpdatedNew;
 
     @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
@@ -213,6 +215,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
     protected static void copy(CprNontemporalRecord from, CprNontemporalRecord to) {
