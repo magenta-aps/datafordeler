@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,9 @@ import org.apache.logging.log4j.Logger;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +25,7 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 @MappedSuperclass
-public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal {
+public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal, MigrateModel {
 
     @Transient
     private final Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
@@ -203,6 +207,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     public OffsetDateTime dafoUpdated;
+    @JsonIgnore
     @Column(name = DB_FIELD_UPDATED+"_new")
     public OffsetDateTime dafoUpdatedNew;
 
@@ -283,5 +288,13 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     protected static String trim(String text) {
         return text != null ? text.trim() : null;
+    }
+
+    public void updateTimestamp() {
+        this.dafoUpdatedNew = this.getDafoUpdated();
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_UPDATED);
     }
 }

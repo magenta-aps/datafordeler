@@ -9,9 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
@@ -26,6 +24,7 @@ public abstract class DetailData extends DatabaseEntry {
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
     private OffsetDateTime dafoUpdatedNew = null;
 
@@ -72,6 +71,14 @@ public abstract class DetailData extends DatabaseEntry {
             out.put(key, map.get(key));
         }
         return out;
+    }
+
+    public void updateTimestamp() {
+        this.dafoUpdatedNew = this.getDafoUpdated();
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_DAFO_UPDATED);
     }
 
 }

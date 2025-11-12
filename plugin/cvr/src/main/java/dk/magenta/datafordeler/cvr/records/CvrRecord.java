@@ -33,6 +33,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
     private OffsetDateTime dafoUpdatedNew = null;
 
@@ -97,5 +98,9 @@ public abstract class CvrRecord extends DatabaseEntry {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public void updateTimestamp() {
+        this.dafoUpdatedNew = this.getDafoUpdated();
     }
 }

@@ -78,6 +78,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     @JsonIgnore
     private OffsetDateTime timestamp;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_TIMESTAMP+"_new")
     private OffsetDateTime timestampNew;
 
@@ -131,5 +132,10 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), field, text, oldItem, timestamp, getDafoUpdated());
+    }
+
+    public void updateTimestamp() {
+        super.updateTimestamp();
+        this.timestampNew = this.getTimestamp();
     }
 }

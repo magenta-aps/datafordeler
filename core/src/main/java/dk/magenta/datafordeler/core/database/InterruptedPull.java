@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.io.File;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -135,5 +136,14 @@ public class InterruptedPull extends DatabaseEntry {
 
     public void setImportConfiguration(String importConfiguration) {
         this.importConfiguration = importConfiguration;
+    }
+
+    public void updateTimestamp() {
+        this.startTimeNew = this.getStartTime();
+        this.interruptTimeNew = this.getInterruptTime();
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList("startTime", "interruptTime");
     }
 }
