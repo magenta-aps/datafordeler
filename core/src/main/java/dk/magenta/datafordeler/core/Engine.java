@@ -2,11 +2,7 @@ package dk.magenta.datafordeler.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
-import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
-import dk.magenta.datafordeler.core.dump.Dump;
-import dk.magenta.datafordeler.core.dump.Dump.Task;
-import dk.magenta.datafordeler.core.dump.DumpConfiguration;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
@@ -17,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +46,6 @@ public class Engine {
     @Value("${dafo.server.name:dafo01}")
     private String serverName;
 
-    @Value("${dafo.dump.enabled:true}")
-    private boolean dumpEnabled;
-
     @Value("${dafo.pull.enabled:true}")
     private boolean pullEnabled;
 
@@ -74,7 +66,6 @@ public class Engine {
     @PostConstruct
     public void init() {
         this.setupPullSchedules();
-        this.setupDumpSchedules();
     }
 
     public String getServerName() {
@@ -83,10 +74,6 @@ public class Engine {
 
     public boolean isPullEnabled() {
         return this.pullEnabled;
-    }
-
-    public boolean isDumpEnabled() {
-        return this.dumpEnabled;
     }
 
     public boolean isCronEnabled() {
@@ -192,87 +179,6 @@ public class Engine {
             } catch (SchedulerException e) {
                 log.error("Failed to schedule pull!", e);
             }
-        }
-    }
-
-    public boolean setupDumpSchedules() {
-        if (!dumpEnabled || !this.cronEnabled) {
-            log.info("Scheduled dump jobs disabled for this server!");
-            return false;
-        }
-
-        Session session =
-                configurationSessionManager.getSessionFactory().openSession();
-
-        try {
-            return QueryManager.getAllItemsAsStream(session,
-                            DumpConfiguration.class)
-                    .allMatch(
-                            c -> setupDumpSchedule(c, false)
-                    );
-        } finally {
-            session.close();
-        }
-    }
-
-    /**
-     * Sets the schedule for dumps
-     *
-     * @param config   The dump configuration
-     * @param dummyRun For test purposes. If false, no pull will actually be run.
-     */
-    boolean setupDumpSchedule(DumpConfiguration config, boolean
-            dummyRun) {
-        try {
-            if (scheduler == null) {
-                this.scheduler = StdSchedulerFactory.getDefaultScheduler();
-            }
-
-            String triggerID = String.format("DUMP-%d", config.getId());
-
-            // Remove old schedule
-            if (this.pullTriggerKeys.containsKey(triggerID)) {
-                log.info("Removing schedule for dump");
-                scheduler.unscheduleJob(this.pullTriggerKeys.get(triggerID));
-            }
-
-            CronScheduleBuilder scheduleBuilder = makeSchedule(
-                    config.getSchedule()
-            );
-
-            if (scheduleBuilder != null) {
-                log.info("Setting up dump with schedule {}",
-                        scheduleBuilder);
-                this.pullTriggerKeys.put(triggerID,
-                        TriggerKey.triggerKey("dumpTrigger", triggerID));
-
-                // Set up new schedule, or replace existing
-                Trigger dumpTrigger = TriggerBuilder.newTrigger()
-                        .withIdentity(this.pullTriggerKeys.get(triggerID))
-                        .withSchedule(
-                                scheduleBuilder
-                        ).build();
-                log.info("The trigger is {}",
-                        dumpTrigger);
-
-                JobDataMap jobData = new JobDataMap();
-                jobData.put(Dump.Task.DATA_ENGINE, this);
-                jobData.put(Task.DATA_SESSIONMANAGER, this.sessionManager);
-                jobData.put(Dump.Task.DATA_CONFIG, config);
-                jobData.put(Dump.Task.DATA_DUMMYRUN, dummyRun);
-                JobDetail job = JobBuilder.newJob(Dump.Task.class)
-                        .withIdentity(triggerID)
-                        .setJobData(jobData)
-                        .build();
-
-                scheduler.scheduleJob(job, Collections.singleton(dumpTrigger), true);
-                scheduler.start();
-            }
-
-            return true;
-        } catch (Exception e) {
-            log.error("failed to schedule dump!", e);
-            return false;
         }
     }
 
