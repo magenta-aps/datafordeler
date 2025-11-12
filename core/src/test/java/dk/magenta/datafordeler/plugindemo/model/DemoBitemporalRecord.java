@@ -3,13 +3,17 @@ package dk.magenta.datafordeler.plugindemo.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @MappedSuperclass
-public abstract class DemoBitemporalRecord extends DatabaseEntry implements Monotemporal, Bitemporal {
+public abstract class DemoBitemporalRecord extends DatabaseEntry implements Monotemporal, Bitemporal, MigrateModel {
 
 
     public static final String DB_FIELD_ENTITY = "entity";
@@ -53,6 +57,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
     private OffsetDateTime registrationFrom;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
     private OffsetDateTime registrationFromNew;
 
@@ -73,6 +78,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
     @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
     private OffsetDateTime registrationTo;
+    @JsonIgnore
     @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
     private OffsetDateTime registrationToNew;
 
@@ -96,6 +102,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
     @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
     private OffsetDateTime effectFrom;
+    @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_FROM+"_new")
     private OffsetDateTime effectFromNew;
 
@@ -115,6 +122,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
     @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
     private OffsetDateTime effectTo;
+    @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_TO+"_new")
     private OffsetDateTime effectToNew;
 
@@ -141,6 +149,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
     @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
     public OffsetDateTime dafoUpdated;
+    @JsonIgnore
     @Column(name = DB_FIELD_UPDATED+"_new")
     public OffsetDateTime dafoUpdatedNew;
 
@@ -156,6 +165,16 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
         this.dafoUpdatedNew = dafoUpdated;
     }
 
+    public void updateTimestamp() {
+        this.dafoUpdatedNew = this.getDafoUpdated();
+        this.registrationFromNew = this.getRegistrationFrom();
+        this.registrationToNew = this.getRegistrationTo();
+        this.effectFromNew = this.getEffectFrom();
+        this.effectToNew = this.getEffectTo();
+    }
 
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_UPDATED, DB_FIELD_REGISTRATION_FROM, DB_FIELD_REGISTRATION_TO, DB_FIELD_EFFECT_FROM, DB_FIELD_EFFECT_TO);
+    }
 
 }

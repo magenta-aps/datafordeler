@@ -206,7 +206,8 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationFrom;
 
-    @Column(name = DB_FIELD_REGISTRATION_FROM, nullable = true, insertable = true, updatable = false)
+    @JsonIgnore
+    @Column(name = DB_FIELD_REGISTRATION_FROM+"_new", nullable = true, insertable = true, updatable = false)
     protected OffsetDateTime registrationFromNew;
 
 
@@ -228,6 +229,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @Column(name = DB_FIELD_REGISTRATION_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
     protected OffsetDateTime registrationTo;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_REGISTRATION_TO+"_new", nullable = true, insertable = true, updatable = false)
     protected OffsetDateTime registrationToNew;
 
@@ -279,6 +281,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     @Column(nullable = true, insertable = true, updatable = true, columnDefinition = "datetime2")
     protected OffsetDateTime lastImportTime;
 
+    @JsonIgnore
     @Column(name="lastImportTime"+"_new", nullable = true, insertable = true, updatable = true)
     protected OffsetDateTime lastImportTimeNew;
 
@@ -387,5 +390,18 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
         for (V effect : new ArrayList<V>(this.getEffects())) {
             effect.setRegistration(otherRegistration);
         }
+    }
+
+    public void updateTimestamp() {
+        this.lastImportTimeNew = this.getLastImportTime();
+        this.registrationFromNew = this.getRegistrationFrom();
+        this.registrationToNew = this.getRegistrationTo();
+        for (V effect : this.effects) {
+            effect.updateTimestamp();
+        }
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_REGISTRATION_FROM, DB_FIELD_REGISTRATION_TO, "lastImportTime");
     }
 }

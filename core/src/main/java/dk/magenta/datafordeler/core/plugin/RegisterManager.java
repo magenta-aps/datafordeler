@@ -156,6 +156,7 @@ public abstract class RegisterManager {
     }
 
     public InputStream pullRawData(URI eventInterface, EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
+        System.out.println("pullRawData: "+eventInterface+", "+entityManager);
         this.getLog().info("Pulling events from " + eventInterface + ", for entityManager " + entityManager);
         Communicator eventCommunicator = this.getEventFetcher();
         return eventCommunicator.fetch(eventInterface);

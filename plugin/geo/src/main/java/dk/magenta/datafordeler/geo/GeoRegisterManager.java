@@ -120,11 +120,7 @@ public class GeoRegisterManager extends RegisterManager {
         session.close();
 
         if (lastUpdateTime == null) {
-            if (entityManager.getManagedEntityClass() == UnitAddressEntity.class) {
-                lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
-            } else {
-                lastUpdateTime = OffsetDateTime.now().minusDays(30);
-            }
+            lastUpdateTime = OffsetDateTime.parse("1900-01-01T00:00:00Z");
             log.info("Last update time not found");
         } else {
             log.info("Last update time: " + lastUpdateTime.format(DateTimeFormatter.ISO_LOCAL_DATE));

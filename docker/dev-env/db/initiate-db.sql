@@ -42,16 +42,15 @@ BEGIN
             2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/4/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
             2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/3/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
             'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/10/query?where=DeletedDate>%{editDate}&outFields=*&returnGeometry=true&f=geojson',
-            2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/5/query?where=Postnummer>0&outFields=*&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson ',
+            2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/5/query?where=Postnummer>0&outFields=*&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
             2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/1/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
             'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/11/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate',
             2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/0/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
             'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/7/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate',
-            2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/6/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=false&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
+            2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/6/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=false&resultOffset=%{offset}&resultRecordCount=%{count}&f=json',
             'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/9/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate',
             2, 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/2/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
             'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/8/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate'
-
             )
         END
     ELSE
@@ -66,11 +65,11 @@ BEGIN
         roadDeletionRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/11/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate',
         accessAddressRegisterType = 2, accessAddressRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/0/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
         accessAddressDeletionRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/7/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate',
-        unitAddressRegisterType = 2, unitAddressRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/6/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=false&resultOffset=%{offset}&f=geojson',
+        unitAddressRegisterType = 2, unitAddressRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/6/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=false&resultOffset=%{offset}&f=json',
         unitAddressDeletionRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/9/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate',
         buildingRegisterType = 2, buildingRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/2/query?where=EditDate>%{editDate}&outFields=*&returnGeometry=true&resultOffset=%{offset}&resultRecordCount=%{count}&f=geojson',
         buildingDeletionRegisterURL = 'https://grunddatatest.nanoq.gl/server/rest/services/OperationalLayers/Grunddata/MapServer/8/query?where=DeletedDate>%{editDate}&f=json&outFields=*&orderByFields=DeletedDate'
-END
+        END
 END
 
 BEGIN

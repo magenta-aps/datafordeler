@@ -92,6 +92,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime lastUpdated;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_LAST_UPDATED+"_new")
     private OffsetDateTime lastUpdatedNew;
 
@@ -167,4 +168,11 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
 
     public abstract void forceLoad(Session session);
 
+    public void updateTimestamp() {
+        this.lastUpdatedNew = this.getLastUpdated();
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_LAST_UPDATED);
+    }
 }
