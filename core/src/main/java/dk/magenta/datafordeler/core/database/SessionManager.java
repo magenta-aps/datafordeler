@@ -57,7 +57,7 @@ public class SessionManager {
         this.sessionFactory.close();
     }
 
-    protected HashSet<Class> managedClasses() {
+    public HashSet<Class> managedClasses() {
         HashSet<Class> managedClasses = new HashSet<Class>();
         managedClasses.add(dk.magenta.datafordeler.core.database.Identification.class);
         managedClasses.add(dk.magenta.datafordeler.core.database.Entity.class);
@@ -73,7 +73,6 @@ public class SessionManager {
         componentProvider.addExcludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
         for (Class cls : managedClasses) {
-            log.info("Located hardcoded data class " + cls.getCanonicalName());
             componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
         }
 
@@ -82,7 +81,6 @@ public class SessionManager {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             for (BeanDefinition component : components) {
                 Class cls = Class.forName(component.getBeanClassName(), true, cl);
-                log.info("Located autodetected data class " + cls.getCanonicalName());
                 managedClasses.add(cls);
             }
         } catch (Throwable ex) {

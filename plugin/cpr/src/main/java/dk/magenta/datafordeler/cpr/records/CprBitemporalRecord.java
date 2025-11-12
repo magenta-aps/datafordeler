@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cpr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -10,6 +11,9 @@ import jakarta.persistence.Transient;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -33,6 +37,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_FROM+"_new")
     private OffsetDateTime effectFromNew;
 
@@ -65,6 +70,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_TO+"_new")
     private OffsetDateTime effectToNew;
 
@@ -240,6 +246,19 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), effectFrom, effectFromUncertain, effectTo, effectToUncertain);
+    }
+
+    public void updateTimestamp() {
+        super.updateTimestamp();
+        this.effectFromNew = this.getEffectFrom();
+        this.effectToNew = this.getEffectTo();
+    }
+
+    public static List<String> updateFields() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(CprMonotemporalRecord.updateFields());
+        list.addAll(Arrays.asList(DB_FIELD_EFFECT_FROM, DB_FIELD_EFFECT_TO));
+        return list;
     }
 
 }

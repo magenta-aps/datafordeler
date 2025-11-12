@@ -1,12 +1,14 @@
 package dk.magenta.datafordeler.core.plugin;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
@@ -15,7 +17,7 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
         @Index(name = "ftp_pulled_file_filename", columnList = FtpPulledFile.DB_FIELD_FILENAME, unique = true),
         @Index(name = "ftp_pulled_file_type", columnList = FtpPulledFile.DB_FIELD_TYPE),
 })
-public class FtpPulledFile extends DatabaseEntry {
+public class FtpPulledFile extends DatabaseEntry implements MigrateModel {
 
     public static final String DB_FIELD_TYPE = "type";
     public static final String DB_FIELD_FILENAME = "filename";
@@ -42,4 +44,11 @@ public class FtpPulledFile extends DatabaseEntry {
     @Column(name = DB_FIELD_TIMESTAMP+"_new", nullable = false, updatable = false)
     private OffsetDateTime timestampNew;
 
+    public void updateTimestamp() {
+        this.timestampNew = this.timestamp;
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_TIMESTAMP);
+    }
 }

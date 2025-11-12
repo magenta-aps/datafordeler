@@ -28,7 +28,7 @@ public class ConfigurationSessionManager extends SessionManager {
         super();
     }
 
-    protected HashSet<Class> managedClasses() {
+    public HashSet<Class> managedClasses() {
         HashSet<Class> managedSecondaryClasses = new HashSet<>();
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.command.Command.class);
         managedSecondaryClasses.add(dk.magenta.datafordeler.core.database.InterruptedPull.class);
@@ -38,7 +38,6 @@ public class ConfigurationSessionManager extends SessionManager {
         componentProvider.addIncludeFilter(new AssignableTypeFilter(dk.magenta.datafordeler.core.configuration.Configuration.class));
 
         for (Class cls : managedSecondaryClasses) {
-            log.info("Located hardcoded configuration data class " + cls.getCanonicalName());
             componentProvider.addExcludeFilter(new AssignableTypeFilter(cls));
         }
 
@@ -47,7 +46,6 @@ public class ConfigurationSessionManager extends SessionManager {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             for (BeanDefinition component : components) {
                 Class cls = Class.forName(component.getBeanClassName(), true, cl);
-                log.info("Located autodetected secondary data class " + cls.getCanonicalName());
                 managedSecondaryClasses.add(cls);
             }
         } catch (Throwable ex) {

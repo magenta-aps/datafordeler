@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.ger.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
@@ -9,7 +10,10 @@ import jakarta.persistence.*;
 import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @MappedSuperclass
 public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
@@ -42,6 +46,7 @@ public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated;
 
+    @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
     private OffsetDateTime dafoUpdatedNew;
 
@@ -53,6 +58,14 @@ public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = dafoUpdated;
         this.dafoUpdatedNew = dafoUpdated;
+    }
+
+    public void updateTimestamp() {
+        this.dafoUpdatedNew = this.getDafoUpdated();
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_DAFO_UPDATED);
     }
 
 }
