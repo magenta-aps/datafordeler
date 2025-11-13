@@ -190,88 +190,81 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
         long chunkCount = 1;
         long startChunk = importMetadata.getStartChunk();
 
-        InterruptedPull progress = new InterruptedPull();
-        timer.clear();
+        try (Session progressSession = this.configurationSessionManager.getSessionFactory().openSession()) {
+            InterruptedPull progress = new InterruptedPull();
+            progressSession.persist(progress);
+            timer.clear();
 
-        try {
-            while (scanner.hasNext()) {
-                String data = scanner.next();
-                try {
-                    if (chunkCount >= startChunk) {
-                        log.info("Handling chunk " + chunkCount + (lines > 0 ? ("/" + lines) : "") + " (" + data.length() + " chars)");
+            try {
+                while (scanner.hasNext()) {
+                    String data = scanner.next();
+                    try {
+                        if (chunkCount >= startChunk) {
+                            log.info("Handling chunk " + chunkCount + (lines > 0 ? ("/" + lines) : "") + " (" + data.length() + " chars)");
 
-                        // Save progress
-                        progress.setChunk(chunkCount);
-                        progress.setFiles(cacheFiles);
-                        progress.setStartTime(importMetadata.getImportTime());
-                        progress.setInterruptTime(OffsetDateTime.now());
-                        progress.setSchemaName(this.getSchema());
-                        progress.setPlugin(this.getRegisterManager().getPlugin());
+                            // Save progress
+                            progress.setChunk(chunkCount);
+                            progress.setFiles(cacheFiles);
+                            progress.setStartTime(importMetadata.getImportTime());
+                            progress.setInterruptTime(OffsetDateTime.now());
+                            progress.setSchemaName(this.getSchema());
+                            progress.setPlugin(this.getRegisterManager().getPlugin());
 
-                        Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
-                        progressSession.beginTransaction();
-                        progressSession.persist(progress);
-                        progressSession.getTransaction().commit();
-                        progressSession.close();
+                            if (session == null) {
+                                session = this.getSessionManager().getSessionFactory().openSession();
+                            }
 
-                        if (session == null) {
-                            session = this.getSessionManager().getSessionFactory().openSession();
+                            if (!wrappedInTransaction) {
+                                session.beginTransaction();
+                                importMetadata.setTransactionInProgress(true);
+                            }
+                            try {
+                                int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
+                            } catch (JsonParseException e) {
+                                ImportInterruptedException ex = new ImportInterruptedException(e);
+                                session.getTransaction().rollback();
+                                importMetadata.setTransactionInProgress(false);
+                                session.clear();
+                                ex.setChunk(chunkCount);
+                                throw ex;
+                            } catch (ImportInterruptedException e) {
+                                session.getTransaction().rollback();
+                                importMetadata.setTransactionInProgress(false);
+                                session.clear();
+                                e.setChunk(chunkCount);
+                                throw e;
+                            }
+
+                            timer.start(TASK_COMMIT);
+                            session.flush();
+                            if (!wrappedInTransaction) {
+                                session.getTransaction().commit();
+                                importMetadata.setTransactionInProgress(false);
+                                session.clear();
+                            }
+                            timer.measure(TASK_COMMIT);
+
+                            log.debug("Chunk " + chunkCount + ":\n" + timer.formatAllTotal());
                         }
-
-                        if (!wrappedInTransaction) {
-                            session.beginTransaction();
-                            importMetadata.setTransactionInProgress(true);
-                        }
-                        try {
-                            int count = this.parseData(this.getObjectMapper().readTree(data), importMetadata, session, filter);
-                        } catch (JsonParseException e) {
-                            ImportInterruptedException ex = new ImportInterruptedException(e);
-                            session.getTransaction().rollback();
-                            importMetadata.setTransactionInProgress(false);
-                            session.clear();
-                            ex.setChunk(chunkCount);
-                            throw ex;
-                        } catch (ImportInterruptedException e) {
-                            session.getTransaction().rollback();
-                            importMetadata.setTransactionInProgress(false);
-                            session.clear();
-                            e.setChunk(chunkCount);
-                            throw e;
-                        }
-
-                        timer.start(TASK_COMMIT);
-                        session.flush();
-                        if (!wrappedInTransaction) {
-                            session.getTransaction().commit();
-                            importMetadata.setTransactionInProgress(false);
-                            session.clear();
-                        }
-                        timer.measure(TASK_COMMIT);
-
-                        log.debug("Chunk " + chunkCount + ":\n" + timer.formatAllTotal());
+                        chunkCount++;
+                    } catch (IOException e) {
+                        throw new DataStreamException(e);
                     }
-                    chunkCount++;
-                } catch (IOException e) {
-                    throw new DataStreamException(e);
                 }
-            }
-            subscribeToMissingCvr();
+                subscribeToMissingCvr();
 
-            log.info("All chunks handled\n" + timer.formatAllTotal());
-            Session progressSession = this.configurationSessionManager.getSessionFactory().openSession();
-            progressSession.beginTransaction();
-            progressSession.remove(progress);
-            progressSession.getTransaction().commit();
-            progressSession.close();
-        } catch (ImportInterruptedException e) {
-            log.info("Import aborted in chunk " + chunkCount);
-            if (e.getChunk() == null) {
-                log.info("That's before our startPoint, propagate startPoint " + startChunk);
-                e.setChunk(startChunk);
+                log.info("All chunks handled\n" + timer.formatAllTotal());
+                progressSession.remove(progress);
+            } catch (ImportInterruptedException e) {
+                log.info("Import aborted in chunk " + chunkCount);
+                if (e.getChunk() == null) {
+                    log.info("That's before our startPoint, propagate startPoint " + startChunk);
+                    e.setChunk(startChunk);
+                }
+                e.setFiles(cacheFiles);
+                e.setEntityManager(this);
+                throw e;
             }
-            e.setFiles(cacheFiles);
-            e.setEntityManager(this);
-            throw e;
         }
         log.info("Parse complete");
     }
