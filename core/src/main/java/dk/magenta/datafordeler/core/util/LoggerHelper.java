@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.core.util;
 
 import dk.magenta.datafordeler.core.database.Entity;
 import dk.magenta.datafordeler.core.fapi.Envelope;
+import dk.magenta.datafordeler.core.fapi.ParameterMap;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Level;
@@ -62,6 +63,13 @@ public class LoggerHelper {
             urlInvokePrefix += paramName + "," + request.getParameter(paramName) + ";";
         }
         urlInvokePrefix += "]";
+    }
+
+    public void logRequest() {
+        this.info("Incoming request for " + this.getClass().getSimpleName() +
+                " on path " + this.request.getServletPath() +
+                " with parameters " + ParameterMap.ofArrays(this.request.getParameterMap()).replace("token", "***").toString()
+        );
     }
 
     public <E extends Entity> void logResult(Envelope result) {

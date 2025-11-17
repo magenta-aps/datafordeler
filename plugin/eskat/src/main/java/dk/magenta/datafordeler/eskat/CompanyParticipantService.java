@@ -200,6 +200,7 @@ public class CompanyParticipantService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);

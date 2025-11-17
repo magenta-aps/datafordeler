@@ -109,7 +109,6 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
         this.checkAndLogAccess(loggerHelper);
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
@@ -197,7 +196,6 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
         this.checkAndLogAccess(loggerHelper);
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
@@ -285,7 +283,6 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         }
         // Check that the user has access to CPR data
         LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
         this.checkAndLogAccess(loggerHelper);
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
@@ -339,7 +336,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
         LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
+        loggerHelper.logRequest();
         this.checkAndLogAccess(loggerHelper);
 
         String currentcollectionUuid = "";

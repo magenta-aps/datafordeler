@@ -68,6 +68,7 @@ public class CommandService {
      */
     protected void checkAndLogAccess(LoggerHelper loggerHelper, SystemRole requiredRole)
             throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             this.checkAccess(loggerHelper.getUser(), requiredRole);
         } catch (AccessDeniedException | AccessRequiredException e) {

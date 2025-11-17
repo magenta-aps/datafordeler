@@ -82,6 +82,7 @@ public class PersonEntityCustodyService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
         } catch (AccessDeniedException e) {

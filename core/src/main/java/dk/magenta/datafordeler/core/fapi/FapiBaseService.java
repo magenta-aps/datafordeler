@@ -144,6 +144,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper)
             throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             this.checkAccess(loggerHelper.getUser());
         } catch (AccessDeniedException | AccessRequiredException e) {

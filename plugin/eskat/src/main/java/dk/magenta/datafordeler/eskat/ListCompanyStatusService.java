@@ -79,6 +79,7 @@ public class ListCompanyStatusService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
         } catch (AccessDeniedException e) {

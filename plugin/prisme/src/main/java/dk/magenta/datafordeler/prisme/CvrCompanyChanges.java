@@ -101,6 +101,7 @@ public class CvrCompanyChanges {
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
         } catch (AccessDeniedException e) {
