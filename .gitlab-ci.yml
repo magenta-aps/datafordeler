@@ -133,7 +133,7 @@ build-doc-image:
     USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
     USER_DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
     USER_DATABASE_SHOW_SQL: "true"
-    USER_DATABASE_USERNAME: "sa"
+    USER_DATABASE_USERNAME: "SA"
     USER_DATABASE_PASSWORD: "testTEST1"
     USER_DATABASE_METHOD: "validate"
     USER_DATABASE_DEFAULT_SCHEMA: "dbo"

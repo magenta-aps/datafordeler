@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -39,10 +40,16 @@ public class SessionManager {
                 LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
                 sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
                 sessionFactoryBean.setAnnotatedPackages("dk.magenta.datafordeler");
-                sessionFactoryBean.setDataSource(this.dataSource());
+                DataSource dataSource = this.dataSource();
+                sessionFactoryBean.setDataSource(dataSource);
                 sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
                 sessionFactoryBean.afterPropertiesSet();
                 this.sessionFactory = sessionFactoryBean.getObject();
+                try {
+                    log.info(this.getClass().getCanonicalName() + " initialized with url " + dataSource.getConnection().getMetaData().getURL());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
