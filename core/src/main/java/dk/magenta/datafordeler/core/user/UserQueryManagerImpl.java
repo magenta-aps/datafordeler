@@ -2,9 +2,12 @@ package dk.magenta.datafordeler.core.user;
 
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
+import dk.magenta.datafordeler.core.database.UserSessionManager;
 import dk.magenta.datafordeler.core.role.SystemRole;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
+import jakarta.persistence.NoResultException;
+import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,89 +21,79 @@ import java.util.Set;
 @Component
 public class UserQueryManagerImpl extends UserQueryManager {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    public UserQueryManagerImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @Autowired
+    private UserSessionManager userSessionManager;
 
     @Override
     public int getUserProfileIdByName(String name) {
-        SqlRowSet rows = jdbcTemplate.queryForRowSet(
-                "SELECT "
-                        + " [dafousers_userprofile].[id]"
-                        + "FROM"
-                        + " [dafousers_userprofile]"
-                        + "WHERE"
-                        + " [dafousers_userprofile].[name] = ?",
-                name);
-        if (rows.next()) {
-            return rows.getInt(1);
-        } else {
-            return INVALID_USERPROFILE_ID;
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<Integer> query = session.createNativeQuery(
+                "SELECT [dafousers_userprofile].[id]" +
+                        "FROM [dafousers_userprofile]" +
+                        "WHERE [dafousers_userprofile].[name] = ?1", Integer.class
+                );
+            query.setParameter(1, name);
+            try {
+                return (Integer) query.getSingleResult();
+            } catch (NoResultException e) {
+                return INVALID_USERPROFILE_ID;
+            }
         }
     }
 
     @Override
     public List<String> getSystemRoleNamesByUserProfileId(int databaseId) {
         List<String> result = new ArrayList<>();
-        SqlRowSet rows = jdbcTemplate.queryForRowSet(
-                "SELECT"
-                        + " [dafousers_systemrole].[role_name]"
-                        + "FROM"
-                        + " [dafousers_systemrole]"
-                        + " INNER JOIN [dafousers_userprofile_system_roles] ON ("
-                        + "   [dafousers_systemrole].[id] ="
-                        + "      [dafousers_userprofile_system_roles].[systemrole_id]"
-                        + ")"
-                        + " INNER JOIN [dafousers_userprofile] ON ("
-                        + "   [dafousers_userprofile_system_roles].[userprofile_id] ="
-                        + "        [dafousers_userprofile].[id]"
-                        + ")"
-                        + " WHERE [dafousers_userprofile].[id] = ?",
-                databaseId);
-        while (rows.next()) {
-            result.add(rows.getString(1));
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<String> query = session.createNativeQuery(
+                    "SELECT [dafousers_systemrole].[role_name]" +
+                            "FROM [dafousers_systemrole]" +
+                            " INNER JOIN [dafousers_userprofile_system_roles] ON (" +
+                            "   [dafousers_systemrole].[id] =" +
+                            "      [dafousers_userprofile_system_roles].[systemrole_id]" +
+                            ")" +
+                            " INNER JOIN [dafousers_userprofile] ON (" +
+                            "   [dafousers_userprofile_system_roles].[userprofile_id] =" +
+                            "        [dafousers_userprofile].[id]" +
+                            ")" +
+                            " WHERE [dafousers_userprofile].[id] = ?1",
+                    String.class
+            );
+            query.setParameter(1, databaseId);
+            query.getResultList().forEach(result::add);
         }
         return result;
     }
 
     @Override
     public List<AreaRestriction> getAreaRestrictionsByUserProfileId(int databaseId) {
-
         List<AreaRestriction> result = new ArrayList<>();
-        SqlRowSet rows = jdbcTemplate.queryForRowSet(
-                "SELECT"
-                        + " [dafousers_arearestriction].[name], "
-                        + " [areatype].[name], "
-                        + " [areatype].[service_name] "
-                        + "FROM"
-                        + " [dafousers_arearestriction]"
-                        + " INNER JOIN"
-                        + " [dafousers_userprofile_area_restrictions] ON ("
-                        + "   [dafousers_arearestriction].[id] = "
-                        + "     [dafousers_userprofile_area_restrictions].[arearestriction_id]"
-                        + " )"
-                        + " INNER JOIN [dafousers_userprofile] ON ("
-                        + "   [dafousers_userprofile_area_restrictions].[userprofile_id] ="
-                        + "    [dafousers_userprofile].[id]"
-                        + " )"
-                        + " INNER JOIN [dafousers_arearestrictiontype] areatype ON ("
-                        + "   [dafousers_arearestriction].[area_restriction_type_id] = [areatype].[id]"
-                        + " )"
-                        + "WHERE"
-                        + "  [dafousers_userprofile].[id] = ?",
-                databaseId);
-        while (rows.next()) {
-            AreaRestriction area = AreaRestriction.lookup(
-                    rows.getString(3) + ":" +
-                            rows.getString(2) + ":" +
-                            rows.getString(1)
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<Object[]> query = session.createNativeQuery(
+                    "SELECT [dafousers_arearestriction].[name], [areatype].[name], [areatype].[service_name] " +
+                            "FROM [dafousers_arearestriction] " +
+                            "INNER JOIN [dafousers_userprofile_area_restrictions] " +
+                            "ON [dafousers_arearestriction].[id] = [dafousers_userprofile_area_restrictions].[arearestriction_id] " +
+                            "INNER JOIN [dafousers_userprofile] " +
+                            "ON [dafousers_userprofile_area_restrictions].[userprofile_id] = [dafousers_userprofile].[id] " +
+                            "INNER JOIN [dafousers_arearestrictiontype] areatype " +
+                            "ON [dafousers_arearestriction].[area_restriction_type_id] = [areatype].[id] " +
+                            "WHERE [dafousers_userprofile].[id] = ?1"
             );
-            if (area != null) {
-                result.add(area);
-            } else {
-                // TODO: Log warning about unkown areatype being mentioned in token
+            query.setParameter(1, databaseId);
+            List<Object[]> rows = query.getResultList();
+            for (Object[] row : rows) {
+                String areaRestrictionName = (String) row[0];
+                String areaTypeName = (String) row[1];
+                String serviceName = (String) row[2];
+                AreaRestriction area = AreaRestriction.lookup(
+                        serviceName + ":" + areaTypeName + ":" + areaRestrictionName
+                );
+                if (area != null) {
+                    result.add(area);
+                } else {
+                    // TODO: Log warning about unknown areatype being mentioned in token
+                }
             }
         }
         return result;
@@ -108,88 +101,79 @@ public class UserQueryManagerImpl extends UserQueryManager {
 
     @Override
     public Set<String> getAllStoredSystemRoleNames() {
-        HashSet result = new HashSet<>();
-        SqlRowSet rows = jdbcTemplate.queryForRowSet(
-                "SELECT"
-                        + " [dafousers_systemrole].[role_name]"
-                        + "FROM"
-                        + " [dafousers_systemrole]"
-        );
-        while (rows.next()) {
-            result.add(rows.getString(1));
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<String> query = session.createNativeQuery(
+                    "SELECT [dafousers_systemrole].[role_name]" +
+                            "FROM [dafousers_systemrole]", String.class
+            );
+            return new HashSet<>(query.getResultList());
         }
-        return result;
     }
 
     @Override
     public void insertSystemRole(SystemRole systemRole) {
-        String parentName = null;
-        if (systemRole.getParent() != null) {
-            parentName = systemRole.getParent().getRoleName();
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery query = session.createNativeQuery(
+                    "INSERT INTO [dafousers_systemrole]" +
+                            "([role_name], [role_type], [target_name], [parent_id]) " +
+                            "VALUES (?1, ?2, ?3, " +
+                            "(SELECT TOP 1 [id] FROM [dafousers_systemrole] WHERE [role_name] = ?4)" +
+                            ")"
+            );
+            query.setParameter(1, systemRole.getRoleName());
+            query.setParameter(2, systemRole.getType().getNumericValue());
+            query.setParameter(3, systemRole.getTargetName());
+            query.setParameter(4, systemRole.getParent() != null ? systemRole.getParent().getRoleName() : null);
+            query.executeUpdate();
         }
-        jdbcTemplate.update(
-                "INSERT INTO [dafousers_systemrole]" +
-                        "([role_name], [role_type], [target_name], [parent_id]) " +
-                        "VALUES (?, ?, ?, " +
-                        "(SELECT TOP 1 [id] FROM [dafousers_systemrole] WHERE [role_name] = ?)" +
-                        ")",
-                systemRole.getRoleName(),
-                systemRole.getType().getNumericValue(),
-                systemRole.getTargetName(),
-                parentName
-        );
     }
 
     @Override
     public Set<String> getAllAreaRestrictionTypeLookupNames() {
-        HashSet result = new HashSet<>();
-        SqlRowSet rows = jdbcTemplate.queryForRowSet(
-                "SELECT"
-                        + " [dafousers_arearestrictiontype].[name],"
-                        + " [dafousers_arearestrictiontype].[service_name]"
-                        + "FROM"
-                        + " [dafousers_arearestrictiontype]"
-        );
-        while (rows.next()) {
-            result.add(rows.getString(2) + ":" + rows.getString(1));
+        HashSet<String> result = new HashSet<>();
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<Object[]> query = session.createNativeQuery(
+                    "SELECT [dafousers_arearestrictiontype].[name], [dafousers_arearestrictiontype].[service_name]" +
+                            "FROM [dafousers_arearestrictiontype]"
+            );
+            List<Object[]> rows = query.getResultList();
+            for (Object[] row : rows) {
+                result.add(row[1] + ":" + row[0]);
+            }
         }
         return result;
     }
 
     @Override
     public Set<String> getAllAreaRestrictionLookupNames() {
-        HashSet result = new HashSet<>();
-        SqlRowSet rows = jdbcTemplate.queryForRowSet(
-                "SELECT"
-                        + " [area].[name],"
-                        + " [areatype].[name],"
-                        + " [areatype].[service_name]"
-                        + "FROM"
-                        + " [dafousers_arearestriction] area"
-                        + " INNER JOIN [dafousers_arearestrictiontype] areatype ON ("
-                        + "   [area].[area_restriction_type_id] = [areatype].[id]"
-                        + " )"
-        );
-        while (rows.next()) {
-            result.add(
-                    rows.getString(3) + ":" +
-                            rows.getString(2) + ":" +
-                            rows.getString(1)
+        HashSet<String> result = new HashSet<>();
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<Object[]> query = session.createNativeQuery(
+                    "SELECT [dafousers_arearestriction].[name], [areatype].[name], [areatype].[service_name] " +
+                            "FROM [dafousers_arearestriction] area " +
+                            "INNER JOIN [dafousers_arearestrictiontype] areatype ON (" +
+                            "   [area].[area_restriction_type_id] = [areatype].[id] " +
+                            ")"
             );
+            List<Object[]> rows = query.getResultList();
+            for (Object[] row : rows) {
+                result.add(row[2] + ":" + row[1] + ":" + row[0]);
+            }
         }
         return result;
     }
 
     @Override
     public void insertAreaRestrictionType(AreaRestrictionType areaRestrictionType) {
-        jdbcTemplate.update(
-                "INSERT INTO [dafousers_arearestrictiontype] " +
-                        "([name], [description], [service_name]) " +
-                        "VALUES (?, ?, ?)",
-                areaRestrictionType.getName(),
-                areaRestrictionType.getDescription(),
-                areaRestrictionType.getServiceName()
-        );
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery query = session.createNativeQuery("INSERT INTO [dafousers_arearestrictiontype] " +
+                    "([name], [description], [service_name]) " +
+                    "VALUES (?1, ?2, ?3)");
+            query.setParameter(1, areaRestrictionType.getName());
+            query.setParameter(2, areaRestrictionType.getDescription());
+            query.setParameter(3, areaRestrictionType.getServiceName());
+            query.executeUpdate();
+        }
     }
 
     @Override
@@ -200,33 +184,34 @@ public class UserQueryManagerImpl extends UserQueryManager {
             typeName = areaRestriction.getType().getName();
             serviceTypeName = areaRestriction.getType().getServiceName();
         }
-        jdbcTemplate.update(
-                "INSERT INTO [dafousers_arearestriction] "
-                        + "([name], [description], [sumiffiik], [area_restriction_type_id]) "
-                        + "VALUES "
-                        + " (?, ?, ?, "
-                        + "   (SELECT TOP 1"
-                        + "     [id] "
-                        + "   FROM"
-                        + "     [dafousers_arearestrictiontype] "
-                        + "   WHERE"
-                        + "     [name] = ? AND "
-                        + "     [service_name] = ?"
-                        + "   )"
-                        + " )",
-                areaRestriction.getName(),
-                areaRestriction.getDescription(),
-                areaRestriction.getSumifiik(),
-                typeName,
-                serviceTypeName
-        );
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery query = session.createNativeQuery(
+                    "INSERT INTO [dafousers_arearestriction] "
+                            + "([name], [description], [sumiffiik], [area_restriction_type_id]) "
+                            + "VALUES "
+                            + " (?1, ?2, ?3, "
+                            + "   (SELECT TOP 1 [id] "
+                            + "   FROM"
+                            + "     [dafousers_arearestrictiontype] "
+                            + "   WHERE"
+                            + "     [name] = ?4 AND [service_name] = ?5"
+                            + "   )"
+                            + " )"
+            );
+            query.setParameter(1, areaRestriction.getName());
+            query.setParameter(2, areaRestriction.getDescription());
+            query.setParameter(3, areaRestriction.getSumifiik());
+            query.setParameter(4, typeName);
+            query.setParameter(5, serviceTypeName);
+            query.executeUpdate();
+        }
     }
 
     @Override
     public void checkConnection() {
-        SqlRowSet rows = jdbcTemplate.queryForRowSet("SELECT 1");
-        if (rows.next()) {
-            rows.getInt(1);
+        try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
+            NativeQuery<Integer> query = session.createNativeQuery("SELECT 1", Integer.class);
+            query.getSingleResult();
         }
     }
 }

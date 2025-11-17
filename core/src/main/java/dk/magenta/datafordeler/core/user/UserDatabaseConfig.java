@@ -24,7 +24,7 @@ public class UserDatabaseConfig {
     @Bean
     public UserQueryManager userQueryManager() throws ConfigurationException {
         if (enabled) {
-            return new UserQueryManagerImpl(userJdbcTemplate());
+            return new UserQueryManagerImpl();
         } else {
             return new NoDBUserQueryManager();
         }
