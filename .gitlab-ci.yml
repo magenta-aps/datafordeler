@@ -125,18 +125,9 @@ build-doc-image:
     SECONDARY_DATABASE_METHOD: "update"
     SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
 
-    SSL_ENABLE: "false"
-
     USER_DATABASE_ENABLED: "false"  # Use NoDBUserQueryManager, which returns hardcoded data
 
-#    USER_DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-#    USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
-#    USER_DATABASE_DIALECT: "org.hibernate.spatial.dialect.sqlserver.SqlServer2012SpatialDialect"
-#    USER_DATABASE_SHOW_SQL: "true"
-#    USER_DATABASE_USERNAME: "SA"
-#    USER_DATABASE_PASSWORD: "testTEST1"
-#    USER_DATABASE_METHOD: "validate"
-#    USER_DATABASE_DEFAULT_SCHEMA: "dbo"
+    SSL_ENABLE: "false"
 
     STS_METADATA_PATH: "/tmp/sts_metadata.test.xml"
 
