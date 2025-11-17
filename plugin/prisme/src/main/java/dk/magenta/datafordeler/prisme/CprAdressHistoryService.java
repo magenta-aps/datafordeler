@@ -71,7 +71,7 @@ public class CprAdressHistoryService {
             throws AccessDeniedException, InvalidTokenException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException, InvalidClientInputException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );

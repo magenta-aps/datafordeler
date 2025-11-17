@@ -82,7 +82,7 @@ public class CprBirthDateService {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("CprBirthDateService");
         this.checkAndLogAccess(loggerHelper);
 

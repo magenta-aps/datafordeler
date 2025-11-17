@@ -96,7 +96,7 @@ public class CvrRecordCombinedService {
         boolean includeGlobalIds = "1".equals(request.getParameter(PARAM_INCLUDE_GLOBAL_IDS));
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCvrService with cvrNummer " + cvrNummer + " and " +
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails
@@ -152,7 +152,7 @@ public class CvrRecordCombinedService {
         boolean includeGlobalIds = "1".equals(request.getParameter(PARAM_INCLUDE_GLOBAL_IDS));
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCvrService with cvrNummer " + cvrNumbers + " and " +
                         PARAM_RETURN_PARTICIPANT_DETAILS + " = " + returnParticipantDetails

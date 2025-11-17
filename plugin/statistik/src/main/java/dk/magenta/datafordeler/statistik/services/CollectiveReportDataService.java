@@ -108,7 +108,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         }
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
@@ -195,7 +195,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         }
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
@@ -282,7 +282,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
             user = this.getDafoUserManager().getSamlUserDetailsFromToken(formToken);
         }
         // Check that the user has access to CPR data
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
 
         try (Session reportProgressSession = sessionManager.getSessionFactory().openSession()) {
@@ -335,7 +335,7 @@ public class CollectiveReportDataService extends PersonStatisticsService {
         }
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user, this.getClass());
         loggerHelper.logRequest();
         this.checkAndLogAccess(loggerHelper);
 

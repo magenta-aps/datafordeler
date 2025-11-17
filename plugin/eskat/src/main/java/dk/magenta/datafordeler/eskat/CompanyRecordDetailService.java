@@ -63,7 +63,7 @@ public class CompanyRecordDetailService {
     ResponseEntity companyDetail(HttpServletRequest request, @PathVariable("cvr") String cvr) throws AccessDeniedException, AccessRequiredException, InvalidCertificateException, InvalidTokenException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user, this.getClass());
             loggerHelper.info("Incoming request CompanyPunitRecordService ");
             this.checkAndLogAccess(loggerHelper);
 

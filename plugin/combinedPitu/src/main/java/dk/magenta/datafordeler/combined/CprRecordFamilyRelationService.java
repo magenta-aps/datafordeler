@@ -73,7 +73,7 @@ public class CprRecordFamilyRelationService {
             throws AccessDeniedException, InvalidTokenException, HttpNotFoundException, InvalidCertificateException, InvalidClientInputException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for CprRecordFamilyRelationService with cprNummer " + cprNummer
         );

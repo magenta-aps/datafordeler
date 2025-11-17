@@ -68,7 +68,7 @@ public class CprCohabitationService {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("CprRecordCombinedPersonLookupService");
         this.checkAndLogAccess(loggerHelper);
 

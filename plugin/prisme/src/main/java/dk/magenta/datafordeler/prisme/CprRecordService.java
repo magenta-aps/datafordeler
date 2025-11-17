@@ -80,7 +80,7 @@ public class CprRecordService {
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );
@@ -141,7 +141,7 @@ public class CprRecordService {
         final List<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER)) : null;
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCprService with " +
                         PARAM_UPDATED_SINCE + " = " + updatedSince + " and " +

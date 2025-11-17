@@ -148,7 +148,7 @@ public class ManageSubscription {
     public ResponseEntity<String> createMySubscriber(HttpServletRequest request) throws IOException, AccessDeniedException, InvalidTokenException, InvalidCertificateException, ConflictException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("subscriber");
         String subscriberId = this.getSubscriberId(request, user);
         try (Session session = sessionManager.getSessionFactory().openSession()) {
@@ -182,7 +182,7 @@ public class ManageSubscription {
     @RequestMapping(method = RequestMethod.DELETE, path = {"/subscriber", "/subscriber/"})
     public ResponseEntity<String> deleteBySubscriberId(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("subscriber");
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             String subscriberId = this.getSubscriberId(request, user);
@@ -209,7 +209,7 @@ public class ManageSubscription {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
             String subscriberId = this.getSubscriberId(request, user);
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             Iterator<BusinessEventSubscription> subscriptions = subscriber.getBusinessEventSubscription().iterator();
             List<BusinessEventSubscription> list = new ArrayList<BusinessEventSubscription>();
@@ -238,7 +238,7 @@ public class ManageSubscription {
             Transaction transaction = session.beginTransaction();
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
 
             String subscriberId = this.getSubscriberId(request, user);
@@ -268,7 +268,7 @@ public class ManageSubscription {
             BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, businessEventId);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             Transaction transaction = session.beginTransaction();
             String subscriberId = this.getSubscriberId(request, user);
@@ -297,7 +297,7 @@ public class ManageSubscription {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, subscriptionId);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription");
             loggerHelper.urlInvokePersistablelogs("businesseventSubscription done");
             return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
@@ -313,7 +313,7 @@ public class ManageSubscription {
             BusinessEventSubscription subscription = this.getBusinessEventSubscription(session, subscriptionId);
 
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             String subscriberId = this.getSubscriberId(request, user);
             if (subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
@@ -340,7 +340,7 @@ public class ManageSubscription {
     public ResponseEntity<String > dataEventSubscriptionfindAll(HttpServletRequest request) throws AccessDeniedException, InvalidTokenException, InvalidCertificateException, HttpNotFoundException {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             String subscriberId = this.getSubscriberId(request, user);
             Subscriber subscriber = this.getSubscriber(session, subscriberId);
@@ -361,7 +361,7 @@ public class ManageSubscription {
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             CprList cprListItem = null;
             if (!cprList.isEmpty()) {
@@ -401,7 +401,7 @@ public class ManageSubscription {
             Transaction transaction = session.beginTransaction();
             DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             String subscriberId = this.getSubscriberId(request, user);
             if (!subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {
@@ -432,7 +432,7 @@ public class ManageSubscription {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription done");
             return ResponseEntity.ok(objectMapper.writeValueAsString(subscription));
         } catch (JsonProcessingException e) {
@@ -446,7 +446,7 @@ public class ManageSubscription {
             DataEventSubscription subscription = this.getDataEventSubscription(session, dataEventId);
             Transaction transaction = session.beginTransaction();
             DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.urlInvokePersistablelogs("dataeventSubscription");
             String subscriberId = this.getSubscriberId(request, user);
             if (subscription.getSubscriber().getSubscriberId().equals(subscriberId)) {

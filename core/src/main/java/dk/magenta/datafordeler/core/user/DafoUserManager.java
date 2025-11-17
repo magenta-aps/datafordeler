@@ -85,7 +85,7 @@ public class DafoUserManager {
         // SAML token based user.
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.indexOf("SAML ") == 0) {
-            LoggerHelper loggerHelper = new LoggerHelper(logger, request);
+            LoggerHelper loggerHelper = new LoggerHelper(logger, request, this.getClass());
             loggerHelper.info("Authorizing with SAML token");
 
             SamlDafoUserDetails userDetails;

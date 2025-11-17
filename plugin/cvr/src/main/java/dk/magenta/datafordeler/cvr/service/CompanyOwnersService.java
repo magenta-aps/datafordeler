@@ -153,7 +153,7 @@ public class CompanyOwnersService {
     )
     public String getRest(@PathVariable("cvr") String cvr, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
         try (Session lookupSession = sessionManager.getSessionFactory().openSession()) {
             try (Session participantSession = sessionManager.getSessionFactory().openSession()) {

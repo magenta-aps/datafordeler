@@ -96,7 +96,7 @@ public class MonitorService {
 
     @RequestMapping(method = RequestMethod.GET, path = {"/pull", "/pull/"})
     public void checkPulls(HttpServletRequest request, HttpServletResponse response) throws ParseException, IOException, DataFordelerException {
-        LoggerHelper loggerHelper = new LoggerHelper(log, request);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, this.getClass());
         loggerHelper.urlInvokePersistablelogs("checkPulls");
 
         Session session = sessionManager.getSessionFactory().openSession();
@@ -146,7 +146,7 @@ public class MonitorService {
 
     @RequestMapping(method = RequestMethod.GET, path = {"/errors", "/errors/"})
     public void checkErrors(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        LoggerHelper loggerHelper = new LoggerHelper(log, request);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, this.getClass());
         loggerHelper.urlInvokePersistablelogs("checkErrors");
 
         PrintWriter output = response.getWriter();
@@ -212,7 +212,7 @@ public class MonitorService {
 
     @RequestMapping(method = RequestMethod.GET, path = {"/access","/access/"})
     public void checkAccess(HttpServletRequest request, HttpServletResponse response) throws IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        LoggerHelper loggerHelper = new LoggerHelper(log, request);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, this.getClass());
         loggerHelper.urlInvokePersistablelogs("checkAccess");
 
         StringJoiner successes = new StringJoiner("\n");

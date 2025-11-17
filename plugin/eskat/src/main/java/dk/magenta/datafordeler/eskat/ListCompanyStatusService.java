@@ -57,7 +57,7 @@ public class ListCompanyStatusService {
             throws DataFordelerException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
 
         CompanyRecordQuery companyQuery = new CompanyRecordQuery();

@@ -23,16 +23,18 @@ public class LoggerHelper {
     private DafoUserDetails user;
     private String prefix = "";
     private String urlInvokePrefix = "";
+    private Class service;
 
-    public LoggerHelper(Logger logger, HttpServletRequest request, DafoUserDetails user) {
+    public LoggerHelper(Logger logger, HttpServletRequest request, DafoUserDetails user, Class service) {
         this.logger = logger;
         this.request = request;
         this.user = user;
+        this.service = service;
         updatePrefix();
     }
 
-    public LoggerHelper(Logger logger, HttpServletRequest request) {
-        this(logger, request, null);
+    public LoggerHelper(Logger logger, HttpServletRequest request, Class service) {
+        this(logger, request, null, service);
     }
 
     public DafoUserDetails getUser() {
@@ -66,7 +68,7 @@ public class LoggerHelper {
     }
 
     public void logRequest() {
-        this.info("Incoming request for " + this.getClass().getSimpleName() +
+        this.info("Incoming request for " + this.service.getSimpleName() +
                 " on path " + this.request.getServletPath() +
                 " with parameters " + ParameterMap.ofArrays(this.request.getParameterMap()).replace("token", "***").toString()
         );

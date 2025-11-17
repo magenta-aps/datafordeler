@@ -85,7 +85,7 @@ public class EboksRecieveLookupService {
             throws DataFordelerException, JsonProcessingException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
 
         PersonRecordQuery personQuery = new PersonRecordQuery();

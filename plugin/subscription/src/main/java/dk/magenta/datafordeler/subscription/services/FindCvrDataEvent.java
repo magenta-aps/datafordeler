@@ -91,7 +91,7 @@ public class FindCvrDataEvent {
         Boolean includeMeta = Boolean.parseBoolean(requestParams.getFirst("includeMeta"));
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("fetchEvents");
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
