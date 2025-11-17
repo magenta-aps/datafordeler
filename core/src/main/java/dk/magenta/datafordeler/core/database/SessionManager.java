@@ -133,7 +133,7 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.query.plan_cache_max_size", "1024");
         hibernateProperties.setProperty("hibernate.query.plan_parameter_metadata_max_size", "1024");
 
-        System.out.println("SessionManager properties: "+hibernateProperties.toString());
+        log.info("SessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
     }
 

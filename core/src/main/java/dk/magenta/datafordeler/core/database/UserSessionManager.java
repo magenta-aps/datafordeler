@@ -1,16 +1,12 @@
 package dk.magenta.datafordeler.core.database;
 
 
-import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
-import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
-import dk.magenta.datafordeler.core.role.SystemRole;
 import dk.magenta.datafordeler.core.user.NoDBUserQueryManager;
 import dk.magenta.datafordeler.core.user.UserQueryManager;
 import dk.magenta.datafordeler.core.user.UserQueryManagerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
@@ -88,7 +84,7 @@ public class UserSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.query.plan_cache_max_size", "1024");
         hibernateProperties.setProperty("hibernate.query.plan_parameter_metadata_max_size", "1024");
 
-        System.out.println("UserSessionManager properties: "+hibernateProperties.toString());
+        log.info("UserSessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
     }
 
