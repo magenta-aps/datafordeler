@@ -3,9 +3,15 @@ package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.arearestriction.AreaRestriction;
 import dk.magenta.datafordeler.core.arearestriction.AreaRestrictionType;
+import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.role.SystemRole;
+import dk.magenta.datafordeler.core.user.NoDBUserQueryManager;
+import dk.magenta.datafordeler.core.user.UserQueryManager;
+import dk.magenta.datafordeler.core.user.UserQueryManagerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +28,18 @@ import java.util.Properties;
 public class UserSessionManager extends SessionManager {
 
     private static final Logger log = LogManager.getLogger(UserSessionManager.class.getCanonicalName());
+
+    @Value("${dafo.userdatabase.enabled:false}")
+    private boolean enabled;
+
+    @Bean
+    public UserQueryManager userQueryManager() throws ConfigurationException {
+        if (enabled) {
+            return new UserQueryManagerImpl();
+        } else {
+            return new NoDBUserQueryManager();
+        }
+    }
 
     public UserSessionManager() throws IOException {
         super();
