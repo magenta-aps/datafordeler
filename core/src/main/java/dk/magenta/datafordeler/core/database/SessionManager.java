@@ -33,18 +33,24 @@ public class SessionManager {
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     public SessionManager() throws IOException {
-        try {
-            LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-            sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
-            sessionFactoryBean.setAnnotatedPackages("dk.magenta.datafordeler");
-            sessionFactoryBean.setDataSource(this.dataSource());
-            sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-            sessionFactoryBean.afterPropertiesSet();
-            this.sessionFactory = sessionFactoryBean.getObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        if (this.enabled()) {
+            try {
+                LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+                sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
+                sessionFactoryBean.setAnnotatedPackages("dk.magenta.datafordeler");
+                sessionFactoryBean.setDataSource(this.dataSource());
+                sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
+                sessionFactoryBean.afterPropertiesSet();
+                this.sessionFactory = sessionFactoryBean.getObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
         }
+    }
+
+    protected boolean enabled() {
+        return true;
     }
 
     public SessionFactory getSessionFactory() {

@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.user.UserQueryManagerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class UserSessionManager extends SessionManager {
 
     private static final Logger log = LogManager.getLogger(UserSessionManager.class.getCanonicalName());
 
-    private boolean enabled() {
+    protected boolean enabled() {
         return Boolean.parseBoolean(getEnv("USER_DATABASE_ENABLED", "false"));
     }
 
