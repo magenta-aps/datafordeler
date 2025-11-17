@@ -54,6 +54,12 @@ public class UserSessionManager extends SessionManager {
         dataSource.setUrl(System.getenv("USER_DATABASE_URL"));
         dataSource.setUsername(System.getenv("USER_DATABASE_USERNAME"));
         dataSource.setPassword(System.getenv("USER_DATABASE_PASSWORD"));
+
+        System.out.println(System.getenv("USER_DATABASE_CLASS"));
+        System.out.println(System.getenv("USER_DATABASE_URL"));
+        System.out.println(System.getenv("USER_DATABASE_USERNAME"));
+
+        System.out.println("DataSource created");
         return dataSource;
     }
 
