@@ -7,7 +7,7 @@ BEGIN
         directCustomerNumber,
         directPort,
         personRegisterDataCharset,
-        roadRegisterDataCharset,
+        roadRegisterDataCharset
         ) VALUES (
         'dk.magenta.datafordeler.cpr.CprPlugin',
         1, '/app/dev-env/local/cpr/download/d170608.l534902', 'ftp://dummy',

@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
+import dk.magenta.datafordeler.core.database.UserSessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.HttpNotFoundException;
 import dk.magenta.datafordeler.core.plugin.Plugin;
@@ -39,6 +40,9 @@ public class Engine {
 
     @Autowired
     ConfigurationSessionManager configurationSessionManager;
+
+    @Autowired
+    UserSessionManager userSessionManager;
 
     @Autowired
     ObjectMapper objectMapper;

@@ -28,9 +28,9 @@ public class UserQueryManagerImpl extends UserQueryManager {
     public int getUserProfileIdByName(String name) {
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery<Integer> query = session.createNativeQuery(
-                "SELECT [dafousers_userprofile].[id]" +
-                        "FROM [dafousers_userprofile]" +
-                        "WHERE [dafousers_userprofile].[name] = ?1", Integer.class
+                "SELECT userprofile.id " +
+                        "FROM dafousers_userprofile as userprofile " +
+                        "WHERE userprofile.name = ?1", Integer.class
                 );
             query.setParameter(1, name);
             try {
@@ -46,17 +46,16 @@ public class UserQueryManagerImpl extends UserQueryManager {
         List<String> result = new ArrayList<>();
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery<String> query = session.createNativeQuery(
-                    "SELECT [dafousers_systemrole].[role_name]" +
-                            "FROM [dafousers_systemrole]" +
-                            " INNER JOIN [dafousers_userprofile_system_roles] ON (" +
-                            "   [dafousers_systemrole].[id] =" +
-                            "      [dafousers_userprofile_system_roles].[systemrole_id]" +
-                            ")" +
-                            " INNER JOIN [dafousers_userprofile] ON (" +
-                            "   [dafousers_userprofile_system_roles].[userprofile_id] =" +
-                            "        [dafousers_userprofile].[id]" +
-                            ")" +
-                            " WHERE [dafousers_userprofile].[id] = ?1",
+                    "SELECT systemrole.role_name " +
+                            "FROM dafousers_systemrole as systemrole " +
+
+                            "INNER JOIN dafousers_userprofile_system_roles as userprofile_system_roles " +
+                            "ON systemrole.id = userprofile_system_roles.systemrole_id " +
+
+                            "INNER JOIN dafousers_userprofile as userprofile " +
+                            "ON userprofile_system_roles.userprofile_id = userprofile.id " +
+
+                            "WHERE userprofile.id = ?1",
                     String.class
             );
             query.setParameter(1, databaseId);
@@ -70,15 +69,19 @@ public class UserQueryManagerImpl extends UserQueryManager {
         List<AreaRestriction> result = new ArrayList<>();
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery<Object[]> query = session.createNativeQuery(
-                    "SELECT [dafousers_arearestriction].[name], [areatype].[name], [areatype].[service_name] " +
-                            "FROM [dafousers_arearestriction] " +
-                            "INNER JOIN [dafousers_userprofile_area_restrictions] " +
-                            "ON [dafousers_arearestriction].[id] = [dafousers_userprofile_area_restrictions].[arearestriction_id] " +
-                            "INNER JOIN [dafousers_userprofile] " +
-                            "ON [dafousers_userprofile_area_restrictions].[userprofile_id] = [dafousers_userprofile].[id] " +
-                            "INNER JOIN [dafousers_arearestrictiontype] areatype " +
-                            "ON [dafousers_arearestriction].[area_restriction_type_id] = [areatype].[id] " +
-                            "WHERE [dafousers_userprofile].[id] = ?1"
+                    "SELECT arearestriction.name, arearestrictiontype.name, arearestrictiontype.service_name " +
+                            "FROM dafousers_arearestriction as arearestriction " +
+
+                            "INNER JOIN dafousers_userprofile_area_restrictions as userprofile_area_restrictions " +
+                            "ON arearestriction.id = userprofile_area_restrictions.arearestriction_id " +
+
+                            "INNER JOIN dafousers_userprofile as userprofile " +
+                            "ON userprofile_area_restrictions.userprofile_id = userprofile.id " +
+
+                            "INNER JOIN dafousers_arearestrictiontype as arearestrictiontype " +
+                            "ON arearestriction.area_restriction_type_id = arearestrictiontype.id " +
+
+                            "WHERE userprofile.id = ?1"
             );
             query.setParameter(1, databaseId);
             List<Object[]> rows = query.getResultList();
@@ -103,8 +106,9 @@ public class UserQueryManagerImpl extends UserQueryManager {
     public Set<String> getAllStoredSystemRoleNames() {
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery<String> query = session.createNativeQuery(
-                    "SELECT [dafousers_systemrole].[role_name]" +
-                            "FROM [dafousers_systemrole]", String.class
+                    "SELECT systemrole.role_name " +
+                            "FROM dafousers_systemrole as systemrole",
+                    String.class
             );
             return new HashSet<>(query.getResultList());
         }
@@ -114,10 +118,11 @@ public class UserQueryManagerImpl extends UserQueryManager {
     public void insertSystemRole(SystemRole systemRole) {
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery query = session.createNativeQuery(
-                    "INSERT INTO [dafousers_systemrole]" +
-                            "([role_name], [role_type], [target_name], [parent_id]) " +
-                            "VALUES (?1, ?2, ?3, " +
-                            "(SELECT TOP 1 [id] FROM [dafousers_systemrole] WHERE [role_name] = ?4)" +
+                    "INSERT INTO dafousers_systemrole " +
+                            "(role_name, role_type, target_name, parent_id) " +
+                            "VALUES (" +
+                            "?1, ?2, ?3, " +
+                            "(SELECT TOP 1 id FROM dafousers_systemrole WHERE role_name = ?4)" +
                             ")"
             );
             query.setParameter(1, systemRole.getRoleName());
@@ -133,8 +138,8 @@ public class UserQueryManagerImpl extends UserQueryManager {
         HashSet<String> result = new HashSet<>();
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery<Object[]> query = session.createNativeQuery(
-                    "SELECT [dafousers_arearestrictiontype].[name], [dafousers_arearestrictiontype].[service_name]" +
-                            "FROM [dafousers_arearestrictiontype]"
+                    "SELECT arearestrictiontype.name, arearestrictiontype.service_name " +
+                            "FROM dafousers_arearestrictiontype as arearestrictiontype"
             );
             List<Object[]> rows = query.getResultList();
             for (Object[] row : rows) {
@@ -149,11 +154,11 @@ public class UserQueryManagerImpl extends UserQueryManager {
         HashSet<String> result = new HashSet<>();
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery<Object[]> query = session.createNativeQuery(
-                    "SELECT [dafousers_arearestriction].[name], [areatype].[name], [areatype].[service_name] " +
-                            "FROM [dafousers_arearestriction] area " +
-                            "INNER JOIN [dafousers_arearestrictiontype] areatype ON (" +
-                            "   [area].[area_restriction_type_id] = [areatype].[id] " +
-                            ")"
+                    "SELECT arearestriction.name, areatype.name, areatype.service_name " +
+                            "FROM dafousers_arearestriction arearestriction " +
+
+                            "INNER JOIN dafousers_arearestrictiontype as areatype " +
+                            "ON arearestriction.area_restriction_type_id = areatype.id"
             );
             List<Object[]> rows = query.getResultList();
             for (Object[] row : rows) {
@@ -166,8 +171,9 @@ public class UserQueryManagerImpl extends UserQueryManager {
     @Override
     public void insertAreaRestrictionType(AreaRestrictionType areaRestrictionType) {
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
-            NativeQuery query = session.createNativeQuery("INSERT INTO [dafousers_arearestrictiontype] " +
-                    "([name], [description], [service_name]) " +
+            NativeQuery query = session.createNativeQuery(
+                    "INSERT INTO dafousers_arearestrictiontype " +
+                    "(name, description, service_name) " +
                     "VALUES (?1, ?2, ?3)");
             query.setParameter(1, areaRestrictionType.getName());
             query.setParameter(2, areaRestrictionType.getDescription());
@@ -186,15 +192,13 @@ public class UserQueryManagerImpl extends UserQueryManager {
         }
         try (Session session = this.userSessionManager.getSessionFactory().openSession()) {
             NativeQuery query = session.createNativeQuery(
-                    "INSERT INTO [dafousers_arearestriction] "
-                            + "([name], [description], [sumiffiik], [area_restriction_type_id]) "
+                    "INSERT INTO dafousers_arearestriction "
+                            + "(name, description, sumiffiik, area_restriction_type_id) "
                             + "VALUES "
                             + " (?1, ?2, ?3, "
-                            + "   (SELECT TOP 1 [id] "
-                            + "   FROM"
-                            + "     [dafousers_arearestrictiontype] "
-                            + "   WHERE"
-                            + "     [name] = ?4 AND [service_name] = ?5"
+                            + "   (SELECT TOP 1 id "
+                            + "   FROM dafousers_arearestrictiontype "
+                            + "   WHERE name = ?4 AND service_name = ?5"
                             + "   )"
                             + " )"
             );

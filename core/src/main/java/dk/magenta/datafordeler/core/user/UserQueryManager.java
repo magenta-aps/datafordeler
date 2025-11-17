@@ -16,7 +16,6 @@ public abstract class UserQueryManager {
 
     public UserProfile getUserProfileByName(String name) {
         UserProfile userProfile = null;
-
         int userProfileId = getUserProfileIdByName(name);
         if (userProfileId != INVALID_USERPROFILE_ID) {
             userProfile = new UserProfile(name);

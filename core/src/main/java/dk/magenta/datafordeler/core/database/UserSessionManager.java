@@ -29,12 +29,13 @@ public class UserSessionManager extends SessionManager {
 
     private static final Logger log = LogManager.getLogger(UserSessionManager.class.getCanonicalName());
 
-    @Value("${dafo.userdatabase.enabled:false}")
-    private boolean enabled;
+    private boolean enabled() {
+        return Boolean.parseBoolean(getEnv("USER_DATABASE_ENABLED", "false"));
+    }
 
     @Bean
     public UserQueryManager userQueryManager() throws ConfigurationException {
-        if (enabled) {
+        if (this.enabled()) {
             return new UserQueryManagerImpl();
         } else {
             return new NoDBUserQueryManager();
@@ -47,9 +48,6 @@ public class UserSessionManager extends SessionManager {
 
     protected HashSet<Class> managedClasses() {
         HashSet<Class> managedSecondaryClasses = new HashSet<>();
-        managedSecondaryClasses.add(AreaRestriction.class);
-        managedSecondaryClasses.add(SystemRole.class);
-        managedSecondaryClasses.add(AreaRestrictionType.class);
         return managedSecondaryClasses;
     }
 
