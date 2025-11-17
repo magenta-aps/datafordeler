@@ -34,7 +34,7 @@ public class SessionManager {
 
     public SessionManager() throws IOException {
         if (this.enabled()) {
-            System.out.println(this.getClass().getCanonicalName()+" enabled");
+            log.info(this.getClass().getCanonicalName()+" enabled");
             try {
                 LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
                 sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
@@ -48,7 +48,7 @@ public class SessionManager {
                 throw e;
             }
         } else {
-            System.out.println(this.getClass().getCanonicalName()+" disabled");
+            log.info(this.getClass().getCanonicalName()+" disabled");
         }
     }
 
