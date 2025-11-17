@@ -127,7 +127,7 @@ build-doc-image:
 
     SSL_ENABLE: "false"
 
-    USER_DATABASE_ENABLED: "true"
+    USER_DATABASE_ENABLED: "false"
 
     USER_DATABASE_CLASS: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
