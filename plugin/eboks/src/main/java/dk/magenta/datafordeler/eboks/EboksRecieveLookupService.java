@@ -85,9 +85,8 @@ public class EboksRecieveLookupService {
             throws DataFordelerException, JsonProcessingException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
-        loggerHelper.info("Incoming request for eboks lookup (cprs="+ String.join(", ", cprs) +", cvrs="+String.join(", ", cvrs)+")");
 
         PersonRecordQuery personQuery = new PersonRecordQuery();
         personQuery.setPageSize(Integer.MAX_VALUE);
@@ -244,6 +243,7 @@ public class EboksRecieveLookupService {
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);

@@ -83,7 +83,7 @@ public class CprRecordCombinedService {
             throws AccessDeniedException, AccessRequiredException, InvalidTokenException, InvalidClientInputException, JsonProcessingException, HttpNotFoundException, InvalidCertificateException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );
@@ -184,7 +184,7 @@ public class CprRecordCombinedService {
         final HashSet<String> cprNumbers = (requestObject.has(PARAM_CPR_NUMBER)) ? new HashSet<>(this.getCprNumber(requestObject.get(PARAM_CPR_NUMBER))) : null;
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCprService with " +
                         PARAM_UPDATED_SINCE + " = " + updatedSince + " and " +
@@ -283,6 +283,7 @@ public class CprRecordCombinedService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
         } catch (AccessDeniedException e) {

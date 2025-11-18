@@ -41,22 +41,6 @@ public abstract class TestBase {
     @Autowired
     protected Engine engine;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private List<String> tableNames;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @PostConstruct
-    public void init() {
-        tableNames = entityManager.getMetamodel().getEntities().stream()
-                .filter(e -> e.getJavaType().getAnnotation(Table.class) != null)
-                .map(e -> e.getJavaType().getAnnotation(Table.class).name())
-                .sorted(Comparator.naturalOrder())
-                .collect(Collectors.toList());
-    }
-
     @AfterEach
     public void cleanup() {
         try (Session session = sessionManager.getSessionFactory().openSession()) {

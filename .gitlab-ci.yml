@@ -125,13 +125,10 @@ build-doc-image:
     SECONDARY_DATABASE_METHOD: "update"
     SECONDARY_DATABASE_DEFAULT_SCHEMA: "dbo"
 
+    USER_DATABASE_ENABLED: "false"  # Use NoDBUserQueryManager, which returns hardcoded data
+
     SSL_ENABLE: "false"
 
-    USER_DATABASE_ENABLED: "false"
-    USER_DATABASE_SECURITY_DISABLED: "false"
-    USER_DATABASE_URL: "jdbc:sqlserver://datafordeler-db:1433;databaseName=Datafordeler;trustServerCertificate=true"
-    USER_DATABASE_USERNAME: "sa"
-    USER_DATABASE_PASSWORD: "testTEST1"
     STS_METADATA_PATH: "/tmp/sts_metadata.test.xml"
 
     STATISTICS_ENABLE: "true"

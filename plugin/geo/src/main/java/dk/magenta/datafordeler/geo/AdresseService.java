@@ -121,7 +121,7 @@ public class AdresseService {
     public String getLocalities(HttpServletRequest request) throws DataFordelerException {
         String municipalityCode = request.getParameter(PARAM_MUNICIPALITY);
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for AddressService.locality with municipality {}", municipalityCode
         );
@@ -181,7 +181,7 @@ public class AdresseService {
     public String getRoads(HttpServletRequest request) throws DataFordelerException {
         String locality = request.getParameter(PARAM_LOCALITY);
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for AddressService.road with locality {}", locality
         );
@@ -348,7 +348,7 @@ public class AdresseService {
         String roadUUID = request.getParameter(PARAM_ROAD);
         boolean debug = "1".equals(request.getParameter(PARAM_DEBUG));
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for AddressService.building with road {}", roadUUID
         );
@@ -465,7 +465,7 @@ public class AdresseService {
         String houseNumber = request.getParameter(PARAM_HOUSE);
         String buildingNumber = request.getParameter(PARAM_BNR);
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for AddressService.address with road {}, houseNumber {}, bNumber {}", roadUUID, houseNumber, buildingNumber
         );
@@ -691,7 +691,7 @@ public class AdresseService {
     public String getAddressData(HttpServletRequest request) throws DataFordelerException {
         String addressUUID = request.getParameter(PARAM_ADDRESS);
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for AddressService.addressdata with address {}", addressUUID
         );

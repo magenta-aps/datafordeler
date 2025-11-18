@@ -77,12 +77,7 @@ public class DownloadService extends StatisticsService {
         }
 
         // Add current user to LoggerHelper
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-
-        log.info(this.getClass().getSimpleName());
-        log.info(request.getParameterMap());
-
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
+        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user, this.getClass());
 
         // Check that the user has access to CPR data
         this.checkAndLogAccess(loggerHelper);

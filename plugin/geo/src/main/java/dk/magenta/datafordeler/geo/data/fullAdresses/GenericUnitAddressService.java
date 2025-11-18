@@ -117,7 +117,7 @@ public class GenericUnitAddressService {
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Envelope envelope = new Envelope();
             DafoUserDetails user = this.dafoUserManager.getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.info(
                     "Fetching from generic address service"
             );

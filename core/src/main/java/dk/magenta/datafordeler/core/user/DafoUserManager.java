@@ -35,9 +35,6 @@ public class DafoUserManager {
     @Value("${pitu.sdn.whitelist:}")
     private String[] pituSDNWhitelistCsep;
 
-//    @Value("${dafo.userdatabase.securitydisabled:false}")
-    private boolean securityDisabled = false;
-
     private final HashSet<String> pituSDNWhitelist = new HashSet<>();
 
     @Value("${pitu.idn.whitelist:}")
@@ -81,63 +78,14 @@ public class DafoUserManager {
 
     public DafoUserDetails getUserFromRequest(HttpServletRequest request, boolean samlOnly)
             throws InvalidTokenException, AccessDeniedException, InvalidCertificateException {
-        if (securityDisabled) {
-
-            //VALIDATE SECURITY
-            return new DafoUserDetails(null) {
-                @Override
-                public String getNameQualifier() {
-                    return "INTERNAL";
-                }
-
-                @Override
-                public String getIdentity() {
-                    return "sender";
-                }
-
-                @Override
-                public String getOnBehalfOf() {
-                    return null;
-                }
-
-                @Override
-                public boolean hasSystemRole(String role) {
-                    return true;
-                }
-
-                @Override
-                public boolean isAnonymous() {
-                    return false;
-                }
-
-                @Override
-                public boolean hasUserProfile(String userProfileName) {
-                    return true;
-                }
-
-                @Override
-                public Collection<String> getUserProfiles() {
-                    return Collections.EMPTY_LIST;
-                }
-
-                @Override
-                public Collection<String> getSystemRoles() {
-                    return Collections.EMPTY_LIST;
-                }
-
-                @Override
-                public Collection<UserProfile> getUserProfilesForRole(String role) {
-                    return Collections.EMPTY_LIST;
-                }
-            };
-        } else if (request instanceof MockInternalServletRequest) {
+        if (request instanceof MockInternalServletRequest) {
             return ((MockInternalServletRequest) request).getUserDetails();
         }
         // If an authorization header starting with "SAML " is provided, use it to create a
         // SAML token based user.
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.indexOf("SAML ") == 0) {
-            LoggerHelper loggerHelper = new LoggerHelper(logger, request);
+            LoggerHelper loggerHelper = new LoggerHelper(logger, request, this.getClass());
             loggerHelper.info("Authorizing with SAML token");
 
             SamlDafoUserDetails userDetails;
