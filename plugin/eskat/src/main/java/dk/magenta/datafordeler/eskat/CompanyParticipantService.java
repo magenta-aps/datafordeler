@@ -61,7 +61,7 @@ public class CompanyParticipantService {
                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
                                                   HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user, this.getClass());
         loggerHelper.info("Incoming request CompanyParticipantService");
         this.checkAndLogAccess(loggerHelper);
 
@@ -200,6 +200,7 @@ public class CompanyParticipantService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);

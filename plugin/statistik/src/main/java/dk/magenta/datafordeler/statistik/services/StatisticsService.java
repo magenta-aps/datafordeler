@@ -131,8 +131,7 @@ public abstract class StatisticsService {
 
         // Check that the user has access to CPR data
         //DafoUserDetails user = this.getUser(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user);
-        loggerHelper.info("Incoming request for " + this.getClass().getSimpleName() + " with parameters " + request.getParameterMap());
+        LoggerHelper loggerHelper = new LoggerHelper(this.getLogger(), request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
         for (String required : this.requiredParameters()) {
             this.requireParameter(required, request.getParameter(required));
@@ -469,6 +468,7 @@ public abstract class StatisticsService {
         if (!statisticsEnabled) {
             throw new AccessDeniedException("Statistics is disabled on the server");
         }
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
         } catch (AccessDeniedException e) {

@@ -25,6 +25,24 @@ public class ParameterMap extends ListHashMap<String, String> {
         }
     }
 
+    public ParameterMap(Map<String, List<String>> initial) {
+        this(initial, true);
+    }
+
+    public ParameterMap(org.apache.catalina.util.ParameterMap<String, String[]> initial) {
+        for (String key : initial.keySet()) {
+            this.add(key, Arrays.asList(initial.get(key)));
+        }
+    }
+
+    public static ParameterMap ofArrays(Map<String, String[]> initial) {
+        ParameterMap map = new ParameterMap();
+        for (String key : initial.keySet()) {
+            map.add(key, Arrays.asList(initial.get(key)));
+        }
+        return map;
+    }
+
     public ParameterMap set(String key, String value) {
         this.add(key, value);
         return this;

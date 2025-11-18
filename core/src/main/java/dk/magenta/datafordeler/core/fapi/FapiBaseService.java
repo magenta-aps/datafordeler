@@ -144,6 +144,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper)
             throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             this.checkAccess(loggerHelper.getUser());
         } catch (AccessDeniedException | AccessRequiredException e) {
@@ -167,7 +168,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {
             DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.info(
                     "Incoming REST request for " + this.getServiceName() + " with uuid " + uuid
             );
@@ -232,7 +233,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {
             DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.info(
                     "Incoming CSV REST request for " + this.getServiceName() +
                             " with id " + id
@@ -284,7 +285,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         Envelope envelope = new Envelope();
         try {
             DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.info(
                     "Incoming REST request for " + this.getServiceName() + " with query " + requestParams.toString()
             );
@@ -338,7 +339,7 @@ public abstract class FapiBaseService<E extends IdentifiedEntity, Q extends Base
         Session session = this.getSessionManager().getSessionFactory().openSession();
         try {
             DafoUserDetails user = this.getDafoUserManager().getUserFromRequest(request);
-            LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+            LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
             loggerHelper.info(
                     "Incoming CSV REST request for " + this.getServiceName() +
                             " with query " + requestParams.toString()

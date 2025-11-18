@@ -27,7 +27,6 @@ public class SamlDafoUserDetails extends DafoUserDetails {
         super();
 
         this.sourceAssertion = assertion;
-
         this.nameQualifier = assertion.getSubject().getNameID().getNameQualifier();
         this.identity = assertion.getSubject().getNameID().getValue();
         this.onBehalfOf = this.lookupOnBehalfOf();

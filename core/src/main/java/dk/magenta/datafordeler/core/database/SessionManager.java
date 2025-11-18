@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -33,18 +34,33 @@ public class SessionManager {
     private static final Logger log = LogManager.getLogger(SessionManager.class.getCanonicalName());
 
     public SessionManager() throws IOException {
-        try {
-            LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-            sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
-            sessionFactoryBean.setAnnotatedPackages("dk.magenta.datafordeler");
-            sessionFactoryBean.setDataSource(this.dataSource());
-            sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
-            sessionFactoryBean.afterPropertiesSet();
-            this.sessionFactory = sessionFactoryBean.getObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
+        if (this.enabled()) {
+            log.info(this.getClass().getCanonicalName()+" enabled");
+            try {
+                LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+                sessionFactoryBean.setAnnotatedClasses(this.managedClasses().toArray(new Class[0]));
+                sessionFactoryBean.setAnnotatedPackages("dk.magenta.datafordeler");
+                DataSource dataSource = this.dataSource();
+                sessionFactoryBean.setDataSource(dataSource);
+                sessionFactoryBean.setHibernateProperties(this.hibernateProperties());
+                sessionFactoryBean.afterPropertiesSet();
+                this.sessionFactory = sessionFactoryBean.getObject();
+                try {
+                    log.info(this.getClass().getCanonicalName() + " initialized with url " + dataSource.getConnection().getMetaData().getURL());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw e;
+            }
+        } else {
+            log.info(this.getClass().getCanonicalName()+" disabled");
         }
+    }
+
+    protected boolean enabled() {
+        return true;
     }
 
     public SessionFactory getSessionFactory() {
@@ -133,7 +149,7 @@ public class SessionManager {
         hibernateProperties.setProperty("hibernate.query.plan_cache_max_size", "1024");
         hibernateProperties.setProperty("hibernate.query.plan_parameter_metadata_max_size", "1024");
 
-        System.out.println("SessionManager properties: "+hibernateProperties.toString());
+        log.info("SessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
     }
 

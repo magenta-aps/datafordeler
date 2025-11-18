@@ -84,7 +84,7 @@ public class CprRecordCombinedPersonLookupService {
         cprNummer = cprNummer.replaceAll("\\D", "");
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info(
                 "Incoming REST request for PrismeCprService with cprNummer " + cprNummer
         );
@@ -143,7 +143,7 @@ public class CprRecordCombinedPersonLookupService {
         boolean includeGlobalIds = "1".equals(requestParams.getFirst("includeGlobalIds"));
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("CprRecordCombinedPersonLookupService");
         this.checkAndLogAccess(loggerHelper);
 
@@ -217,6 +217,7 @@ public class CprRecordCombinedPersonLookupService {
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
         } catch (AccessDeniedException e) {

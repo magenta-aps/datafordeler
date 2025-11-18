@@ -82,7 +82,7 @@ public class CprBirthDateService {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
 
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.urlInvokePersistablelogs("CprBirthDateService");
         this.checkAndLogAccess(loggerHelper);
 
@@ -141,6 +141,7 @@ public class CprBirthDateService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
         } catch (AccessDeniedException e) {

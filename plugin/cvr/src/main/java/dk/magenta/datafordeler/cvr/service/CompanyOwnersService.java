@@ -153,8 +153,7 @@ public class CompanyOwnersService {
     )
     public String getRest(@PathVariable("cvr") String cvr, HttpServletRequest request) throws DataFordelerException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user);
-        loggerHelper.info("Incoming request for owners of cvr " + cvr);
+        LoggerHelper loggerHelper = new LoggerHelper(this.log, request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
         try (Session lookupSession = sessionManager.getSessionFactory().openSession()) {
             try (Session participantSession = sessionManager.getSessionFactory().openSession()) {
@@ -403,6 +402,7 @@ public class CompanyOwnersService {
     }
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CvrRolesDefinition.READ_CVR_ROLE);
         } catch (AccessDeniedException e) {

@@ -60,7 +60,7 @@ public class PersonEntityCustodyService {
             throws DataFordelerException, JsonProcessingException {
 
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         this.checkAndLogAccess(loggerHelper);
 
         if (cpr != null && !cpr.isEmpty()) {
@@ -82,6 +82,7 @@ public class PersonEntityCustodyService {
 
 
     protected void checkAndLogAccess(LoggerHelper loggerHelper) throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             loggerHelper.getUser().checkHasSystemRole(CprRolesDefinition.READ_CPR_ROLE);
         } catch (AccessDeniedException e) {

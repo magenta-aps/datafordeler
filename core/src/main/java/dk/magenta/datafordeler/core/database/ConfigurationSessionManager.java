@@ -94,7 +94,7 @@ public class ConfigurationSessionManager extends SessionManager {
         hibernateProperties.setProperty("hibernate.query.plan_cache_max_size", "1024");
         hibernateProperties.setProperty("hibernate.query.plan_parameter_metadata_max_size", "1024");
 
-        System.out.println("ConfigurationSessionManager properties: "+hibernateProperties.toString());
+        log.info("ConfigurationSessionManager properties: "+hibernateProperties.toString());
         return hibernateProperties;
     }
 

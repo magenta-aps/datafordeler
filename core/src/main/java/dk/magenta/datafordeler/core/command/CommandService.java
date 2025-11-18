@@ -68,6 +68,7 @@ public class CommandService {
      */
     protected void checkAndLogAccess(LoggerHelper loggerHelper, SystemRole requiredRole)
             throws AccessDeniedException, AccessRequiredException {
+        loggerHelper.logRequest();
         try {
             this.checkAccess(loggerHelper.getUser(), requiredRole);
         } catch (AccessDeniedException | AccessRequiredException e) {
@@ -156,7 +157,7 @@ public class CommandService {
     public void doGet(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long commandId)
             throws IOException, HttpNotFoundException, InvalidClientInputException, InvalidTokenException, AccessRequiredException, AccessDeniedException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info("GET request received on address " + request.getServletPath());
 
         if (commandId >= 0) {
@@ -185,7 +186,7 @@ public class CommandService {
     public void doGetSummary(HttpServletRequest request, HttpServletResponse response, @PathVariable("plugin") String pluginName, @PathVariable("state") String state)
             throws IOException, HttpNotFoundException, InvalidClientInputException, InvalidTokenException, AccessRequiredException, AccessDeniedException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info("GET request received on address " + request.getServletPath());
 
         pluginName = pluginName.toLowerCase();
@@ -240,7 +241,7 @@ public class CommandService {
     public void doPost(HttpServletRequest request, HttpServletResponse response, @PathVariable("command") String commandName)
             throws IOException, InvalidClientInputException, InvalidTokenException, AccessDeniedException, AccessRequiredException, DataStreamException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info("POST request received on address " + request.getServletPath());
         loggerHelper.info("Request for command '" + commandName + "'");
         Command command;
@@ -287,7 +288,7 @@ public class CommandService {
     public void doDelete(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") Long commandId)
             throws IOException, InvalidClientInputException, HttpNotFoundException, InvalidTokenException, DataStreamException, AccessDeniedException, AccessRequiredException, InvalidCertificateException {
         DafoUserDetails user = dafoUserManager.getUserFromRequest(request, true);
-        LoggerHelper loggerHelper = new LoggerHelper(log, request, user);
+        LoggerHelper loggerHelper = new LoggerHelper(log, request, user, this.getClass());
         loggerHelper.info("DELETE request received on address " + request.getServletPath());
         if (commandId >= 0) {
             loggerHelper.info("Request for cancelling of job id '" + commandId + "'");
