@@ -285,6 +285,7 @@ public class QueryManager {
                     subQueries.addAll(entity.getAssoc());
                 }
                 for (BaseQuery subQuery : subQueries) {
+                    System.out.println("Subquery for " + subQuery.getEntityClassname());
                     List<ResultSet<IdentifiedEntity>> subResults = getAllEntitySets(session, subQuery, (Class<IdentifiedEntity>) Class.forName(subQuery.getEntityClassname()), cache);
                     for (ResultSet<IdentifiedEntity> subResult : subResults) {
                         resultSet.addAssociatedEntities(subResult.all());

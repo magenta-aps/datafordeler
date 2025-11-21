@@ -71,7 +71,9 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
             System.out.println("Class: " + entry.getKey().getCanonicalName() + " => " + entry.getValue().getClass().getCanonicalName());
         }
         for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
-            System.out.println("Associated entity class: "+associatedEntityClass.getCanonicalName());
+            System.out.println("Associated entity class: " + associatedEntityClass.getCanonicalName());
+        }
+        for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
             OutputWrapper wrapper = wrapperMap.get(associatedEntityClass);
             if (wrapper instanceof RecordOutputWrapper) {
                 // Find any JsonModifiers from this outputwrapper of associated entityclass, and add them to our cache
