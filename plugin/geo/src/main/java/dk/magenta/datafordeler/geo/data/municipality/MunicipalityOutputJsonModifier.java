@@ -33,6 +33,12 @@ public class MunicipalityOutputJsonModifier extends JsonModifier {
             if (entity != null) {
                 MunicipalityNameRecord name = entity.getName().current(); // TODO: Find den rigtige navnerecord (nyeste?)
                 node.put("kommunenavn", name.getName());
+            } else {
+                System.out.println("No entity found for " + municipalityCode.asInt());
+                System.out.println("Cache has: ");
+                for (Integer key : this.entities.keySet()) {
+                    System.out.println("  " + key);
+                }
             }
         }
     }

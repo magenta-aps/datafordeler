@@ -45,6 +45,12 @@ public class RoadOutputJsonModifier extends JsonModifier {
                     RoadLocalityRecord locality = entity.getLocality().current();
                     node.put("lokalitetskode", locality.getCode());
                 }
+            } else {
+                System.out.println("No entity found for " + municipalityCode.asInt() + "|" + roadCode.asInt());
+                System.out.println("Cache has: ");
+                for (String key : this.entities.keySet()) {
+                    System.out.println("  " + key);
+                }
             }
         }
     }

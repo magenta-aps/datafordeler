@@ -66,6 +66,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
     public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
         for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
+            System.out.println("Associated entity class: "+associatedEntityClass.getCanonicalName());
             OutputWrapper wrapper = wrapperMap.get(associatedEntityClass);
             if (wrapper instanceof RecordOutputWrapper) {
                 // Find any JsonModifiers from this outputwrapper of associated entityclass, and add them to our cache
@@ -85,11 +86,15 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
     }
 
     protected List<JsonModifier> getEligibleModifiers(Class cls) {
+        System.out.println("All modifiers: "+this.modifiers.keySet());
         List<String> modifierNames = this.getEligibleModifierNames().get(cls);
         if (modifierNames == null) {
             return Collections.emptyList();
         }
-        System.out.println("\nEligible modifiers for " + cls + ": " + modifierNames);
+        System.out.println(
+                "\nEligible modifiers for " + cls + ": " + modifierNames +" => "+
+                modifierNames.stream().filter(this.modifiers::containsKey).toList()
+        );
         return modifierNames.stream().map(name -> this.modifiers.get(name)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 

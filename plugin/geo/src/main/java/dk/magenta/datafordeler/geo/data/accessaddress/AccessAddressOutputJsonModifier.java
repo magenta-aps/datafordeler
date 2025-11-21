@@ -102,7 +102,15 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
                     node.put("kommunekode", entity.getRoad().current().getMunicipalityCode());
                 }
 
+            } else {
+                System.out.println("No entity found for " + ident);
+                System.out.println("Cache has: ");
+                for (String key : this.accessAddressEntities.keySet()) {
+                    System.out.println("  " + key);
+                }
             }
+        } else {
+            System.out.println("No ident found");
         }
     }
 

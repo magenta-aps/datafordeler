@@ -39,6 +39,12 @@ public class LocalityOutputJsonModifier extends JsonModifier {
                 LocalityNameRecord localityNameRecord = entity.getName().current();
                 System.out.println("Adding lokalitetsnavn: "+localityNameRecord.getName());
                 node.put("lokalitetsnavn", localityNameRecord.getName());
+            } else {
+                System.out.println("No entity found for " + localityCode.asText());
+                System.out.println("Cache has: ");
+                for (String key : this.localityEntities.keySet()) {
+                    System.out.println("  " + key);
+                }
             }
         }
     }
