@@ -286,9 +286,16 @@ public class QueryManager {
                 }
                 for (BaseQuery subQuery : subQueries) {
                     System.out.println("Subquery for " + subQuery.getEntityClassname());
+                    System.out.println(subQuery.toHql());
+                    System.out.println(subQuery.getConditionParameters());
+
                     List<ResultSet<IdentifiedEntity>> subResults = getAllEntitySets(session, subQuery, (Class<IdentifiedEntity>) Class.forName(subQuery.getEntityClassname()), cache);
                     for (ResultSet<IdentifiedEntity> subResult : subResults) {
+                        System.out.println("Subresult for " + subResult.getPrimaryEntity().getClass().getCanonicalName()+" found");
                         resultSet.addAssociatedEntities(subResult.all());
+                    }
+                    if (subResults.isEmpty()) {
+                        System.out.println("Subresults is empty");
                     }
                 }
                 E primaryEntity = resultSet.getPrimaryEntity();

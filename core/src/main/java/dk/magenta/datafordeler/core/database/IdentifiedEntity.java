@@ -23,4 +23,5 @@ public interface IdentifiedEntity {
 
     List<BaseQuery> getAssoc();
 
+    Long getId();
 }

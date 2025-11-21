@@ -40,18 +40,22 @@ public class ResultSet<E extends IdentifiedEntity> {
     public void addAssociatedEntity(IdentifiedEntity entity) {
         if (entity != null) {
             Class c = entity.getClass();
-            System.out.println("addAssociatedEntity: " + c.getName()+" "+entity.getIdentification());
+            System.out.println("addAssociatedEntity: " + c.getName()+" "+entity.getId());
             if (!this.associatedEntities.containsKey(c)) {
                 this.associatedEntities.put(c, new HashSet<>());
             }
             this.associatedEntities.get(c).add(entity);
         }
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        System.out.println("Called from: "+ stackTraceElements[1].toString());
+        System.out.println("Called from: ");
+        for (int i=1; i<6; i++) {
+            System.out.println(stackTraceElements[i].toString());
+        }
     }
 
     public void addAssociatedEntities(Collection<IdentifiedEntity> entities) {
         for (IdentifiedEntity entity : entities) {
+            System.out.println("addAssociatedEntity: " + entity.getClass().getName()+" "+entity.getId());
             this.addAssociatedEntity(entity);
         }
     }
