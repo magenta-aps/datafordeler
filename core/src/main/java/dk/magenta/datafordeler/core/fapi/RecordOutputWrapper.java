@@ -69,11 +69,6 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         System.out.println("Wrapper map:");
         for (Map.Entry<Class, OutputWrapper> entry : wrapperMap.entrySet()) {
             System.out.println("Class: " + entry.getKey().getCanonicalName() + " => " + entry.getValue().getClass().getCanonicalName());
-            OutputWrapper outputWrapper = entry.getValue();
-            if (outputWrapper instanceof RecordOutputWrapper) {
-                RecordOutputWrapper rOutputWrapper = (RecordOutputWrapper) outputWrapper;
-                System.out.println("    " + rOutputWrapper.getModifier(input));
-            }
         }
         for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
             System.out.println("Associated entity class: "+associatedEntityClass.getCanonicalName());
@@ -83,7 +78,10 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
                 RecordOutputWrapper recordOutputWrapper = (RecordOutputWrapper) wrapper;
                 JsonModifier modifier = recordOutputWrapper.getModifier(input);
                 if (modifier != null) {
+                    System.out.println("Found modifier for "+associatedEntityClass.getCanonicalName()+": "+modifier.getName());
                     this.modifiers.put(modifier.getName(), modifier);
+                }else {
+                    System.out.println("No modifier for "+associatedEntityClass.getCanonicalName());
                 }
             }
         }
