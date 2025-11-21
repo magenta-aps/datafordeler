@@ -32,6 +32,7 @@ public class RoadOutputJsonModifier extends JsonModifier {
      */
     @Override
     public void modify(ObjectNode node) {
+        System.out.println(this.getClass().getSimpleName() + " modifying " + node.toString()+", has "+this.entities.size()+" in cache");
         JsonNode roadCode = node.get("vejkode");
         JsonNode municipalityCode = node.get("kommunekode");
         JsonNode houseNumber = node.get("husnummer");

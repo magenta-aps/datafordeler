@@ -26,6 +26,7 @@ public class MunicipalityOutputJsonModifier extends JsonModifier {
      */
     @Override
     public void modify(ObjectNode node) {
+        System.out.println(this.getClass().getSimpleName() + " modifying " + node.toString()+", has "+this.entities.size()+" in cache");
         JsonNode municipalityCode = node.get("kommunekode");
         if (municipalityCode != null) {
             GeoMunicipalityEntity entity = this.entities.get(municipalityCode.asInt());

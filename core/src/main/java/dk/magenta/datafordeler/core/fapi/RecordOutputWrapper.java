@@ -89,6 +89,7 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
         if (modifierNames == null) {
             return Collections.emptyList();
         }
+        System.out.println("Eligible modifiers for " + cls + ": " + modifierNames);
         return modifierNames.stream().map(name -> this.modifiers.get(name)).filter(Objects::nonNull).collect(Collectors.toList());
     }
 

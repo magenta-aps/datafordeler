@@ -29,6 +29,7 @@ public class RoadOutputJsonModifier extends JsonModifier {
      */
     @Override
     public void modify(ObjectNode node) {
+        System.out.println(this.getClass().getSimpleName() + " modifying " + node.toString());
         JsonNode roadCode = node.get("vejkode");
         JsonNode municipalityCode = node.get("kommunekode");
         if (roadCode != null && municipalityCode != null) {

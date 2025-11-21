@@ -30,6 +30,7 @@ public class LocalityOutputJsonModifier extends JsonModifier {
      */
     @Override
     public void modify(ObjectNode node) {
+        System.out.println(this.getClass().getSimpleName() + " modifying " + node.toString()+", has "+this.localityEntities.size()+" in cache");
         JsonNode localityCode = node.get("lokalitetskode");
         if (localityCode != null && !localityCode.isNull()) {
             GeoLocalityEntity entity = this.localityEntities.get(localityCode.asText());

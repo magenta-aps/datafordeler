@@ -50,6 +50,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
      */
     @Override
     public void modify(ObjectNode node) {
+        System.out.println(this.getClass().getSimpleName() + " modifying " + node.toString()+", has "+this.accessAddressEntities.size()+" in cache");
         JsonNode municipalityCode = node.get("kommunekode");
         JsonNode roadCode = node.get("vejkode");
         JsonNode bnr = node.get("bnr");
