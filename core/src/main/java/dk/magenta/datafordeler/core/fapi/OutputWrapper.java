@@ -23,6 +23,7 @@ public abstract class OutputWrapper<E extends IdentifiedEntity> {
     protected static HashMap<Class, OutputWrapper> wrapperMap = new HashMap<>();
 
     protected void register(Class entityClass) {
+        System.out.println("Registering wrapper"+this+" for "+entityClass.getCanonicalName()+" in wrapperMap "+System.identityHashCode(wrapperMap));
         wrapperMap.put(entityClass, this);
     }
 

@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.util.*;
 import org.springframework.data.util.Pair;
 
+import javax.sql.rowset.spi.SyncResolver;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -65,6 +66,15 @@ public abstract class RecordOutputWrapper<E extends IdentifiedEntity> extends Ou
 
 
     public Object wrapResultSet(ResultSet<E> input, BaseQuery query, Mode mode) {
+        System.out.println("Wrapper map:");
+        for (Map.Entry<Class, OutputWrapper> entry : wrapperMap.entrySet()) {
+            System.out.println("Class: " + entry.getKey().getCanonicalName() + " => " + entry.getValue().getClass().getCanonicalName());
+            OutputWrapper outputWrapper = entry.getValue();
+            if (outputWrapper instanceof RecordOutputWrapper) {
+                RecordOutputWrapper rOutputWrapper = (RecordOutputWrapper) outputWrapper;
+                System.out.println("    " + rOutputWrapper.getModifier(input));
+            }
+        }
         for (Class associatedEntityClass : input.getAssociatedEntityClasses()) {
             System.out.println("Associated entity class: "+associatedEntityClass.getCanonicalName());
             OutputWrapper wrapper = wrapperMap.get(associatedEntityClass);
