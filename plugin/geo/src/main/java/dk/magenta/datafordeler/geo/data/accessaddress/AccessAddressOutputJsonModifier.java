@@ -66,6 +66,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
         if (ident != null) {
             AccessAddressEntity entity = this.accessAddressEntities.get(ident);
             if (entity != null) {
+                System.out.println("Found entity for " + ident + ": "+entity.getId());
                 AccessAddressPostcodeRecord postcodeRecord = entity.getPostcode().current(); // TODO: Ud fra dato? (bitemporal)
                 if (postcodeRecord != null) {
                     node.put("postnummer", postcodeRecord.getPostcode());
@@ -73,6 +74,7 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
                     if (postcodeEntity != null) {
                         PostcodeNameRecord postcodeNameRecord = postcodeEntity.getName().current(); // TODO: Ud fra dato? (bitemporal)
                         if (postcodeNameRecord != null) {
+                            System.out.println("Adding postdistrikt: "+postcodeNameRecord.getName());
                             node.put("postdistrikt", postcodeNameRecord.getName());
                         }
                     }
@@ -81,11 +83,13 @@ public class AccessAddressOutputJsonModifier extends JsonModifier {
                 AccessAddressLocalityRecord accessAddressLocalityRecord = entity.getLocality().current(); // TODO: Ud fra dato? (bitemporal)
                 if (accessAddressLocalityRecord != null) {
                     node.put("lokalitetskode", accessAddressLocalityRecord.getCode());
+                    System.out.println("Adding lokalitetskode: "+accessAddressLocalityRecord.getCode());
                     GeoLocalityEntity localityEntity = this.localityEntities.get(accessAddressLocalityRecord.getCode());
                     if (localityEntity != null) {
                         LocalityNameRecord localityNameRecord = localityEntity.getName().current();// TODO: Ud fra dato? (bitemporal)
                         if (localityNameRecord != null) {
                             node.put("lokalitetsnavn", localityNameRecord.getName());
+                            System.out.println("Adding lokalitetsnavn: "+localityNameRecord.getName());
                         }
                     }
                 }

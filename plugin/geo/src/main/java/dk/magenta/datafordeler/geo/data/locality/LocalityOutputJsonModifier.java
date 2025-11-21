@@ -35,7 +35,9 @@ public class LocalityOutputJsonModifier extends JsonModifier {
         if (localityCode != null && !localityCode.isNull()) {
             GeoLocalityEntity entity = this.localityEntities.get(localityCode.asText());
             if (entity != null) {
+                System.out.println("Found entity for " + localityCode.asText() + ": "+entity.getId());
                 LocalityNameRecord localityNameRecord = entity.getName().current();
+                System.out.println("Adding lokalitetsnavn: "+localityNameRecord.getName());
                 node.put("lokalitetsnavn", localityNameRecord.getName());
             }
         }
