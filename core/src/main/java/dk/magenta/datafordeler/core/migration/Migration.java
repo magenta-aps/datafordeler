@@ -76,10 +76,10 @@ public class Migration {
         Method updateTimestamp = model.getMethod("updateTimestamp");
         String hql = "from " + model.getCanonicalName() + " where " + s;
         System.out.println(hql);
-        Transaction transaction = session.beginTransaction();
-        try {
-            long count = 0;
-            for (int offset=0; offset<100000000; offset+=1000) {
+        long count = 0;
+        for (int offset=0; offset<100000000; offset+=1000) {
+            Transaction transaction = session.beginTransaction();
+            try {
                 Query<T> query = session.createQuery(hql, model);
                 query.setFirstResult(0);
                 query.setMaxResults(1000);
@@ -94,12 +94,12 @@ public class Migration {
                 session.clear();
                 count += list.size();
                 System.out.println(count);
+            } catch (Exception e) {
+                e.printStackTrace();
+                transaction.rollback();
+                break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            transaction.rollback();
+            transaction.commit();
         }
-        System.out.println("\nCommitting transaction");
-        transaction.commit();
     }
 }
