@@ -69,10 +69,24 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
                     if (configuration.encryptCompanyDirectRegisterPassword(true)) {
                         // Must use merge instead of save, because we are updating an object that was born in another session
                         configuration = (CvrConfiguration) session.merge(configuration);
+                        log.info("Encrypted company register password");
                     }
                     if (configuration.encryptParticipantDirectRegisterPassword(true)) {
                         // Must use merge instead of save, because we are updating an object that was born in another session
                         configuration = (CvrConfiguration) session.merge(configuration);
+                        log.info("Encrypted participant register password");
+                    }
+                    if (configuration.encryptCompanyRegisterPassword(true, true)) {
+                        configuration = (CvrConfiguration) session.merge(configuration);
+                        log.info("Encrypted company register password");
+                    }
+                    if (configuration.encryptCompanyUnitRegisterPassword(true)) {
+                        configuration = (CvrConfiguration) session.merge(configuration);
+                        log.info("Encrypted company unit register password");
+                    }
+                    if (configuration.encryptParticipantRegisterPassword(true)) {
+                        configuration = (CvrConfiguration) session.merge(configuration);
+                        log.info("Encrypted company unit register password");
                     }
                     transaction.commit();
                 } catch (Exception e) {
