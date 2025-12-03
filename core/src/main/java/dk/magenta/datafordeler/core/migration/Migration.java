@@ -77,12 +77,15 @@ public class Migration {
         String hql = "from " + model.getCanonicalName() + " where " + s;
         Transaction transaction = session.beginTransaction();
         try {
+            long count = 0;
             for (int offset=0; offset<100000000; offset+=1000) {
                 Query<T> query = session.createQuery(hql, model);
-                query.setFirstResult(offset);
+//                query.setFirstResult(offset);
+                query.setFirstResult(0);
                 query.setMaxResults(1000);
                 List<T> list = query.getResultList();
                 if (list.isEmpty()) {
+                    System.out.println(offset + list.size());
                     break;
                 }
                 for (T t : list) {
@@ -90,7 +93,8 @@ public class Migration {
                 }
                 session.flush();
                 session.clear();
-                System.out.println(offset + list.size());
+                count += list.size();
+                System.out.println(count);
             }
         } catch (Exception e) {
             e.printStackTrace();
