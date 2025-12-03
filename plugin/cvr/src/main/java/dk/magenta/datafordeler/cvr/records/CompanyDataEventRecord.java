@@ -29,7 +29,8 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
     public CompanyDataEventRecord(OffsetDateTime timestamp, String field, Long oldItem) {
         this.setDafoUpdated(OffsetDateTime.now());
-        this.timestamp = timestamp;
+        this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
         this.field = field;
         this.oldItem = oldItem;
     }
@@ -77,6 +78,9 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     @JsonIgnore
     private OffsetDateTime timestamp;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_TIMESTAMP+"_new")
+    private OffsetDateTime timestampNew;
 
     public static final String DB_FIELD_OLD_ITEM = "oldItem";
     @Column(name = DB_FIELD_OLD_ITEM)
@@ -101,6 +105,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
     }
 
     public Long getOldItem() {
@@ -127,5 +132,10 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), field, text, oldItem, timestamp, getDafoUpdated());
+    }
+
+    public void updateTimestamp() {
+        super.updateTimestamp();
+        this.timestampNew = this.getTimestamp();
     }
 }

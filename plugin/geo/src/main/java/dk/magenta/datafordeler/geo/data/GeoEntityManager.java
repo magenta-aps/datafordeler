@@ -50,6 +50,9 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     @Autowired
     Stopwatch timer;
 
+
+
+
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 

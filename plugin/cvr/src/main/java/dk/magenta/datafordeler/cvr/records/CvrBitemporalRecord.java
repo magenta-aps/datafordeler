@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
@@ -24,9 +25,10 @@ import java.util.stream.Stream;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED;
 
 @MappedSuperclass
-public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord> {
+public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord>, MigrateModel {
 
     public static final String FILTERLOGIC_REGISTRATIONFROM_AFTER = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER + ")";
     public static final String FILTERLOGIC_REGISTRATIONFROM_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE + " OR " + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " is null)";
@@ -76,6 +78,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     private OffsetDateTime lastUpdated;
 
     @JsonIgnore
+    @Column(name = DB_FIELD_LAST_UPDATED+"_new")
+    protected OffsetDateTime lastUpdatedNew;
+
+
+    @JsonIgnore
     public OffsetDateTime getLastUpdated() {
         return fixOffsetOut(this.lastUpdated);
     }
@@ -91,6 +98,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         // Hvis vi går væk fra datetime2 skal vi ændre tilbage til at der bare står
         // this.lastUpdated = lastUpdated
         this.lastUpdated = fixOffsetIn(lastUpdated);
+        this.lastUpdatedNew = lastUpdated;
     }
 
 
@@ -102,6 +110,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     private OffsetDateTime lastLoaded;
 
     @JsonIgnore
+    @Column(name = DB_FIELD_LAST_LOADED+"_new")
+    private OffsetDateTime lastLoadedNew;
+
+    @JsonIgnore
     public OffsetDateTime getLastLoaded() {
         return fixOffsetOut(this.lastLoaded);
     }
@@ -109,6 +121,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public void setLastLoaded(OffsetDateTime lastLoaded) {
         // Samme som setLastUpdated
         this.lastLoaded = fixOffsetIn(lastLoaded);
+        this.lastLoadedNew = lastLoaded;
     }
 
     @JsonIgnore
@@ -178,12 +191,18 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     @Column(columnDefinition = "datetime2")
     private OffsetDateTime registrationTo;
 
+    @JsonIgnore
+    @Column(name="registrationTo"+"_new")
+    private OffsetDateTime registrationToNew;
+
+
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationToNew = registrationTo;
     }
 
 
@@ -381,4 +400,13 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return clone;
     }
 
+    public void updateTimestamp() {
+        this.lastUpdatedNew = this.getLastUpdated();
+        this.lastLoadedNew = this.getLastLoaded();
+        this.registrationToNew = this.getRegistrationTo();
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_LAST_LOADED, DB_FIELD_LAST_UPDATED, "registrationTo");
+    }
 }

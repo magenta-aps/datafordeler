@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
@@ -13,6 +14,9 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,8 +43,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     public ForeignAddressEmigrationDataRecord(int immigrationCountryCode, int emigrationCountryCode, OffsetDateTime emigrationRegistration, OffsetDateTime immigrationRegistration) {
         this.immigrationCountryCode = immigrationCountryCode;
         this.emigrationCountryCode = emigrationCountryCode;
-        this.emigrationRegistration = emigrationRegistration;
-        this.immigrationRegistration = immigrationRegistration;
+        this.setEmigrationRegistration(emigrationRegistration);
+        this.setImmigrationRegistration(immigrationRegistration);
     }
 
     public ForeignAddressEmigrationDataRecord(int emigrationCountryCode) {
@@ -91,11 +95,29 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
     private OffsetDateTime emigrationRegistration;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_EXIT_REGISTRATION+"_new")
+    private OffsetDateTime emigrationRegistrationNew;
+
+    @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
+    public void setEmigrationRegistration(OffsetDateTime emigrationRegistration) {
+        this.emigrationRegistration = Bitemporal.fixOffsetIn(emigrationRegistration);
+        this.emigrationRegistrationNew = emigrationRegistration;
+    }
+    public OffsetDateTime getEmigrationRegistration() {
+        return Bitemporal.fixOffsetOut(this.emigrationRegistration);
+    }
+
+
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
     @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
     private OffsetDateTime immigrationRegistration;
+
+    @JsonIgnore
+    @Column(name = DB_FIELD_RETURN_REGISTRATION+"_new")
+    private OffsetDateTime immigrationRegistrationNew;
 
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public OffsetDateTime getImmigrationRegistration() {
@@ -105,6 +127,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public void setImmigrationRegistration(OffsetDateTime immigrationRegistration) {
         this.immigrationRegistration = Bitemporal.fixOffsetIn(immigrationRegistration);
+        this.immigrationRegistrationNew = immigrationRegistration;
     }
 
 
@@ -137,5 +160,17 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
         clone.emigrationCountryCode = this.emigrationCountryCode;
         CprBitemporalRecord.copy(this, clone);
         return clone;
+    }
+
+    public void updateTimestamp() {
+        this.emigrationRegistrationNew = this.getEmigrationRegistration();
+        this.immigrationRegistrationNew = this.getImmigrationRegistration();
+    }
+
+    public static List<String> updateFields() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(CprBitemporalPersonRecord.updateFields());
+        list.addAll(Arrays.asList(DB_FIELD_EXIT_REGISTRATION, DB_FIELD_RETURN_REGISTRATION));
+        return list;
     }
 }
