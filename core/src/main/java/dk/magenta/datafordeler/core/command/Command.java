@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Command descriptor, holding data about an issued command
@@ -22,7 +26,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "command", indexes = {@Index(name = "status", columnList = "status")})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class Command extends DatabaseEntry implements Configuration {
+public final class Command extends DatabaseEntry implements Configuration, MigrateModel {
 
     public enum Status {
         QUEUED(0),
@@ -50,8 +54,14 @@ public final class Command extends DatabaseEntry implements Configuration {
     @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime received;
 
+    @Column(nullable = true)
+    private OffsetDateTime receivedNew;
+
     @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime handled;
+
+    @Column(nullable = true)
+    private OffsetDateTime handledNew;
 
     @Column(nullable = true)
     @JsonIgnore
@@ -121,7 +131,7 @@ public final class Command extends DatabaseEntry implements Configuration {
     }
 
     public void setReceived() {
-        this.received = OffsetDateTime.now();
+        this.received = this.receivedNew = OffsetDateTime.now();
     }
 
     public OffsetDateTime getHandled() {
@@ -129,7 +139,7 @@ public final class Command extends DatabaseEntry implements Configuration {
     }
 
     public void setHandled() {
-        this.handled = OffsetDateTime.now();
+        this.handled = this.handledNew = OffsetDateTime.now();
     }
 
     public Status getStatus() {
@@ -186,6 +196,16 @@ public final class Command extends DatabaseEntry implements Configuration {
             }
         }
         return "running";
+    }
+
+
+    public void updateTimestamp() {
+        this.receivedNew = this.getReceived();
+        this.handledNew = this.getHandled();
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList("received", "handled");
     }
 
 }

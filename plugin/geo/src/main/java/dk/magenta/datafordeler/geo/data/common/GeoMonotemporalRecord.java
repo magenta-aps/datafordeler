@@ -13,13 +13,9 @@ import org.hibernate.Session;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
 
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+import static dk.magenta.datafordeler.core.database.Bitemporal.*;
 
 @MappedSuperclass
 public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRecord<E> implements Monotemporal {
@@ -33,12 +29,18 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
+    private OffsetDateTime registrationFromNew;
+
+
     public OffsetDateTime getRegistrationFrom() {
         return fixOffsetOut(this.registrationFrom);
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
         this.registrationFrom = fixOffsetIn(registrationFrom);
+        this.registrationFromNew = registrationFrom;
     }
 
     public void setRegistrationFrom(long registrationFrom) {
@@ -55,12 +57,17 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
+    private OffsetDateTime registrationToNew;
+
     public OffsetDateTime getRegistrationTo() {
         return fixOffsetOut(this.registrationTo);
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
         this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationToNew = registrationTo;
     }
 
     public void setRegistrationTo(long registrationTo) {
@@ -144,6 +151,8 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
         GeoNontemporalRecord.copy(from, to);
         to.registrationFrom = from.registrationFrom;
         to.registrationTo = from.registrationTo;
+        to.registrationFromNew = from.registrationFromNew;
+        to.registrationToNew = from.registrationToNew;
     }
 
     public void wire(Session session, WireCache wireCache) {
@@ -153,5 +162,19 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     @JsonIgnore
     public Monotemporality getMonotemporality() {
         return new Monotemporality(this.registrationFrom, this.registrationTo);
+    }
+
+
+    public void updateTimestamp() {
+        super.updateTimestamp();
+        this.registrationFromNew = this.getRegistrationFrom();
+        this.registrationToNew = this.getRegistrationTo();
+    }
+
+    public static List<String> updateFields() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(GeoNontemporalRecord.updateFields());
+        list.addAll(Arrays.asList(DB_FIELD_REGISTRATION_FROM, DB_FIELD_REGISTRATION_TO));
+        return list;
     }
 }

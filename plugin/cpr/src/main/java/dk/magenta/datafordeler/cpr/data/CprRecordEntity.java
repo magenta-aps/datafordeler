@@ -1,21 +1,26 @@
 package dk.magenta.datafordeler.cpr.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import jakarta.persistence.*;
 import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 @MappedSuperclass
-public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity {
+public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity, MigrateModel {
 
     public CprRecordEntity() {
     }
@@ -60,6 +65,10 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
+    private OffsetDateTime dafoUpdatedNew;
+
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
         return fixOffsetOut(this.dafoUpdated);
@@ -67,7 +76,15 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
+    public void updateTimestamp() {
+        this.dafoUpdatedNew = this.getDafoUpdated();
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_DAFO_UPDATED);
+    }
 
 }

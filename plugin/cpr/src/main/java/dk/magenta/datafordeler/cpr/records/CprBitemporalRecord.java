@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cpr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -10,6 +11,9 @@ import jakarta.persistence.Transient;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -33,12 +37,17 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_EFFECT_FROM+"_new")
+    private OffsetDateTime effectFromNew;
+
     public OffsetDateTime getEffectFrom() {
         return Bitemporal.fixOffsetOut(this.effectFrom);
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
         this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
+        this.effectFromNew = effectFrom;
     }
 
     public static final String DB_FIELD_EFFECT_FROM_UNCERTAIN = "effectFromUncertain";
@@ -61,12 +70,17 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_EFFECT_TO+"_new")
+    private OffsetDateTime effectToNew;
+
     public OffsetDateTime getEffectTo() {
         return Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
         this.effectTo = Bitemporal.fixOffsetIn(effectTo);
+        this.effectToNew = effectTo;
     }
 
     public static final String DB_FIELD_EFFECT_TO_UNCERTAIN = "effectToUncertain";
@@ -232,6 +246,19 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), effectFrom, effectFromUncertain, effectTo, effectToUncertain);
+    }
+
+    public void updateTimestamp() {
+        super.updateTimestamp();
+        this.effectFromNew = this.getEffectFrom();
+        this.effectToNew = this.getEffectTo();
+    }
+
+    public static List<String> updateFields() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(CprMonotemporalRecord.updateFields());
+        list.addAll(Arrays.asList(DB_FIELD_EFFECT_FROM, DB_FIELD_EFFECT_TO));
+        return list;
     }
 
 }

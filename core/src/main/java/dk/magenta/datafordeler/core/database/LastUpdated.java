@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
@@ -30,6 +33,8 @@ public class LastUpdated extends DatabaseEntry {
     @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
     private OffsetDateTime timestamp;
 
+    @Column(name = DB_FIELD_TIMESTAMP+"_new")
+    private OffsetDateTime timestampNew;
 
     public String getPlugin() {
         return this.plugin;
@@ -53,5 +58,14 @@ public class LastUpdated extends DatabaseEntry {
 
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
+    }
+
+    public void updateTimestamp() {
+        this.timestampNew = this.getTimestamp();
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_TIMESTAMP);
     }
 }
