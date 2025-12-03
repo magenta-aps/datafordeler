@@ -76,6 +76,7 @@ public class Migration {
         Method updateTimestamp = model.getMethod("updateTimestamp");
         String hql = "from " + model.getCanonicalName() + " where " + s;
         System.out.println(hql);
+        System.out.println(0);
         Transaction transaction = session.beginTransaction();
         try {
             long count = 0;
@@ -94,13 +95,13 @@ public class Migration {
                 session.flush();
                 session.clear();
                 count += list.size();
-                System.out.println(count);
+                System.out.print("\r"+count);
             }
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
         }
-        System.out.println("Committing transaction");
+        System.out.println("\nCommitting transaction");
         transaction.commit();
     }
 }
