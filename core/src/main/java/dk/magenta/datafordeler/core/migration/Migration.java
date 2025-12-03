@@ -93,7 +93,7 @@ public class Migration {
                 session.flush();
                 session.clear();
                 count += list.size();
-                System.out.print(count);
+                System.out.println(count);
             }
         } catch (Exception e) {
             e.printStackTrace();
