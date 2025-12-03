@@ -85,6 +85,7 @@ public class Migration {
                 query.setMaxResults(1000);
                 List<T> list = query.getResultList();
                 if (list.isEmpty()) {
+                    transaction.rollback();
                     break;
                 }
                 for (T t : list) {
