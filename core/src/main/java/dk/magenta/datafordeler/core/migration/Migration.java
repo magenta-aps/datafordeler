@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.migration;
 
+import dk.magenta.datafordeler.core.Engine;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.reflections.Reflections;
@@ -28,13 +29,18 @@ public class Migration {
     @Autowired
     protected ConfigurationSessionManager configurationSessionManager;
 
+    @Autowired
+    private Engine engine;
+
     @PostConstruct
     public void run() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        this.runForPackage("dk.magenta.datafordeler.cpr");
-        this.runForPackage("dk.magenta.datafordeler.cvr");
-        this.runForPackage("dk.magenta.datafordeler.geo");
-        this.runForPackage("dk.magenta.datafordeler.ger");
-        this.runForPackage("dk.magenta.datafordeler.core");
+        if (this.engine.isPullEnabled()) {
+            this.runForPackage("dk.magenta.datafordeler.cpr");
+            this.runForPackage("dk.magenta.datafordeler.cvr");
+            this.runForPackage("dk.magenta.datafordeler.geo");
+            this.runForPackage("dk.magenta.datafordeler.ger");
+            this.runForPackage("dk.magenta.datafordeler.core");
+        }
     }
 
     private void runForPackage(String pack) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
