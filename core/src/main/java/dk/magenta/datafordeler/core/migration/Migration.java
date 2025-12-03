@@ -75,6 +75,7 @@ public class Migration {
         }
         Method updateTimestamp = model.getMethod("updateTimestamp");
         String hql = "from " + model.getCanonicalName() + " where " + s;
+        System.out.println(hql);
         Transaction transaction = session.beginTransaction();
         try {
             long count = 0;
@@ -85,7 +86,6 @@ public class Migration {
                 query.setMaxResults(1000);
                 List<T> list = query.getResultList();
                 if (list.isEmpty()) {
-                    System.out.println(offset + list.size());
                     break;
                 }
                 for (T t : list) {
