@@ -71,7 +71,7 @@ public class Migration {
         Method updateFields = model.getMethod("updateFields");
         List<String> fields = (List<String>) updateFields.invoke(null);
         for (String field : fields) {
-            s.add(field + " is not null");
+            s.add("(" + field + " is not null and " + field + "New is null)");
         }
         Method updateTimestamp = model.getMethod("updateTimestamp");
         String hql = "from " + model.getCanonicalName() + " where " + s;
@@ -90,11 +90,13 @@ public class Migration {
                 }
                 session.flush();
                 session.clear();
+                System.out.println(offset + list.size());
             }
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
         }
+        System.out.println("Committing transaction");
         transaction.commit();
     }
 }
