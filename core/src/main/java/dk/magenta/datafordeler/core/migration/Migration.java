@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.migration;
 
+import dk.magenta.datafordeler.core.Engine;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.reflections.Reflections;
@@ -28,13 +29,18 @@ public class Migration {
     @Autowired
     protected ConfigurationSessionManager configurationSessionManager;
 
+    @Autowired
+    private Engine engine;
+
     @PostConstruct
     public void run() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        this.runForPackage("dk.magenta.datafordeler.cpr");
-        this.runForPackage("dk.magenta.datafordeler.cvr");
-        this.runForPackage("dk.magenta.datafordeler.geo");
-        this.runForPackage("dk.magenta.datafordeler.ger");
-        this.runForPackage("dk.magenta.datafordeler.core");
+        if (this.engine.isMigrateEnabled()) {
+            this.runForPackage("dk.magenta.datafordeler.cpr");
+            this.runForPackage("dk.magenta.datafordeler.cvr");
+            this.runForPackage("dk.magenta.datafordeler.geo");
+            this.runForPackage("dk.magenta.datafordeler.ger");
+            this.runForPackage("dk.magenta.datafordeler.core");
+        }
     }
 
     private void runForPackage(String pack) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -65,18 +71,21 @@ public class Migration {
         Method updateFields = model.getMethod("updateFields");
         List<String> fields = (List<String>) updateFields.invoke(null);
         for (String field : fields) {
-            s.add(field + " is not null");
+            s.add("(" + field + " is not null and " + field + "New is null)");
         }
         Method updateTimestamp = model.getMethod("updateTimestamp");
         String hql = "from " + model.getCanonicalName() + " where " + s;
-        Transaction transaction = session.beginTransaction();
-        try {
-            for (int offset=0; offset<100000000; offset+=1000) {
+        System.out.println(hql);
+        long count = 0;
+        for (int offset=0; offset<100000000; offset+=1000) {
+            Transaction transaction = session.beginTransaction();
+            try {
                 Query<T> query = session.createQuery(hql, model);
-                query.setFirstResult(offset);
+                query.setFirstResult(0);
                 query.setMaxResults(1000);
                 List<T> list = query.getResultList();
                 if (list.isEmpty()) {
+                    transaction.rollback();
                     break;
                 }
                 for (T t : list) {
@@ -84,11 +93,14 @@ public class Migration {
                 }
                 session.flush();
                 session.clear();
+                count += list.size();
+                System.out.println(count);
+            } catch (Exception e) {
+                e.printStackTrace();
+                transaction.rollback();
+                break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            transaction.rollback();
+            transaction.commit();
         }
-        transaction.commit();
     }
 }
