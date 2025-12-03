@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.geo.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
@@ -14,11 +15,11 @@ import org.hibernate.Session;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
+import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -60,6 +61,9 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
     @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
     private OffsetDateTime creationDate;
+    @JsonIgnore
+    @Column(name = DB_FIELD_CREATION_DATE+"_new")
+    private OffsetDateTime creationDateNew;
 
     public OffsetDateTime getCreationDate() {
         return fixOffsetOut(this.creationDate);
@@ -68,6 +72,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     @JsonProperty(value = "CreationDate")
     public void setCreationDate(OffsetDateTime creationDate) {
         this.creationDate = fixOffsetIn(creationDate);
+        this.creationDateNew = creationDate;
     }
 
     @JsonProperty(value = "CreationDate")
@@ -78,6 +83,9 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_EDIT_DATE = "editDate";
     @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
     private OffsetDateTime editDate;
+    @JsonIgnore
+    @Column(name = DB_FIELD_EDIT_DATE+"_new")
+    private OffsetDateTime editDateNew;
 
     public OffsetDateTime getEditDate() {
         return fixOffsetOut(this.editDate);
@@ -86,6 +94,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     @JsonProperty(value = "EditDate")
     public void setEditDate(OffsetDateTime editDate) {
         this.editDate = fixOffsetIn(editDate);
+        this.editDateNew = editDate;
     }
 
     @JsonProperty(value = "EditDate")
@@ -99,6 +108,10 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     private OffsetDateTime dafoUpdated = null;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
+    private OffsetDateTime dafoUpdatedNew = null;
+
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
         return this.dafoUpdated;
@@ -106,6 +119,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
         this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdatedNew = dafoUpdated;
     }
 
 
@@ -146,4 +160,15 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public abstract Set<Set<? extends GeoMonotemporalRecord>> getAllRecords();
+
+
+    public void updateTimestamp() {
+        this.creationDateNew = this.getCreationDate();
+        this.editDateNew = this.getEditDate();
+        this.dafoUpdatedNew = this.getDafoUpdated();
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_UPDATED, DB_FIELD_EDIT_DATE, DB_FIELD_CREATION_DATE);
+    }
 }

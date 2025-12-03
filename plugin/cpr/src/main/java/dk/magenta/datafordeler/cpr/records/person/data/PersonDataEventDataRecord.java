@@ -10,7 +10,10 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
@@ -34,6 +37,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, String text) {
         this.setDafoUpdated(OffsetDateTime.now());
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
         this.field = field;
         this.oldItem = oldItem;
         this.text = text;
@@ -87,6 +91,10 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     @JsonIgnore
     private OffsetDateTime timestamp;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_TIMESTAMP+"_new")
+    private OffsetDateTime timestampNew;
+
 
     public static final String DB_FIELD_OLD_ITEM = "oldItem";
     @Column(name = DB_FIELD_OLD_ITEM)
@@ -106,5 +114,15 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     @Override
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
+    }
+
+    public void updateTimestamp() {
+        this.timestampNew = this.getTimestamp();
+    }
+
+    public static List<String> updateFields() {
+        ArrayList<String> list = new ArrayList<>(CprRecordEntity.updateFields());
+        list.add(DB_FIELD_TIMESTAMP);
+        return list;
     }
 }

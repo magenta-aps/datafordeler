@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.io.File;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -58,17 +59,24 @@ public class InterruptedPull extends DatabaseEntry {
     @Column(columnDefinition = "datetime2")
     private OffsetDateTime startTime;
 
+    @Column(name="startTime"+"_new")
+    private OffsetDateTime startTimeNew;
+
     public OffsetDateTime getStartTime() {
         return fixOffsetOut(this.startTime);
     }
 
     public void setStartTime(OffsetDateTime startTime) {
         this.startTime = fixOffsetIn(startTime);
+        this.startTimeNew = startTime;
     }
 
 
     @Column(columnDefinition = "datetime2")
     private OffsetDateTime interruptTime;
+
+    @Column(name="interruptTime"+"_new")
+    private OffsetDateTime interruptTimeNew;
 
     public OffsetDateTime getInterruptTime() {
         return fixOffsetOut(this.interruptTime);
@@ -76,6 +84,7 @@ public class InterruptedPull extends DatabaseEntry {
 
     public void setInterruptTime(OffsetDateTime interruptTime) {
         this.interruptTime = fixOffsetIn(interruptTime);
+        this.interruptTimeNew = interruptTime;
     }
 
 
@@ -127,5 +136,14 @@ public class InterruptedPull extends DatabaseEntry {
 
     public void setImportConfiguration(String importConfiguration) {
         this.importConfiguration = importConfiguration;
+    }
+
+    public void updateTimestamp() {
+        this.startTimeNew = this.getStartTime();
+        this.interruptTimeNew = this.getInterruptTime();
+    }
+
+    public static List<String> updateFields() {
+        return Arrays.asList("startTime", "interruptTime");
     }
 }

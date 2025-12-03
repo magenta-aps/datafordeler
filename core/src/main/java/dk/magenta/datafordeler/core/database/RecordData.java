@@ -1,10 +1,14 @@
 package dk.magenta.datafordeler.core.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.util.Equality;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
@@ -21,6 +25,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
 
     public RecordData(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
     }
 
     @ManyToOne
@@ -41,6 +46,10 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     public OffsetDateTime getTimestamp() {
         return fixOffsetOut(this.timestamp);
     }
+
+    @JsonIgnore
+    @Column(name="timestamp"+"_new")
+    private OffsetDateTime timestampNew;
 
 
     @Lob
@@ -70,5 +79,13 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     @Override
     public int compareTo(RecordData o) {
         return Equality.compare(this.timestamp, o == null ? null : o.timestamp, OffsetDateTime.class, false);
+    }
+
+    public void updateTimestamp() {
+        this.timestampNew = this.getTimestamp();
+    }
+
+    public static List<String> updateFields() {
+        return List.of("timestamp");
     }
 }

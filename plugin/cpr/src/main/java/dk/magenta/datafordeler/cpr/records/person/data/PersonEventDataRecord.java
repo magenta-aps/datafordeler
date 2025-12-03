@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
@@ -33,6 +34,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
         this.timestamp = fixOffsetIn(timestamp);
         this.eventId = eventId;
         this.derived = derived;
+        this.timestampNew = timestamp;
     }
 
 
@@ -69,8 +71,13 @@ public class PersonEventDataRecord extends CprRecordEntity {
     @JsonIgnore
     private OffsetDateTime timestamp;
 
+    @JsonIgnore
+    @Column(name = DB_FIELD_TIMESTAMP+"_new")
+    private OffsetDateTime timestampNew;
+
     public void setTimestamp(OffsetDateTime timestamp) {
         this.timestamp = fixOffsetIn(timestamp);
+        this.timestampNew = timestamp;
     }
 
     public static final String DB_FIELD_EVENT = "eventId";
@@ -93,5 +100,13 @@ public class PersonEventDataRecord extends CprRecordEntity {
     @Override
     public IdentifiedEntity getNewest(Collection<IdentifiedEntity> collection) {
         return null;
+    }
+
+    public void updateTimestamp() {
+        this.timestampNew = this.getTimestamp();
+    }
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_TIMESTAMP);
     }
 }

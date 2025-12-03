@@ -42,7 +42,7 @@ public class UserSessionManager extends SessionManager {
         super();
     }
 
-    protected HashSet<Class> managedClasses() {
+    public HashSet<Class> managedClasses() {
         HashSet<Class> managedSecondaryClasses = new HashSet<>();
         return managedSecondaryClasses;
     }
