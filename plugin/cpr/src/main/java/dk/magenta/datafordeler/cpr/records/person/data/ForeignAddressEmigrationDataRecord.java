@@ -163,6 +163,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
     }
 
     public void updateTimestamp() {
+        super.updateTimestamp();
         this.emigrationRegistrationNew = this.getEmigrationRegistration();
         this.immigrationRegistrationNew = this.getImmigrationRegistration();
     }

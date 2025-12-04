@@ -117,6 +117,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
     }
 
     public void updateTimestamp() {
+        super.updateTimestamp();
         this.timestampNew = this.getTimestamp();
     }
 

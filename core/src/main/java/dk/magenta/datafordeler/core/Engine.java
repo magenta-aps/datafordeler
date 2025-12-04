@@ -53,6 +53,9 @@ public class Engine {
     @Value("${dafo.pull.enabled:true}")
     private boolean pullEnabled;
 
+    @Value("${dafo.migrate.enabled:false}")
+    private boolean migrateEnabled;
+
     @Value("${dafo.cron.enabled:true}")
     private boolean cronEnabled;
 
@@ -78,6 +81,10 @@ public class Engine {
 
     public boolean isPullEnabled() {
         return this.pullEnabled;
+    }
+
+    public boolean isMigrateEnabled() {
+        return this.migrateEnabled;
     }
 
     public boolean isCronEnabled() {
