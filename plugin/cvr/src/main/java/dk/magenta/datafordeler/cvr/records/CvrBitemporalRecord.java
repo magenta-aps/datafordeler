@@ -401,6 +401,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public void updateTimestamp() {
+        super.updateTimestamp();
         this.lastUpdatedNew = this.getLastUpdated();
         this.lastLoadedNew = this.getLastLoaded();
         this.registrationToNew = this.getRegistrationTo();
