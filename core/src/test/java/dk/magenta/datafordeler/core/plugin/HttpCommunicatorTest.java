@@ -18,22 +18,22 @@ public class HttpCommunicatorTest {
     @Test
     public void testFetchOk() throws URISyntaxException, HttpStatusException, DataStreamException, IOException {
         Communicator communicator = new HttpCommunicator();
-        InputStream data = communicator.fetch(new URI("https://www.example.com"));
+        InputStream data = communicator.fetch(new URI("https://data.gl"));
         Assertions.assertNotNull(data);
         Assertions.assertNotNull(data.read(new byte[10]));
     }
 
     @Test
-    public void testFetchFail1() throws URISyntaxException, HttpStatusException, DataStreamException, IOException {
+    public void testFetchFail1()  {
         Communicator communicator = new HttpCommunicator();
         DataStreamException thrown = Assertions.assertThrows(DataStreamException.class, () -> communicator.fetch(new URI("https://frsghr8hffdh0gtonxhpjd.gl")));
     }
 
     @Test
-    public void testFetchFail2() throws URISyntaxException, HttpStatusException, DataStreamException, IOException {
+    public void testFetchFail2() {
         Communicator communicator = new HttpCommunicator();
         HttpStatusException thrown = Assertions.assertThrows(HttpStatusException.class, () -> {
-                communicator.fetch(new URI("https://www.example.com/foo"));
+                communicator.fetch(new URI("https://data.gl/foo"));
         });
     }
 }
