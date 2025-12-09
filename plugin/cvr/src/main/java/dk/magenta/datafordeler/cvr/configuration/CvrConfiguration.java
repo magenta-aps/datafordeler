@@ -415,14 +415,17 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-    public boolean encryptCompanyRegisterPassword() {
+    public boolean encryptCompanyRegisterPassword(boolean overwrite, boolean clearPlain) {
         if (
                 this.companyRegisterPasswordEncryptionFile != null &&
                         !(this.companyRegisterPassword == null || this.companyRegisterPassword.isEmpty()) &&
-                        (this.companyRegisterPasswordEncrypted == null || this.companyRegisterPasswordEncrypted.length == 0)
+                        (overwrite || this.companyRegisterPasswordEncrypted == null || this.companyRegisterPasswordEncrypted.length == 0)
         ) {
             try {
                 this.companyRegisterPasswordEncrypted = Encryption.encrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterPassword);
+                if (clearPlain) {
+                    this.companyRegisterPassword = null;
+                }
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
@@ -431,11 +434,11 @@ public class CvrConfiguration implements Configuration {
         return false;
     }
 
-    public boolean encryptCompanyUnitRegisterPassword() {
+    public boolean encryptCompanyUnitRegisterPassword(boolean overwrite) {
         if (
                 this.companyUnitRegisterPasswordEncryptionFile != null &&
                         !(this.companyUnitRegisterPassword == null || this.companyUnitRegisterPassword.isEmpty()) &&
-                        (this.companyUnitRegisterPasswordEncrypted == null || this.companyUnitRegisterPasswordEncrypted.length == 0)
+                        (overwrite || this.companyUnitRegisterPasswordEncrypted == null || this.companyUnitRegisterPasswordEncrypted.length == 0)
         ) {
             try {
                 this.companyUnitRegisterPasswordEncrypted = Encryption.encrypt(this.companyUnitRegisterPasswordEncryptionFile, this.companyUnitRegisterPassword);
@@ -447,11 +450,11 @@ public class CvrConfiguration implements Configuration {
         return false;
     }
 
-    public boolean encryptParticipantRegisterPassword() {
+    public boolean encryptParticipantRegisterPassword(boolean overwrite) {
         if (
                 this.participantRegisterPasswordEncryptionFile != null &&
                         !(this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) &&
-                        (this.participantRegisterPasswordEncrypted == null || this.participantRegisterPasswordEncrypted.length == 0)
+                        (overwrite || this.participantRegisterPasswordEncrypted == null || this.participantRegisterPasswordEncrypted.length == 0)
         ) {
             try {
                 this.participantRegisterPasswordEncrypted = Encryption.encrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterPassword);
