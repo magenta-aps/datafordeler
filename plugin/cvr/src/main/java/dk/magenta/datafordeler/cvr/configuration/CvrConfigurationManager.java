@@ -66,12 +66,12 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
             try {
                 Transaction transaction = session.beginTransaction();
                 try {
-                    if (configuration.encryptCompanyDirectRegisterPassword(true)) {
+                    if (configuration.encryptCompanyDirectRegisterPassword(true, true)) {
                         // Must use merge instead of save, because we are updating an object that was born in another session
                         configuration = (CvrConfiguration) session.merge(configuration);
                         log.info("Encrypted company register password");
                     }
-                    if (configuration.encryptParticipantDirectRegisterPassword(true)) {
+                    if (configuration.encryptParticipantDirectRegisterPassword(true, true)) {
                         // Must use merge instead of save, because we are updating an object that was born in another session
                         configuration = (CvrConfiguration) session.merge(configuration);
                         log.info("Encrypted participant register password");
@@ -80,11 +80,11 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
                         configuration = (CvrConfiguration) session.merge(configuration);
                         log.info("Encrypted company register password");
                     }
-                    if (configuration.encryptCompanyUnitRegisterPassword(true)) {
+                    if (configuration.encryptCompanyUnitRegisterPassword(true, true)) {
                         configuration = (CvrConfiguration) session.merge(configuration);
                         log.info("Encrypted company unit register password");
                     }
-                    if (configuration.encryptParticipantRegisterPassword(true)) {
+                    if (configuration.encryptParticipantRegisterPassword(true, true)) {
                         configuration = (CvrConfiguration) session.merge(configuration);
                         log.info("Encrypted company unit register password");
                     }

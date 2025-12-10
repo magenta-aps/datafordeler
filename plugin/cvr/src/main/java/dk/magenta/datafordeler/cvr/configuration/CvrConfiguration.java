@@ -434,7 +434,7 @@ public class CvrConfiguration implements Configuration {
         return false;
     }
 
-    public boolean encryptCompanyUnitRegisterPassword(boolean overwrite) {
+    public boolean encryptCompanyUnitRegisterPassword(boolean overwrite, boolean clearPlain) {
         if (
                 this.companyUnitRegisterPasswordEncryptionFile != null &&
                         !(this.companyUnitRegisterPassword == null || this.companyUnitRegisterPassword.isEmpty()) &&
@@ -442,6 +442,9 @@ public class CvrConfiguration implements Configuration {
         ) {
             try {
                 this.companyUnitRegisterPasswordEncrypted = Encryption.encrypt(this.companyUnitRegisterPasswordEncryptionFile, this.companyUnitRegisterPassword);
+                if (clearPlain) {
+                    this.companyUnitRegisterPassword = null;
+                }
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
@@ -450,7 +453,7 @@ public class CvrConfiguration implements Configuration {
         return false;
     }
 
-    public boolean encryptParticipantRegisterPassword(boolean overwrite) {
+    public boolean encryptParticipantRegisterPassword(boolean overwrite, boolean clearPlain) {
         if (
                 this.participantRegisterPasswordEncryptionFile != null &&
                         !(this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) &&
@@ -458,6 +461,9 @@ public class CvrConfiguration implements Configuration {
         ) {
             try {
                 this.participantRegisterPasswordEncrypted = Encryption.encrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterPassword);
+                if (clearPlain) {
+                    this.participantRegisterPassword = null;
+                }
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
@@ -466,7 +472,7 @@ public class CvrConfiguration implements Configuration {
         return false;
     }
 
-    public boolean encryptCompanyDirectRegisterPassword(boolean overwrite) {
+    public boolean encryptCompanyDirectRegisterPassword(boolean overwrite, boolean clearPlain) {
         if (
                 this.companyRegisterPasswordEncryptionFile != null &&
                         !(this.companyRegisterDirectLookupPassword == null || this.companyRegisterDirectLookupPassword.isEmpty()) &&
@@ -474,7 +480,9 @@ public class CvrConfiguration implements Configuration {
         ) {
             try {
                 this.companyRegisterDirectLookupPasswordEncrypted = Encryption.encrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterDirectLookupPassword);
-                this.companyRegisterDirectLookupPassword = null;
+                if (clearPlain) {
+                    this.companyRegisterDirectLookupPassword = null;
+                }
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
@@ -484,7 +492,7 @@ public class CvrConfiguration implements Configuration {
     }
 
 
-    public boolean encryptParticipantDirectRegisterPassword(boolean overwrite) {
+    public boolean encryptParticipantDirectRegisterPassword(boolean overwrite, boolean clearPlain) {
         if (
                 this.participantRegisterPasswordEncryptionFile != null &&
                         !(this.participantRegisterDirectLookupPassword == null || this.participantRegisterDirectLookupPassword.isEmpty()) &&
@@ -492,7 +500,9 @@ public class CvrConfiguration implements Configuration {
         ) {
             try {
                 this.participantRegisterDirectLookupPasswordEncrypted = Encryption.encrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterDirectLookupPassword);
-                this.participantRegisterDirectLookupPassword = null;
+                if (clearPlain) {
+                    this.participantRegisterDirectLookupPassword = null;
+                }
                 return true;
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
