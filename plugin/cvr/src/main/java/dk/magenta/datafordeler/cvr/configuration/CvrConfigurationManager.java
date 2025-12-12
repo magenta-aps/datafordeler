@@ -46,20 +46,9 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
         return this.log;
     }
 
-    @Override
-    public CvrConfiguration getConfiguration() {
-        CvrConfiguration configuration = super.getConfiguration();
-        if (configuration != null) {
-            File encryptionFile = new File(configuration.getEncryptionKeyFileName());
-            configuration.setCompanyRegisterPasswordEncryptionFile(encryptionFile);
-            configuration.setCompanyUnitRegisterPasswordEncryptionFile(encryptionFile);
-            configuration.setParticipantRegisterPasswordEncryptionFile(encryptionFile);
-        }
-        return configuration;
-    }
-
     @PostConstruct
     public void encryptPasswords() {
+        log.info("Encrypting passwords");
         CvrConfiguration configuration = this.getConfiguration();
         if (configuration != null) {
             Session session = this.getSessionManager().getSessionFactory().openSession();
@@ -69,12 +58,12 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
                     if (configuration.encryptCompanyDirectRegisterPassword(true, true)) {
                         // Must use merge instead of save, because we are updating an object that was born in another session
                         configuration = (CvrConfiguration) session.merge(configuration);
-                        log.info("Encrypted company register password");
+                        log.info("Encrypted company direct register password");
                     }
                     if (configuration.encryptParticipantDirectRegisterPassword(true, true)) {
                         // Must use merge instead of save, because we are updating an object that was born in another session
                         configuration = (CvrConfiguration) session.merge(configuration);
-                        log.info("Encrypted participant register password");
+                        log.info("Encrypted participant direct register password");
                     }
                     if (configuration.encryptCompanyRegisterPassword(true, true)) {
                         configuration = (CvrConfiguration) session.merge(configuration);
@@ -86,7 +75,7 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
                     }
                     if (configuration.encryptParticipantRegisterPassword(true, true)) {
                         configuration = (CvrConfiguration) session.merge(configuration);
-                        log.info("Encrypted company unit register password");
+                        log.info("Encrypted company participant register password");
                     }
                     transaction.commit();
                 } catch (Exception e) {
