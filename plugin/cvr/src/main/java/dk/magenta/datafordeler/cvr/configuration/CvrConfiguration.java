@@ -470,10 +470,10 @@ public class CvrConfiguration implements Configuration {
             }
         } else {
             if (this.participantRegisterPasswordEncryptionFile == null) {
-                System.out.println("Keyfile does not exist");
+                System.out.println("Keyfile does not exist for encrypting participant register password");
             }
             if (this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) {
-                System.out.println("Plaintext password is empty");
+                System.out.println("Participant plaintext password is empty");
             }
         }
         return false;

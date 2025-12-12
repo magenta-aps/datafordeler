@@ -50,6 +50,7 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
     public CvrConfiguration getConfiguration() {
         CvrConfiguration configuration = super.getConfiguration();
         if (configuration != null) {
+            log.info("Using encryption key file: {}", configuration.getEncryptionKeyFileName());
             File encryptionFile = new File(configuration.getEncryptionKeyFileName());
             configuration.setCompanyRegisterPasswordEncryptionFile(encryptionFile);
             configuration.setCompanyUnitRegisterPasswordEncryptionFile(encryptionFile);
