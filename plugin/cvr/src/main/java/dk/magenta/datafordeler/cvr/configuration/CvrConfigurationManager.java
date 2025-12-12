@@ -86,7 +86,7 @@ public class CvrConfigurationManager extends ConfigurationManager<CvrConfigurati
                     }
                     if (configuration.encryptParticipantRegisterPassword(true, true)) {
                         configuration = (CvrConfiguration) session.merge(configuration);
-                        log.info("Encrypted company unit register password");
+                        log.info("Encrypted company participant register password");
                     }
                     transaction.commit();
                 } catch (Exception e) {
