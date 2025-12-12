@@ -459,13 +459,6 @@ public class CvrConfiguration implements Configuration {
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            if (encryptionKeyFile == null) {
-                System.out.println("Keyfile does not exist for encrypting participant register password");
-            }
-            if (this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) {
-                System.out.println("Participant plaintext password is empty");
-            }
         }
         return false;
     }
