@@ -460,7 +460,7 @@ public class CvrConfiguration implements Configuration {
                 e.printStackTrace();
             }
         } else {
-            if (this.participantRegisterPasswordEncryptionFile == null) {
+            if (encryptionKeyFile == null) {
                 System.out.println("Keyfile does not exist for encrypting participant register password");
             }
             if (this.participantRegisterPassword == null || this.participantRegisterPassword.isEmpty()) {
