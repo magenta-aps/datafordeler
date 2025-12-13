@@ -528,9 +528,14 @@ public class CvrConfiguration implements Configuration {
         return this.encryptionKeyFileName;
     }
 
+    @Transient
+    private File encryptionKeyFile = null;
+
     private File getEncryptionKeyFile() {
-        System.out.println("Encryption key file: " + this.encryptionKeyFileName);
-        return new File(this.encryptionKeyFileName);
+        if (this.encryptionKeyFile == null) {
+            this.encryptionKeyFile = new File(this.encryptionKeyFileName);
+        }
+        return this.encryptionKeyFile;
     }
 
     public String getLocalCopyFolder() {
