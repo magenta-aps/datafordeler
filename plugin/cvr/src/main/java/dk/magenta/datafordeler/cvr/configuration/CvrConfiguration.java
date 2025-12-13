@@ -65,9 +65,6 @@ public class CvrConfiguration implements Configuration {
     @Column
     private byte[] companyRegisterPasswordEncrypted;
 
-    @Transient
-    private File companyRegisterPasswordEncryptionFile;
-
     @Column(length = 8192)
     public String companyRegisterQuery = "{\n" +
             "  \"query\": {\n" +
@@ -144,7 +141,7 @@ public class CvrConfiguration implements Configuration {
     }
 
     public String getCompanyRegisterPassword() throws GeneralSecurityException, IOException {
-        return Encryption.decrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterPasswordEncrypted);
+        return Encryption.decrypt(this.getEncryptionKeyFile(), this.companyRegisterPasswordEncrypted);
     }
 
     public String getCompanyRegisterQuery() {
@@ -156,7 +153,7 @@ public class CvrConfiguration implements Configuration {
     }
 
     public String getCompanyRegisterDirectLookupPassword() throws GeneralSecurityException, IOException {
-        return Encryption.decrypt(this.companyRegisterPasswordEncryptionFile, this.companyRegisterDirectLookupPasswordEncrypted);
+        return Encryption.decrypt(this.getEncryptionKeyFile(), this.companyRegisterDirectLookupPasswordEncrypted);
     }
 
     public String getCompanyRegisterDirectLookupAddress() {
@@ -181,9 +178,6 @@ public class CvrConfiguration implements Configuration {
 
     @Column
     private byte[] companyUnitRegisterPasswordEncrypted;
-
-    @Transient
-    private File companyUnitRegisterPasswordEncryptionFile;
 
     @Column(length = 8192)
     private String companyUnitRegisterQuery = "{ \n" +
@@ -224,7 +218,7 @@ public class CvrConfiguration implements Configuration {
     }
 
     public String getCompanyUnitRegisterPassword() throws GeneralSecurityException, IOException {
-        return Encryption.decrypt(this.companyUnitRegisterPasswordEncryptionFile, this.companyUnitRegisterPasswordEncrypted);
+        return Encryption.decrypt(this.getEncryptionKeyFile(), this.companyUnitRegisterPasswordEncrypted);
     }
 
     public String getCompanyUnitRegisterQuery() {
@@ -250,9 +244,6 @@ public class CvrConfiguration implements Configuration {
 
     @Column
     private byte[] participantRegisterPasswordEncrypted;
-
-    @Transient
-    private File participantRegisterPasswordEncryptionFile;
 
     @Column(length = 8192)
     private String participantRegisterQuery = "{ \n" +
@@ -306,7 +297,7 @@ public class CvrConfiguration implements Configuration {
     }
 
     public String getParticipantRegisterPassword() throws GeneralSecurityException, IOException {
-        return Encryption.decrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterPasswordEncrypted);
+        return Encryption.decrypt(this.getEncryptionKeyFile(), this.participantRegisterPasswordEncrypted);
     }
 
     public String getParticipantRegisterQuery() {
@@ -318,7 +309,7 @@ public class CvrConfiguration implements Configuration {
     }
 
     public String getParticipantRegisterDirectLookupPassword() throws GeneralSecurityException, IOException {
-        return Encryption.decrypt(this.participantRegisterPasswordEncryptionFile, this.participantRegisterDirectLookupPasswordEncrypted);
+        return Encryption.decrypt(this.getEncryptionKeyFile(), this.participantRegisterDirectLookupPasswordEncrypted);
     }
 
     public String getParticipantRegisterDirectLookupAddress() {
@@ -538,6 +529,7 @@ public class CvrConfiguration implements Configuration {
     }
 
     private File getEncryptionKeyFile() {
+        System.out.println("Encryption key file: " + this.encryptionKeyFileName);
         return new File(this.encryptionKeyFileName);
     }
 
