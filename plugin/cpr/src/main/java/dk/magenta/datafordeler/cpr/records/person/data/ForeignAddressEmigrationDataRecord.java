@@ -105,7 +105,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
         this.emigrationRegistrationNew = emigrationRegistration;
     }
     public OffsetDateTime getEmigrationRegistration() {
-        return Bitemporal.fixOffsetOut(this.emigrationRegistration);
+        return this.emigrationRegistrationNew;
     }
 
 
@@ -121,7 +121,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public OffsetDateTime getImmigrationRegistration() {
-        return Bitemporal.fixOffsetOut(this.immigrationRegistration);
+        return this.immigrationRegistrationNew;
     }
 
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)

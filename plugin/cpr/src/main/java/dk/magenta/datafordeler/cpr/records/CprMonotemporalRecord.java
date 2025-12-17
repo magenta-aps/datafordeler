@@ -9,12 +9,10 @@ import jakarta.persistence.MappedSuperclass;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 @MappedSuperclass
 public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends CprMonotemporalRecord<E, S>> extends CprNontemporalRecord<E, S> implements Monotemporal {
@@ -38,7 +36,7 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
-        return fixOffsetOut(this.registrationFrom);
+        return this.registrationFromNew;
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
@@ -60,7 +58,7 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
-        return fixOffsetOut(this.registrationTo);
+        return this.registrationToNew;
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)

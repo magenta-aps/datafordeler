@@ -1,8 +1,8 @@
 package dk.magenta.datafordeler.core.database;
 
 import dk.magenta.datafordeler.core.plugin.Plugin;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 import java.io.File;
 import java.time.OffsetDateTime;
@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * Entity that stores data about an interrupted Pull. When a running Pull is interrupted,
@@ -63,7 +62,7 @@ public class InterruptedPull extends DatabaseEntry {
     private OffsetDateTime startTimeNew;
 
     public OffsetDateTime getStartTime() {
-        return fixOffsetOut(this.startTime);
+        return this.startTimeNew;
     }
 
     public void setStartTime(OffsetDateTime startTime) {
@@ -79,7 +78,7 @@ public class InterruptedPull extends DatabaseEntry {
     private OffsetDateTime interruptTimeNew;
 
     public OffsetDateTime getInterruptTime() {
-        return fixOffsetOut(this.interruptTime);
+        return this.interruptTimeNew;
     }
 
     public void setInterruptTime(OffsetDateTime interruptTime) {

@@ -52,7 +52,7 @@ public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return this.dafoUpdatedNew;
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
