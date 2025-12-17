@@ -15,10 +15,12 @@ import org.hibernate.Session;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED;
 
 @MappedSuperclass
@@ -66,7 +68,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     private OffsetDateTime creationDateNew;
 
     public OffsetDateTime getCreationDate() {
-        return fixOffsetOut(this.creationDate);
+        return this.creationDateNew;
     }
 
     @JsonProperty(value = "CreationDate")
@@ -88,7 +90,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     private OffsetDateTime editDateNew;
 
     public OffsetDateTime getEditDate() {
-        return fixOffsetOut(this.editDate);
+        return this.editDateNew;
     }
 
     @JsonProperty(value = "EditDate")
@@ -114,7 +116,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return this.dafoUpdated;
+        return this.dafoUpdatedNew;
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {

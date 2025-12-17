@@ -11,12 +11,10 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 
 @Entity
@@ -67,7 +65,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
 
     public OffsetDateTime getTimestamp() {
-        return fixOffsetOut(timestamp);
+        return timestampNew;
     }
 
     public static final String DB_FIELD_FIELD = "field";

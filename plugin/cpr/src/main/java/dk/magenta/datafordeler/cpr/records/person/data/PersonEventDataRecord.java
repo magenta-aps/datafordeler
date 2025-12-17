@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * Storage for data on a Person's eventhistory
@@ -63,7 +62,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public OffsetDateTime getTimestamp() {
-        return fixOffsetOut(timestamp);
+        return this.timestampNew;
     }
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";

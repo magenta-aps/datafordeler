@@ -17,7 +17,6 @@ import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * An Effect defines the time range in which a piece of data has effect.
@@ -126,7 +125,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     private OffsetDateTime effectFromNew;
 
     public OffsetDateTime getEffectFrom() {
-        return fixOffsetOut(this.effectFrom);
+        return this.effectFromNew;
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
@@ -147,7 +146,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     private OffsetDateTime effectToNew;
 
     public OffsetDateTime getEffectTo() {
-        return fixOffsetOut(this.effectTo);
+        return this.effectToNew;
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {

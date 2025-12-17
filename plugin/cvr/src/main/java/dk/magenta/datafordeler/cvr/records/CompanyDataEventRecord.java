@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 
 @Entity
@@ -58,7 +57,7 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
 
     public OffsetDateTime getTimestamp() {
-        return fixOffsetOut(timestamp);
+        return this.timestampNew;
     }
 
     public static final String DB_FIELD_FIELD = "field";

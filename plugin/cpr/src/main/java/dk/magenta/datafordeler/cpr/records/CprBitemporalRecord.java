@@ -75,7 +75,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     private OffsetDateTime effectToNew;
 
     public OffsetDateTime getEffectTo() {
-        return Bitemporal.fixOffsetOut(this.effectTo);
+        return this.effectToNew;
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {

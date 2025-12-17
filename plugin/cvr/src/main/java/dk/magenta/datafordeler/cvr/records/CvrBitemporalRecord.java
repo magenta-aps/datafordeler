@@ -8,24 +8,18 @@ import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
-import dk.magenta.datafordeler.cvr.BitemporalSet;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
-import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.stream.Stream;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
-import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED;
 
 @MappedSuperclass
 public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord>, MigrateModel {
@@ -113,7 +107,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     @JsonIgnore
     public OffsetDateTime getLastLoaded() {
-        return fixOffsetOut(this.lastLoaded);
+        return this.lastLoadedNew;
     }
 
     public void setLastLoaded(OffsetDateTime lastLoaded) {
@@ -124,7 +118,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     @JsonIgnore
     public OffsetDateTime getRegistrationFrom() {
-        return fixOffsetOut((this.lastUpdated != null) ? this.lastUpdated : this.lastLoaded);
+        return (this.lastUpdatedNew != null) ? this.lastUpdatedNew : this.lastLoadedNew;
     }
 
     public void setRegistrationFrom(OffsetDateTime offsetDateTime) {
@@ -195,7 +189,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
 
     public OffsetDateTime getRegistrationTo() {
-        return fixOffsetOut(this.registrationTo);
+        return this.registrationToNew;
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {

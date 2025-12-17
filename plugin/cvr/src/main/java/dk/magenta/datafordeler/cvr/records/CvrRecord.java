@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 
 /**
@@ -40,7 +39,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     // @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     @JsonIgnore
     public OffsetDateTime getDafoUpdated() {
-        return fixOffsetOut(this.dafoUpdated);
+        return this.dafoUpdatedNew;
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {

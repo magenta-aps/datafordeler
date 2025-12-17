@@ -35,7 +35,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
 
 
     public OffsetDateTime getRegistrationFrom() {
-        return fixOffsetOut(this.registrationFrom);
+        return this.registrationFromNew;
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
@@ -62,7 +62,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     private OffsetDateTime registrationToNew;
 
     public OffsetDateTime getRegistrationTo() {
-        return fixOffsetOut(this.registrationTo);
+        return this.registrationToNew;
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {

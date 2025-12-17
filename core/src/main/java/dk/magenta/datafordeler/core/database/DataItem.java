@@ -8,7 +8,6 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * Superclass for bitemporal data, pointing to Effects objects.
@@ -97,7 +96,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     private OffsetDateTime lastUpdatedNew;
 
     public OffsetDateTime getLastUpdated() {
-        return fixOffsetOut(this.lastUpdated);
+        return this.lastUpdatedNew;
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
