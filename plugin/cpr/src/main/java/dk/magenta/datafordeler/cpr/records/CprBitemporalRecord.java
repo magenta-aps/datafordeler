@@ -34,15 +34,15 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
     @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_FROM+"_new")
     private OffsetDateTime effectFromNew;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     public OffsetDateTime getEffectFrom() {
-        return Bitemporal.fixOffsetOut(this.effectFrom);
+        return this.effectFromNew;
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
