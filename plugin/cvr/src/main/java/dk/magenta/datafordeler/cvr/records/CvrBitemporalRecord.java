@@ -74,17 +74,15 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
     @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_LAST_UPDATED)
     private OffsetDateTime lastUpdated;
 
     @JsonIgnore
     @Column(name = DB_FIELD_LAST_UPDATED+"_new")
     protected OffsetDateTime lastUpdatedNew;
 
-
-    @JsonIgnore
+    @JsonProperty(value = IO_FIELD_LAST_UPDATED)
     public OffsetDateTime getLastUpdated() {
-        return fixOffsetOut(this.lastUpdated);
+        return this.lastUpdatedNew;
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
