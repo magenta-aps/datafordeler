@@ -580,7 +580,7 @@ public class FapiTest {
             session.persist(demoEntityRecord);
 
             DemoDataRecord demoDataRecord1 = new DemoDataRecord("Århus C");
-            demoDataRecord1.setBitemporality("2017-02-21T16:02:50+01:00", "2017-05-01T15:06:22+01:00", "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
+            demoDataRecord1.setBitemporality("2017-02-21T16:02:50+01:00", "2017-05-01T16:06:22+02:00", "2017-02-22T13:59:30+01:00", "2017-12-31T23:59:59+01:00");
             demoEntityRecord.addBitemporalRecord(demoDataRecord1, session);
 
             DemoDataRecord demoDataRecord2 = new DemoDataRecord("AArhus C");
@@ -592,7 +592,7 @@ public class FapiTest {
             demoEntityRecord.addBitemporalRecord(demoDataRecord3, session);
 
             DemoDataRecord demoDataRecord4 = new DemoDataRecord("Aarhus C");
-            demoDataRecord4.setBitemporality("2017-05-01T15:06:22+01:00", null, "2018-01-01T00:00:00+01:00", null);
+            demoDataRecord4.setBitemporality("2017-05-01T16:06:22+02:00", null, "2018-01-01T00:00:00+01:00", null);
             demoEntityRecord.addBitemporalRecord(demoDataRecord4, session);
 
             transaction.commit();
