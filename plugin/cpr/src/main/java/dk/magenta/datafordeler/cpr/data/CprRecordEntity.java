@@ -11,13 +11,10 @@ import jakarta.persistence.*;
 import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 @MappedSuperclass
 public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity, MigrateModel {
@@ -71,7 +68,7 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return fixOffsetOut(this.dafoUpdated);
+        return this.dafoUpdatedNew;
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {

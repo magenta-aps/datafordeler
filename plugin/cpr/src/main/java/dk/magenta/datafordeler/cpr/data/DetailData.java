@@ -9,10 +9,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 @MappedSuperclass
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -30,7 +32,7 @@ public abstract class DetailData extends DatabaseEntry {
 
     @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return fixOffsetOut(this.dafoUpdated);
+        return this.dafoUpdatedNew;
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {

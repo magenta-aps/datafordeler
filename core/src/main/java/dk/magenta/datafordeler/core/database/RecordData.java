@@ -2,16 +2,13 @@ package dk.magenta.datafordeler.core.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.util.Equality;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * Storage of how we got a piece of data into the system, ie. source, date, ...
@@ -44,7 +41,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     private OffsetDateTime timestamp;
 
     public OffsetDateTime getTimestamp() {
-        return fixOffsetOut(this.timestamp);
+        return this.timestampNew;
     }
 
     @JsonIgnore

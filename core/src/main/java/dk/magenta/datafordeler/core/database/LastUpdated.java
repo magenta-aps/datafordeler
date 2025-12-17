@@ -5,12 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * A database entry for storing the timestamp of the last successful import
@@ -53,7 +50,7 @@ public class LastUpdated extends DatabaseEntry {
     }
 
     public OffsetDateTime getTimestamp() {
-        return fixOffsetOut(this.timestamp);
+        return this.timestampNew;
     }
 
     public void setTimestamp(OffsetDateTime timestamp) {

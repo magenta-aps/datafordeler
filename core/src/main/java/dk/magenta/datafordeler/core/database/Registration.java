@@ -14,7 +14,6 @@ import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 /**
  * A Registration defines the time range in which a piece of data is "registered",
@@ -213,7 +212,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public OffsetDateTime getRegistrationFrom() {
-        return fixOffsetOut(this.registrationFrom);
+        return this.registrationFromNew;
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
@@ -235,7 +234,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public OffsetDateTime getRegistrationTo() {
-        return fixOffsetOut(this.registrationTo);
+        return this.registrationToNew;
     }
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
@@ -287,7 +286,7 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty("sidstImporteret")
     public OffsetDateTime getLastImportTime() {
-        return fixOffsetOut(this.lastImportTime);
+        return this.lastImportTimeNew;
     }
 
     public void setLastImportTime(OffsetDateTime lastImportTime) {

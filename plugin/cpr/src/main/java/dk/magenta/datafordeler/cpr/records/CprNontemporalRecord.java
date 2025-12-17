@@ -14,15 +14,12 @@ import org.apache.logging.log4j.Logger;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetOut;
 
 @MappedSuperclass
 public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal, MigrateModel {
@@ -213,7 +210,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     @JsonProperty(value = IO_FIELD_UPDATED)
     public OffsetDateTime getDafoUpdated() {
-        return fixOffsetOut(this.dafoUpdated);
+        return this.dafoUpdatedNew;
     }
 
     @Override
