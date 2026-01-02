@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import jakarta.persistence.*;
@@ -135,6 +136,6 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.timestampNew = this.getTimestamp();
+        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 }

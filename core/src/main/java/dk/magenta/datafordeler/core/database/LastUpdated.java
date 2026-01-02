@@ -59,7 +59,7 @@ public class LastUpdated extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
-        this.timestampNew = this.getTimestamp();
+        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {

@@ -392,9 +392,9 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
     public void updateTimestamp() {
-        this.lastImportTimeNew = this.getLastImportTime();
-        this.registrationFromNew = this.getRegistrationFrom();
-        this.registrationToNew = this.getRegistrationTo();
+        this.lastImportTimeNew = Bitemporal.fixOffsetOut(this.lastImportTime);
+        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
+        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
         for (V effect : this.effects) {
             effect.updateTimestamp();
         }
