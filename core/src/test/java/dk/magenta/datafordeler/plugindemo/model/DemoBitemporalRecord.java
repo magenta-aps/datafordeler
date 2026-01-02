@@ -166,11 +166,11 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     }
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = this.getDafoUpdated();
-        this.registrationFromNew = this.getRegistrationFrom();
-        this.registrationToNew = this.getRegistrationTo();
-        this.effectFromNew = this.getEffectFrom();
-        this.effectToNew = this.getEffectTo();
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
+        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
+        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
+        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public static List<String> updateFields() {

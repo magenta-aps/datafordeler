@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cvr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -100,6 +101,6 @@ public abstract class CvrRecord extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = this.getDafoUpdated();
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 }

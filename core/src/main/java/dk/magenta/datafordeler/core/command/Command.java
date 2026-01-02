@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.configuration.Configuration;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
@@ -200,8 +201,8 @@ public final class Command extends DatabaseEntry implements Configuration, Migra
 
 
     public void updateTimestamp() {
-        this.receivedNew = this.getReceived();
-        this.handledNew = this.getHandled();
+        this.receivedNew = Bitemporal.fixOffsetOut(this.received);
+        this.handledNew = Bitemporal.fixOffsetOut(this.handled);
     }
 
     public static List<String> updateFields() {

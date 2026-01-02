@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.records.person.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -116,7 +117,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.timestampNew = this.getTimestamp();
+        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {

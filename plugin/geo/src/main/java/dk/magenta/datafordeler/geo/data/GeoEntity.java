@@ -3,10 +3,7 @@ package dk.magenta.datafordeler.geo.data;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.DatabaseEntry;
-import dk.magenta.datafordeler.core.database.Identification;
-import dk.magenta.datafordeler.core.database.IdentifiedEntity;
-import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import jakarta.persistence.*;
@@ -165,9 +162,9 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
 
     public void updateTimestamp() {
-        this.creationDateNew = this.getCreationDate();
-        this.editDateNew = this.getEditDate();
-        this.dafoUpdatedNew = this.getDafoUpdated();
+        this.creationDateNew = Bitemporal.fixOffsetOut(this.creationDate);
+        this.editDateNew = Bitemporal.fixOffsetOut(this.editDate);
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     public static List<String> updateFields() {
