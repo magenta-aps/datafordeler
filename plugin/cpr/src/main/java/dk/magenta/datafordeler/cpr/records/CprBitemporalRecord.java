@@ -252,8 +252,8 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.effectFromNew = this.getEffectFrom();
-        this.effectToNew = this.getEffectTo();
+        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
+        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
         System.out.println("Updated effectFromNew for "+this.getId()+" to "+this.effectFromNew);
         System.out.println("Updated effectToNew for "+this.getId()+" to "+this.effectToNew);
     }

@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.records;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Nontemporal;
@@ -288,7 +289,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
     }
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = this.getDafoUpdated();
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
         System.out.println("Updated dafoUpdatedNew for "+this.getId()+" to "+this.dafoUpdatedNew);
     }
 
