@@ -119,8 +119,6 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
         super.updateTimestamp();
         this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
         this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
-        System.out.println("Updated registrationFromNew for "+this.getId()+" to "+this.registrationFromNew);
-        System.out.println("Updated registrationToNew for "+this.getId()+" to "+this.registrationToNew);
     }
 
     public static List<String> updateFields() {

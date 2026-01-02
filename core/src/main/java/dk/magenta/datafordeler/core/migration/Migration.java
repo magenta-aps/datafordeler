@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.core.migration;
 
 import dk.magenta.datafordeler.core.Engine;
+import dk.magenta.datafordeler.core.exception.EndIteration;
 import jakarta.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.reflections.Reflections;
@@ -86,20 +87,15 @@ public class Migration {
                 query.setMaxResults(1000);
                 List<T> list = query.getResultList();
                 if (list.isEmpty()) {
-                    transaction.rollback();
-                    break;
+                    throw new EndIteration("Empty results");
                 }
                 for (T t : list) {
                     Long id = t.getId();
                     if (id == null) {
-                        System.out.println("Null id");
-                        transaction.rollback();
-                        break;
+                        throw new EndIteration("No id");
                     }
                     if (seen.contains(id)) {
-                        System.out.println("Already seen " + id);
-                        transaction.rollback();
-                        break;
+                        throw new EndIteration("Already seen " + id);
                     }
                     updateTimestamp.invoke(t);
                     seen.add(id);
@@ -108,6 +104,10 @@ public class Migration {
                 session.clear();
                 count += list.size();
                 System.out.println(count);
+            } catch (EndIteration e) {
+                System.out.println(e.getReason());
+                transaction.rollback();
+                break;
             } catch (Exception e) {
                 e.printStackTrace();
                 transaction.rollback();
