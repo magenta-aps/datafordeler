@@ -164,8 +164,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.emigrationRegistrationNew = this.getEmigrationRegistration();
-        this.immigrationRegistrationNew = this.getImmigrationRegistration();
+        this.emigrationRegistrationNew = Bitemporal.fixOffsetOut(this.emigrationRegistration);
+        this.immigrationRegistrationNew = Bitemporal.fixOffsetOut(this.immigrationRegistration);
     }
 
     public static List<String> updateFields() {

@@ -2,10 +2,7 @@ package dk.magenta.datafordeler.cpr.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.DatabaseEntry;
-import dk.magenta.datafordeler.core.database.Identification;
-import dk.magenta.datafordeler.core.database.IdentifiedEntity;
-import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.database.*;
 import dk.magenta.datafordeler.core.migration.MigrateModel;
 import jakarta.persistence.*;
 import org.hibernate.Session;
@@ -77,7 +74,7 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     }
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = this.getDafoUpdated();
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     public static List<String> updateFields() {

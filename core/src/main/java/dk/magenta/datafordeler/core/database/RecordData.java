@@ -79,7 +79,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
     public void updateTimestamp() {
-        this.timestampNew = this.getTimestamp();
+        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {

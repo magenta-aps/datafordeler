@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Monotemporality;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
@@ -167,8 +168,8 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.registrationFromNew = this.getRegistrationFrom();
-        this.registrationToNew = this.getRegistrationTo();
+        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
+        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
     }
 
     public static List<String> updateFields() {

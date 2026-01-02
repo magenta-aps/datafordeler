@@ -9,4 +9,6 @@ public interface MigrateModel {
     static List<String> updateFields() {
         return Collections.emptyList();
     }
+
+    public Long getId();
 }

@@ -168,7 +168,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     public abstract void forceLoad(Session session);
 
     public void updateTimestamp() {
-        this.lastUpdatedNew = this.getLastUpdated();
+        this.lastUpdatedNew = Bitemporal.fixOffsetOut(this.lastUpdated);
     }
 
     public static List<String> updateFields() {

@@ -138,8 +138,8 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
-        this.startTimeNew = this.getStartTime();
-        this.interruptTimeNew = this.getInterruptTime();
+        this.startTimeNew = Bitemporal.fixOffsetOut(this.startTime);
+        this.interruptTimeNew = Bitemporal.fixOffsetOut(this.interruptTime);
     }
 
     public static List<String> updateFields() {

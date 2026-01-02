@@ -287,8 +287,8 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void updateTimestamp() {
-        this.effectFromNew = this.getEffectFrom();
-        this.effectToNew = this.getEffectTo();
+        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
+        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public static List<String> updateFields() {
