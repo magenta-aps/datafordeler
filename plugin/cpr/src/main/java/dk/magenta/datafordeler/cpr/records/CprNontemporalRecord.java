@@ -289,6 +289,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     public void updateTimestamp() {
         this.dafoUpdatedNew = this.getDafoUpdated();
+        System.out.println("Updated dafoUpdatedNew for "+this.getId()+" to "+this.dafoUpdatedNew);
     }
 
     public static List<String> updateFields() {

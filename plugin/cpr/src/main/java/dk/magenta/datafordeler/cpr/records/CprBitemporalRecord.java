@@ -227,6 +227,8 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         CprMonotemporalRecord.copy(from, to);
         to.effectFrom = from.effectFrom;
         to.effectTo = from.effectTo;
+        to.effectFromNew = from.effectFromNew;
+        to.effectToNew = from.effectToNew;
     }
 
     @Override
@@ -252,6 +254,8 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         super.updateTimestamp();
         this.effectFromNew = this.getEffectFrom();
         this.effectToNew = this.getEffectTo();
+        System.out.println("Updated effectFromNew for "+this.getId()+" to "+this.effectFromNew);
+        System.out.println("Updated effectToNew for "+this.getId()+" to "+this.effectToNew);
     }
 
     public static List<String> updateFields() {

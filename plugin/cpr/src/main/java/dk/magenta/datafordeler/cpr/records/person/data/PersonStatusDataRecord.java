@@ -88,7 +88,7 @@ public class PersonStatusDataRecord extends CprBitemporalPersonRecord<PersonStat
     public PersonStatusDataRecord clone() {
         PersonStatusDataRecord clone = new PersonStatusDataRecord();
         clone.status = this.status;
-        clone.line = "cloned from" + this.line;
+        clone.line = "cloned from " + this.line;
         CprBitemporalRecord.copy(this, clone);
         return clone;
     }

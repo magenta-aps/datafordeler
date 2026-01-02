@@ -77,6 +77,7 @@ public class Migration {
         String hql = "from " + model.getCanonicalName() + " where " + s;
         System.out.println(hql);
         long count = 0;
+        HashSet<Long> seen = new HashSet<>();
         for (int offset=0; offset<100000000; offset+=1000) {
             Transaction transaction = session.beginTransaction();
             try {
@@ -89,7 +90,19 @@ public class Migration {
                     break;
                 }
                 for (T t : list) {
+                    Long id = t.getId();
+                    if (id == null) {
+                        System.out.println("Null id");
+                        transaction.rollback();
+                        break;
+                    }
+                    if (seen.contains(id)) {
+                        System.out.println("Already seen " + id);
+                        transaction.rollback();
+                        break;
+                    }
                     updateTimestamp.invoke(t);
+                    seen.add(id);
                 }
                 session.flush();
                 session.clear();

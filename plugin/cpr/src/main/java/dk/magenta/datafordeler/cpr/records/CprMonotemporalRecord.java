@@ -110,12 +110,16 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
         CprNontemporalRecord.copy(from, to);
         to.registrationFrom = from.registrationFrom;
         to.registrationTo = from.registrationTo;
+        to.registrationFromNew = from.registrationFromNew;
+        to.registrationToNew = from.registrationToNew;
     }
 
     public void updateTimestamp() {
         super.updateTimestamp();
         this.registrationFromNew = this.getRegistrationFrom();
         this.registrationToNew = this.getRegistrationTo();
+        System.out.println("Updated registrationFromNew for "+this.getId()+" to "+this.registrationFromNew);
+        System.out.println("Updated registrationToNew for "+this.getId()+" to "+this.registrationToNew);
     }
 
     public static List<String> updateFields() {
