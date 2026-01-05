@@ -187,6 +187,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     private OffsetDateTime registrationToNew;
 
 
+    @JsonIgnore
     public OffsetDateTime getRegistrationTo() {
         return this.registrationToNew;
     }
