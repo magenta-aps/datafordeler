@@ -321,7 +321,7 @@ public class CvrRegisterManager extends RegisterManager {
                         }
                     }
                     if (!cacheFile.exists()) {
-                        log.info("Fetching CVR data for schema "+schema+" with username "+configuration.getUsername(schema)+" and request body "+requestBody);
+                        log.info("Fetching CVR data for schema "+schema+" with request body "+requestBody);
                         eventCommunicator.setUsername(configuration.getUsername(schema));
                         eventCommunicator.setPassword(configuration.getPassword(schema));
 
