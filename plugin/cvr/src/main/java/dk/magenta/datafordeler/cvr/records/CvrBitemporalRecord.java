@@ -310,9 +310,61 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
+
+        ArrayList<T> registrationOrdered = new ArrayList<>(records);
+        if (!records.isEmpty()) {
+            registrationOrdered.sort(
+                    Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                            .thenComparing(T::getRegistrationTo, Comparator.nullsLast(Comparator.naturalOrder()))
+                            .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                            .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
+            );
+            T previous = null;
+
+//            System.out.println("Before:");
+//            for (T current : registrationOrdered) {
+//                System.out.println("    " + current.getBitemporality() + "   " + current.debug_name());
+//            }
+
+            for (T current : registrationOrdered) {
+                if (previous != null) {
+                    if (previous.getRegistrationTo() == null && previous.getEffectTo() == null && current.getEffectTo() != null) {
+                        // A value has ended; what was once open (without effectTo) is now closed in another registration
+                        // Update the previous registration to end when this one begins
+                        previous.setRegistrationTo(current.getRegistrationFrom());
+                    }
+
+//                if (current.getBitemporality().contains(previous.getBitemporality()) && previous.equals(current)) {
+//                Should remove previous; it is wholly contained in current and has the same value
+//                }
+//                if (previous.equals(current) && previous.getBitemporality().containsEffect(current.getBitemporality()) && previous.getBitemporality().overlaps(current.getBitemporality())) {
+//                    De to skal sættes sammen til én
+//                    current.setRegistrationFrom(previous.getRegistrationFrom());
+//                    current.setEffectFrom(Bitemporality.min(previous.getEffectFrom(), current.getEffectFrom(), true));
+//                    current.setEffectTo(Bitemporality.max(previous.getEffectTo(), current.getEffectTo(), true));
+//                    current.setRegistrationFrom(Bitemporality.min(previous.getRegistrationFrom(), current.getRegistrationFrom(), true));
+//                    current.setRegistrationTo(Bitemporality.max(previous.getRegistrationTo(), current.getRegistrationTo(), true));
+//                    // remove previous
+//                }
+
+                }
+                previous = current;
+            }
+            registrationOrdered.sort(
+                    Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                            .thenComparing(T::getRegistrationTo, Comparator.nullsLast(Comparator.naturalOrder()))
+                            .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                            .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
+            );
+
+//            System.out.println("After:");
+//            for (T current : registrationOrdered) {
+//                System.out.println("    " + current.getBitemporality() + "   " + current.debug_name());
+//            }
+        }
+
         return updated;
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -138,4 +138,9 @@ public class ContactRecord extends CvrBitemporalDataRecord implements Cloneable 
         clone.setContactInformation(this.contactInformation);
         return clone;
     }
+
+
+    protected String debug_name() {
+        return this.contactInformation + (this.secret ? " (secret)" : " (not secret)");
+    }
 }
