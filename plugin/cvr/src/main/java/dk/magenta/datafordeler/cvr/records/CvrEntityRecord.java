@@ -192,7 +192,6 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         omitClasses.add(CompanyParticipantRelationRecord.class);
         this.traverse(
             cvrRecords -> {
-                System.out.println("Closing "+cvrRecords.size()+" records of type "+cvrRecords.getRecordClass().getCanonicalName());
                 Class<? extends CvrRecord> recordClass = cvrRecords.getRecordClass();
                 if (CvrBitemporalRecord.class.isAssignableFrom(recordClass)) {
                     if (!omitClasses.contains(recordClass)) {
