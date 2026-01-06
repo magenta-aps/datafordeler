@@ -117,6 +117,7 @@ public abstract class FtpCommunicator implements Communicator {
 
     protected FTPClient performConnect(URI uri) throws IOException, DataStreamException {
         FTPClient ftpClient = new FTPClient();
+        ftpClient.setPassive(true);
         if (this.useFtps) {
             ftpClient.setSecurity(FTPClient.SECURITY_FTPS);
             log.info("Connecting to " + uri.toString()+", using ftps");
