@@ -338,7 +338,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 //                Should remove previous; it is wholly contained in current and has the same value
 //                }
 //                if (previous.equals(current) && previous.getBitemporality().containsEffect(current.getBitemporality()) && previous.getBitemporality().overlaps(current.getBitemporality())) {
-//                    De to skal sættes sammen til én
+//                    De to har samme værdi og ligger bitemporalt sammen. De skal sættes sammen til én
+//                    Se f.eks. Magenta's branchedata
 //                    current.setRegistrationFrom(previous.getRegistrationFrom());
 //                    current.setEffectFrom(Bitemporality.min(previous.getEffectFrom(), current.getEffectFrom(), true));
 //                    current.setEffectTo(Bitemporality.max(previous.getEffectTo(), current.getEffectTo(), true));
