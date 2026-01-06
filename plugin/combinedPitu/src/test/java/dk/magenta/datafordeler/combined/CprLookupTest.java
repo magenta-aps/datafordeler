@@ -388,15 +388,15 @@ public class CprLookupTest extends TestBase {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0101001235\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956,\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\",\"postnummer\":3962,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"}},\"far\":{},\"mor\":{\"cprNummer\":\"0101001234\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\",\"adresse\":{\"tilflytningsdato\":\"2016-08-31\",\"myndighedskode\":956,\"vejkode\":254,\"kommune\":\"Kommuneqarfik Sermersooq\",\"adresse\":\"Mut aqqut 18, 1. tv (B-3197)\",\"postnummer\":3962,\"bynavn\":null,\"stedkode\":600,\"landekode\":\"GL\"},\"myndighedshaver\":false},\"soeskende\":[{\"cprNummer\":\"0101001235\",\"fornavn\":\"Tester Testmember\",\"efternavn\":\"Testersen\"}]}", response.getBody(), JSONCompareMode.LENIENT);
 
-        //Find familyrelation of "0312600013", this person has a strange formatted fathers cpr (0000000000)
+        //Find familyrelation of "0311620013", this person has a strange formatted fathers cpr (0000000000)
         response = restTemplate.exchange(
-                "/combined/familyRelation/1/cpr/0312600013",
+                "/combined/familyRelation/1/cpr/0311620013",
                 HttpMethod.GET,
                 httpEntity,
                 String.class
         );
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0312600013\",\"adresse\":{\"tilflytningsdato\":\"2016-10-15\"," +
+        JSONAssert.assertEquals("{\"person\":{\"cprNummer\":\"0311620013\",\"adresse\":{\"tilflytningsdato\":\"2016-10-15\"," +
                 "\"myndighedskode\":541,\"vejkode\":5411,\"kommune\":null,\"postnummer\":0,\"bynavn\":null,\"stedkode\":0,\"landekode\":\"DK\"}},\"far\":{},\"mor\":{},\"soeskende\":[]}", response.getBody(), JSONCompareMode.LENIENT);
 
         //Find familyrelation of "0101141234", this person has a father which does not have custody, and a mother which does not exist in the dataset
