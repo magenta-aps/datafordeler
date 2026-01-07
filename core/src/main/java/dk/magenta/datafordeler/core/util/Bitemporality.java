@@ -125,16 +125,44 @@ public class Bitemporality implements Comparable<Bitemporality> {
         return (this.registrationFrom == null || (rangeStart != null && !rangeStart.isBefore(this.registrationFrom))) && (this.registrationTo == null || (rangeEnd != null && !rangeEnd.isAfter(this.registrationTo)));
     }
 
+    public boolean containsRegistration(Bitemporality other) {
+        return this.containsRegistration(other.registrationFrom, other.registrationTo);
+    }
+
     public boolean containsEffect(OffsetDateTime rangeStart, OffsetDateTime rangeEnd) {
         return (this.effectFrom == null || (rangeStart != null && !rangeStart.isBefore(this.effectFrom))) && (this.effectTo == null || (rangeEnd != null && !rangeEnd.isAfter(this.effectTo)));
+    }
+
+    public boolean containsEffect(Bitemporality other) {
+        return this.containsEffect(other.effectFrom, other.effectTo);
     }
 
     public boolean contains(Bitemporality other) {
         return this.containsRegistration(other.registrationFrom, other.registrationTo) && this.containsEffect(other.effectFrom, other.effectTo);
     }
 
+    public static OffsetDateTime min(OffsetDateTime a, OffsetDateTime b, boolean nullIsMin) {
+        if (a == null) {
+            return nullIsMin ? null : b;
+        }
+        if (b == null) {
+            return nullIsMin ? null : a;
+        }
+        return a.isBefore(b) ? a : b;
+    }
+
+    public static OffsetDateTime max(OffsetDateTime a, OffsetDateTime b, boolean nullIsMax) {
+        if (a == null) {
+            return nullIsMax ? null : b;
+        }
+        if (b == null) {
+            return nullIsMax ? null : a;
+        }
+        return a.isAfter(b) ? a : b;
+    }
+
     public String toString() {
-        return this.registrationFrom + "|" + this.registrationTo + "|" + this.effectFrom + "|" + this.effectTo;
+        return this.registrationFrom + " | " + this.registrationTo + "  |  " + this.effectFrom + " | " + this.effectTo;
     }
 
     public static OffsetDateTime convertTime(LocalDate time) {

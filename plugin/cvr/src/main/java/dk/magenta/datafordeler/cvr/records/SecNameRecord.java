@@ -99,4 +99,9 @@ public class SecNameRecord extends CvrBitemporalDataRecord implements Cloneable 
         return clone;
     }
 
+
+    protected String debug_name() {
+        return this.name;
+    }
+
 }

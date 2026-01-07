@@ -143,4 +143,8 @@ public class BaseNameRecord extends CvrBitemporalMetaRecord implements Cloneable
         clone.setRelationParticipantRecord(this.relationParticipantRecord);
         return clone;
     }
+
+    protected String debug_name() {
+        return this.name;
+    }
 }

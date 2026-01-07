@@ -111,4 +111,8 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord implement
         clone.setIndustryText(this.industryText);
         return clone;
     }
+
+    protected String debug_name() {
+        return this.industryText;
+    }
 }

@@ -37,4 +37,8 @@ public class AttributeValueRecord extends BaseAttributeValueRecord {
         this.attribute = attribute;
     }
 
+    @Override
+    protected String debug_name() {
+        return this.attribute.getType()+" = "+this.value;
+    }
 }
