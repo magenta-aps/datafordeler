@@ -142,8 +142,7 @@ public class EboksRecieveLookupService {
 
                     CompanyStatusRecord statusRecord = k.getMetadata().getCompanyStatusRecord(k);
                     String status = statusRecord != null ? statusRecord.getStatus() : null;
-                    System.out.println("lifecycleActive: "+lifecycleActive(k));
-                    if (!("NORMAL".equals(status) || "Aktiv".equals(status) || "Fremtid".equals(status)) || adress == null) {
+                    if (!("NORMAL".equals(status) || "Aktiv".equals(status) || "Fremtid".equals(status)) || !lifecycleActive(k)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
                     } else if (!this.companyFromGreenland(adress)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
@@ -225,7 +224,6 @@ public class EboksRecieveLookupService {
 
     private boolean lifecycleActive(CompanyRecord companyRecord) {
         LifecycleRecord lifecycleRecord = companyRecord.getLifecycle().current().stream().max(Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom)).orElse(null);
-        System.out.println("lifecycleRecord: "+lifecycleRecord);
         if (lifecycleRecord != null) {
             return lifecycleRecord.getBitemporality().containsEffectNow();
         }
