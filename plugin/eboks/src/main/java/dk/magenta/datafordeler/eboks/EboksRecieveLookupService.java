@@ -148,7 +148,11 @@ public class EboksRecieveLookupService {
 
                     CompanyStatusRecord statusRecord = k.getMetadata().getCompanyStatusRecord(k);
                     String status = statusRecord != null ? statusRecord.getStatus() : null;
-                    if (!("NORMAL".equals(status) || "Aktiv".equals(status) || "Fremtid".equals(status))) {
+                    System.out.println("Status: " + status);
+                    if (statusRecord != null) {
+                        System.out.println("Status bitemp: " + statusRecord.getBitemporality());
+                    }
+                    if (!("NORMAL".equals(status) || "Aktiv".equals(status) || "Fremtid".equals(status)) || adress == null) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
                     } else if (!this.companyFromGreenland(adress)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
