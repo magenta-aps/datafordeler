@@ -137,6 +137,14 @@ public class Bitemporality implements Comparable<Bitemporality> {
         return this.containsEffect(other.effectFrom, other.effectTo);
     }
 
+    public boolean containsEffectTime(OffsetDateTime time) {
+        return this.containsEffect(time, time);
+    }
+
+    public boolean containsEffectNow() {
+        return this.containsEffectTime(OffsetDateTime.now());
+    }
+
     public boolean contains(Bitemporality other) {
         return this.containsRegistration(other.registrationFrom, other.registrationTo) && this.containsEffect(other.effectFrom, other.effectTo);
     }

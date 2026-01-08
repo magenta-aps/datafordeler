@@ -19,9 +19,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonRecordQuery;
 import dk.magenta.datafordeler.cpr.records.person.data.BirthTimeDataRecord;
 import dk.magenta.datafordeler.cvr.access.CvrRolesDefinition;
 import dk.magenta.datafordeler.cvr.query.CompanyRecordQuery;
-import dk.magenta.datafordeler.cvr.records.AddressMunicipalityRecord;
-import dk.magenta.datafordeler.cvr.records.AddressRecord;
-import dk.magenta.datafordeler.cvr.records.CompanyRecord;
+import dk.magenta.datafordeler.cvr.records.*;
 import dk.magenta.datafordeler.eboks.utils.FilterUtilities;
 import dk.magenta.datafordeler.ger.data.company.CompanyEntity;
 import dk.magenta.datafordeler.ger.data.company.CompanyQuery;
@@ -40,10 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -145,8 +140,9 @@ public class EboksRecieveLookupService {
                         adress = FilterUtilities.findNewestCvr(k.getPostalAddress().currentRegistration());
                     }
 
-                    String status = k.getMetadata().getCompanyStatusRecord(k).getStatus();
-                    if (!"NORMAL".equals(status) && !"Aktiv".equals(status) && !"Fremtid".equals(status)) {
+                    CompanyStatusRecord statusRecord = k.getMetadata().getCompanyStatusRecord(k);
+                    String status = statusRecord != null ? statusRecord.getStatus() : null;
+                    if (!("NORMAL".equals(status) || "Aktiv".equals(status) || "Fremtid".equals(status)) || !lifecycleActive(k)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.CEASED));
                     } else if (!this.companyFromGreenland(adress)) {
                         failedCvrs.add(new FailResult(cvrNumber, FailState.NOTFROMGREENLAND));
@@ -224,6 +220,14 @@ public class EboksRecieveLookupService {
             }
         }
         return null;
+    }
+
+    private boolean lifecycleActive(CompanyRecord companyRecord) {
+        LifecycleRecord lifecycleRecord = companyRecord.getLifecycle().current().stream().max(Comparator.comparing(CvrBitemporalRecord::getRegistrationFrom)).orElse(null);
+        if (lifecycleRecord != null) {
+            return lifecycleRecord.getBitemporality().containsEffectNow();
+        }
+        return false;
     }
 
     private boolean companyFromGreenland(AddressRecord addressRecord) {
