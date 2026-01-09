@@ -139,6 +139,12 @@ public class EboksRecieveLookupService {
                     if (adress == null) {
                         adress = FilterUtilities.findNewestCvr(k.getPostalAddress().currentRegistration());
                     }
+                    if (adress == null) {
+                        CompanyMetadataRecord metadata = k.getMetadata();
+                        if (metadata != null) {
+                            adress = k.getMetadata().getLatestNewestLocation();
+                        }
+                    }
 
                     CompanyStatusRecord statusRecord = k.getMetadata().getCompanyStatusRecord(k);
                     String status = statusRecord != null ? statusRecord.getStatus() : null;
