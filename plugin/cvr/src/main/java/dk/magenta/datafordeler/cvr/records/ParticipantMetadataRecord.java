@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -160,12 +161,16 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
         return subs;
     }
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         ParticipantMetadataRecord that = (ParticipantMetadataRecord) o;
-        return this.cvrNumber == that.cvrNumber;
-    }*/
+        return (
+                this.getParticipantRecord() == that.getParticipantRecord() &&
+                Nontemporal.equalData(this.metadataContactRecords, that.metadataContactRecords) &&
+                Nontemporal.equalData(this.newestLocation, that.newestLocation)
+        );
+    }
 
     @Override
     public void traverse(Consumer<RecordSet<? extends CvrRecord, ? extends CvrRecord>> setCallback, Consumer<CvrRecord> itemCallback) {
@@ -193,9 +198,9 @@ public class ParticipantMetadataRecord extends CvrBitemporalDataRecord implement
         return clone;
     }
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
-        return updated;
-    }
+//    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+//        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+//        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.newestLocation));
+//        return updated;
+//    }
 }

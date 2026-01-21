@@ -21,7 +21,6 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMonthlyNumbersRecord.TABLE_NAME + "__unit", columnList = CompanyMonthlyNumbersRecord.DB_FIELD_COMPANYUNIT + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMonthlyNumbersRecord.TABLE_NAME + "__year", columnList = CompanyMonthlyNumbersRecord.DB_FIELD_YEAR),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMonthlyNumbersRecord.TABLE_NAME + "__month", columnList = CompanyMonthlyNumbersRecord.DB_FIELD_MONTH),
-
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMonthlyNumbersRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMonthlyNumbersRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyMonthlyNumbersRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
@@ -64,8 +63,7 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         CompanyMonthlyNumbersRecord that = (CompanyMonthlyNumbersRecord) o;
-        return year == that.year &&
-                month == that.month;
+        return year == that.year && month == that.month;
     }
 
     @Override
@@ -74,10 +72,16 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
     }
 
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         CompanyMonthlyNumbersRecord that = (CompanyMonthlyNumbersRecord) o;
         return year == that.year && month == that.month;
-    }*/
+    }
+
+
+    @Override
+    protected String debug_name() {
+        return this.year+"/"+this.month;
+    }
 }

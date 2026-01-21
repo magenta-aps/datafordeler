@@ -110,7 +110,7 @@ public class CloseCommandHandler extends CommandHandler {
 
                     try (Session session = sessionManager.getSessionFactory().openSession()) {
                         int startBatch = 1;
-                        int batchSize = 100;
+                        int batchSize = 10;
                         if (commandData.batch != null) {
                             startBatch = commandData.batch;
                         }
@@ -118,7 +118,7 @@ public class CloseCommandHandler extends CommandHandler {
                         switch (commandData.type) {
 
                             case "company":
-                                for (int batch=startBatch; batch<10000000; batch++) {
+                                for (int batch=startBatch; batch<=1; batch++) {
                                     log.info("Processing batch "+batch);
                                     Transaction transaction = session.beginTransaction();
                                     try {
@@ -141,7 +141,8 @@ public class CloseCommandHandler extends CommandHandler {
                                             break;
                                         }
                                         session.flush();
-                                        transaction.commit();
+//                                        transaction.commit();
+                                        transaction.rollback();
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         transaction.rollback();

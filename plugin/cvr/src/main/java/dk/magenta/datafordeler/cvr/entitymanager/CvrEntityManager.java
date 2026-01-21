@@ -35,6 +35,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -369,6 +370,8 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             this.beforeParseSave(item, importMetadata, session);
             item.save(session);
         }
+        this.cleanupBitemporalSets(session, items);
+        this.closeAllEligibleRegistrations(session, items);
         return items.size();
     }
 
@@ -496,11 +499,15 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
 
     public void closeAllEligibleRegistrations(Session session, Collection<T> records) {
         log.info("Closing all eligible registrations for "+records.size()+" items");
-        int count = 0;
+        int updatedCount = 0;
+        int deletedCount = 0;
         for (T record : records) {
-            count += record.closeRegistrations(session);
+            Pair<Integer, Integer> result = record.closeRegistrations(session);
+            updatedCount += result.getFirst();
+            deletedCount += result.getSecond();
         }
-        log.info("Closed "+count+" registrations");
+        log.info("Updated "+updatedCount+" registrations");
+        log.info("Deleted "+deletedCount+" registrations");
     }
 
     protected String finalizeQuery(ObjectNode query) {

@@ -107,4 +107,8 @@ public abstract class CvrRecord extends DatabaseEntry {
     protected String debug_name() {
         return "";
     }
+
+    public boolean equalData(Object other) {
+        return true;
+    }
 }

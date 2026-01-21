@@ -127,13 +127,13 @@ public class OrganizationMemberdataRecord extends CvrRecord {
         this.getAttributes().traverse(setCallback, itemCallback);
     }
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord> updated = new ArrayList<>();
-        for (AttributeRecord attribute : this.attributes) {
-            updated.addAll(
-                    dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord.closeRegistrations(attribute.getValues())
-            );
-        }
-        return updated;
-    }
+//    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+//        ArrayList<dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord> updated = new ArrayList<>();
+//        for (AttributeRecord attribute : this.attributes) {
+//            updated.addAll(
+//                    dk.magenta.datafordeler.cvr.records.CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+//            );
+//        }
+//        return updated;
+//    }
 }

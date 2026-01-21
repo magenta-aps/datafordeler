@@ -40,4 +40,14 @@ public class GenericParentOutputDTO implements Nontemporal {
     public void setDafoUpdated(OffsetDateTime offsetDateTime) {
 
     }
+
+    @Override
+    public boolean equalData(Object o) {
+        if (!(o instanceof GenericParentOutputDTO)) {
+            return false;
+        }
+        GenericParentOutputDTO other = (GenericParentOutputDTO) o;
+        return this.getPnr().equals(other.getPnr());
+    }
+
 }

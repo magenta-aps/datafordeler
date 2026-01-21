@@ -14,6 +14,7 @@ import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -186,8 +187,9 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         session.remove(this);
     }
 
-    public int closeRegistrations(Session session) {
+    public Pair<Integer, Integer> closeRegistrations(Session session) {
         HashSet<CvrBitemporalRecord> updated = new HashSet<>();
+        HashSet<CvrBitemporalRecord> deleted = new HashSet<>();
         HashSet<Class<? extends CvrBitemporalRecord>> omitClasses = new HashSet<>();
         omitClasses.add(CompanyParticipantRelationRecord.class);
         this.traverse(
@@ -198,9 +200,17 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                         Set<CvrBitemporalRecord> bitemporalRecords = cvrRecords.stream()
                                 .map((Function<CvrRecord, CvrBitemporalRecord>) cvrRecord -> (CvrBitemporalRecord) cvrRecord)
                                 .collect(Collectors.toSet());
-                        updated.addAll(CvrBitemporalRecord.closeRegistrations(bitemporalRecords));
+                        Pair<Collection<CvrBitemporalRecord>, Collection<CvrBitemporalRecord>> returned = CvrBitemporalRecord.closeRegistrations(bitemporalRecords);
+                        updated.addAll(returned.getFirst());
+                        deleted.addAll(returned.getSecond());
+
+                        bitemporalRecords.removeAll(returned.getSecond());
                         cvrRecords.clear();
                         cvrRecords.addAllSuper(bitemporalRecords);
+                        cvrRecords.removeAll(returned.getSecond());
+//                        for (CvrBitemporalRecord bitemporalRecord : returned.getSecond()) {
+//                            cvrRecords.remove(bitemporalRecord);
+//                        }
                     }
                 }
             },
@@ -215,7 +225,12 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                 session.merge(bitemporalRecord);
             }
         }
-        return updated.size();
+        for (CvrBitemporalRecord bitemporalRecord : deleted) {
+            if (bitemporalRecord.getId() != null) {
+                session.remove(bitemporalRecord);
+            }
+        }
+        return Pair.of(updated.size(), deleted.size());
     }
 
     public int cleanupBitemporalSets(Session session) {

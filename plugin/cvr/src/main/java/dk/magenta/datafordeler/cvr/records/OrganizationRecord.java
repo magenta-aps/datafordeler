@@ -239,19 +239,19 @@ public class OrganizationRecord extends CvrRecord implements Cloneable {
     }
 
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
-        for (AttributeRecord attribute : this.attributes) {
-            updated.addAll(
-                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
-            );
-        }
-        for (OrganizationMemberdataRecord memberdata : this.memberData) {
-            updated.addAll(memberdata.closeRegistrations());
-        }
-        return updated;
-    }
+//    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+//        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+//        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+//        for (AttributeRecord attribute : this.attributes) {
+//            updated.addAll(
+//                    CvrBitemporalRecord.closeRegistrations(attribute.getValues())
+//            );
+//        }
+//        for (OrganizationMemberdataRecord memberdata : this.memberData) {
+//            updated.addAll(memberdata.closeRegistrations());
+//        }
+//        return updated;
+//    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

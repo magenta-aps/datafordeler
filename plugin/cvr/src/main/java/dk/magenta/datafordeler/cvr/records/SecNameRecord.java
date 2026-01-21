@@ -83,13 +83,13 @@ public class SecNameRecord extends CvrBitemporalDataRecord implements Cloneable 
         return Objects.hash(super.hashCode(), name, secondary);
     }
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         SecNameRecord that = (SecNameRecord) o;
         return secondary == that.secondary &&
                 Objects.equals(name, that.name);
-    }*/
+    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

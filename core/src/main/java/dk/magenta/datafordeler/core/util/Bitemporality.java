@@ -170,7 +170,7 @@ public class Bitemporality implements Comparable<Bitemporality> {
     }
 
     public String toString() {
-        return this.registrationFrom + " | " + this.registrationTo + "  |  " + this.effectFrom + " | " + this.effectTo;
+        return String.format("%25s - %-25s  |  %25s - %-25s", this.registrationFrom, this.registrationTo, this.effectFrom, this.effectTo);
     }
 
     public static OffsetDateTime convertTime(LocalDate time) {

@@ -19,10 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 
@@ -315,7 +312,7 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
         }
     }
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         MetadataRecord that = (MetadataRecord) o;
@@ -332,5 +329,5 @@ public abstract class MetadataRecord extends CvrBitemporalDataRecord {
             return false;
         }
         return true;
-    }*/
+    }
 }

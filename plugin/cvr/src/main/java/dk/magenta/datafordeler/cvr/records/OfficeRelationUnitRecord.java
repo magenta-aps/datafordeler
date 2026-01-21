@@ -183,12 +183,12 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord {
     }
 
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
-        return updated;
-    }
+//    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+//        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+//        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+//        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+//        return updated;
+//    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

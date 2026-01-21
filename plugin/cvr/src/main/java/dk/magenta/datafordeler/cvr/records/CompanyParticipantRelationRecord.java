@@ -289,7 +289,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         return subs;
     }
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         CompanyParticipantRelationRecord that = (CompanyParticipantRelationRecord) o;
@@ -297,7 +297,7 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
                 Objects.equals(relationCompanyRecord, that.relationCompanyRecord) &&
                 Objects.equals(offices, that.offices) &&
                 Objects.equals(organizations, that.organizations);
-    }*/
+    }
 
 
     @Override
@@ -315,18 +315,18 @@ public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
         super.traverse(setCallback, itemCallback);
     }
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
-        if (this.relationParticipantRecord != null) {
-            updated.addAll(this.relationParticipantRecord.closeRegistrations());
-        }
-        for (OfficeRelationRecord officeRelation : this.offices) {
-            updated.addAll(officeRelation.closeRegistrations());
-        }
-        for (OrganizationRecord organization : this.organizations) {
-            updated.addAll(organization.closeRegistrations());
-        }
-        return updated;
-    }
+//    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+//        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+//        if (this.relationParticipantRecord != null) {
+//            updated.addAll(this.relationParticipantRecord.closeRegistrations());
+//        }
+//        for (OfficeRelationRecord officeRelation : this.offices) {
+//            updated.addAll(officeRelation.closeRegistrations());
+//        }
+//        for (OrganizationRecord organization : this.organizations) {
+//            updated.addAll(organization.closeRegistrations());
+//        }
+//        return updated;
+//    }
 
 }

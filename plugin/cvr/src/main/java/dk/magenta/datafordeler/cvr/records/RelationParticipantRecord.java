@@ -223,10 +223,10 @@ public class RelationParticipantRecord extends CvrBitemporalRecord {
         this.getLocationAddress().traverse(setCallback, itemCallback);
     }
 
-    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
-        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
-        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
-        return updated;
-    }
+//    public ArrayList<CvrBitemporalRecord> closeRegistrations() {
+//        ArrayList<CvrBitemporalRecord> updated = new ArrayList<>();
+//        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.names));
+//        updated.addAll(CvrBitemporalRecord.closeRegistrations(this.locationAddress));
+//        return updated;
+//    }
 }

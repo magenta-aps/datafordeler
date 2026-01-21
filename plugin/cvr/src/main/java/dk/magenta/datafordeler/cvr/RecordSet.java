@@ -149,6 +149,9 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
         if (this.inner.removeIf(r -> Objects.equals(r.getId(), o.getId()))) {
             return true;
         }
+        if (this.parentRecordSet != null) {
+            return this.parentRecordSet.remove(o);
+        }
         return false;
     }
 
@@ -178,7 +181,15 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        return this.inner.removeAll(collection);
+        boolean all = true;
+        for (Object o : collection) {
+            if (this.recordClass.isInstance(o)) {
+                if (!this.remove(this.recordClass.cast(o))) {
+                    all = false;
+                }
+            }
+        }
+        return all;
     }
 
     @Override

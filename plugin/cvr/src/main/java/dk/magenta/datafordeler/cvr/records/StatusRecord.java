@@ -125,7 +125,7 @@ public class StatusRecord extends CvrBitemporalDataRecord implements Cloneable {
         return Objects.hash(super.hashCode(), statusText, statusCode, creditDataText, creditDataCode);
     }
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         StatusRecord that = (StatusRecord) o;
@@ -133,7 +133,7 @@ public class StatusRecord extends CvrBitemporalDataRecord implements Cloneable {
                 Objects.equals(creditDataCode, that.creditDataCode) &&
                 Objects.equals(statusText, that.statusText) &&
                 Objects.equals(creditDataText, that.creditDataText);
-    }*/
+    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

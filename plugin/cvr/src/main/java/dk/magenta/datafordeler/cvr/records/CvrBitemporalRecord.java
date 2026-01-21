@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.core.util.ListHashMap;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -222,19 +223,89 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return recordGroups;
     }
 
-    public static <T extends CvrBitemporalRecord> Collection<T> closeRegistrations(Collection<T> records) {
+    public static <T extends CvrBitemporalRecord> Pair<Collection<T>, Collection<T>> closeRegistrations(Collection<T> records) {
         int unclosedCount = 0;
         ArrayList<T> updated = new ArrayList<>();
+        ArrayList<T> toDelete = new ArrayList<>();
         for (T record : records) {
             if (record.getRegistrationTo() == null && record.getEffectTo() == null) {
                 unclosedCount++;
             }
         }
+        Comparator<T> comparator = Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+                                            .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
+        ArrayList<T> recordList = new ArrayList<>(records);
+
+        recordList.sort(comparator);
+        if (recordList.size() > 1) {
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.println(records.iterator().next().getClass().getSimpleName()+" has "+records.size()+" records, of which "+unclosedCount+" are unclosed");
+            System.out.println("    --------");
+            for (T record : recordList) {
+                System.out.println("    "+String.format("%8s", record.getId().toString())+"    "+String.format("%30s", record.debug_name())+"    "+record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
+            }
+            System.out.println("    --------");
+        }
+
+        for (T current : recordList) {
+            if (!toDelete.contains(current)) {
+                if (
+                        (current.getRegistrationFrom() != null && current.getRegistrationTo() != null) &&
+                        (
+                                Equality.equal(current.getRegistrationFrom(), current.getRegistrationTo()) ||
+                                Equality.equal(current.getRegistrationFrom().plusHours(2), current.getRegistrationTo()) ||
+                                Equality.equal(current.getRegistrationFrom().plusHours(3), current.getRegistrationTo())
+                        )
+                ) {
+                    System.out.println("    " + current.getId() + " has no registration time range, should delete");
+                    toDelete.add(current);
+                }
+            }
+        }
+        recordList.removeAll(toDelete);
+
+
+        for (T current : recordList) {
+            if (!toDelete.contains(current)) {
+                List<T> trailing = recordList.stream()
+                        .filter(record -> !toDelete.contains(record))
+                        .filter(record -> !Objects.equals(record.getId(), current.getId()))
+                        .filter(record -> record.equalData(current))
+                        .filter(record -> record.getBitemporality().equals(current.getBitemporality()))
+                        .toList();
+                if (!trailing.isEmpty()) {
+                    for (T trailingRecord : trailing) {
+                        System.out.println("    " + trailingRecord.getId() + " is trailing " + current.getId() + ", should delete "+trailingRecord.getId());
+                        toDelete.add(trailingRecord);
+                    }
+                }
+            }
+        }
+        recordList.removeAll(toDelete);
+
+        for (T current : recordList) {
+            if (!toDelete.contains(current)) {
+                List<T> trailing = recordList.stream()
+                        .filter(record -> !toDelete.contains(record))
+                        .filter(record -> !Objects.equals(record.getId(), current.getId()))
+                        .filter(record -> record.equalData(current))
+                        .filter(record -> record.getBitemporality().equalEffect(current.getBitemporality()))
+                        .filter(record -> record.getBitemporality().equals(current.getBitemporality(), Bitemporality.COMPARE_REGISTRATION_TO))
+                        .filter(record ->
+                                Equality.equal(current.getRegistrationFrom(), record.getRegistrationFrom().minusHours(2)) ||
+                                Equality.equal(current.getRegistrationFrom(), record.getRegistrationFrom().minusHours(3))
+                        )
+                        .toList();
+                if (!trailing.isEmpty()) {
+                    for (T trailingRecord : trailing) {
+                        System.out.println("    " + trailingRecord.getId() + " is trailing " + current.getId() + ", should delete "+current.getId());
+                        toDelete.add(current);
+                    }
+                }
+            }
+        }
 
         if (unclosedCount > 1) {
-            Comparator<T> comparator = Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
-                    .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
-            ArrayList<T> recordList = new ArrayList<>(records);
             for (T current : recordList) {
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
                     // For every group there can only ever be one that has both registrationTo=null and effectTo=null
@@ -255,20 +326,42 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                         current.getEffectFrom()
                                 ));
                     }
-                    T next = candidates.min(comparator).orElse(null);
+                    List<T> cList = candidates.toList();
+                    T next = cList.stream().min(comparator).orElse(null);
                     if (next != null) {
+                        System.out.println("    "+current.getId()+" is unclosed, and there are "+cList.size()+" records with registration and effect after it");
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
                             OffsetDateTime effectCut = next.getEffectFrom();
+                            // Do we have a matching record and a clone already?
+
+                            // Any records matching the first bit (cutoff registration, same effect), basically what current would become?
+                            T matching1 = recordList.stream()
+                                    .filter(record -> Equality.equal(record.getRegistrationFrom(), current.getRegistrationFrom()))
+                                    .filter(record -> Equality.equal(record.getRegistrationTo(), registrationCut))
+                                    .filter(record -> record.getBitemporality().equalEffect(current.getBitemporality()))
+                                    .findFirst().orElse(null);
+
+
                             if (effectCut != null) {
                                 clone.setEffectTo(effectCut.minus(1, ChronoUnit.MICROS));
                             }
                             clone.setRegistrationFrom(registrationCut);
-                            updated.add(clone);
-                            records.add(clone);
-                            current.setRegistrationTo(registrationCut);
-                            updated.add(current);
+
+                            // Any records matching the second bit, what the clone would become?
+                            T matching2 = recordList.stream().filter(record -> record.getBitemporality().equals(clone.getBitemporality())).findFirst().orElse(null);
+
+                            if (matching1 != null && matching2 != null) {
+                                System.out.println("    Should delete "+current.getId()+", it is represented in "+matching1.getId()+" and "+matching2.getId());
+                                toDelete.add(current);
+                            } else {
+                                System.out.println("    Splitting "+current.getId()+" at registration "+registrationCut+" and effect "+effectCut+" to align with "+next.getId());
+                                updated.add(clone);
+                                records.add(clone);
+                                current.setRegistrationTo(registrationCut);
+                                updated.add(current);
+                            }
 
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
@@ -302,7 +395,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 );
                 T previous = null;
                 for (T record : effectGroup) {
-                    if (previous != null && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationFrom())) {
+                    if (previous != null && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationFrom()) && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationTo())) {
+                        System.out.println("Closing " + previous.getClass().getSimpleName() + " " + previous.getId() + ", changing registrationTo from " + previous.getRegistrationTo() + " to " + record.getRegistrationFrom() + " to match " + record.getId());
                         previous.setRegistrationTo(record.getRegistrationFrom());
                         updated.add(previous);
                     }
@@ -364,7 +458,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 //            }
         }
 
-        return updated;
+        return Pair.of(updated, toDelete);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.core.database;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 public interface Nontemporal {
 
@@ -17,12 +18,12 @@ public interface Nontemporal {
     OffsetDateTime getDafoUpdated();
 
     void setDafoUpdated(OffsetDateTime dafoUpdated);
-    //boolean equalData(Object o);
+    boolean equalData(Object o);
 
     static void copy(Nontemporal from, Nontemporal to) {
         to.setDafoUpdated(from.getDafoUpdated());
     }
-/*
+
     static boolean equalData(Nontemporal a, Nontemporal b) {
         if (a != null) {
             if (b == null) return false;
@@ -33,7 +34,7 @@ public interface Nontemporal {
         return true;
     }
 
-    static boolean equalData(Set<Nontemporal> a, Set<Nontemporal> b) {
+    static <T extends Nontemporal> boolean equalData(Set<T> a, Set<T> b) {
         if (a.size() != b.size()) return false;
         for (Nontemporal aa : a) {
             boolean found = false;
@@ -47,5 +48,5 @@ public interface Nontemporal {
         }
         return true;
     }
-*/
+
 }
