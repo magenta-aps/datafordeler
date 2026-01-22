@@ -224,6 +224,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public static <T extends CvrBitemporalRecord> Pair<Collection<T>, Collection<T>> closeRegistrations(Collection<T> records) {
+        boolean output = false;
         int unclosedCount = 0;
         ArrayList<T> updated = new ArrayList<>();
         ArrayList<T> toDelete = new ArrayList<>();
@@ -237,14 +238,16 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         ArrayList<T> recordList = new ArrayList<>(records);
 
         recordList.sort(comparator);
-        if (recordList.size() > 1) {
-            System.out.println("-------------------------------------------------------------------------");
-            System.out.println(records.iterator().next().getClass().getSimpleName()+" has "+records.size()+" records, of which "+unclosedCount+" are unclosed");
-            System.out.println("    --------");
-            for (T record : recordList) {
-                System.out.println("    "+String.format("%8s", record.getId().toString())+"    "+String.format("%30s", record.debug_name())+"    "+record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
+        if (output) {
+            if (recordList.size() > 1) {
+                System.out.println("-------------------------------------------------------------------------");
+                System.out.println(records.iterator().next().getClass().getSimpleName() + " has " + records.size() + " records, of which " + unclosedCount + " are unclosed");
+                System.out.println("    --------");
+                for (T record : recordList) {
+                    System.out.println("    " + String.format("%8s", record.getId().toString()) + "    " + String.format("%30s", record.debug_name()) + "    " + record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
+                }
+                System.out.println("    --------");
             }
-            System.out.println("    --------");
         }
 
         for (T current : recordList) {
@@ -257,7 +260,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 Equality.equal(current.getRegistrationFrom().plusHours(3), current.getRegistrationTo())
                         )
                 ) {
-                    System.out.println("    " + current.getId() + " has no registration time range, should delete");
+                    if (output) {
+                        System.out.println("    " + current.getId() + " has no registration time range, should delete");
+                    }
                     toDelete.add(current);
                 }
             }
@@ -275,7 +280,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         .toList();
                 if (!trailing.isEmpty()) {
                     for (T trailingRecord : trailing) {
-                        System.out.println("    " + trailingRecord.getId() + " is trailing " + current.getId() + ", should delete "+trailingRecord.getId());
+                        if (output) {
+                            System.out.println("    " + trailingRecord.getId() + " is trailing " + current.getId() + ", should delete " + trailingRecord.getId());
+                        }
                         toDelete.add(trailingRecord);
                     }
                 }
@@ -287,7 +294,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             if (!toDelete.contains(current)) {
                 List<T> trailing = recordList.stream()
                         .filter(record -> !toDelete.contains(record))
-                        .filter(record -> !Objects.equals(record.getId(), current.getId()))
+                        .filter(record -> !Objects.equals(record, current))
                         .filter(record -> record.equalData(current))
                         .filter(record -> record.getBitemporality().equalEffect(current.getBitemporality()))
                         .filter(record -> record.getBitemporality().equals(current.getBitemporality(), Bitemporality.COMPARE_REGISTRATION_TO))
@@ -298,7 +305,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         .toList();
                 if (!trailing.isEmpty()) {
                     for (T trailingRecord : trailing) {
-                        System.out.println("    " + trailingRecord.getId() + " is trailing " + current.getId() + ", should delete "+current.getId());
+                        if (output) {
+                            System.out.println("    " + trailingRecord.getId() + " is trailing " + current.getId() + ", should delete " + current.getId());
+                        }
                         toDelete.add(current);
                     }
                 }
@@ -329,7 +338,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     List<T> cList = candidates.toList();
                     T next = cList.stream().min(comparator).orElse(null);
                     if (next != null) {
-                        System.out.println("    "+current.getId()+" is unclosed, and there are "+cList.size()+" records with registration and effect after it");
+                        if (output) {
+                            System.out.println("    " + current.getId() + " is unclosed, and there are " + cList.size() + " records with registration and effect after it");
+                        }
                         OffsetDateTime registrationCut = next.getRegistrationFrom();
                         try {
                             T clone = (T) current.clone();
@@ -353,10 +364,14 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             T matching2 = recordList.stream().filter(record -> record.getBitemporality().equals(clone.getBitemporality())).findFirst().orElse(null);
 
                             if (matching1 != null && matching2 != null) {
-                                System.out.println("    Should delete "+current.getId()+", it is represented in "+matching1.getId()+" and "+matching2.getId());
+                                if (output) {
+                                    System.out.println("    Should delete " + current.getId() + ", it is represented in " + matching1.getId() + " and " + matching2.getId());
+                                }
                                 toDelete.add(current);
                             } else {
-                                System.out.println("    Splitting "+current.getId()+" at registration "+registrationCut+" and effect "+effectCut+" to align with "+next.getId());
+                                if (output) {
+                                    System.out.println("    Splitting " + current.getId() + " at registration " + registrationCut + " and effect " + effectCut + " to align with " + next.getId());
+                                }
                                 updated.add(clone);
                                 records.add(clone);
                                 current.setRegistrationTo(registrationCut);
@@ -396,7 +411,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 T previous = null;
                 for (T record : effectGroup) {
                     if (previous != null && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationFrom()) && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationTo())) {
-                        System.out.println("Closing " + previous.getClass().getSimpleName() + " " + previous.getId() + ", changing registrationTo from " + previous.getRegistrationTo() + " to " + record.getRegistrationFrom() + " to match " + record.getId());
+                        if (output) {
+                            System.out.println("Closing " + previous.getClass().getSimpleName() + " " + previous.getId() + ", changing registrationTo from " + previous.getRegistrationTo() + " to " + record.getRegistrationFrom() + " to match " + record.getId());
+                        }
                         previous.setRegistrationTo(record.getRegistrationFrom());
                         updated.add(previous);
                     }
@@ -414,11 +431,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
             );
             T previous = null;
-
-//            System.out.println("Before:");
-//            for (T current : registrationOrdered) {
-//                System.out.println("    " + current.getBitemporality() + "   " + current.debug_name());
-//            }
 
             for (T current : registrationOrdered) {
                 if (previous != null) {
@@ -452,10 +464,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
             );
 
-//            System.out.println("After:");
-//            for (T current : registrationOrdered) {
-//                System.out.println("    " + current.getBitemporality() + "   " + current.debug_name());
-//            }
         }
 
         return Pair.of(updated, toDelete);
