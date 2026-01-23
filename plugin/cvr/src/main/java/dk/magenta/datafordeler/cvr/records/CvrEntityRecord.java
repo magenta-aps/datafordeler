@@ -211,11 +211,11 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             for (Class<? extends CvrRecord> c : classlist) {
                 System.out.println(c.getSimpleName()+" directly pointing to this companyRecord:");
                 try {
-                    String hql = "from " + c.getCanonicalName() + " x where x.companyRecord_id=:company";
+                    String hql = "from " + c.getCanonicalName() + " x where x.companyRecord=:company";
                     System.out.println("    " + hql);
                     List<Object> records = session
                             .createQuery(hql)
-                            .setParameter("company", this.getId())
+                            .setParameter("company", this)
                             .getResultList();
                     for (Object record : records) {
                         CvrRecord r = c.cast(record);
