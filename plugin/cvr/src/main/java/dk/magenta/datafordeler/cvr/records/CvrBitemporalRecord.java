@@ -400,7 +400,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
-/*
+
         ListHashMap<CvrRecordPeriod, T> effectGroups = new ListHashMap<>();
         for (T record : records) {
             effectGroups.add(record.getValidity(), record);
@@ -425,7 +425,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
-*/
+
         /*
         ArrayList<T> registrationOrdered = new ArrayList<>(records);
         if (!records.isEmpty()) {
