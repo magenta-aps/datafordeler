@@ -198,7 +198,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
         if (this instanceof CompanyRecord) {
             System.out.println("Directly pointing to this companyRecord:");
-            List<Class<CvrRecord>> classlist = List.of(
+            List<Class<? extends CvrRecord>> classlist = List.of(
                     CompanyRegNumberRecord.class,
                     SecNameRecord.class,
                     AddressRecord.class,
@@ -218,7 +218,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                     CompanyDataEventRecord.class
             );
 
-            for (Class<CvrRecord> c : classlist) {
+            for (Class<? extends CvrRecord> c : classlist) {
                 List<?> records = session
                         .createQuery("from " + c.getCanonicalName() + " x where x.companyRecord=:company", c)
                         .setParameter("company", this)
