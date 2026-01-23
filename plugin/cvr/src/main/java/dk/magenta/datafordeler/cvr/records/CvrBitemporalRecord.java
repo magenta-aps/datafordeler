@@ -384,7 +384,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             throw new RuntimeException(e);
                         }
                     } else {
-/*
+
                         if (current.getRegistrationFrom() != null) {
                             candidates = recordList.stream().filter(c -> c != current);
                             candidates = candidates
@@ -395,7 +395,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(next.getRegistrationFrom());
                             }
                         }
-*/
+
                     }
                 }
             }
