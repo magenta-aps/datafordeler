@@ -355,13 +355,13 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                     .filter(record -> record.getBitemporality().equalEffect(current.getBitemporality()))
                                     .findFirst().orElse(null);
 
-/*
+
                             if (effectCut != null) {
                                 clone.setEffectTo(effectCut.minus(1, ChronoUnit.MICROS));
                             }
                             clone.setRegistrationFrom(registrationCut);
-*/
-/*
+
+
                             // Any records matching the second bit, what the clone would become?
                             T matching2 = recordList.stream().filter(record -> record.getBitemporality().equals(clone.getBitemporality())).findFirst().orElse(null);
 
@@ -379,7 +379,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(registrationCut);
                                 updated.add(current);
                             }
-*/
+
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
