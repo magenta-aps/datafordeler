@@ -269,7 +269,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
-/*
+
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 List<T> trailing = recordList.stream()
@@ -289,7 +289,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
         recordList.removeAll(toDelete);
-*/
+
 /*
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
