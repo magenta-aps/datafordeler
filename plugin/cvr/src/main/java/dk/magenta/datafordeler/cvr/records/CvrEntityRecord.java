@@ -189,12 +189,22 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             if (!r.isEmpty()) {
                 System.out.println("RecordSet is not empty:");
                 for (CvrRecord record : r) {
-                    System.out.println("    " + record.getClass().getSimpleName()+" "+record.getId());
+                    ArrayList<String> pathItems = new ArrayList<>();
+                    for (CvrRecord c = record ; c != null; c = c.parent() ) {
+                        pathItems.add(c.getClass().getSimpleName()+" "+c.getId());
+                    }
+                    Collections.reverse(pathItems);
+                    StringJoiner path = new StringJoiner(" -> ");
+                    for (String pathItem : pathItems) {
+                        path.add(pathItem);
+                    }
+
+
+
+                    System.out.println("    " + record.getClass().getSimpleName()+" "+record.getId() + "(" + path + ")");
                 }
             }
-        }, i -> {
-            System.out.println("Found item "+i.getClass().getSimpleName()+" "+i.getId());
-        });
+        }, null);
 
         session.remove(this);
     }

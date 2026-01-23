@@ -111,4 +111,9 @@ public abstract class CvrRecord extends DatabaseEntry {
     public boolean equalData(Object other) {
         return true;
     }
+
+
+    public CvrRecord parent() {
+        return null;
+    }
 }

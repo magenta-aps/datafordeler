@@ -221,4 +221,21 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         super.traverse(setCallback, itemCallback);
         this.getValues().traverse(setCallback, itemCallback);
     }
+
+
+    public CvrRecord parent() {
+        if (this.organizationRecord != null) {
+            return this.organizationRecord;
+        }
+        if (this.organizationMemberdataRecord != null) {
+            return this.organizationMemberdataRecord;
+        }
+        if (this.fusionSplitRecord != null) {
+            return this.fusionSplitRecord;
+        }
+        if (this.officeRelationRecord != null) {
+            return this.officeRelationRecord;
+        }
+        return null;
+    }
 }
