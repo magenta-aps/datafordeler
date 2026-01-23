@@ -375,10 +375,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 if (output) {
                                     System.out.println("    Splitting " + current.getId() + " at registration " + registrationCut + " and effect " + effectCut + " to align with " + next.getId());
                                 }
-                                /*updated.add(clone);
+                                // Noget sker her
+                                updated.add(clone);
                                 records.add(clone);
                                 current.setRegistrationTo(registrationCut);
-                                updated.add(current);*/
+                                updated.add(current);
                             }
 
                         } catch (CloneNotSupportedException e) {
