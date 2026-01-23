@@ -186,9 +186,8 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         HashSet<CvrRecord> removed = new HashSet<>();
         System.out.println("Removing records:");
         this.traverse(s -> {
-            System.out.println("Clearing set " + System.identityHashCode(s));
+            System.out.println("Clearing set " + s.getParent().toString()+" -> "+s.getField());
             s.clear();
-            System.out.println("    " + s.size());
         }, r -> {
             System.out.println("    " + r.toString());
             removed.add(r);
@@ -198,7 +197,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
         this.traverse(r -> {
             if (!r.isEmpty()) {
-                System.out.println("RecordSet "+System.identityHashCode(r)+" is not empty (has "+r.size()+" records):");
+                System.out.println("RecordSet "+r.getParent().toString()+" -> "+r.getField()+" is not empty (has "+r.size()+" records):");
                 for (CvrRecord record : r) {
                     System.out.println("    " + record.toString() + " ( " + record.path() + " )");
                     if (removed.contains(record)) {
