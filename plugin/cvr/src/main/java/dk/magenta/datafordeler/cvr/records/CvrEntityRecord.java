@@ -186,18 +186,8 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
     public void delete(Session session) {
         System.out.println("----------------------");
-        System.out.println("Removing records:");
-        this.traverse(s -> {
-            System.out.println("Clearing set " + s.getParent().toString()+" -> "+s.getRecordClass().getSimpleName()+" ("+s.size()+" records)");
-            for (CvrRecord r : s) {
-                System.out.println("    " + r.toString() +" ( " + r.path() + " )");
-                session.remove(r);
-            }
-            s.clear();
-        }, session::remove);
 
         if (this instanceof CompanyRecord) {
-            System.out.println("Directly pointing to this companyRecord:");
             List<Class<? extends CvrRecord>> classlist = List.of(
                     CompanyRegNumberRecord.class,
                     SecNameRecord.class,
@@ -219,17 +209,32 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             );
 
             for (Class<? extends CvrRecord> c : classlist) {
-                List<?> records = session
-                        .createQuery("from " + c.getCanonicalName() + " x where x.companyRecord=:company", c)
-                        .setParameter("company", this)
+                System.out.println(c.getSimpleName()+" directly pointing to this companyRecord:");
+                List<? extends CvrRecord> records = session
+                        .createQuery("from " + c.getCanonicalName() + " x where x.companyRecord_id=:company", c)
+                        .setParameter("company", this.getId())
                         .getResultList();
                 for (Object record : records) {
-
                     CvrRecord r = c.cast(record);
                     System.out.println("    " + r.toString()+" ( "+r.path()+" )");
                 }
             }
         }
+
+
+
+
+        System.out.println("Removing records:");
+        this.traverse(s -> {
+            System.out.println("Clearing set " + s.getParent().toString()+" -> "+s.getRecordClass().getSimpleName()+" ("+s.size()+" records)");
+            for (CvrRecord r : s) {
+                System.out.println("    " + r.toString() +" ( " + r.path() + " )");
+                session.remove(r);
+            }
+            s.clear();
+        }, session::remove);
+
+
         System.out.println("----------------------");
 
 
