@@ -184,6 +184,18 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
     public void delete(Session session) {
         this.traverse(RecordSet::clear, session::remove);
+
+        this.traverse(r -> {
+            if (!r.isEmpty()) {
+                System.out.println("RecordSet is not empty:");
+                for (CvrRecord record : r) {
+                    System.out.println("    " + record.getClass().getSimpleName()+" "+record.getId());
+                }
+            }
+        }, i -> {
+            System.out.println("Found item "+i.getClass().getSimpleName()+" "+i.getId());
+        });
+
         session.remove(this);
     }
 
