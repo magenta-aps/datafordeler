@@ -426,7 +426,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
-
+        // Noget er galt her:
         ArrayList<T> registrationOrdered = new ArrayList<>(records);
         if (!records.isEmpty()) {
             registrationOrdered.sort(
@@ -443,6 +443,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         // A value has ended; what was once open (without effectTo) is now closed in another registration
                         // Update the previous registration to end when this one begins
                         previous.setRegistrationTo(current.getRegistrationFrom());
+                        updated.add(previous);
                     }
 
 //                if (current.getBitemporality().contains(previous.getBitemporality()) && previous.equals(current)) {
@@ -462,12 +463,12 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
                 previous = current;
             }
-            registrationOrdered.sort(
-                    Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
-                            .thenComparing(T::getRegistrationTo, Comparator.nullsLast(Comparator.naturalOrder()))
-                            .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
-                            .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
-            );
+//            registrationOrdered.sort(
+//                    Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+//                            .thenComparing(T::getRegistrationTo, Comparator.nullsLast(Comparator.naturalOrder()))
+//                            .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
+//                            .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
+//            );
 
         }
 
