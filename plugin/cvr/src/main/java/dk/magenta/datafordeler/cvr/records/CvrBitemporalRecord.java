@@ -446,8 +446,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         // Update the previous registration to end when this one begins
 
                         // Noget sker her
-                        previous.setRegistrationTo(current.getRegistrationFrom());
-                        updated.add(previous);
+//                        previous.setRegistrationTo(current.getRegistrationFrom());
+//                        updated.add(previous);
 
                     }
 
