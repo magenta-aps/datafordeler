@@ -355,15 +355,16 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                     .filter(record -> record.getBitemporality().equalEffect(current.getBitemporality()))
                                     .findFirst().orElse(null);
 
-
+/*
                             if (effectCut != null) {
                                 clone.setEffectTo(effectCut.minus(1, ChronoUnit.MICROS));
                             }
                             clone.setRegistrationFrom(registrationCut);
-
+*/
+/*
                             // Any records matching the second bit, what the clone would become?
                             T matching2 = recordList.stream().filter(record -> record.getBitemporality().equals(clone.getBitemporality())).findFirst().orElse(null);
-/*
+
                             if (matching1 != null && matching2 != null) {
                                 if (output) {
                                     System.out.println("    Should delete " + current.getId() + ", it is represented in " + matching1.getId() + " and " + matching2.getId());
@@ -383,6 +384,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             throw new RuntimeException(e);
                         }
                     } else {
+/*
                         if (current.getRegistrationFrom() != null) {
                             candidates = recordList.stream().filter(c -> c != current);
                             candidates = candidates
@@ -393,11 +395,12 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(next.getRegistrationFrom());
                             }
                         }
+*/
                     }
                 }
             }
         }
-
+/*
         ListHashMap<CvrRecordPeriod, T> effectGroups = new ListHashMap<>();
         for (T record : records) {
             effectGroups.add(record.getValidity(), record);
@@ -422,7 +425,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
-
+*/
+        /*
         ArrayList<T> registrationOrdered = new ArrayList<>(records);
         if (!records.isEmpty()) {
             registrationOrdered.sort(
@@ -465,7 +469,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
             );
 
-        }
+        }*/
 
         return Pair.of(updated, toDelete);
     }
