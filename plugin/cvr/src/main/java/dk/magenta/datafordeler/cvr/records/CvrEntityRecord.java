@@ -183,6 +183,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
     public void delete(Session session) {
+        System.out.println("----------------------");
         System.out.println("Removing records:");
         this.traverse(s -> {
             System.out.println("Clearing set " + s.getParent().toString()+" -> "+s.getRecordClass().getSimpleName()+" ("+s.size()+" records)");
@@ -192,7 +193,23 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             }
             s.clear();
         }, session::remove);
-        session.remove(this);
+
+        if (this instanceof CompanyRecord) {
+            System.out.println("Directly pointing to this companyRecord:");
+            for (Class<?> c : CvrBitemporalDataRecord.class.getPermittedSubclasses()) {
+                List<?> records = session
+                        .createQuery("from " + c.getCanonicalName() + " where " + CvrBitemporalDataRecord.DB_FIELD_COMPANY + "=:company", c)
+                        .setParameter("company", this)
+                        .getResultList();
+                for (Object record : records) {
+                    CvrBitemporalDataRecord r = (CvrBitemporalDataRecord) record;
+                    System.out.println("    " + r.toString()+" ( "+r.path()+" )");
+                }
+            }
+        }
+        System.out.println("----------------------");
+
+
     }
 
     public Pair<Integer, Integer> closeRegistrations(Session session) {
