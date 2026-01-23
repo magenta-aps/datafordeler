@@ -1215,15 +1215,10 @@ public class CompanyRecord extends CvrEntityRecord {
     @JsonProperty(value = IO_FIELD_P_UNITS)
     private Set<CompanyUnitLinkRecord> productionUnits = new HashSet<>();
 
-    public void setProductionUnits(Set<CompanyUnitLinkRecord> productionUnits) {
-        this.productionUnits = (productionUnits == null) ? new HashSet<>() : new HashSet<>(productionUnits);
-        for (CompanyUnitLinkRecord unitLinkRecord : this.productionUnits) {
-            unitLinkRecord.setCompanyRecord(this);
-        }
-    }
-
     public void addProductionUnit(CompanyUnitLinkRecord record) {
-        if (record != null && !productionUnits.contains(record)) {
+        HashSet<Integer> existingUnitIds = productionUnits.stream().map(CompanyUnitLinkRecord::getpNumber).collect(Collectors.toCollection(HashSet::new));
+        if (record != null && !productionUnits.contains(record)/* && !existingUnitIds.contains(record.getpNumber())*/) {
+            System.out.println("Adding production unit " + record.getpNumber()+", we already have " + existingUnitIds + "");
             record.setCompanyRecord(this);
             if (!productionUnits.isEmpty()) {
                 this.addDataEventRecord(
