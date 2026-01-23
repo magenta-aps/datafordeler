@@ -249,7 +249,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 System.out.println("    --------");
             }
         }
-
+/*
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 if (
@@ -268,8 +268,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
         recordList.removeAll(toDelete);
-
-
+*/
+/*
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 List<T> trailing = recordList.stream()
@@ -289,7 +289,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
         recordList.removeAll(toDelete);
-
+*/
+/*
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 List<T> trailing = recordList.stream()
@@ -313,7 +314,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
-
+*/
         if (unclosedCount > 1) {
             for (T current : recordList) {
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
@@ -362,7 +363,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
                             // Any records matching the second bit, what the clone would become?
                             T matching2 = recordList.stream().filter(record -> record.getBitemporality().equals(clone.getBitemporality())).findFirst().orElse(null);
-
+/*
                             if (matching1 != null && matching2 != null) {
                                 if (output) {
                                     System.out.println("    Should delete " + current.getId() + ", it is represented in " + matching1.getId() + " and " + matching2.getId());
@@ -377,7 +378,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(registrationCut);
                                 updated.add(current);
                             }
-
+*/
                         } catch (CloneNotSupportedException e) {
                             throw new RuntimeException(e);
                         }
