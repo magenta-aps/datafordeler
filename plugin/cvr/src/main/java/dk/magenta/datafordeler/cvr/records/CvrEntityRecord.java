@@ -187,12 +187,13 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         System.out.println("Removing records:");
         this.traverse(s -> {
             System.out.println("Clearing set " + s.getParent().toString()+" -> "+s.getRecordClass().getSimpleName()+" ("+s.size()+" records)");
+            removed.addAll(s);
+            for (CvrRecord r : s) {
+                System.out.println("    " + r.toString() +" ( " + r.path() + " )");
+                session.remove(r);
+            }
             s.clear();
-        }, r -> {
-            System.out.println("    " + r.toString()+" ("+r.path()+")");
-            removed.add(r);
-            session.remove(r);
-        });
+        }, null);
 
 
         this.traverse(r -> {
