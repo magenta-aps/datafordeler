@@ -314,6 +314,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
+        recordList.removeAll(toDelete);
 
         if (unclosedCount > 1) {
             for (T current : recordList) {
@@ -426,8 +427,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
+        recordList.removeAll(toDelete);
         // Noget er galt her:
-        ArrayList<T> registrationOrdered = new ArrayList<>(records);
+        ArrayList<T> registrationOrdered = new ArrayList<>(recordList);
         if (!records.isEmpty()) {
             registrationOrdered.sort(
                     Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
@@ -443,6 +445,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                         // A value has ended; what was once open (without effectTo) is now closed in another registration
                         // Update the previous registration to end when this one begins
 
+                        // Noget sker her
                         previous.setRegistrationTo(current.getRegistrationFrom());
                         updated.add(previous);
 
