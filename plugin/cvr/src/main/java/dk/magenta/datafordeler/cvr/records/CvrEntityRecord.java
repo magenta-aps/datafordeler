@@ -14,6 +14,8 @@ import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.data.util.Pair;
 
 import java.time.LocalDate;
@@ -196,13 +198,34 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
         if (this instanceof CompanyRecord) {
             System.out.println("Directly pointing to this companyRecord:");
-            for (Class<?> c : CvrBitemporalDataRecord.class.getPermittedSubclasses()) {
+            List<Class<CvrRecord>> classlist = List.of(
+                    CompanyRegNumberRecord.class,
+                    SecNameRecord.class,
+                    AddressRecord.class,
+                    ContactRecord.class,
+                    LifecycleRecord.class,
+                    CompanyIndustryRecord.class,
+                    StatusRecord.class,
+                    CompanyStatusRecord.class,
+                    FormRecord.class,
+                    CompanyYearlyNumbersRecord.class,
+                    CompanyQuarterlyNumbersRecord.class,
+                    CompanyMonthlyNumbersRecord.class,
+                    AttributeRecord.class,
+                    CompanyUnitLinkRecord.class,
+                    CompanyParticipantRelationRecord.class,
+                    FusionSplitRecord.class,
+                    CompanyDataEventRecord.class
+            );
+
+            for (Class<CvrRecord> c : classlist) {
                 List<?> records = session
-                        .createQuery("from " + c.getCanonicalName() + " where " + CvrBitemporalDataRecord.DB_FIELD_COMPANY + "=:company", c)
+                        .createQuery("from " + c.getCanonicalName() + " x where x.companyRecord=:company", c)
                         .setParameter("company", this)
                         .getResultList();
                 for (Object record : records) {
-                    CvrBitemporalDataRecord r = (CvrBitemporalDataRecord) record;
+
+                    CvrRecord r = c.cast(record);
                     System.out.println("    " + r.toString()+" ( "+r.path()+" )");
                 }
             }
