@@ -185,9 +185,12 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
     public void delete(Session session) {
+        HashSet<String> found = new HashSet<>();
         System.out.println("----------------------");
 
         if (this instanceof CompanyRecord) {
+            System.out.println("Directly pointing to this companyRecord:");
+
             List<Class<? extends CvrRecord>> classlist = List.of(
                     CompanyRegNumberRecord.class,
                     SecNameRecord.class,
@@ -209,17 +212,16 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
             );
 
             for (Class<? extends CvrRecord> c : classlist) {
-                System.out.println(c.getSimpleName()+" directly pointing to this companyRecord:");
                 try {
                     String hql = "from " + c.getCanonicalName() + " x where x.companyRecord=:company";
-                    System.out.println("    " + hql);
                     List<Object> records = session
                             .createQuery(hql)
                             .setParameter("company", this)
                             .getResultList();
                     for (Object record : records) {
                         CvrRecord r = c.cast(record);
-                        System.out.println("    " + r.toString() + " ( " + r.path() + " )");
+                        System.out.println("    " + r.toString());
+                        found.add(r.toString());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -229,18 +231,23 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
 
 
-
+        HashSet<String> removed = new HashSet<>();
         System.out.println("Removing records:");
         this.traverse(s -> {
             System.out.println("Clearing set " + s.getParent().toString()+" -> "+s.getRecordClass().getSimpleName()+" ("+s.size()+" records)");
             for (CvrRecord r : s) {
                 System.out.println("    " + r.toString() +" ( " + r.path() + " )");
                 session.remove(r);
+                removed.add(r.toString());
             }
             s.clear();
         }, session::remove);
 
-
+        found.removeAll(removed);
+        System.out.println("Found records:");
+        for (String r : found) {
+            System.out.println("    " + r);
+        }
         System.out.println("----------------------");
 
 
