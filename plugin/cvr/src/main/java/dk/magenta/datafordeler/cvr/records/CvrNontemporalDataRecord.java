@@ -49,4 +49,17 @@ public class CvrNontemporalDataRecord extends CvrRecord {
         this.participantRecord = participantRecordRecord;
     }
 
+    public CvrRecord parent() {
+        if (this.companyRecord != null) {
+            return this.companyRecord;
+        }
+        if (this.companyUnitRecord != null) {
+            return this.companyUnitRecord;
+        }
+        if (this.participantRecord != null) {
+            return this.participantRecord;
+        }
+        return super.parent();
+    }
+
 }

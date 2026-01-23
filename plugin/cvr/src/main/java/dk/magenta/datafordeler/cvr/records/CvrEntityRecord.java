@@ -201,7 +201,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
 
 
-                    System.out.println("    " + record.getClass().getSimpleName()+" "+record.getId() + "(" + path + ")");
+                    System.out.println("    " + record.getClass().getSimpleName()+" "+record.getId() + " ( " + path + " )");
                 }
             }
         }, null);

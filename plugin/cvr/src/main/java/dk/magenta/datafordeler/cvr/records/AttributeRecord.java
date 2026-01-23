@@ -236,6 +236,6 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         if (this.officeRelationRecord != null) {
             return this.officeRelationRecord;
         }
-        return null;
+        return super.parent();
     }
 }
