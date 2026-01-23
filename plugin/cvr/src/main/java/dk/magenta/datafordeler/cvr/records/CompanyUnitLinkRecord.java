@@ -73,12 +73,12 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord implements Cl
         return Objects.hash(super.hashCode(), pNumber);
     }
 
-    /*@Override
+    @Override
     public boolean equalData(Object o) {
         if (!super.equalData(o)) return false;
         CompanyUnitLinkRecord that = (CompanyUnitLinkRecord) o;
         return pNumber == that.pNumber;
-    }*/
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

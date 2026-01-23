@@ -220,7 +220,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                             .getResultList();
                     for (Object record : records) {
                         CvrRecord r = c.cast(record);
-                        System.out.println("    " + r.toString());
+//                        System.out.println("    " + r.toString());
                         found.add(r.toString());
                     }
                 } catch (Exception e) {

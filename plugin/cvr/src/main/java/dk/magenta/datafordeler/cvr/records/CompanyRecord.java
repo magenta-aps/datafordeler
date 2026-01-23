@@ -1417,8 +1417,8 @@ public class CompanyRecord extends CvrEntityRecord {
         }
     }
 
-    public Set<CompanyDataEventRecord> getDataevent() {
-        return this.dataevent;
+    public RecordSet<CompanyDataEventRecord, CompanyRecord> getDataevent() {
+        return new RecordSet<>(this.dataevent, CompanyDataEventRecord.class, this, CompanyDataEventRecord.DB_FIELD_COMPANY);
     }
 
     @JsonIgnore
@@ -1704,6 +1704,7 @@ public class CompanyRecord extends CvrEntityRecord {
         if (this.getMetadata() != null) {
             this.getMetadata().traverse(setCallback, itemCallback);
         }
+        this.getDataevent().traverse(setCallback, itemCallback);
     }
 
 }
