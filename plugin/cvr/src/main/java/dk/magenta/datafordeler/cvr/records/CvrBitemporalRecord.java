@@ -249,7 +249,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 System.out.println("    --------");
             }
         }
-/*
+
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 if (
@@ -268,7 +268,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
         recordList.removeAll(toDelete);
-*/
+
 /*
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
