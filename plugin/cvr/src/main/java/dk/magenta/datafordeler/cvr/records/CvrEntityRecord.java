@@ -183,8 +183,16 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     }
 
     public void delete(Session session) {
-        System.out.println("Removing records:");
         HashSet<CvrRecord> removed = new HashSet<>();
+        System.out.println("Removing records (first run):");
+        this.traverse(RecordSet::clear, r -> {
+            System.out.println("    " + r.toString());
+            removed.add(r);
+            session.remove(r);
+        });
+
+
+        System.out.println("Removing records (second run):");
         this.traverse(RecordSet::clear, r -> {
             System.out.println("    " + r.toString());
             removed.add(r);
