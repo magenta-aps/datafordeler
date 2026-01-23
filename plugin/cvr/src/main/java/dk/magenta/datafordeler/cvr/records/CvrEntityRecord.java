@@ -184,31 +184,28 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
     public void delete(Session session) {
         HashSet<CvrRecord> removed = new HashSet<>();
-        System.out.println("Removing records (first run):");
-        this.traverse(RecordSet::clear, r -> {
+        System.out.println("Removing records:");
+        this.traverse(s -> {
+            System.out.println("Clearing set " + System.identityHashCode(s));
+            s.clear();
+            System.out.println("    " + s.size());
+        }, r -> {
             System.out.println("    " + r.toString());
             removed.add(r);
             session.remove(r);
         });
 
-
-        System.out.println("Removing records (second run):");
-        this.traverse(RecordSet::clear, r -> {
-            System.out.println("    " + r.toString());
-            removed.add(r);
-            session.remove(r);
-        });
 
         this.traverse(r -> {
             if (!r.isEmpty()) {
-                System.out.println("RecordSet is not empty:");
+                System.out.println("RecordSet "+System.identityHashCode(r)+" is not empty (has "+r.size()+" records):");
                 for (CvrRecord record : r) {
                     System.out.println("    " + record.toString() + " ( " + record.path() + " )");
                     if (removed.contains(record)) {
                         System.out.println("        Should already be removed");
                         for (CvrRecord x : removed) {
                             if (x.equals(record)) {
-                                System.out.println("        "+x.getClass().getSimpleName()+" "+x.getId()+" is equal");
+                                System.out.println("        "+x.toString()+" is equal");
                             }
                         }
                     }

@@ -199,7 +199,6 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
 
     @Override
     public void clear() {
-        System.out.println("Clearing recordset, "+this.size()+" records exist");
         if (this.parentRecordSet != null) {
             for (R record : this.inner) {
                 System.out.println("Removing " + record.toString()+" from parent recordset");
@@ -207,7 +206,6 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
             }
         }
         this.inner.clear();
-        System.out.println("Cleared recordset, "+this.size()+" records exist");
     }
 
     @Override
