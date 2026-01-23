@@ -1217,7 +1217,13 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public void addProductionUnit(CompanyUnitLinkRecord record) {
         HashSet<Integer> existingUnitIds = productionUnits.stream().map(CompanyUnitLinkRecord::getpNumber).collect(Collectors.toCollection(HashSet::new));
-        if (record != null && !productionUnits.contains(record)/* && !existingUnitIds.contains(record.getpNumber())*/) {
+
+        System.out.println(productionUnits.contains(record));
+        for (CompanyUnitLinkRecord companyUnitLinkRecord : productionUnits) {
+            System.out.println(companyUnitLinkRecord.getpNumber()+" "+record.getpNumber()+" "+Objects.equals(companyUnitLinkRecord, record));
+        }
+
+        if (record != null && !productionUnits.contains(record) && !existingUnitIds.contains(record.getpNumber())) {
             System.out.println("Adding production unit " + record.getpNumber()+", we already have " + existingUnitIds + "");
             record.setCompanyRecord(this);
             if (!productionUnits.isEmpty()) {
