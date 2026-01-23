@@ -426,7 +426,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
-        /*
+
         ArrayList<T> registrationOrdered = new ArrayList<>(records);
         if (!records.isEmpty()) {
             registrationOrdered.sort(
@@ -469,7 +469,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
             );
 
-        }*/
+        }
 
         return Pair.of(updated, toDelete);
     }
