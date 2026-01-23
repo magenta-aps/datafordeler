@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
@@ -112,6 +113,23 @@ public abstract class CvrRecord extends DatabaseEntry {
         return true;
     }
 
+
+    public String toString() {
+        return this.getClass().getSimpleName()+" "+this.getId();
+    }
+
+    public String path() {
+        ArrayList<String> pathItems = new ArrayList<>();
+        for (CvrRecord c = this ; c != null; c = c.parent()) {
+            pathItems.add(c.getClass().getSimpleName()+" "+c.getId());
+        }
+        Collections.reverse(pathItems);
+        StringJoiner path = new StringJoiner(" -> ");
+        for (String pathItem : pathItems) {
+            path.add(pathItem);
+        }
+        return path.toString();
+    }
 
     public CvrRecord parent() {
         return null;

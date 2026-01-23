@@ -199,6 +199,12 @@ public class RecordSet<R extends CvrRecord, P extends CvrRecord> implements Set<
 
     @Override
     public void clear() {
+        if (this.parentRecordSet != null) {
+            for (R record : this.inner) {
+                System.out.println("Removing " + record.toString()+" from parent recordset");
+                this.parentRecordSet.remove(record);
+            }
+        }
         this.inner.clear();
     }
 
