@@ -442,10 +442,10 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                     if (previous.getRegistrationTo() == null && previous.getEffectTo() == null && current.getEffectTo() != null) {
                         // A value has ended; what was once open (without effectTo) is now closed in another registration
                         // Update the previous registration to end when this one begins
-                        /*
+
                         previous.setRegistrationTo(current.getRegistrationFrom());
                         updated.add(previous);
-                         */
+
                     }
 
 //                if (current.getBitemporality().contains(previous.getBitemporality()) && previous.equals(current)) {
