@@ -1223,10 +1223,16 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addProductionUnit(CompanyUnitLinkRecord record) {
-        if (record != null) {
+        if (record != null && !productionUnits.contains(record)) {
             record.setCompanyRecord(this);
             if (!productionUnits.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.productionUnits.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(
+                    new CompanyDataEventRecord(
+                        record.getLastUpdated(),
+                        record.getFieldName(),
+                        this.productionUnits.stream().reduce((first, second) -> second).get().getId()
+                    )
+                );
             }
             this.productionUnits.add(record);
         }
