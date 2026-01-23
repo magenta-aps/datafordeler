@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 public class AttributeRecordSet<P extends CvrRecord> extends RecordSet<AttributeRecord, P> {
 
-    public AttributeRecordSet(Collection<AttributeRecord> c, P parent, String field) {
-        super(new HashSet<>(c), AttributeRecord.class, parent, field);
+    public AttributeRecordSet(Set<AttributeRecord> c, P parent, String field) {
+        super(c, AttributeRecord.class, parent, field);
     }
-    public AttributeRecordSet(Collection<AttributeRecord> c, P parent, String field, String clause) {
-        super(new HashSet<>(c), AttributeRecord.class, parent, field, clause);
+    public AttributeRecordSet(Set<AttributeRecord> c, P parent, String field, String clause) {
+        super(c, AttributeRecord.class, parent, field, clause);
     }
 
     public List<AttributeRecord> byType(String type) {
