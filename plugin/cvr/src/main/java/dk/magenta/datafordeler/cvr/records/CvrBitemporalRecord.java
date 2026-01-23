@@ -382,10 +382,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(registrationCut);
                                 updated.add(current);
 
-                                System.out.println("ATTENTION:");
-                                System.out.println(current.getBitemporality());
-                                System.out.println(clone.getBitemporality());
-                                System.out.println(current.equals(clone));
                             }
 
                         } catch (CloneNotSupportedException e) {
