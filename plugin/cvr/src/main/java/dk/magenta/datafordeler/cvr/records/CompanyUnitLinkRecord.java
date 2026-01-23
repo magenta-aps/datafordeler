@@ -86,4 +86,8 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord implements Cl
         clone.setpNumber(this.pNumber);
         return clone;
     }
+
+    public String toString() {
+        return super.toString() + " pNumber=" + pNumber;
+    }
 }
