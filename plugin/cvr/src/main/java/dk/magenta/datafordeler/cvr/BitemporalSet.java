@@ -5,9 +5,6 @@ import dk.magenta.datafordeler.cvr.records.CvrRecord;
 
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
