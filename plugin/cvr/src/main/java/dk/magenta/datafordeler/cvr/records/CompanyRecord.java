@@ -1218,13 +1218,16 @@ public class CompanyRecord extends CvrEntityRecord {
     public void addProductionUnit(CompanyUnitLinkRecord record) {
         HashSet<Integer> existingUnitIds = productionUnits.stream().map(CompanyUnitLinkRecord::getpNumber).collect(Collectors.toCollection(HashSet::new));
 
-        System.out.println(productionUnits.contains(record));
+        // TODO: Check for bitemporality equal
+        // Only add if record is different
+        // på mystisk vis var der kommet records ind som var magen til de andre (så Set kun havde nogen af dem)
+        System.out.println("Already contained: "+productionUnits.contains(record));
         for (CompanyUnitLinkRecord companyUnitLinkRecord : productionUnits) {
-            System.out.println(companyUnitLinkRecord.getpNumber()+" "+record.getpNumber()+" "+Objects.equals(companyUnitLinkRecord, record));
+            System.out.println(companyUnitLinkRecord.getpNumber()+" "+record.getpNumber()+" equals="+Objects.equals(companyUnitLinkRecord, record));
         }
 
-        if (record != null && !productionUnits.contains(record) && !existingUnitIds.contains(record.getpNumber())) {
-            System.out.println("Adding production unit " + record.getpNumber()+", we already have " + existingUnitIds + "");
+        if (record != null && !productionUnits.contains(record)) {
+            System.out.println("Adding production unit " + record.getpNumber()+", we already have " + existingUnitIds + ", contains is false");
             record.setCompanyRecord(this);
             if (!productionUnits.isEmpty()) {
                 this.addDataEventRecord(
