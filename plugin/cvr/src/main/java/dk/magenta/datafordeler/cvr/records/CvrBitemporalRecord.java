@@ -224,11 +224,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public static <T extends CvrBitemporalRecord> Pair<Collection<T>, Collection<T>> closeRegistrations(Collection<T> records) {
+        // Should only be called on a group of records where just one should be open
         boolean output = false;
         int unclosedCount = 0;
         ArrayList<T> updated = new ArrayList<>();
         ArrayList<T> toDelete = new ArrayList<>();
-        boolean shouldClose = false;
         for (T record : records) {
             if (record.getRegistrationTo() == null && record.getEffectTo() == null) {
                 unclosedCount++;

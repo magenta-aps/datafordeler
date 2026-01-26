@@ -241,6 +241,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public void addSecondaryName(SecNameRecord record) {
+        System.out.println("Adding secondary name: " + record.debug_name()+" "+record.getBitemporality());
         if (record != null) {
             record.setSecondary(true);
             record.setCompanyRecord(this);
@@ -1217,19 +1218,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     public void addProductionUnit(CompanyUnitLinkRecord record) {
         if (record != null) {
-            HashSet<Integer> existingUnitIds = productionUnits.stream().map(CompanyUnitLinkRecord::getpNumber).collect(Collectors.toCollection(HashSet::new));
-            System.out.println("Trying to add " + record.getpNumber() + " with bitemp " + record.getBitemporality());
-
-            // TODO: Check for bitemporality equal
-            // Only add if record is different
-            // på mystisk vis var der kommet records ind som var magen til de andre (så Set kun havde nogen af dem)
-            System.out.println("Existing:");
-            for (CompanyUnitLinkRecord companyUnitLinkRecord : productionUnits) {
-                System.out.println(companyUnitLinkRecord.getpNumber() + " " + companyUnitLinkRecord.getBitemporality());
-            }
-
             if (!productionUnits.contains(record)) {
-                System.out.println("Adding production unit " + record.getpNumber() + ", we already have " + existingUnitIds + ", contains is false");
                 record.setCompanyRecord(this);
                 if (!productionUnits.isEmpty()) {
                     this.addDataEventRecord(
@@ -1241,8 +1230,6 @@ public class CompanyRecord extends CvrEntityRecord {
                     );
                 }
                 this.productionUnits.add(record);
-            } else {
-                System.out.println("Not adding production unit " + record.getpNumber() + ", we already have " + existingUnitIds + ", contains is true");
             }
         }
     }
@@ -1546,6 +1533,7 @@ public class CompanyRecord extends CvrEntityRecord {
 
     @Override
     public boolean merge(CvrEntityRecord other) {
+        // Merging new into existing
         if (other != null && !Objects.equals(this.getId(), other.getId()) && other instanceof CompanyRecord) {
             CompanyRecord otherRecord = (CompanyRecord) other;
             for (CompanyRegNumberRecord regNumberRecord : otherRecord.getRegNumber()) {
@@ -1554,9 +1542,23 @@ public class CompanyRecord extends CvrEntityRecord {
             for (SecNameRecord nameRecord : otherRecord.getNames()) {
                 this.addName(nameRecord);
             }
-            for (SecNameRecord nameRecord : otherRecord.getSecondaryNames()) {
-                this.addSecondaryName(nameRecord);
+
+
+
+            for (SecNameRecord existingNameRecord : this.getSecondaryNames()) {
+                System.out.println("Existing secondary name: " + existingNameRecord.getName()+" "+existingNameRecord.getBitemporality());
             }
+            if (otherRecord.getSecondaryNames().isEmpty()) {
+                System.out.println("No secondary names in other record");
+            } else {
+                for (SecNameRecord nameRecord : otherRecord.getSecondaryNames()) {
+                    System.out.println("Merging secondary name: " + nameRecord.getName());
+                    this.addSecondaryName(nameRecord);
+                }
+            }
+
+
+
             for (AddressRecord addressRecord : otherRecord.getLocationAddress()) {
                 this.addLocationAddress(addressRecord);
             }

@@ -256,15 +256,20 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
     public Pair<Integer, Integer> closeRegistrations(Session session) {
         HashSet<CvrBitemporalRecord> updated = new HashSet<>();
         HashSet<CvrBitemporalRecord> deleted = new HashSet<>();
-        HashSet<Class<? extends CvrBitemporalRecord>> omitClasses = new HashSet<>();
+
+        HashSet<Class<? extends CvrRecord>> omitClasses = new HashSet<>();
         omitClasses.add(CompanyParticipantRelationRecord.class);
         omitClasses.add(CompanyUnitLinkRecord.class);
-
+        omitClasses.add(CompanyDataEventRecord.class);
+        omitClasses.add(FusionSplitRecord.class);
+        omitClasses.add(AttributeRecord.class);
+        omitClasses.add(SecNameRecord.class);
 
 
         this.traverse(
             cvrRecords -> {
                 Class<? extends CvrRecord> recordClass = cvrRecords.getRecordClass();
+
                 if (CvrBitemporalRecord.class.isAssignableFrom(recordClass)) {
                     if (!omitClasses.contains(recordClass)) {
                         Set<CvrBitemporalRecord> bitemporalRecords = cvrRecords.stream()

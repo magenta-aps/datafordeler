@@ -67,15 +67,31 @@ public class ParseTest extends TestBase {
 
     @Test
     public void testParseCompanyDemoFile() throws DataFordelerException, URISyntaxException {
+        System.out.println("========================");
+        System.out.println("testParseCompanyDemoFile");
         ImportMetadata importMetadata = new ImportMetadata();
 
-        URL testData = ParseTest.class.getResource("/GLBASETEST.json");
+
+        System.out.println("LOAD FIRST");
+
+        URL testData = ParseTest.class.getResource("/GLBASETEST_0.json");
         String testDataPath = testData.toURI().toString();
         registerManager.setCvrDemoCompanyFile(testDataPath);
 
         CompanyEntityManager entityManager = (CompanyEntityManager) this.registerManager.getEntityManager(CompanyRecord.schema);
-        InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata);
-        entityManager.parseData(stream, importMetadata);
+        entityManager.parseData(this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata), importMetadata);
+
+
+        System.out.println("LOAD SECOND");
+
+        testData = ParseTest.class.getResource("/GLBASETEST.json");
+        testDataPath = testData.toURI().toString();
+        registerManager.setCvrDemoCompanyFile(testDataPath);
+        entityManager.parseData(this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, importMetadata), importMetadata);
+
+
+
+
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
 

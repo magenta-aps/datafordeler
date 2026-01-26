@@ -26,7 +26,6 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 @MappedSuperclass
 public abstract class CvrRecord extends DatabaseEntry {
 
-
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
