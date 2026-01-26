@@ -90,4 +90,5 @@ public class CompanyUnitLinkRecord extends CvrBitemporalDataRecord implements Cl
     public String toString() {
         return super.toString() + " pNumber=" + pNumber;
     }
+
 }

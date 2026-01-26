@@ -228,6 +228,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         int unclosedCount = 0;
         ArrayList<T> updated = new ArrayList<>();
         ArrayList<T> toDelete = new ArrayList<>();
+        boolean shouldClose = false;
         for (T record : records) {
             if (record.getRegistrationTo() == null && record.getEffectTo() == null) {
                 unclosedCount++;

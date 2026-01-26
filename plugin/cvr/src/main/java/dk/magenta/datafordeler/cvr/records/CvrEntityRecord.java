@@ -258,6 +258,10 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         HashSet<CvrBitemporalRecord> deleted = new HashSet<>();
         HashSet<Class<? extends CvrBitemporalRecord>> omitClasses = new HashSet<>();
         omitClasses.add(CompanyParticipantRelationRecord.class);
+        omitClasses.add(CompanyUnitLinkRecord.class);
+
+
+
         this.traverse(
             cvrRecords -> {
                 Class<? extends CvrRecord> recordClass = cvrRecords.getRecordClass();
