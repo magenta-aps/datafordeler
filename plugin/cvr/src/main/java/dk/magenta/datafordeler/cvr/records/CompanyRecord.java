@@ -1248,7 +1248,7 @@ public class CompanyRecord extends CvrEntityRecord {
     }
 
     public BitemporalSet<CompanyUnitLinkRecord, CompanyRecord> getProductionUnits() {
-        return new BitemporalSet<>(this.productionUnits, CompanyUnitLinkRecord.class, this, CompanyUnitLinkRecord.DB_FIELD_COMPANY, null, null, true);
+        return new BitemporalSet<>(this.productionUnits, CompanyUnitLinkRecord.class, this, CompanyUnitLinkRecord.DB_FIELD_COMPANY);
     }
 
 
