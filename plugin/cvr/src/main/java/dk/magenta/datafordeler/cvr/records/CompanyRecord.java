@@ -1547,9 +1547,22 @@ public class CompanyRecord extends CvrEntityRecord {
 
             for (SecNameRecord existingNameRecord : this.getSecondaryNames()) {
                 System.out.println("Existing secondary name: " + existingNameRecord.getName()+" "+existingNameRecord.getBitemporality());
+                boolean found = false;
+                for (SecNameRecord newRecord : otherRecord.getSecondaryNames()) {
+                    if (existingNameRecord.equalData(newRecord)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    System.out.println("Record exists in both old and new");
+                } else {
+                    System.out.println("Record does not exist in new");
+                }
             }
             if (otherRecord.getSecondaryNames().isEmpty()) {
                 System.out.println("No secondary names in other record");
+                // Should end existing records?
             } else {
                 for (SecNameRecord nameRecord : otherRecord.getSecondaryNames()) {
                     System.out.println("Merging secondary name: " + nameRecord.getName());

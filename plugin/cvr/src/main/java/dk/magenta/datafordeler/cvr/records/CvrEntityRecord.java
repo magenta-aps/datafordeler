@@ -264,6 +264,11 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         omitClasses.add(FusionSplitRecord.class);
         omitClasses.add(AttributeRecord.class);
         omitClasses.add(SecNameRecord.class);
+        omitClasses.add(ContactRecord.class);
+        omitClasses.add(CompanyMonthlyNumbersRecord.class);
+        omitClasses.add(CompanyQuarterlyNumbersRecord.class);
+        omitClasses.add(CompanyYearlyNumbersRecord.class);
+        omitClasses.add(CompanyIndustryRecord.class);
 
 
         this.traverse(

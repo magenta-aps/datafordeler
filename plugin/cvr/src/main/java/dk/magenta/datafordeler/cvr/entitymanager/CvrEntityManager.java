@@ -370,7 +370,10 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             this.beforeParseSave(item, importMetadata, session);
             item.save(session);
         }
-//        this.closeAllEligibleRegistrations(session, items);
+
+
+        // Run this?
+        this.closeAllEligibleRegistrations(session, items);
         return items.size();
     }
 
