@@ -1024,7 +1024,7 @@ public class RecordTest extends TestBase {
         Assertions.assertEquals("Name1", actualName1.getName());
         Assertions.assertTrue(Equality.equal(actualName1.getRegistrationFrom(), first), actualName1.getRegistrationFrom()+" != "+first);
         Assertions.assertTrue(Equality.equal(actualName1.getRegistrationTo(), second), actualName1.getRegistrationTo()+" != "+second);
-        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), secondTrunc), actualName1.getEffectFrom()+" != "+secondTrunc);
+        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), first), actualName1.getEffectFrom()+" != "+first);
         Assertions.assertNull(actualName1.getEffectTo());
 
         SecNameRecord actualName2 = nameRecords.get(1); // open reg, closed effect
