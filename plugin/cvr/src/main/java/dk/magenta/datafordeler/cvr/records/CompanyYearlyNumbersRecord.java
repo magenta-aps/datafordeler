@@ -66,4 +66,9 @@ public class CompanyYearlyNumbersRecord extends CompanyNumbersRecord {
         CompanyYearlyNumbersRecord that = (CompanyYearlyNumbersRecord) o;
         return year == that.year;
     }*/
+
+    @Override
+    public long getBitemporalBucketHash() {
+        return this.year;
+    }
 }

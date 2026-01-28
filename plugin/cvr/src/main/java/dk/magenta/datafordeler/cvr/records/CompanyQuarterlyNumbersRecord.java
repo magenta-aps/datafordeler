@@ -77,4 +77,9 @@ public class CompanyQuarterlyNumbersRecord extends CompanyNumbersRecord {
         CompanyQuarterlyNumbersRecord that = (CompanyQuarterlyNumbersRecord) o;
         return year == that.year && quarter == that.quarter;
     }*/
+
+    @Override
+    public long getBitemporalBucketHash() {
+        return Objects.hash(this.year, this.quarter);
+    }
 }

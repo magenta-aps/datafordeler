@@ -709,7 +709,13 @@ public class CompanyRecord extends CvrEntityRecord {
             record.setIndex(0);
             record.setCompanyRecord(this);
             if (!primaryIndustry.isEmpty()) {
-                this.addDataEventRecord(new CompanyDataEventRecord(record.getLastUpdated(), record.getFieldName(), this.primaryIndustry.stream().reduce((first, second) -> second).get().getId()));
+                this.addDataEventRecord(
+                        new CompanyDataEventRecord(
+                                record.getLastUpdated(),
+                                record.getFieldName(),
+                                this.primaryIndustry.stream().reduce((first, second) -> second).get().getId()
+                        )
+                );
             }
             this.primaryIndustry.add(record);
         }

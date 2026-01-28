@@ -143,4 +143,9 @@ public class ContactRecord extends CvrBitemporalDataRecord implements Cloneable 
     protected String debug_name() {
         return this.contactInformation + (this.secret ? " (secret)" : " (not secret)");
     }
+
+    @Override
+    public long getBitemporalBucketHash() {
+        return Objects.hash(this.secondary, this.type);
+    }
 }

@@ -104,4 +104,14 @@ public class SecNameRecord extends CvrBitemporalDataRecord implements Cloneable 
         return this.name;
     }
 
+
+    @Override
+    public long getBitemporalBucketHash() {
+        if (this.secondary) {
+            return Objects.hashCode(this.name);
+        } else {
+            return super.getBitemporalBucketHash();
+        }
+    }
+
 }

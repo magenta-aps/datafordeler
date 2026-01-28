@@ -238,4 +238,5 @@ public class AttributeRecord extends CvrNontemporalDataRecord {
         }
         return super.parent();
     }
+
 }

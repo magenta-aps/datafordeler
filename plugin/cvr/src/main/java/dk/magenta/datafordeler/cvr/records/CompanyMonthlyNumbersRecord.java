@@ -84,4 +84,10 @@ public class CompanyMonthlyNumbersRecord extends CompanyNumbersRecord {
     protected String debug_name() {
         return this.year+"/"+this.month;
     }
+
+
+    @Override
+    public long getBitemporalBucketHash() {
+        return Objects.hash(this.year, this.month);
+    }
 }

@@ -371,7 +371,6 @@ public abstract class CvrEntityManager<T extends CvrEntityRecord>
             item.save(session);
         }
 
-
         // Run this?
         this.closeAllEligibleRegistrations(session, items);
         return items.size();

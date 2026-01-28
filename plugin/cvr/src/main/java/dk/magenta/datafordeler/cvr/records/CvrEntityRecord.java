@@ -263,13 +263,12 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
         omitClasses.add(CompanyDataEventRecord.class);
         omitClasses.add(FusionSplitRecord.class);
         omitClasses.add(AttributeRecord.class);
-        omitClasses.add(SecNameRecord.class);
-        omitClasses.add(ContactRecord.class);
+//        omitClasses.add(SecNameRecord.class);
+//        omitClasses.add(ContactRecord.class);
         omitClasses.add(CompanyMonthlyNumbersRecord.class);
         omitClasses.add(CompanyQuarterlyNumbersRecord.class);
         omitClasses.add(CompanyYearlyNumbersRecord.class);
         omitClasses.add(CompanyIndustryRecord.class);
-
 
         this.traverse(
             cvrRecords -> {
@@ -280,17 +279,21 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                         Set<CvrBitemporalRecord> bitemporalRecords = cvrRecords.stream()
                                 .map((Function<CvrRecord, CvrBitemporalRecord>) cvrRecord -> (CvrBitemporalRecord) cvrRecord)
                                 .collect(Collectors.toSet());
-                        Pair<Collection<CvrBitemporalRecord>, Collection<CvrBitemporalRecord>> returned = CvrBitemporalRecord.closeRegistrations(bitemporalRecords);
-                        updated.addAll(returned.getFirst());
-                        deleted.addAll(returned.getSecond());
 
-                        bitemporalRecords.removeAll(returned.getSecond());
-                        cvrRecords.clear();
-                        cvrRecords.addAllSuper(bitemporalRecords);
-                        cvrRecords.removeAll(returned.getSecond());
-//                        for (CvrBitemporalRecord bitemporalRecord : returned.getSecond()) {
-//                            cvrRecords.remove(bitemporalRecord);
-//                        }
+
+                        ListHashMap<Long, CvrBitemporalRecord> buckets = CvrBitemporalRecord.sortIntoCloseableCollections(bitemporalRecords);
+                        for (List<CvrBitemporalRecord> bucket : buckets.values()) {
+                            Pair<Collection<CvrBitemporalRecord>, Collection<CvrBitemporalRecord>> returned = CvrBitemporalRecord.closeRegistrations(bucket);
+                            updated.addAll(returned.getFirst());
+                            deleted.addAll(returned.getSecond());
+                            bitemporalRecords.removeAll(returned.getSecond());
+//                        cvrRecords.clear();
+//                        cvrRecords.addAllSuper(bitemporalRecords);
+//                        cvrRecords.removeAll(returned.getSecond());
+                            for (CvrBitemporalRecord bitemporalRecord : returned.getSecond()) {
+                                cvrRecords.remove(bitemporalRecord);
+                            }
+                        }
                     }
                 }
             },

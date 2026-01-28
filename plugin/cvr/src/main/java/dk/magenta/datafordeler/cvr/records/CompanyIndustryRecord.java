@@ -115,4 +115,10 @@ public class CompanyIndustryRecord extends CvrBitemporalDataMetaRecord implement
     protected String debug_name() {
         return this.industryText;
     }
+
+
+    @Override
+    public long getBitemporalBucketHash() {
+        return this.index;
+    }
 }

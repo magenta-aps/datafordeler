@@ -572,4 +572,16 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static List<String> updateFields() {
         return Arrays.asList(DB_FIELD_LAST_LOADED, DB_FIELD_LAST_UPDATED, "registrationTo");
     }
+
+    public static ListHashMap<Long, CvrBitemporalRecord> sortIntoCloseableCollections(Collection<CvrBitemporalRecord> records) {
+        ListHashMap<Long, CvrBitemporalRecord> sorted = new ListHashMap<>();
+        for (CvrBitemporalRecord record : records) {
+            sorted.add(record.getBitemporalBucketHash(), record);
+        }
+        return sorted;
+    }
+
+    public long getBitemporalBucketHash() {
+        return 1;
+    }
 }
