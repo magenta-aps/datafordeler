@@ -1018,25 +1018,30 @@ public class RecordTest extends TestBase {
         List<SecNameRecord> nameRecords = company.getNames().ordered();
         Assertions.assertEquals(3, nameRecords.size());
 
+        CvrBitemporalRecord.printCollection(nameRecords);
+
         SecNameRecord actualName1 = nameRecords.get(0);
         Assertions.assertEquals("Name1", actualName1.getName());
-        Assertions.assertTrue(Equality.equal(second, actualName1.getRegistrationFrom()));
+        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationFrom(), first));
         Assertions.assertNull(actualName1.getRegistrationTo());
+
         Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), first));
-        Assertions.assertTrue(Equality.equal(timeTruncated, actualName1.getEffectTo()));
+        Assertions.assertTrue(Equality.equal(actualName1.getEffectTo(), timeTruncated));
 
         SecNameRecord actualName2 = nameRecords.get(1);
         Assertions.assertEquals("Name1", actualName2.getName());
-        Assertions.assertTrue(Equality.equal(first, actualName2.getRegistrationFrom()));
-        Assertions.assertTrue(Equality.equal(second, actualName2.getRegistrationTo()));
+        Assertions.assertTrue(Equality.equal(actualName2.getRegistrationFrom(), first));
+        Assertions.assertTrue(Equality.equal(actualName2.getRegistrationTo(), second));
+
         Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), first));
         Assertions.assertNull(actualName2.getEffectTo());
 
         SecNameRecord actualName3 = nameRecords.get(2);
         Assertions.assertEquals("Name2", actualName3.getName());
-        Assertions.assertTrue(Equality.equal(second, actualName3.getRegistrationFrom()));
+        Assertions.assertTrue(Equality.equal(actualName3.getRegistrationFrom(), second));
         Assertions.assertNull(actualName3.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(timeTruncated, actualName3.getEffectFrom()));
+
+        Assertions.assertTrue(Equality.equal(actualName3.getEffectFrom(), timeTruncated));
         Assertions.assertNull(actualName3.getEffectTo());
     }
 

@@ -223,7 +223,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return recordGroups;
     }
 
-    private static <T extends CvrBitemporalRecord> void printCollection(Collection<T> records) {
+    public static <T extends CvrBitemporalRecord> void printCollection(Collection<T> records) {
         for (T record : records) {
             System.out.println("    " + String.format("%8s", record.getId() != null ? record.getId().toString() : null) + "    " + String.format("%30s", record.debug_name()) + "    " + record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
         }
