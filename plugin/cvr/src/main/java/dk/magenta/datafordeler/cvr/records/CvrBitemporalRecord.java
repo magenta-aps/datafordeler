@@ -225,7 +225,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public static <T extends CvrBitemporalRecord> Pair<Collection<T>, Collection<T>> closeRegistrations(Collection<T> records) {
         // Should only be called on a group of records where just one should be open
-        boolean output = false;
+        boolean output = records.size() > 1 && records.iterator().next().getClass() == SecNameRecord.class;
         int unclosedCount = 0;
         ArrayList<T> updated = new ArrayList<>();
         ArrayList<T> toDelete = new ArrayList<>();
@@ -251,6 +251,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
+        // Remove records that have no registration time range (registrationFrom equals registrationTo), or differ by only a few hours due to timezone issues
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 if (
@@ -270,7 +271,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
-
+        // Deduplicate records that have the same data and bitemporality, but different IDs
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 List<T> trailing = recordList.stream()
@@ -291,7 +292,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
-
+        // Deduplicate records that differ by only a few hours (due to timezone issues)
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
                 List<T> trailing = recordList.stream()
