@@ -318,6 +318,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
+        // Records that overlap (such as an outdated record with open effect, and a new record with different value)
+        // should be split, such that the old record is split/cloned in two, where cloneA has closed effect and open registration,
+        // and cloneB has open effect and closed registration.
         if (unclosedCount > 1) {
             for (T current : recordList) {
                 if (current.getRegistrationTo() == null && current.getEffectTo() == null) {
@@ -383,7 +386,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 records.add(clone);
                                 current.setRegistrationTo(registrationCut);
                                 updated.add(current);
-
+                                recordList.add(clone);
                             }
 
                         } catch (CloneNotSupportedException e) {
@@ -407,6 +410,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
+
+        // In each group of records that share effect, arrange registrations to that each ends as the next one begins
         ListHashMap<CvrRecordPeriod, T> effectGroups = new ListHashMap<>();
         for (T record : records) {
             effectGroups.add(record.getValidity(), record);
@@ -420,7 +425,11 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 );
                 T previous = null;
                 for (T record : effectGroup) {
-                    if (previous != null && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationFrom()) && !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationTo())) {
+                    if (
+                            previous != null &&
+                            !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationFrom()) &&
+                            !Equality.equal(record.getRegistrationFrom(), previous.getRegistrationTo())
+                    ) {
                         if (output) {
                             System.out.println("Closing " + previous.getClass().getSimpleName() + " " + previous.getId() + ", changing registrationTo from " + previous.getRegistrationTo() + " to " + record.getRegistrationFrom() + " to match " + record.getId());
                         }
@@ -431,6 +440,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 }
             }
         }
+
+
 
         recordList.removeAll(toDelete);
         // Noget er galt her:
@@ -480,6 +491,16 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 //                            .thenComparing(T::getEffectTo, Comparator.nullsLast(Comparator.naturalOrder()))
 //            );
 
+        }
+
+        if (output) {
+            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("Result:");
+            System.out.println("    --------");
+            for (T record : recordList) {
+                System.out.println("    " + String.format("%8s", record.getId().toString()) + "    " + String.format("%30s", record.debug_name()) + "    " + record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
+            }
+            System.out.println("    --------");
         }
 
         return Pair.of(updated, toDelete);
