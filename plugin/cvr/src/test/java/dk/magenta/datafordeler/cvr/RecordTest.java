@@ -1022,23 +1022,23 @@ public class RecordTest extends TestBase {
 
         SecNameRecord actualName1 = nameRecords.get(0);  // closed reg, open effect
         Assertions.assertEquals("Name1", actualName1.getName());
-        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationFrom(), first));
-        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationTo(), second));
-        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), secondTrunc));
+        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationFrom(), first), actualName1.getRegistrationFrom()+" != "+first);
+        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationTo(), second), actualName1.getRegistrationTo()+" != "+second);
+        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), secondTrunc), actualName1.getEffectFrom()+" != "+secondTrunc);
         Assertions.assertNull(actualName1.getEffectTo());
 
         SecNameRecord actualName2 = nameRecords.get(1); // open reg, closed effect
         Assertions.assertEquals("Name1", actualName2.getName());
-        Assertions.assertTrue(Equality.equal(actualName2.getRegistrationFrom(), first));
+        Assertions.assertTrue(Equality.equal(actualName2.getRegistrationFrom(), first), actualName2.getRegistrationFrom()+" != "+first);
         Assertions.assertNull(actualName2.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), first));
-        Assertions.assertTrue(Equality.equal(actualName2.getEffectTo(), secondTrunc));
+        Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), first), actualName2.getEffectFrom()+" != "+first);
+        Assertions.assertTrue(Equality.equal(actualName2.getEffectTo(), secondTrunc), actualName2.getEffectTo()+" != "+secondTrunc);
 
         SecNameRecord actualName3 = nameRecords.get(2);
         Assertions.assertEquals("Name2", actualName3.getName());
-        Assertions.assertTrue(Equality.equal(actualName3.getRegistrationFrom(), second));
+        Assertions.assertTrue(Equality.equal(actualName3.getRegistrationFrom(), second), actualName3.getRegistrationFrom()+" != "+second);
         Assertions.assertNull(actualName3.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(actualName3.getEffectFrom(), secondTrunc));
+        Assertions.assertTrue(Equality.equal(actualName3.getEffectFrom(), secondTrunc), actualName3.getEffectFrom()+" != "+secondTrunc);
         Assertions.assertNull(actualName3.getEffectTo());
     }
 
