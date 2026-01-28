@@ -1006,6 +1006,7 @@ public class RecordTest extends TestBase {
             for (SecNameRecord nameRecord : company.getNames()) {
                 session.persist(nameRecord);
             }
+            System.out.println("Calling closeRegistrations");
             company.closeRegistrations(session);
             transaction.commit();
         } catch (Exception e) {

@@ -235,7 +235,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
         Comparator<T> comparator = Comparator.comparing(T::getRegistrationFrom, Comparator.nullsFirst(Comparator.naturalOrder()))
-                                            .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
+                                             .thenComparing(T::getEffectFrom, Comparator.nullsFirst(Comparator.naturalOrder()));
         ArrayList<T> recordList = new ArrayList<>(records);
 
         recordList.sort(comparator);

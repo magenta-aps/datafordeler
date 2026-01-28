@@ -272,6 +272,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
         this.traverse(
             cvrRecords -> {
+                System.out.println("Traversal reached "+cvrRecords.getRecordClass().getSimpleName()+" ("+cvrRecords.size()+" records)");
                 Class<? extends CvrRecord> recordClass = cvrRecords.getRecordClass();
 
                 if (CvrBitemporalRecord.class.isAssignableFrom(recordClass)) {
@@ -283,7 +284,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
                         ListHashMap<Long, CvrBitemporalRecord> buckets = CvrBitemporalRecord.sortIntoCloseableCollections(bitemporalRecords);
                         for (List<CvrBitemporalRecord> bucket : buckets.values()) {
-                            System.out.println("Closing bucket of size " + bucket.size());
+                            System.out.println("Closing bucket of " + bucket.size() +" "+recordClass.getSimpleName());
                             Pair<Collection<CvrBitemporalRecord>, Collection<CvrBitemporalRecord>> returned = CvrBitemporalRecord.closeRegistrations(bucket);
                             updated.addAll(returned.getFirst());
                             deleted.addAll(returned.getSecond());
