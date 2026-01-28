@@ -283,6 +283,7 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
 
                         ListHashMap<Long, CvrBitemporalRecord> buckets = CvrBitemporalRecord.sortIntoCloseableCollections(bitemporalRecords);
                         for (List<CvrBitemporalRecord> bucket : buckets.values()) {
+                            System.out.println("Closing bucket of size " + bucket.size());
                             Pair<Collection<CvrBitemporalRecord>, Collection<CvrBitemporalRecord>> returned = CvrBitemporalRecord.closeRegistrations(bucket);
                             updated.addAll(returned.getFirst());
                             deleted.addAll(returned.getSecond());
