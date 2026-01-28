@@ -1020,23 +1020,23 @@ public class RecordTest extends TestBase {
 
         SecNameRecord actualName1 = nameRecords.get(0);
         Assertions.assertEquals("Name1", actualName1.getName());
-        Assertions.assertTrue(Equality.equal(first, actualName1.getRegistrationFrom()));
-        Assertions.assertTrue(Equality.equal(second, actualName1.getRegistrationTo()));
+        Assertions.assertTrue(Equality.equal(second, actualName1.getRegistrationFrom()));
+        Assertions.assertNull(actualName1.getRegistrationTo());
         Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), first));
-        Assertions.assertNull(actualName1.getEffectTo());
+        Assertions.assertTrue(Equality.equal(timeTruncated, actualName1.getEffectTo()));
 
         SecNameRecord actualName2 = nameRecords.get(1);
         Assertions.assertEquals("Name1", actualName2.getName());
-        Assertions.assertTrue(Equality.equal(second, actualName2.getRegistrationFrom()));
-        Assertions.assertNull(actualName2.getRegistrationTo());
+        Assertions.assertTrue(Equality.equal(first, actualName2.getRegistrationFrom()));
+        Assertions.assertTrue(Equality.equal(second, actualName2.getRegistrationTo()));
         Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), first));
-        Assertions.assertTrue(Equality.equal(timeTruncated.toLocalDate().minusDays(1), actualName2.getEffectTo().toLocalDate()));
+        Assertions.assertNull(actualName2.getEffectTo());
 
         SecNameRecord actualName3 = nameRecords.get(2);
         Assertions.assertEquals("Name2", actualName3.getName());
         Assertions.assertTrue(Equality.equal(second, actualName3.getRegistrationFrom()));
         Assertions.assertNull(actualName3.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(timeTruncated.toLocalDate(), actualName3.getEffectFrom().toLocalDate()));
+        Assertions.assertTrue(Equality.equal(timeTruncated, actualName3.getEffectFrom()));
         Assertions.assertNull(actualName3.getEffectTo());
     }
 
