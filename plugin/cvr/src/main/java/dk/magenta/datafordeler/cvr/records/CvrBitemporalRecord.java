@@ -223,6 +223,12 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         return recordGroups;
     }
 
+    private static <T extends CvrBitemporalRecord> void printCollection(Collection<T> records) {
+        for (T record : records) {
+            System.out.println("    " + String.format("%8s", record.getId() != null ? record.getId().toString() : null) + "    " + String.format("%30s", record.debug_name()) + "    " + record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
+        }
+    }
+
     public static <T extends CvrBitemporalRecord> Pair<Collection<T>, Collection<T>> closeRegistrations(Collection<T> records) {
         // Should only be called on a group of records where just one should be open
         boolean output = records.size() > 1 && records.iterator().next().getClass() == SecNameRecord.class;
@@ -244,9 +250,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 System.out.println("-------------------------------------------------------------------------");
                 System.out.println(records.iterator().next().getClass().getSimpleName() + " has " + records.size() + " records, of which " + unclosedCount + " are unclosed");
                 System.out.println("    --------");
-                for (T record : recordList) {
-                    System.out.println("    " + String.format("%8s", record.getId().toString()) + "    " + String.format("%30s", record.debug_name()) + "    " + record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
-                }
+                printCollection(records);
                 System.out.println("    --------");
             }
         }
@@ -426,6 +430,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                 recordList.add(record);
             }
         }
+        recordList.removeAll(toDelete);
         recordList.sort(comparator);
         if (output) {
             System.out.println("Checkpoint 5");
@@ -467,7 +472,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             System.out.println("Checkpoint 6");
         }
 
-        recordList.removeAll(toDelete);
         // Noget er galt her:
         ArrayList<T> registrationOrdered = new ArrayList<>(recordList);
         if (!records.isEmpty()) {
@@ -524,9 +528,13 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             System.out.println("-------------------------------------------------------------------------");
             System.out.println("Result:");
             System.out.println("    --------");
-            for (T record : recordList) {
-                System.out.println("    " + String.format("%8s", record.getId().toString()) + "    " + String.format("%30s", record.debug_name()) + "    " + record.getBitemporality() + (record.getRegistrationTo() == null && record.getEffectTo() == null ? " (unclosed)" : ""));
-            }
+            printCollection(recordList);
+            System.out.println("    --------");
+            System.out.println("to update:");
+            printCollection(updated);
+            System.out.println("    --------");
+            System.out.println("to delete:");
+            printCollection(toDelete);
             System.out.println("    --------");
         }
 
