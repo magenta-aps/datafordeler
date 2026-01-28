@@ -398,7 +398,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 records.add(clone);
                                 current.setRegistrationTo(registrationCut);
                                 updated.add(current);
-                                recordList.add(clone);
                             }
 
                         } catch (CloneNotSupportedException e) {
@@ -422,6 +421,12 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
+        for (T record : updated) {
+            if (!recordList.contains(record)) {
+                recordList.add(record);
+            }
+        }
+        recordList.sort(comparator);
         if (output) {
             System.out.println("Checkpoint 5");
         }
