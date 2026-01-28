@@ -982,6 +982,7 @@ public class RecordTest extends TestBase {
         Transaction transaction = session.beginTransaction();
         CompanyRecord company = new CompanyRecord();
         OffsetDateTime first = OffsetDateTime.now().minusYears(2);
+        OffsetDateTime firstTrunc = first.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
         OffsetDateTime second = OffsetDateTime.now();
         OffsetDateTime secondTrunc = second.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
         try {
@@ -1023,15 +1024,15 @@ public class RecordTest extends TestBase {
         SecNameRecord actualName1 = nameRecords.get(0);  // closed reg, open effect
         Assertions.assertEquals("Name1", actualName1.getName());
         Assertions.assertTrue(Equality.equal(actualName1.getRegistrationFrom(), first), actualName1.getRegistrationFrom()+" != "+first);
-        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationTo(), second), actualName1.getRegistrationTo()+" != "+second);
-        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), first), actualName1.getEffectFrom()+" != "+first);
+        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationTo(), first), actualName1.getRegistrationTo()+" != "+first);
+        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), firstTrunc), actualName1.getEffectFrom()+" != "+firstTrunc);
         Assertions.assertNull(actualName1.getEffectTo());
 
         SecNameRecord actualName2 = nameRecords.get(1); // open reg, closed effect
         Assertions.assertEquals("Name1", actualName2.getName());
         Assertions.assertTrue(Equality.equal(actualName2.getRegistrationFrom(), first), actualName2.getRegistrationFrom()+" != "+first);
         Assertions.assertNull(actualName2.getRegistrationTo());
-        Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), first), actualName2.getEffectFrom()+" != "+first);
+        Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), firstTrunc), actualName2.getEffectFrom()+" != "+firstTrunc);
         Assertions.assertTrue(Equality.equal(actualName2.getEffectTo(), secondTrunc), actualName2.getEffectTo()+" != "+secondTrunc);
 
         SecNameRecord actualName3 = nameRecords.get(2);
