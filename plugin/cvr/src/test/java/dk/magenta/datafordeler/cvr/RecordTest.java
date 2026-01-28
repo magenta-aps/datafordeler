@@ -983,7 +983,7 @@ public class RecordTest extends TestBase {
         CompanyRecord company = new CompanyRecord();
         OffsetDateTime first = OffsetDateTime.now().minusYears(2);
         OffsetDateTime second = OffsetDateTime.now();
-        OffsetDateTime timeTruncated = second.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime secondTrunc = second.toLocalDate().atStartOfDay().atOffset(ZoneOffset.UTC);
         try {
             SecNameRecord name1 = new SecNameRecord();
             name1.setSecondary(false);
@@ -1020,28 +1020,25 @@ public class RecordTest extends TestBase {
 
         CvrBitemporalRecord.printCollection(nameRecords);
 
-        SecNameRecord actualName1 = nameRecords.get(0);
+        SecNameRecord actualName1 = nameRecords.get(0);  // closed reg, open effect
         Assertions.assertEquals("Name1", actualName1.getName());
         Assertions.assertTrue(Equality.equal(actualName1.getRegistrationFrom(), first));
-        Assertions.assertNull(actualName1.getRegistrationTo());
+        Assertions.assertTrue(Equality.equal(actualName1.getRegistrationTo(), second));
+        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), secondTrunc));
+        Assertions.assertNull(actualName1.getEffectTo());
 
-        Assertions.assertTrue(Equality.equal(actualName1.getEffectFrom(), first));
-        Assertions.assertTrue(Equality.equal(actualName1.getEffectTo(), timeTruncated));
-
-        SecNameRecord actualName2 = nameRecords.get(1);
+        SecNameRecord actualName2 = nameRecords.get(1); // open reg, closed effect
         Assertions.assertEquals("Name1", actualName2.getName());
         Assertions.assertTrue(Equality.equal(actualName2.getRegistrationFrom(), first));
-        Assertions.assertTrue(Equality.equal(actualName2.getRegistrationTo(), second));
-
+        Assertions.assertNull(actualName2.getRegistrationTo());
         Assertions.assertTrue(Equality.equal(actualName2.getEffectFrom(), first));
-        Assertions.assertNull(actualName2.getEffectTo());
+        Assertions.assertTrue(Equality.equal(actualName2.getEffectTo(), secondTrunc));
 
         SecNameRecord actualName3 = nameRecords.get(2);
         Assertions.assertEquals("Name2", actualName3.getName());
         Assertions.assertTrue(Equality.equal(actualName3.getRegistrationFrom(), second));
         Assertions.assertNull(actualName3.getRegistrationTo());
-
-        Assertions.assertTrue(Equality.equal(actualName3.getEffectFrom(), timeTruncated));
+        Assertions.assertTrue(Equality.equal(actualName3.getEffectFrom(), secondTrunc));
         Assertions.assertNull(actualName3.getEffectTo());
     }
 
