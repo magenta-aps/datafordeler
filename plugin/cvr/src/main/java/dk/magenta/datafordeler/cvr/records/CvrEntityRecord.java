@@ -289,12 +289,15 @@ public abstract class CvrEntityRecord extends CvrBitemporalRecord implements Ide
                             updated.addAll(returned.getFirst());
                             deleted.addAll(returned.getSecond());
                             bitemporalRecords.removeAll(returned.getSecond());
-//                        cvrRecords.clear();
-//                        cvrRecords.addAllSuper(bitemporalRecords);
-//                        cvrRecords.removeAll(returned.getSecond());
-                            for (CvrBitemporalRecord bitemporalRecord : returned.getSecond()) {
-                                cvrRecords.remove(bitemporalRecord);
-                            }
+
+                            cvrRecords.clear();
+                            cvrRecords.addAllSuper(bitemporalRecords);
+                            cvrRecords.addAllSuper(returned.getFirst());
+//                            cvrRecords.removeAll(returned.getSecond());
+
+//                            for (CvrBitemporalRecord bitemporalRecord : returned.getSecond()) {
+//                                cvrRecords.remove(bitemporalRecord);
+//                            }
                         }
                     }
                 }
