@@ -1009,6 +1009,7 @@ public class RecordTest extends TestBase {
             }
             System.out.println("Calling closeRegistrations");
             company.closeRegistrations(session);
+            System.out.println("DONE");
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();

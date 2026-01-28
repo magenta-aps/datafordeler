@@ -251,6 +251,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
             }
         }
 
+        if (output) {
+            System.out.println("Checkpoint 1");
+        }
         // Remove records that have no registration time range (registrationFrom equals registrationTo), or differ by only a few hours due to timezone issues
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
@@ -271,6 +274,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
+        if (output) {
+            System.out.println("Checkpoint 2");
+        }
         // Deduplicate records that have the same data and bitemporality, but different IDs
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
@@ -292,6 +298,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
+        if (output) {
+            System.out.println("Checkpoint 3");
+        }
         // Deduplicate records that differ by only a few hours (due to timezone issues)
         for (T current : recordList) {
             if (!toDelete.contains(current)) {
@@ -318,6 +327,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
         recordList.removeAll(toDelete);
 
+        if (output) {
+            System.out.println("Checkpoint 4");
+        }
         // Records that overlap (such as an outdated record with open effect, and a new record with different value)
         // should be split, such that the old record is split/cloned in two, where cloneA has closed effect and open registration,
         // and cloneB has open effect and closed registration.
@@ -390,6 +402,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                             }
 
                         } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
                             throw new RuntimeException(e);
                         }
                     } else {
@@ -404,14 +417,17 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
                                 current.setRegistrationTo(next.getRegistrationFrom());
                             }
                         }
-
                     }
                 }
             }
         }
 
+        if (output) {
+            System.out.println("Checkpoint 5");
+        }
 
-        // In each group of records that share effect, arrange registrations to that each ends as the next one begins
+
+        // In each group of records that share effect, arrange registrations to that each one ends as the next one begins
         ListHashMap<CvrRecordPeriod, T> effectGroups = new ListHashMap<>();
         for (T record : records) {
             effectGroups.add(record.getValidity(), record);
@@ -442,6 +458,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         }
 
 
+        if (output) {
+            System.out.println("Checkpoint 6");
+        }
 
         recordList.removeAll(toDelete);
         // Noget er galt her:
@@ -493,6 +512,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
         }
 
+        if (output) {
+            System.out.println("Checkpoint 7");
+        }
         if (output) {
             System.out.println("-------------------------------------------------------------------------");
             System.out.println("Result:");
