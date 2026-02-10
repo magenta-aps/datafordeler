@@ -38,7 +38,7 @@ public class CprDirectPasswordUpdate extends Worker implements Runnable {
     private static final String ALPHA_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String ALPHA_LOWER = "abcdefghijklmnopqrstuvwxyz";
     private static final String NUMERIC = "0123456789";
-    private static final String SPECIAL_CHARS = "~`!@#$%^*()_-+=,./{}[];:";
+    private static final String SPECIAL_CHARS = "~!@#$%^*()_-+=,./{}[];:";
 
     public String generatePassword(int len) {
         String[] buckets = new String[]{ALPHA_LOWER, ALPHA_UPPER, NUMERIC, SPECIAL_CHARS};
