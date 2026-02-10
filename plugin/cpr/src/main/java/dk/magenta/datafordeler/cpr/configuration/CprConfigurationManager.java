@@ -117,12 +117,8 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
             String encryptedPasswordFileName = "/tmp/cpr_key.json";
             CprConfiguration configuration = super.getConfiguration();
             configuration.setDirectPasswordPasswordEncryptionFile(new File(encryptedPasswordFileName));
-            File encryptedPasswordFile = new File(encryptedPasswordFileName);
             System.out.println("Encrypted password: " + configuration.getEncryptedDirectPassword());
             System.out.println("Password: " + configuration.getDirectPassword());
-            if (encryptedPasswordFile.getParentFile().isDirectory() && configuration.getEncryptedDirectPassword() != null) {
-                Files.write(new File(encryptedPasswordFileName + UUID.randomUUID()).toPath(), configuration.getEncryptedDirectPassword());
-            }
         } catch (Exception ioe) {
             log.error("Exception", ioe);
         }
