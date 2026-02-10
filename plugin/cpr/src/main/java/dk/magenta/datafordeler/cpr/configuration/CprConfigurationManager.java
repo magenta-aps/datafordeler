@@ -12,9 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.security.GeneralSecurityException;
-import java.util.UUID;
 
 @Component
 public class CprConfigurationManager extends ConfigurationManager<CprConfiguration> {
