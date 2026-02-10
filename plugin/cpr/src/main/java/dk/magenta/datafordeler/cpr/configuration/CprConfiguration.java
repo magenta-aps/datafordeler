@@ -154,6 +154,9 @@ public class CprConfiguration implements Configuration {
     private String directUsername = "";
 
     @Column
+    private String directPassword = null;
+
+    @Column
     private byte[] directPasswordEncrypted;
 
     @Transient
@@ -161,6 +164,26 @@ public class CprConfiguration implements Configuration {
 
     public void setDirectPasswordPasswordEncryptionFile(File directPasswordPasswordEncryptionFile) {
         this.directPasswordPasswordEncryptionFile = directPasswordPasswordEncryptionFile;
+    }
+
+    public boolean encryptDirectPassword(boolean overwrite, boolean clearPlain) {
+        String encryptionKeyFileName = this.getEncryptionKeyFileName();
+        if (
+                encryptionKeyFileName != null &&
+                        !(this.directPassword == null || this.directPassword.isEmpty()) &&
+                        (overwrite || this.directPasswordEncrypted == null || this.directPasswordEncrypted.length == 0)
+        ) {
+            try {
+                this.setDirectPassword(this.directPassword);
+                if (clearPlain) {
+                    this.directPassword = null;
+                }
+                return true;
+            } catch (GeneralSecurityException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     @Column
