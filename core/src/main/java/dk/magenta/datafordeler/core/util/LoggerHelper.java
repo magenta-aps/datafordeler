@@ -103,7 +103,7 @@ public class LoggerHelper {
     public void debug(String msg, Object... args) {
         try {
             logger.debug(prefix + msg, args);
-        } catch (AppenderLoggingException e) {
+        } catch Exception e) {
             e.printStackTrace();
         }
     }
@@ -111,7 +111,7 @@ public class LoggerHelper {
     public void info(String msg, Object... args) {
         try {
             logger.info(prefix + msg, args);
-        } catch (AppenderLoggingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -119,7 +119,7 @@ public class LoggerHelper {
     public void warn(String msg, Object... args) {
         try {
         logger.warn(prefix + msg, args);
-        } catch (AppenderLoggingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -127,7 +127,7 @@ public class LoggerHelper {
     public void error(String msg, Object... args) {
         try {
             logger.error(prefix + msg, args);
-        } catch (AppenderLoggingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -135,7 +135,7 @@ public class LoggerHelper {
     public void error(String msg, Throwable exception) {
         try {
             logger.error(prefix + msg, exception);
-        } catch (AppenderLoggingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
