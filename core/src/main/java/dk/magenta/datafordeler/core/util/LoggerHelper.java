@@ -103,7 +103,7 @@ public class LoggerHelper {
     public void debug(String msg, Object... args) {
         try {
             logger.debug(prefix + msg, args);
-        } catch Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
