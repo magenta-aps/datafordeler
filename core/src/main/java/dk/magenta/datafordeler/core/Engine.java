@@ -240,9 +240,4 @@ public class Engine {
         handlerAdapter.handle(request, response, method);
     }
 
-    @PostConstruct
-    public void report() {
-        this.jobReporter.reportJobSuccess("hephey");
-    }
-
 }
