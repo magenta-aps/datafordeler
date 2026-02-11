@@ -7,7 +7,9 @@ import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.AppenderLoggingException;
 
+import java.io.IOException;
 import java.util.Enumeration;
 
 /**
@@ -99,22 +101,42 @@ public class LoggerHelper {
     }
 
     public void debug(String msg, Object... args) {
-        logger.debug(prefix + msg, args);
+        try {
+            logger.debug(prefix + msg, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void info(String msg, Object... args) {
-        logger.info(prefix + msg, args);
+        try {
+            logger.info(prefix + msg, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void warn(String msg, Object... args) {
+        try {
         logger.warn(prefix + msg, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void error(String msg, Object... args) {
-        logger.error(prefix + msg, args);
+        try {
+            logger.error(prefix + msg, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void error(String msg, Throwable exception) {
-        logger.error(prefix + msg, exception);
+        try {
+            logger.error(prefix + msg, exception);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
