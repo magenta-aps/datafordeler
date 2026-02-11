@@ -47,6 +47,9 @@ public class Engine {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    JobReporter jobReporter;
+
     @Value("${dafo.server.name:dafo01}")
     private String serverName;
 
