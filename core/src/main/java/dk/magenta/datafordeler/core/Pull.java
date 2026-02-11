@@ -216,6 +216,7 @@ public class Pull extends Worker implements Runnable {
             this.onComplete();
 
             this.log.info(this.prefix + " removing lock for " + this.registerManager.getClass().getCanonicalName() + " (" + this.registerManager.hashCode() + ") on " + OffsetDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            this.engine.jobReporter.reportJobSuccess("pull_"+pluginName);
         } catch (ImportInterruptedException e) {
             this.log.info(this.prefix + "Pull for " + pluginName + " interrupted");
             if (e.getChunk() != null && e.getFiles() != null) {
