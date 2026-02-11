@@ -64,7 +64,26 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
         configuration.setDirectPasswordPasswordEncryptionFile(encryptionFile);
         return configuration;
     }
-
+    @PostConstruct
+    public void encryptPasswords() {
+        log.info("Encrypting passwords");
+        try (Session session = this.getSessionManager().getSessionFactory().openSession()) {
+            CprConfiguration configuration = this.getConfiguration();
+            if (configuration != null) {
+                configuration.setDirectPasswordPasswordEncryptionFile(new File(configuration.getEncryptionKeyFileName()));
+                Transaction transaction = session.beginTransaction();
+                try {
+                    if (configuration.encryptDirectPassword(false, true)) {
+                        configuration = (CprConfiguration) session.merge(configuration);
+                    }
+                    transaction.commit();
+                } catch (Exception e) {
+                    transaction.rollback();
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     public void setDirectPassword(String password) throws GeneralSecurityException, IOException {
         // Updates the encrypted password in the database
         Session session = this.getSessionManager().getSessionFactory().openSession();
@@ -93,11 +112,11 @@ public class CprConfigurationManager extends ConfigurationManager<CprConfigurati
     @PostConstruct
     public void printDirectPassword() throws GeneralSecurityException, IOException {
         try {
+            String encryptedPasswordFileName = "/tmp/cpr_key.json";
             CprConfiguration configuration = super.getConfiguration();
-            File encryptedPasswordFile = new File(encryptedPassword);
-            if (encryptedPasswordFile.getParentFile().isDirectory() && encryptedPassword != null && configuration.getEncryptedDirectPassword() != null) {
-                Files.write(new File(encryptedPassword + UUID.randomUUID()).toPath(), configuration.getEncryptedDirectPassword());
-            }
+            configuration.setDirectPasswordPasswordEncryptionFile(new File(encryptedPasswordFileName));
+            System.out.println("Encrypted password: " + configuration.getEncryptedDirectPassword());
+            System.out.println("Password: " + configuration.getDirectPassword());
         } catch (Exception ioe) {
             log.error("Exception", ioe);
         }
