@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.direct;
 
 import dk.magenta.datafordeler.core.AbstractTask;
+import dk.magenta.datafordeler.core.JobReporter;
 import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
@@ -16,23 +17,27 @@ public class CprDirectPasswordUpdate extends Worker implements Runnable {
     public static class Task extends AbstractTask<CprDirectPasswordUpdate> {
         public static final String DATA_CONFIGURATIONMANAGER = "configurationManager";
         public static final String DATA_DIRECTLOOKUP = "directLookup";
+        public static final String DATA_JOB_REPORTER = "jobReporter";
 
         @Override
         protected CprDirectPasswordUpdate createWorker(JobDataMap dataMap) {
             CprConfigurationManager configurationManager = (CprConfigurationManager) dataMap.get(DATA_CONFIGURATIONMANAGER);
             CprDirectLookup directLookup = (CprDirectLookup) dataMap.get(DATA_DIRECTLOOKUP);
-            return new CprDirectPasswordUpdate(configurationManager, directLookup);
+            JobReporter jobReporter = (JobReporter) dataMap.get(DATA_JOB_REPORTER);
+            return new CprDirectPasswordUpdate(configurationManager, directLookup, jobReporter);
         }
     }
 
 
     private final CprConfigurationManager configurationManager;
     private final CprDirectLookup directLookup;
+    private final JobReporter jobReporter;
     private final SecureRandom random = new SecureRandom();
 
-    public CprDirectPasswordUpdate(CprConfigurationManager configurationManager, CprDirectLookup directLookup) {
+    public CprDirectPasswordUpdate(CprConfigurationManager configurationManager, CprDirectLookup directLookup, JobReporter jobReporter) {
         this.configurationManager = configurationManager;
         this.directLookup = directLookup;
+        this.jobReporter = jobReporter;
     }
 
     private static final String ALPHA_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -70,6 +75,7 @@ public class CprDirectPasswordUpdate extends Worker implements Runnable {
             directLookup.login(newPassword);
             // If success, update local pw
             this.configurationManager.setDirectPassword(newPassword);
+            this.jobReporter.reportJobSuccess("cpr_direct_password_update");
         } catch (GeneralSecurityException | IOException | ConfigurationException | DataStreamException e) {
             e.printStackTrace();
         }

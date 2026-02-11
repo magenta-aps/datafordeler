@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.cpr.data.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import dk.magenta.datafordeler.core.JobReporter;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -54,6 +55,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
 
     @Autowired
     private CprDirectLookup directLookup;
+
+    @Autowired
+    private JobReporter jobReporter;
 
     private static PersonEntityManager instance;
 
@@ -475,6 +479,8 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                 JobDataMap jobData = new JobDataMap();
                 jobData.put(CprDirectPasswordUpdate.Task.DATA_CONFIGURATIONMANAGER, this.getCprConfigurationManager());
                 jobData.put(CprDirectPasswordUpdate.Task.DATA_DIRECTLOOKUP, this.directLookup);
+                jobData.put(CprDirectPasswordUpdate.Task.DATA_JOB_REPORTER, this.jobReporter);
+
                 JobDetail job = JobBuilder.newJob(CprDirectPasswordUpdate.Task.class).setJobData(jobData).build();
                 scheduler.scheduleJob(job, Collections.singleton(trigger), true);
                 scheduler.start();
@@ -493,7 +499,8 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
                     CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
                     Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
                     JobDataMap jobData = new JobDataMap();
-                    jobData.put("personManager", this);
+                    jobData.put(SubscriptionTimerTask.Task.DATA_PERSONMANAGER, this);
+                    jobData.put(SubscriptionTimerTask.Task.DATA_JOB_REPORTER, this.jobReporter);
                     JobDetail job = JobBuilder.newJob(SubscriptionTimerTask.Task.class)
                             .withIdentity("CprSubscription")
                             .setJobData(jobData)
