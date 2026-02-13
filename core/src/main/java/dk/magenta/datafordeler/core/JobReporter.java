@@ -1,13 +1,16 @@
 package dk.magenta.datafordeler.core;
 
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Instant;
 
 @Component
@@ -26,8 +29,23 @@ public class JobReporter {
             String data = String.format(this.pushgatewayData, Instant.now().getEpochSecond());
             String url = String.format(this.pushgatewayUrl, jobName);
             try {
-                new URI(url).toURL().openConnection().getOutputStream().write(data.getBytes());
-            } catch (IOException | URISyntaxException e) {
+                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    HttpPost post = new HttpPost(url);
+                    post.setEntity(new StringEntity(data));
+                    httpClient.execute(
+                            post,
+                            (HttpClientResponseHandler<Object>) response -> {
+                                if (response.getCode() != 200) {
+                                    log.error(
+                                            "Failed to report job success: {} {}",
+                                            response.getCode(), response.getReasonPhrase()
+                                    );
+                                }
+                                return null;
+                            }
+                    );
+                }
+            } catch (IOException e) {
                 log.error("Failed to report job success", e);
             }
             return true;
