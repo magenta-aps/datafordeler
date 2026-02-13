@@ -4,6 +4,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.BasicHttpEntity;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,18 +33,19 @@ public class JobReporter {
             String url = String.format(this.pushgatewayUrl, jobName);
             try {
                 try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                    System.out.println("Reporting job " + jobName + " success to " + url);
-                    HttpPost post = new HttpPost(new URI(url));
+                    HttpPost post = new HttpPost(url);
                     post.setEntity(new StringEntity(data));
                     httpClient.execute(
                             post,
                             (HttpClientResponseHandler<Object>) response -> {
-                            System.out.println(response.getCode() + " " + response.getReasonPhrase());
-                            return null;
+                                if (response.getCode() != 200) {
+                                    log.error("Failed to report job success: {}", response.getCode());
+                                }
+                                return null;
                             }
                     );
                 }
-            } catch (IOException | URISyntaxException e) {
+            } catch (IOException e) {
                 log.error("Failed to report job success", e);
             }
             return true;
