@@ -240,11 +240,4 @@ public class Engine {
         handlerAdapter.handle(request, response, method);
     }
 
-
-    @PostConstruct
-    public void sendStartupMessage() {
-        log.info("Engine started");
-        this.jobReporter.reportJobSuccess("startup");
-    }
-
 }
