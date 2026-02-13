@@ -158,6 +158,9 @@ build-doc-image:
     CVR_LOCAL_COPY_FOLDER: ""
     GEO_LOCAL_COPY_FOLDER: ""
 
+    JOB_PUSH_GATEWAY_URL: ""
+    JOB_PUSH_GATEWAY_DATA: ""
+
     ERRORFILE_DIR: "cache/log"
   services:
     - name: ${DAFOSQL_IMAGE_SHA}
