@@ -22,7 +22,7 @@ public class JobReporter {
     private String pushgatewayUrl;
 
     public boolean reportJobSuccess(String jobName) {
-        if (this.pushgatewayUrl != null && this.pushgatewayData != null) {
+        if (this.pushgatewayUrl != null && !this.pushgatewayUrl.isBlank() && this.pushgatewayData != null && !this.pushgatewayData.isBlank()) {
             String data = String.format(this.pushgatewayData, Instant.now().getEpochSecond());
             String url = String.format(this.pushgatewayUrl, jobName);
             try {
