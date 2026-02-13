@@ -32,11 +32,15 @@ public class JobReporter {
             String url = String.format(this.pushgatewayUrl, jobName);
             try {
                 try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                    System.out.println("Reporting job " + jobName + " success to " + url);
                     HttpPost post = new HttpPost(new URI(url));
                     post.setEntity(new StringEntity(data));
                     httpClient.execute(
                             post,
-                            (HttpClientResponseHandler<Object>) response -> null
+                            (HttpClientResponseHandler<Object>) response -> {
+                            System.out.println(response.getCode() + " " + response.getReasonPhrase());
+                            return null;
+                            }
                     );
                 }
             } catch (IOException | URISyntaxException e) {
