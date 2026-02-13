@@ -39,7 +39,10 @@ public class JobReporter {
                             post,
                             (HttpClientResponseHandler<Object>) response -> {
                                 if (response.getCode() != 200) {
-                                    log.error("Failed to report job success: {}", response.getCode());
+                                    log.error(
+                                            "Failed to report job success: {} {}",
+                                            response.getCode(), response.getReasonPhrase()
+                                    );
                                 }
                                 return null;
                             }
