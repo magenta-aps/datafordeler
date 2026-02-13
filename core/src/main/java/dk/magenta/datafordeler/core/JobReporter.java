@@ -48,10 +48,4 @@ public class JobReporter {
         return false;
     }
 
-    @PostConstruct
-    public void sendStartupMessage() {
-        log.info("JobReporter started");
-        this.reportJobSuccess("startup");
-    }
-
 }
