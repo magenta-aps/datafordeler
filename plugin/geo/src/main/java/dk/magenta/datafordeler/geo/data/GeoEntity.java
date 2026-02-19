@@ -130,7 +130,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
         for (GeoMonotemporalRecord record : rawData.getMonotemporalRecords()) {
             record.setDafoUpdated(timestamp);
             this.addMonotemporalRecord(record);
-            if (timestamp != null && (this.dafoUpdated == null || timestamp.isAfter(this.getDafoUpdated()))) {
+            if (timestamp != null && (this.getDafoUpdated() == null || timestamp.isAfter(this.getDafoUpdated()))) {
                 this.setDafoUpdated(timestamp);
             }
         }
