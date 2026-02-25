@@ -55,13 +55,13 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("Qarsaalik", road.get("navn").asText());
         Assertions.assertEquals("Qarsaalik", road.get("andet_navn").asText());
         Assertions.assertEquals(956, road.get("kommunekode").intValue());
-        Assertions.assertEquals("e1274f15-9e2b-4b6e-8b7d-c8078df65aa2", road.get("uuid").asText());
+        Assertions.assertEquals("961ffc61-8b04-45f3-80fd-509b0676fef6", road.get("uuid").asText());
     }
 
 
     @Test
     public void testAccessAddress() throws IOException {
-        ResponseEntity<String> response = this.lookup("/geo/adresse/hus?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2");
+        ResponseEntity<String> response = this.lookup("/geo/adresse/hus?vej=961ffc61-8b04-45f3-80fd-509b0676fef6");
         Assertions.assertEquals(200, response.getStatusCode().value());
         ArrayNode buildings = (ArrayNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals(1, buildings.size());
@@ -86,7 +86,7 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
         Assertions.assertEquals("kld", address.get("etage").asText());
         Assertions.assertEquals(1, address.get("anvendelse").intValue());
-        response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2&husnummer=18");
+        response = this.lookup("/geo/adresse/adresse?vej=961ffc61-8b04-45f3-80fd-509b0676fef6&husnummer=18");
         Assertions.assertEquals(200, response.getStatusCode().value());
         addresses = (ArrayNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals(1, addresses.size());

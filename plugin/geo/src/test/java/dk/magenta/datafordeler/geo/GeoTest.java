@@ -57,7 +57,7 @@ public abstract class GeoTest {
 
     protected void loadAll() throws IOException {
         this.load(localityEntityManager, "/locality.json");
-        this.load(roadEntityManager, "/road.json");//We have failures is data from GAR, If there is more than one roadentity, we use the new one find finding a roadname
+        this.load(roadEntityManager, "/road.json");//We have failures in data from GAR, If there is more than one roadentity, we use the new one find finding a roadname
         this.load(unitAddressEntityManager, "/unit.json");
         this.load(municipalityEntityManager, "/municipality.json");
         this.load(postcodeEntityManager, "/post.json");
@@ -66,7 +66,6 @@ public abstract class GeoTest {
     }
 
     public void loadCprAddress() throws Exception {
-        System.out.println("LOADCPRADDRESS");
         InputStream testData = GeoTest.class.getResourceAsStream("/roaddata.txt");
         Session session = sessionManager.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
