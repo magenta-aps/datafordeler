@@ -197,6 +197,7 @@ public class AdresseService {
         Session session = sessionManager.getSessionFactory().openSession();
         try {
 
+            log.info("Querying database for roads...");
             org.hibernate.query.Query databaseQuery = session.createQuery(
                     "SELECT DISTINCT road FROM " + GeoRoadEntity.class.getCanonicalName() + " road " +
                             "JOIN road.locality locality " +
@@ -220,15 +221,18 @@ public class AdresseService {
             ListHashMap<String, GeoRoadEntity> roadMap = new ListHashMap<>();
             for (Object result : databaseQuery.getResultList()) {
                 GeoRoadEntity geoRoadEntity = (GeoRoadEntity) result;
+                log.info("    got road: " + geoRoadEntity.getCode());
                 for (RoadNameRecord nameRecord : geoRoadEntity.getName()) {
                     if (nameRecord.getRegistrationTo() == null) {
                         String nameValue = nameRecord.getName();
                         roadMap.add(nameValue != null ? nameValue.trim() : null, geoRoadEntity);
+                    } else {
+                        log.info("    roadName: " + nameRecord.getName()+" registrationTo is not null");
                     }
                 }
             }
 
-            if (roadMap.size() == 0 || (roadMap.size() == 1 && roadMap.containsKey(null))) {
+            if (roadMap.isEmpty() || (roadMap.size() == 1 && roadMap.containsKey(null))) {
                 GeoLocalityEntity geoLocalityEntity = QueryManager.getEntity(session, locality, GeoLocalityEntity.class);
                 if (geoLocalityEntity != null) {
                     ObjectNode roadNode = objectMapper.createObjectNode();
@@ -250,6 +254,7 @@ public class AdresseService {
 
             for (String roadName : roadNames) {
                 if (roadName != null) {
+                    log.info("    roadName: " + roadName);
                     ObjectNode roadNode = objectMapper.createObjectNode();
                     roadNode.put(OUTPUT_NAME, roadName);
 
