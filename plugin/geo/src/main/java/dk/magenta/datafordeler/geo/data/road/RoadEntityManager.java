@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.road;
 
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
 import dk.magenta.datafordeler.geo.data.GeoEntityManager;
+import dk.magenta.datafordeler.geo.data.SumiffiikRawData;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class RoadEntityManager extends GeoEntityManager<GeoRoadEntity, RoadRawDa
 
     @Override
     protected UUID generateUUID(RoadRawData rawData) {
-        return UUID.fromString("komkod:"+rawData.properties.municipality+",vejkod:"+rawData.properties.code);
+        return SumiffiikRawData.getSumiffiikAsUUID(rawData.properties.sumiffiikId);
     }
 
     @Override

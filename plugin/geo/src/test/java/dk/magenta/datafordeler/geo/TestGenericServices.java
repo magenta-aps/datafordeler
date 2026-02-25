@@ -161,7 +161,6 @@ public class TestGenericServices extends GeoTest {
         ResponseEntity<String> response;
         JsonNode responseContent;
 
-        System.out.println("testGenericService");
         response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&husNummer=18&bloknavn=House of Testing!" +
                 "&kommune_kode=956&lokalitet_kode=0600&post_kode=3900");
         Assertions.assertEquals(200, response.getStatusCode().value());

@@ -18,6 +18,7 @@ public class UnitAddressRawData extends SumiffiikRawData {
     public Map<String, Integer> usageMap = Map.of(
             "Ukendt", 0,
             "Boligenhed", 1,
+            "Bolig enhed", 1,
             "Erhvervsenhed", 2,
             "Liberal erhvervsenhed", 3,
             "Teknikenhed", 4
