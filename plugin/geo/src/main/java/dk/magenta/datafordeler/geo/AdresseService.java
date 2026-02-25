@@ -363,6 +363,7 @@ public class AdresseService {
     }
 
     public String getAccessAddresses(UUID road, boolean debug) {
+        log.info("getAccessAddresses road: " + road);
         Session session = sessionManager.getSessionFactory().openSession();
 
         StringJoiner where = new StringJoiner(" AND ");
@@ -398,10 +399,12 @@ public class AdresseService {
 
 
         // TODO: Fjern kun bagvedstillet bogstav hvis længde > 3
+        log.info("Querying...");
         try {
             for (Object result : databaseQuery.getResultList()) {
                 AccessAddressEntity addressEntity = (AccessAddressEntity) result;
                 String bnr = stripBnr(addressEntity.getBnr(), true);
+                log.info("    got bnr: " + bnr);
                 //if (!bnrs.contains(bnr)) {
                 AccessAddressHouseNumberRecord houseNumber = current(addressEntity.getHouseNumber());
                 String houseNumberValue = null;
@@ -429,6 +432,8 @@ public class AdresseService {
                 //}
             }
 
+            log.info("queried");
+
             // If a number exist with different BNRs, remove both
             for (String houseNumber : houseNumberMap.keySet()) {
                 HashMap<String, ArrayList<ObjectNode>> housesByBnr = houseNumberMap.get(houseNumber);
@@ -443,6 +448,7 @@ public class AdresseService {
                     }
                 }
             }
+            log.info("added to results");
 
             return results.toString();
         } finally {
