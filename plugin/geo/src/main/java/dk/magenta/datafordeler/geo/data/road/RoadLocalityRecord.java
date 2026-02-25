@@ -20,6 +20,10 @@ import jakarta.persistence.Table;
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + RoadLocalityRecord.TABLE_NAME + RoadLocalityRecord.DB_FIELD_REFERENCE,
                 columnList = RoadLocalityRecord.DB_FIELD_REFERENCE + DatabaseEntry.REF
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + RoadLocalityRecord.TABLE_NAME + LocalityReferenceRecord.DB_FIELD_UUID,
+                columnList = LocalityReferenceRecord.DB_FIELD_UUID
         )
 })
 public class RoadLocalityRecord extends LocalityReferenceRecord<GeoRoadEntity> {

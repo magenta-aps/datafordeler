@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.geo.data.accessaddress;
 
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.geo.GeoPlugin;
+import dk.magenta.datafordeler.geo.data.building.BuildingLocalityRecord;
 import dk.magenta.datafordeler.geo.data.common.LocalityReferenceRecord;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -20,6 +21,10 @@ import jakarta.persistence.Table;
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressLocalityRecord.TABLE_NAME + AccessAddressLocalityRecord.DB_FIELD_REFERENCE,
                 columnList = AccessAddressLocalityRecord.DB_FIELD_REFERENCE + DatabaseEntry.REF
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + AccessAddressLocalityRecord.TABLE_NAME + LocalityReferenceRecord.DB_FIELD_UUID,
+                columnList = LocalityReferenceRecord.DB_FIELD_UUID
         )
 })
 public class AccessAddressLocalityRecord extends LocalityReferenceRecord<AccessAddressEntity> {

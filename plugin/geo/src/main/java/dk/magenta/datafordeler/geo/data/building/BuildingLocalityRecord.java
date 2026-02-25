@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.geo.data.building;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.common.LocalityReferenceRecord;
+import dk.magenta.datafordeler.geo.data.road.RoadLocalityRecord;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -22,6 +23,10 @@ import java.util.UUID;
         @Index(
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + BuildingLocalityRecord.TABLE_NAME + BuildingLocalityRecord.DB_FIELD_REFERENCE,
                 columnList = BuildingLocalityRecord.DB_FIELD_REFERENCE + DatabaseEntry.REF
+        ),
+        @Index(
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + BuildingLocalityRecord.TABLE_NAME + LocalityReferenceRecord.DB_FIELD_UUID,
+                columnList = LocalityReferenceRecord.DB_FIELD_UUID
         )
 })
 public class BuildingLocalityRecord extends LocalityReferenceRecord<BuildingEntity> {
