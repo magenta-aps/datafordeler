@@ -75,12 +75,11 @@ public class TestService extends GeoTest {
     public void testUnitAddress() throws IOException {
         ResponseEntity<String> response = this.lookup("/geo/adresse/adresse?b_nummer=B-3197B");
         Assertions.assertEquals(400, response.getStatusCode().value());
-        response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2");
+        response = this.lookup("/geo/adresse/adresse?vej=961ffc61-8b04-45f3-80fd-509b0676fef6");
         Assertions.assertEquals(200, response.getStatusCode().value());
         ArrayNode addresses = (ArrayNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals(1, addresses.size());
         ObjectNode address = (ObjectNode) addresses.get(0);
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address));
         Assertions.assertEquals("18", address.get("husnummer").asText());
         Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
