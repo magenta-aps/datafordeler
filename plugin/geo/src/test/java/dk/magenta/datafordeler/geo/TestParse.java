@@ -115,7 +115,7 @@ public class TestParse extends GeoTest {
 
         Session session = sessionManager.getSessionFactory().openSession();
         try {
-            GeoRoadEntity entity = QueryManager.getEntity(session, UUID.fromString("961FFC61-8B04-45F3-80FD-509B0676FEF6"), GeoRoadEntity.class);
+            GeoRoadEntity entity = QueryManager.getEntity(session, UUID.fromString("035ced7b-d8b8-3e70-ba81-a1f4fceefb81"), GeoRoadEntity.class);
             Assertions.assertNotNull(entity);
             Assertions.assertEquals(254, entity.getCode());
             Assertions.assertTrue(OffsetDateTime.parse("2018-08-23T14:48:05Z").isEqual(entity.getCreationDate()));
@@ -129,7 +129,7 @@ public class TestParse extends GeoTest {
             session.close();
         }
 
-        ResponseEntity<String> response = this.uuidSearch("961FFC61-8B04-45F3-80FD-509B0676FEF6", "road");
+        ResponseEntity<String> response = this.uuidSearch("035ced7b-d8b8-3e70-ba81-a1f4fceefb81", "road");
         Assertions.assertEquals(200, response.getStatusCode().value());
         System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
                 objectMapper.readTree(response.getBody())

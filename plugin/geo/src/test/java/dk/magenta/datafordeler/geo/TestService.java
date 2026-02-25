@@ -55,13 +55,13 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("Qarsaalik", road.get("navn").asText());
         Assertions.assertEquals("Qarsaalik", road.get("andet_navn").asText());
         Assertions.assertEquals(956, road.get("kommunekode").intValue());
-        Assertions.assertEquals("961ffc61-8b04-45f3-80fd-509b0676fef6", road.get("uuid").asText());
+        Assertions.assertEquals("035ced7b-d8b8-3e70-ba81-a1f4fceefb81", road.get("uuid").asText());
     }
 
 
     @Test
     public void testAccessAddress() throws IOException {
-        ResponseEntity<String> response = this.lookup("/geo/adresse/hus?vej=961ffc61-8b04-45f3-80fd-509b0676fef6");
+        ResponseEntity<String> response = this.lookup("/geo/adresse/hus?vej=035ced7b-d8b8-3e70-ba81-a1f4fceefb81");
         Assertions.assertEquals(200, response.getStatusCode().value());
         ArrayNode buildings = (ArrayNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals(1, buildings.size());
@@ -75,7 +75,7 @@ public class TestService extends GeoTest {
     public void testUnitAddress() throws IOException {
         ResponseEntity<String> response = this.lookup("/geo/adresse/adresse?b_nummer=B-3197B");
         Assertions.assertEquals(400, response.getStatusCode().value());
-        response = this.lookup("/geo/adresse/adresse?vej=961ffc61-8b04-45f3-80fd-509b0676fef6");
+        response = this.lookup("/geo/adresse/adresse?vej=035ced7b-d8b8-3e70-ba81-a1f4fceefb81");
         Assertions.assertEquals(200, response.getStatusCode().value());
         ArrayNode addresses = (ArrayNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals(1, addresses.size());
@@ -85,7 +85,7 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
         Assertions.assertEquals("kld", address.get("etage").asText());
         Assertions.assertEquals(1, address.get("anvendelse").intValue());
-        response = this.lookup("/geo/adresse/adresse?vej=961ffc61-8b04-45f3-80fd-509b0676fef6&husnummer=18");
+        response = this.lookup("/geo/adresse/adresse?vej=035ced7b-d8b8-3e70-ba81-a1f4fceefb81&husnummer=18");
         Assertions.assertEquals(200, response.getStatusCode().value());
         addresses = (ArrayNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals(1, addresses.size());
