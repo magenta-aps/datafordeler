@@ -155,6 +155,9 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
 
                     timer.start(TASK_FIND_ENTITY);
                     UUID uuid = this.generateUUID(rawData);
+                    if (uuid == null) {
+                        log.error("null uuid at "+rawData.getClass().getSimpleName()+": ");
+                    }
                     E entity = entityCache.get(uuid);
                     if (entity == null) {
                         Identification identification = QueryManager.getOrCreateIdentification(session, uuid, this.getDomain());
