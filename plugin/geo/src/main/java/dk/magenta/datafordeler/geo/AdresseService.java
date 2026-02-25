@@ -339,9 +339,14 @@ public class AdresseService {
      */
     @RequestMapping(method = RequestMethod.GET, path={"/hus", "/hus/"})
     public void getAccessAddresses(HttpServletRequest request, HttpServletResponse response) throws DataFordelerException, IOException {
-        String payload = this.getAccessAddresses(request);
-        setHeaders(response);
-        response.getWriter().write(payload);
+        try {
+            String payload = this.getAccessAddresses(request);
+            setHeaders(response);
+            response.getWriter().write(payload);
+        } catch (DataFordelerException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     public String getAccessAddresses(HttpServletRequest request) throws DataFordelerException {
