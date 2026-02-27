@@ -145,8 +145,6 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
         }
         try {
             timer.clear();
-            final WireCache wireCache = new WireCache();
-            this.populateWireCache(wireCache, session);
             Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
             ObjectReader objectReader = objectMapper.readerFor(this.getRawClass());
             final FinalWrapper<Integer> counter = new FinalWrapper<>(0);
@@ -185,9 +183,12 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                 } catch (IOException e) {
                     log.error("Error importing " + this.getManagedEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
                 }
+                session.flush();
             });
 
-            session.flush();
+            final WireCache wireCache = new WireCache();
+            this.populateWireCache(wireCache, session);
+            log.info("Wiring all entities of type " + this.getManagedEntityClass().getSimpleName());
             this.wireAll(session, wireCache);
 
             if (!wrappedInTransaction) {
