@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.database.ConfigurationSessionManager;
 import dk.magenta.datafordeler.core.database.Identification;
@@ -18,6 +19,7 @@ import dk.magenta.datafordeler.core.plugin.Communicator;
 import dk.magenta.datafordeler.core.plugin.EntityManager;
 import dk.magenta.datafordeler.core.plugin.HttpCommunicator;
 import dk.magenta.datafordeler.core.plugin.RegisterManager;
+import dk.magenta.datafordeler.core.util.FinalWrapper;
 import dk.magenta.datafordeler.core.util.Stopwatch;
 import dk.magenta.datafordeler.geo.GeoRegisterManager;
 import dk.magenta.datafordeler.geo.configuration.GeoConfiguration;
@@ -146,11 +148,16 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
             final WireCache wireCache = new WireCache();
             this.populateWireCache(wireCache, session);
             Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
-
+            ObjectReader objectReader = objectMapper.readerFor(this.getRawClass());
+            final FinalWrapper<Integer> counter = new FinalWrapper<>(0);
             GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
+                int count = counter.getInner();
+                count++;
+                counter.setInner(count);
+                log.info("Parsing " + this.getManagedEntityClass().getSimpleName() + " " + (count));
                 try {
                     timer.start(TASK_PARSE);
-                    T rawData = objectMapper.readerFor(this.getRawClass()).readValue(jsonNode);
+                    T rawData = objectReader.readValue(jsonNode);
                     timer.measure(TASK_PARSE);
 
                     timer.start(TASK_FIND_ENTITY);
