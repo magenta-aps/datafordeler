@@ -50,9 +50,6 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     @Autowired
     Stopwatch timer;
 
-
-
-
     @Autowired
     private ConfigurationSessionManager configurationSessionManager;
 
@@ -146,6 +143,7 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
             final WireCache wireCache = new WireCache();
             this.populateWireCache(wireCache, session);
             Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
+<<<<<<< Updated upstream
 
             GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
                 try {
@@ -159,33 +157,82 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
                     if (entity == null) {
                         Identification identification = QueryManager.getOrCreateIdentification(session, uuid, this.getDomain());
                         entity = QueryManager.getEntity(session, identification, this.getManagedEntityClass());
+=======
+            ObjectReader objectReader = objectMapper.readerFor(this.getRawClass());
+            final FinalWrapper<Integer> counter = new FinalWrapper<>(0);
+
+            ArrayList<JsonNode> nodes = new ArrayList<>();
+
+
+
+            GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
+                nodes.add(jsonNode);
+            });
+            long total = nodes.size();
+            log.info("Got "+total+" json nodes to import");
+            if (total > 0) {
+
+
+
+                for (JsonNode jsonNode : nodes) {
+                    int count = counter.getInner();
+                    count++;
+                    counter.setInner(count);
+                    log.info("Parsing " + this.getManagedEntityClass().getSimpleName() + " " + count + " of " + total);
+                    try {
+                        timer.start(TASK_PARSE);
+                        T rawData = objectReader.readValue(jsonNode);
+                        timer.measure(TASK_PARSE);
+
+                        timer.start(TASK_FIND_ENTITY);
+                        UUID uuid = this.generateUUID(rawData);
+                        E entity = entityCache.get(uuid);
+>>>>>>> Stashed changes
                         if (entity == null) {
-                            entity = this.createBasicEntity(rawData, session);
-                            entity.setIdentification(identification);
+                            Identification identification = QueryManager.getOrCreateIdentification(session, uuid, this.getDomain());
+                            entity = QueryManager.getEntity(session, identification, this.getManagedEntityClass());
+                            if (entity == null) {
+                                log.info("Creating new " + this.getManagedEntityClass().getSimpleName() + " with UUID: " + uuid);
+                                entity = this.createBasicEntity(rawData, session);
+                                entity.setIdentification(identification);
+                            } else {
+                                continue; //
+                            }
+//                            entityCache.put(uuid, entity);
                         }
-                        entityCache.put(uuid, entity);
+                        timer.measure(TASK_FIND_ENTITY);
+
+                        timer.start(TASK_POPULATE_DATA);
+                        this.updateEntity(entity, rawData, importMetadata);
+                        timer.measure(TASK_POPULATE_DATA);
+
+                        timer.start(TASK_SAVE);
+                        session.persist(entity);
+                        timer.measure(TASK_SAVE);
+
+                    } catch (IOException e) {
+                        log.error("Error importing " + this.getManagedEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
                     }
-                    timer.measure(TASK_FIND_ENTITY);
-
-                    timer.start(TASK_POPULATE_DATA);
-                    this.updateEntity(entity, rawData, importMetadata);
-                    timer.measure(TASK_POPULATE_DATA);
-
-                    timer.start(TASK_SAVE);
-                    session.persist(entity);
-                    timer.measure(TASK_SAVE);
-
-                } catch (IOException e) {
-                    log.error("Error importing " + this.getManagedEntityClass().getSimpleName() + ": " + jsonNode.toString(), e);
+                    session.flush();
+                    session.clear();
                 }
+<<<<<<< Updated upstream
             });
 
             session.flush();
             this.wireAll(session, wireCache);
+=======
 
-            if (!wrappedInTransaction) {
-                session.getTransaction().commit();
-                importMetadata.setTransactionInProgress(false);
+                log.info("Wiring all entities of type " + this.getManagedEntityClass().getSimpleName());
+                WireCache wireCache = new WireCache();
+                this.populateWireCache(wireCache, session);
+                this.wireAll(session, wireCache);
+>>>>>>> Stashed changes
+
+                if (!wrappedInTransaction) {
+                    session.getTransaction().commit();
+                    importMetadata.setTransactionInProgress(false);
+                }
             }
         } catch (Exception e) {
             if (!wrappedInTransaction) {
@@ -256,45 +303,43 @@ public abstract class GeoEntityManager<E extends GeoEntity, T extends RawData> e
     }
 
 
-    public void parseDeletionData(InputStream jsonData) throws DataStreamException {
+    public void parseDeletionData(Session session, InputStream jsonData) throws DataStreamException {
         Charset charset = this.geoConfigurationManager.getConfiguration().getCharset();
-        try (Session session = sessionManager.getSessionFactory().openSession()) {
-            HashMap<UUID, Long> uuids = new HashMap<>();
-            GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
-                JsonNode dataNode = jsonNode.get("attributes");
-                String globalId = dataNode.get("GlobalID").asText();
-                long deletionTime = dataNode.get("DeletedDate").asLong(); // Epoch millisecond
-                UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
-                if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
-                    log.info("Duplicate UUID in deletion for " + this.getManagedEntityClass().getSimpleName()+": " + uuid);
-                    return;
-                }
-                uuids.put(uuid, deletionTime);
-            });
-            ArrayList<E> entitiesToDelete = new ArrayList<>();
-
-            for (UUID uuid : uuids.keySet()) {
-                long deletionTime = uuids.get(uuid);
-                E entity = QueryManager.getEntity(session, uuid, this.getManagedEntityClass());
-                if (entity != null && (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000)) {
-                    entitiesToDelete.add(entity);
-                }
+        HashMap<UUID, Long> uuids = new HashMap<>();
+        GeoEntityManager.parseJsonStream(jsonData, charset, "features", this.objectMapper, jsonNode -> {
+            JsonNode dataNode = jsonNode.get("attributes");
+            String globalId = dataNode.get("GlobalID").asText();
+            long deletionTime = dataNode.get("DeletedDate").asLong(); // Epoch millisecond
+            UUID uuid = SumiffiikRawData.getSumiffiikAsUUID(globalId);
+            if (uuids.containsKey(uuid) && uuids.get(uuid) < deletionTime) {
+                log.info("Duplicate UUID in deletion for " + this.getManagedEntityClass().getSimpleName()+": " + uuid);
+                return;
             }
-            log.info("Found " + entitiesToDelete.size() + " " + this.getManagedEntityClass().getSimpleName() + " to delete");
+            uuids.put(uuid, deletionTime);
+        });
+        long total = uuids.size();
+        log.info("Found " + uuids.size() + " raw UUIDs to delete");
+        ArrayList<E> entitiesToDelete = new ArrayList<>();
 
-            session.beginTransaction();
-            try {
-                for (E entity : entitiesToDelete) {
-                        log.info("Deleting " + this.getManagedEntityClass().getSimpleName() + " " + session.getIdentifier(entity));
-                        session.remove(entity);
+        long i = 0;
+        List<E> entities = QueryManager.getEntities(session, uuids.keySet(), this.getManagedEntityClass());
+        log.info("Found " + entities.size() + " " + this.getManagedEntityClass().getSimpleName() + " to check");
 
-                }
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-                throw e;
+        for (E entity : entities) {
+            UUID uuid = entity.getIdentification().getUuid();
+            long deletionTime = uuids.get(uuid);
+            if (entity.getEditDate() == null || deletionTime > entity.getEditDate().toEpochSecond() * 1000) {
+                entitiesToDelete.add(entity);
             }
-            session.getTransaction().commit();
+            i++;
+            log.info(i+" of "+total);
         }
+        log.info("Found " + entitiesToDelete.size() + " " + this.getManagedEntityClass().getSimpleName() + " to delete");
+        for (E entity : entitiesToDelete) {
+            log.info("Deleting " + this.getManagedEntityClass().getSimpleName() + " " + session.getIdentifier(entity));
+            session.remove(entity);
+        }
+
     }
 
     protected void updateEntity(E entity, T rawData, ImportMetadata importMetadata) {

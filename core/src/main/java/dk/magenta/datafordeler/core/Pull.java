@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.database.InterruptedPull;
 import dk.magenta.datafordeler.core.database.InterruptedPullFile;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.exception.DataFordelerException;
 import dk.magenta.datafordeler.core.exception.ImportInterruptedException;
 import dk.magenta.datafordeler.core.exception.SimilarJobRunningException;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
@@ -177,30 +178,46 @@ public class Pull extends Worker implements Runnable {
 
                 this.log.info(this.prefix + "Pulling data for " + entityManager.getClass().getSimpleName());
 
-                this.registerManager.beforePull(entityManager, this.importMetadata);
-                InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
+                Transaction transaction = session.beginTransaction();
+                this.importMetadata.setTransactionInProgress(true);
 
-                if (Environment.getEnv("SKIP_PULL_LOAD", false)) {
-                    stream = null;
-                    log.info("Skipping actual data load");
-                }
+                try {
+                    this.registerManager.beforePull(entityManager, this.importMetadata);
 
-                if (stream != null) {
-                    try {
-                        entityManager.parseData(stream, importMetadata);
-                        if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
-                            this.registerManager.setLastUpdated(entityManager, importMetadata);
-                        }
-                    } catch (Exception e) {
-                        if (this.doCancel) {
-                            break;
-                        } else {
-                            throw e;
-                        }
-                    } finally {
-                        QueryManager.clearCaches();
-                        stream.close();
+                    InputStream stream = this.registerManager.pullRawData(this.registerManager.getEventInterface(entityManager), entityManager, this.importMetadata);
+                    this.log.info("Data pulled");
+                    if (Environment.getEnv("SKIP_PULL_LOAD", false)) {
+                        stream = null;
+                        log.info("Skipping actual data load");
                     }
+
+                    if (stream != null) {
+                        try {
+                            this.log.info("Parsing data");
+                            entityManager.parseData(stream, importMetadata);
+                            if (!entityManager.shouldSkipLastUpdate(importMetadata)) {
+                                this.registerManager.setLastUpdated(entityManager, importMetadata);
+                            }
+                        } catch (Exception e) {
+                            if (this.doCancel) {
+                                break;
+                            } else {
+                                throw e;
+                            }
+                        } finally {
+                            QueryManager.clearCaches();
+                            stream.close();
+                        }
+                    }
+
+                    transaction.commit();
+
+                } catch (DataFordelerException e) {
+                    transaction.rollback();
+                    this.log.error(this.prefix + "Error in beforePull for " + entityManager.getClass().getSimpleName(), e);
+                    error = true;
+                } finally {
+                    this.importMetadata.setTransactionInProgress(false);
                 }
             }
 

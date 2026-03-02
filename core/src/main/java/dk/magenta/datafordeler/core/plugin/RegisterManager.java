@@ -261,7 +261,7 @@ public abstract class RegisterManager {
         }
     }
 
-    public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
+    public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
         // Override in subclasses
     }
 

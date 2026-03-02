@@ -14,6 +14,7 @@ import org.hibernate.query.Query;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -359,6 +360,28 @@ public class QueryManager {
             return getEntity(session, identification, eClass);
         }
         return null;
+    }
+
+
+    public static <E extends IdentifiedEntity> List<E> getEntities(Session session, Collection<UUID> uuids, Class<E> eClass) {
+        ArrayList<UUID> uuidsList = new ArrayList<>(uuids);
+        // We will pass a list of uuids to the query, but it doesn't like to get too many at a time, so we need to chunk it.
+        List<List<UUID>> chunked = IntStream.rangeClosed(0, (uuidsList.size() - 1) / 500)
+                .mapToObj(i -> uuidsList.subList(i * 500, Math.min((i + 1) * 500, uuidsList.size())))
+                .toList();
+        ArrayList<E> results = new ArrayList<>();
+        for (List<UUID> uuidsChunk : chunked) {
+            Query<E> databaseQuery = session.createQuery(
+                    "select " + ENTITY + " " +
+                            "from " + eClass.getCanonicalName() + " " + ENTITY + " " +
+                            "join " + ENTITY + ".identification identification " +
+                            "where identification.uuid in :uuids",
+                    eClass
+            );
+            databaseQuery.setParameter("uuids", uuidsChunk);
+            results.addAll(databaseQuery.getResultList());
+        }
+        return results;
     }
 
     /**

@@ -133,9 +133,8 @@ public class GeoRegisterManager extends RegisterManager {
         address = address.replace("%{editDate}", this.formatDate(lastUpdateTime));
 
         try {
-            URL url = new URL(address);
-            return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-        } catch (URISyntaxException | MalformedURLException e) {
+            return URI.create(address);
+        } catch (IllegalArgumentException e) {
             throw new ConfigurationException("Invalid URL for schema " + entityManager.getSchema() + ": " + address, e);
         }
     }
@@ -167,13 +166,9 @@ public class GeoRegisterManager extends RegisterManager {
     }
 
     @Override
-    public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) {
+    public void beforePull(EntityManager entityManager, ImportMetadata importMetadata) throws DataFordelerException {
         // First delete items that are deleted on input server
-        try {
-            this.removeDeleted((GeoEntityManager) entityManager, importMetadata);
-        } catch (DataFordelerException e) {
-            e.printStackTrace();
-        }
+        this.removeDeleted((GeoEntityManager) entityManager, importMetadata);
     }
 
     @Override
@@ -290,7 +285,8 @@ public class GeoRegisterManager extends RegisterManager {
             ImportInputStream stream = this.pullRawData(this.getDeletionInterface(entityManager), entityManager, importMetadata);
             if (stream != null) {
                 try {
-                    entityManager.parseDeletionData(stream);
+                    log.info("Deleting obsolete items");
+                    entityManager.parseDeletionData(importMetadata.getSession(), stream);
                 } finally {
                     QueryManager.clearCaches();
                     try {
