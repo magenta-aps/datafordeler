@@ -6,13 +6,19 @@ import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.exception.DataStreamException;
 import dk.magenta.datafordeler.cpr.configuration.CprConfigurationManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDataMap;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
 public class CprDirectPasswordUpdate extends Worker implements Runnable {
+
+    protected Logger log = LogManager.getLogger(this.getClass().getSimpleName());
 
     public static class Task extends AbstractTask<CprDirectPasswordUpdate> {
         public static final String DATA_CONFIGURATIONMANAGER = "configurationManager";
@@ -66,18 +72,28 @@ public class CprDirectPasswordUpdate extends Worker implements Runnable {
 
     @Override
     public void run() {
+        log.info("Running update of CPR direct password");
         try {
-            // Make sure we can access the local password storage
+            // Make sure we can access the local password storage. If there is an exception, do not attempt to create a new password
             String oldPassword = this.configurationManager.getConfiguration().getDirectPassword();
+            log.info("Obtained old password");
             // Generate a new password
             String newPassword = this.generatePassword(8);
+            File tempPasswordStore = new File("/app/data/password.txt");
+            try (FileWriter fw = new FileWriter(tempPasswordStore)) {
+                fw.write(newPassword);
+            }
+            log.info("Generated new password");
             // Update remote pw
             directLookup.login(newPassword);
+            log.info("Updated remote password");
             // If success, update local pw
             this.configurationManager.setDirectPassword(newPassword);
+            log.info("Stored new password");
             this.jobReporter.reportJobSuccess("cpr_direct_password_update");
+            tempPasswordStore.delete();
         } catch (GeneralSecurityException | IOException | ConfigurationException | DataStreamException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }
