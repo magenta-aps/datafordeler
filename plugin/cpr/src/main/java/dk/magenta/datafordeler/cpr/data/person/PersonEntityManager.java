@@ -471,7 +471,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
         if (configurationManager.getConfiguration().isDirectPasswordChangeEnable()) {
             try {
                 Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
-                CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.monthlyOnDayAndHourAndMinute(11, 8, 0);
+                CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.monthlyOnDayAndHourAndMinute(1, 0, 1);
                 log.info("Preparing to update CPR direct password on "+ scheduleBuilder.build().getNextFireTime());
                 TriggerKey triggerKey = TriggerKey.triggerKey("directPasswordChangeTrigger");
                 Trigger trigger = TriggerBuilder.newTrigger()
