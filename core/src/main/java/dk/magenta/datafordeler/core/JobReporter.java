@@ -25,26 +25,29 @@ public class JobReporter {
     private String pushgatewayUrl;
 
     public boolean reportJobSuccess(String jobName) {
+        log.info("Reporting success on job {} to gateway {} with payload {}", jobName, this.pushgatewayUrl, this.pushgatewayData);
         if (this.pushgatewayUrl != null && !this.pushgatewayUrl.isBlank() && this.pushgatewayData != null && !this.pushgatewayData.isBlank()) {
             String data = String.format(this.pushgatewayData, Instant.now().getEpochSecond());
             String url = String.format(this.pushgatewayUrl, jobName);
-            try {
-                try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-                    HttpPost post = new HttpPost(url);
-                    post.setEntity(new StringEntity(data));
-                    httpClient.execute(
-                            post,
-                            (HttpClientResponseHandler<Object>) response -> {
-                                if (response.getCode() != 200) {
-                                    log.error(
-                                            "Failed to report job success: {} {}",
-                                            response.getCode(), response.getReasonPhrase()
-                                    );
-                                }
-                                return null;
-                            }
-                    );
-                }
+
+            try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+                HttpPost post = new HttpPost(url);
+                post.setEntity(new StringEntity(data));
+                httpClient.execute(
+                    post,
+                    (HttpClientResponseHandler<Object>) response -> {
+                        if (response.getCode() == 200) {
+                            log.info("Job success for {} reported", jobName);
+                        } else {
+                            log.error(
+                                    "Failed to report job success: {} {}",
+                                    response.getCode(), response.getReasonPhrase()
+                            );
+                        }
+                        return null;
+                    }
+                );
+
             } catch (IOException e) {
                 log.error("Failed to report job success", e);
             }
