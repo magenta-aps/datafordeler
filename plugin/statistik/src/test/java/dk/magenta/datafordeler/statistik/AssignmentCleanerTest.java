@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.statistik;
 
 import dk.magenta.datafordeler.core.Application;
+import dk.magenta.datafordeler.core.JobReporter;
 import dk.magenta.datafordeler.core.database.QueryManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -25,6 +26,9 @@ public class AssignmentCleanerTest {
     @Autowired
     SessionManager sessionManager;
 
+    @Autowired
+    JobReporter jobReporter;
+
     @Test
     public void testRun() throws ConfigurationException, InterruptedException, SchedulerException {
         ReportAssignment reportAssignment = new ReportAssignment();
@@ -42,7 +46,7 @@ public class AssignmentCleanerTest {
             List<ReportAssignment> reportAssignmentList = QueryManager.getAllEntities(session, ReportAssignment.class, false);
             Assertions.assertFalse(reportAssignmentList.isEmpty());
 
-            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * * *");
+            AssignmentCleaner.setup(sessionManager.getSessionFactory(), 0, "* * * * * *", jobReporter);
             Thread.sleep(1000);
             AssignmentCleaner.unSchedule();
 

@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.statistik.reportExecution;
 
 import dk.magenta.datafordeler.core.AbstractTask;
+import dk.magenta.datafordeler.core.JobReporter;
 import dk.magenta.datafordeler.core.command.Worker;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
 import dk.magenta.datafordeler.core.util.CronUtil;
@@ -22,20 +23,28 @@ public class AssignmentCleaner extends Worker implements Runnable {
 
     private SessionFactory sessionFactory;
     private int daysToLive;
+    private JobReporter jobReporter;
 
     private static final Logger log = LogManager.getLogger(AssignmentCleaner.class.getCanonicalName());
 
-    public AssignmentCleaner(SessionFactory sessionFactory, int daysToLive) {
+    public AssignmentCleaner(SessionFactory sessionFactory, int daysToLive, JobReporter jobReporter) {
         this.sessionFactory = sessionFactory;
         this.daysToLive = daysToLive;
+        this.jobReporter = jobReporter;
     }
 
     public static class Task extends AbstractTask<AssignmentCleaner> {
+
+        public static final String DATA_SESSIONFACTORY = "sessionFactory";
+        public static final String DATA_DAYS_TO_LIVE = "daysToLive";
+        public static final String DATA_JOB_REPORTER = "jobReporter";
+
         @Override
         protected AssignmentCleaner createWorker(JobDataMap dataMap) {
-            SessionFactory sessionFactory = (SessionFactory) dataMap.get("sessionFactory");
-            int daysToLive = (int) dataMap.get("daysToLive");
-            return new AssignmentCleaner(sessionFactory, daysToLive);
+            SessionFactory sessionFactory = (SessionFactory) dataMap.get(DATA_SESSIONFACTORY);
+            int daysToLive = (int) dataMap.get(DATA_DAYS_TO_LIVE);
+            JobReporter jobReporter = (JobReporter)  dataMap.get(DATA_JOB_REPORTER);
+            return new AssignmentCleaner(sessionFactory, daysToLive, jobReporter);
         }
     }
 
@@ -49,6 +58,7 @@ public class AssignmentCleaner extends Worker implements Runnable {
                 query.setParameter("cutoffDate", cutoffDate);
                 query.executeUpdate();
                 transaction.commit();
+                this.jobReporter.reportJobSuccess("cleanup_assignments");
             } catch (Exception e) {
                 transaction.rollback();
                 throw e;
@@ -56,7 +66,7 @@ public class AssignmentCleaner extends Worker implements Runnable {
         }
     }
 
-    public static void setup(SessionFactory sessionFactory, int daysToLive, String cronSchedule) throws ConfigurationException {
+    public static void setup(SessionFactory sessionFactory, int daysToLive, String cronSchedule, JobReporter jobReporter) throws ConfigurationException {
         String s = CronUtil.reformatSchedule(cronSchedule);
         if (s == null) {
             log.error("CronSchedule for AssignmentCleaner is null");
@@ -71,8 +81,9 @@ public class AssignmentCleaner extends Worker implements Runnable {
                     .withSchedule(scheduleBuilder).build();
 
             JobDataMap jobData = new JobDataMap();
-            jobData.put("sessionFactory", sessionFactory);
-            jobData.put("daysToLive", daysToLive);
+            jobData.put(Task.DATA_SESSIONFACTORY, sessionFactory);
+            jobData.put(Task.DATA_DAYS_TO_LIVE, daysToLive);
+            jobData.put(Task.DATA_JOB_REPORTER, jobReporter);
 
             JobDetail job = JobBuilder.newJob(AssignmentCleaner.Task.class)
                     .withIdentity("assignmentCleaner")

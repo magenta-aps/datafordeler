@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.statistik;
 
+import dk.magenta.datafordeler.core.JobReporter;
 import dk.magenta.datafordeler.core.configuration.ConfigurationManager;
 import dk.magenta.datafordeler.core.database.SessionManager;
 import dk.magenta.datafordeler.core.exception.ConfigurationException;
@@ -45,8 +46,11 @@ public class StatistikPlugin extends Plugin {
     @Autowired
     public SessionManager sessionManager;
 
+    @Autowired
+    private JobReporter jobReporter;
+
     @PostConstruct
     public void init() throws ConfigurationException {
-        AssignmentCleaner.setup(sessionManager.getSessionFactory(), 7, "0 0 0 15 * *");
+        AssignmentCleaner.setup(sessionManager.getSessionFactory(), 7, "0 0 0 15 * *", this.jobReporter);
     }
 }
