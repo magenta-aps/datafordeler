@@ -585,7 +585,7 @@ public class CprConfiguration implements Configuration {
     private boolean subscriptionEnabled = Environment.getEnv("CPR_SUBSCRIPTION_ENABLE", false);
 
     @Transient
-    private String localSubscriptionFolder = Environment.getEnv("CPR_LOCAL_SUBSCRIPTION_FOLDER", null);
+    private String localSubscriptionFolder = Environment.getEnv("CPR_SUBSCRIPTION_FOLDER", null);
 
     @Transient
     private int jobId = Environment.getEnv("CPR_JOB_ID", 0);
