@@ -368,7 +368,7 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
     public void createSubscriptionFile(Session session) {
         log.info("Creating subscription file");
         String charset = this.getConfiguration().getRegisterCharset(this);
-
+        Transaction transaction = session.beginTransaction();
         try {
 
             Query<PersonSubscription> subscriptionQuery = session.createQuery(
@@ -422,8 +422,9 @@ public class PersonEntityManager extends CprRecordEntityManager<PersonDataRecord
             for (PersonSubscription subscription : subscriptionList) {
                 session.persist(subscription);
             }
-
+            transaction.commit();
         } catch (Exception e) {
+            transaction.rollback();
             log.error(e);
         }
     }
