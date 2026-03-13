@@ -1,7 +1,6 @@
 package dk.magenta.datafordeler.core.fapi;
 
 import dk.magenta.datafordeler.core.Application;
-import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Entity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,10 +66,6 @@ public class QueryTest {
             return Entity.class;
         }
 
-        @Override
-        public Class getDataClass() {
-            return DataItem.class;
-        }
     }
 
     @Test

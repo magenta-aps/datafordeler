@@ -66,7 +66,6 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
     public void setStartTime(OffsetDateTime startTime) {
-//        this.startTime = fixOffsetIn(startTime);
         this.startTimeNew = startTime;
     }
 
@@ -82,7 +81,6 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
     public void setInterruptTime(OffsetDateTime interruptTime) {
-//        this.interruptTime = fixOffsetIn(interruptTime);
         this.interruptTimeNew = interruptTime;
     }
 
@@ -138,8 +136,6 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
-//        this.startTimeNew = Bitemporal.fixOffsetOut(this.startTime);
-//        this.interruptTimeNew = Bitemporal.fixOffsetOut(this.interruptTime);
     }
 
     public static List<String> updateFields() {
