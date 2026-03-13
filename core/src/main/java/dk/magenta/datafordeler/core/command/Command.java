@@ -52,14 +52,14 @@ public final class Command extends DatabaseEntry implements Configuration, Migra
     @JsonIgnore
     private String issuer;
 
-    @Column(nullable = true, columnDefinition = "datetime2")
-    private OffsetDateTime received;
+//    @Column(nullable = true, columnDefinition = "datetime2")
+//    private OffsetDateTime received;
 
     @Column(nullable = true)
     private OffsetDateTime receivedNew;
 
-    @Column(nullable = true, columnDefinition = "datetime2")
-    private OffsetDateTime handled;
+//    @Column(nullable = true, columnDefinition = "datetime2")
+//    private OffsetDateTime handled;
 
     @Column(nullable = true)
     private OffsetDateTime handledNew;
@@ -128,15 +128,15 @@ public final class Command extends DatabaseEntry implements Configuration, Migra
     }
 
     public OffsetDateTime getReceived() {
-        return received;
+        return receivedNew;
     }
 
     public void setReceived() {
-        this.received = this.receivedNew = OffsetDateTime.now();
+        this.receivedNew = OffsetDateTime.now();
     }
 
     public OffsetDateTime getHandled() {
-        return handled;
+        return handledNew;
     }
 
     public void setHandled() {
@@ -201,8 +201,8 @@ public final class Command extends DatabaseEntry implements Configuration, Migra
 
 
     public void updateTimestamp() {
-        this.receivedNew = Bitemporal.fixOffsetOut(this.received);
-        this.handledNew = Bitemporal.fixOffsetOut(this.handled);
+//        this.receivedNew = Bitemporal.fixOffsetOut(this.received);
+//        this.handledNew = Bitemporal.fixOffsetOut(this.handled);
     }
 
     public static List<String> updateFields() {
