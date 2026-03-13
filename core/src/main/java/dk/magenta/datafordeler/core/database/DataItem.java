@@ -88,8 +88,8 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
-    private OffsetDateTime lastUpdated;
+//    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
+//    private OffsetDateTime lastUpdated;
 
     @JsonIgnore
     @Column(name = DB_FIELD_LAST_UPDATED+"_new")
@@ -100,12 +100,12 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     }
 
     public void setLastUpdated(OffsetDateTime lastUpdated) {
-        this.lastUpdated = fixOffsetIn(lastUpdated);
+//        this.lastUpdated = fixOffsetIn(lastUpdated);
         this.lastUpdatedNew = lastUpdated;
     }
 
     public void setUpdated(OffsetDateTime lastUpdated) {
-        if (this.lastUpdated == null || (lastUpdated != null && lastUpdated.isAfter(this.lastUpdated))) {
+        if (this.lastUpdatedNew == null || (lastUpdated != null && lastUpdated.isAfter(this.lastUpdatedNew))) {
             this.setLastUpdated(lastUpdated);
         }
     }
@@ -168,7 +168,7 @@ public abstract class DataItem<V extends Effect, D extends DataItem> extends Dat
     public abstract void forceLoad(Session session);
 
     public void updateTimestamp() {
-        this.lastUpdatedNew = Bitemporal.fixOffsetOut(this.lastUpdated);
+//        this.lastUpdatedNew = Bitemporal.fixOffsetOut(this.lastUpdated);
     }
 
     public static List<String> updateFields() {

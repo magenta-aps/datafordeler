@@ -37,7 +37,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     protected R registration;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Filter(name = DataItem.FILTER_RECORD_AFTER, condition = "(lastUpdated > :" + DataItem.FILTERPARAM_RECORD_AFTER + ")")
+    @Filter(name = DataItem.FILTER_RECORD_AFTER, condition = "(lastUpdatedNew > :" + DataItem.FILTERPARAM_RECORD_AFTER + ")")
     @JoinTable(
             joinColumns = @JoinColumn(name = "effects_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "dataitems_id", referencedColumnName = "id"),

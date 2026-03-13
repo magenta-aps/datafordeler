@@ -201,8 +201,6 @@ public final class Command extends DatabaseEntry implements Configuration, Migra
 
 
     public void updateTimestamp() {
-//        this.receivedNew = Bitemporal.fixOffsetOut(this.received);
-//        this.handledNew = Bitemporal.fixOffsetOut(this.handled);
     }
 
     public static List<String> updateFields() {
