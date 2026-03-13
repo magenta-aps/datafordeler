@@ -140,7 +140,7 @@ public final class Command extends DatabaseEntry implements Configuration, Migra
     }
 
     public void setHandled() {
-        this.handled = this.handledNew = OffsetDateTime.now();
+        this.handledNew = OffsetDateTime.now();
     }
 
     public Status getStatus() {
