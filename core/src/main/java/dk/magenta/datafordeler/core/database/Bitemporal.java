@@ -30,14 +30,14 @@ public interface Bitemporal extends Monotemporal {
     String FILTERLOGIC_EFFECTTO_BEFORE = "(" + Bitemporal.DB_FIELD_EFFECT_TO + "_new < :" + Bitemporal.FILTERPARAM_EFFECTTO_BEFORE + ")";
 
 
-    String DB_FIELD_EFFECT_FROM = "effectFrom_new";
+    String DB_FIELD_EFFECT_FROM = "effectFrom";
     String IO_FIELD_EFFECT_FROM = "virkningFra";
 
     OffsetDateTime getEffectFrom();
 
     void setEffectFrom(OffsetDateTime effectFrom);
 
-    String DB_FIELD_EFFECT_TO = "effectTo_new";
+    String DB_FIELD_EFFECT_TO = "effectTo";
     String IO_FIELD_EFFECT_TO = "virkningTil";
 
     OffsetDateTime getEffectTo();
