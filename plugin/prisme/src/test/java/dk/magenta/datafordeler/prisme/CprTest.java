@@ -552,7 +552,8 @@ public class CprTest extends TestBase {
         cprList.add("0000000009");
         body.set("cprNumber", cprList);
         body.put("updatedSince", middle.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        httpEntity = new HttpEntity<String>(body.toString(), new HttpHeaders());
+        httpEntity = new HttpEntity<>(body.toString(), new HttpHeaders());
+        System.out.println("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
         response = restTemplate.exchange(
                 "/prisme/cpr/1/",
                 HttpMethod.POST,
