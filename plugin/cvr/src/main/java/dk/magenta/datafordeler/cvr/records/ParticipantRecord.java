@@ -28,7 +28,8 @@ import java.util.function.Consumer;
 @Entity
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantRecord.TABLE_NAME + "__unitNumber", columnList = ParticipantRecord.DB_FIELD_UNIT_NUMBER, unique = true),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantRecord.TABLE_NAME + "__" + ParticipantRecord.DB_FIELD_DAFO_UPDATED, columnList = ParticipantRecord.DB_FIELD_DAFO_UPDATED)
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantRecord.TABLE_NAME + "__" + ParticipantRecord.DB_FIELD_DAFO_UPDATED, columnList = ParticipantRecord.DB_FIELD_DAFO_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + ParticipantRecord.TABLE_NAME + "__" + ParticipantRecord.DB_FIELD_DAFO_UPDATED+"_new", columnList = ParticipantRecord.DB_FIELD_DAFO_UPDATED+"_new")
 })
 
 @JsonIgnoreProperties(ignoreUnknown = true)
