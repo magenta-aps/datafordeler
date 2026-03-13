@@ -885,7 +885,7 @@ public abstract class BaseQuery {
 
     private Map<String, String> allJoinHandles() {
         HashMap<String, String> map = new HashMap<>(this.joinHandles());
-        map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED);
+        map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED + "_new");
         map.put("uuid", Entity.DB_FIELD_IDENTIFICATION + BaseQuery.separator + Identification.DB_FIELD_UUID);
         return map;
     }
@@ -1032,7 +1032,7 @@ public abstract class BaseQuery {
 
                 if (this.recordAfter != null) {
                     this.addCondition(
-                            "dafoUpdated",
+                            "dafoUpdated_new",
                             Condition.Operator.GT,
                             Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)),
                             OffsetDateTime.class,
