@@ -369,6 +369,7 @@ public class CprTest extends TestBase {
 
     @Test
     public void testMaintainChildrenPrisme() throws Exception {
+        System.out.println("testMaintainChildrenPrisme");
         TestUserDetails testUserDetails = new TestUserDetails();
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());

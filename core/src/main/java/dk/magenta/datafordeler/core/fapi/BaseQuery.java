@@ -1032,7 +1032,7 @@ public abstract class BaseQuery {
 
                 if (this.recordAfter != null) {
                     this.addCondition(
-                            "dafoUpdated_new",
+                            "dafoUpdated",
                             Condition.Operator.GT,
                             Collections.singletonList(this.recordAfter.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)),
                             OffsetDateTime.class,
