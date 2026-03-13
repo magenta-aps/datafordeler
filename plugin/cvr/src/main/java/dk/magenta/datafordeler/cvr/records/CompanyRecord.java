@@ -31,7 +31,8 @@ import java.util.stream.Collectors;
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__cvrnumber", columnList = CompanyRecord.DB_FIELD_CVR_NUMBER, unique = true),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__advertprotection", columnList = CompanyRecord.DB_FIELD_ADVERTPROTECTION),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__" + CompanyRecord.DB_FIELD_DAFO_UPDATED, columnList = CompanyRecord.DB_FIELD_DAFO_UPDATED)
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__" + CompanyRecord.DB_FIELD_DAFO_UPDATED, columnList = CompanyRecord.DB_FIELD_DAFO_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyRecord.TABLE_NAME + "__" + CompanyRecord.DB_FIELD_DAFO_UPDATED + "_new", columnList = CompanyRecord.DB_FIELD_DAFO_UPDATED+"_new")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyRecord extends CvrEntityRecord {
