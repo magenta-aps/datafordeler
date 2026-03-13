@@ -196,7 +196,7 @@ public class QueryManager {
         return results;
     }
 
-    private static final boolean logQuery = true;
+    private static final boolean logQuery = false;
 
     public static Query<Object> getQuery(Session session, BaseQuery query) {
         query.applyFilters(session);
