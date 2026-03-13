@@ -21,7 +21,7 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
     public RecordData(OffsetDateTime timestamp) {
-        this.timestamp = fixOffsetIn(timestamp);
+//        this.timestamp = fixOffsetIn(timestamp);
         this.timestampNew = timestamp;
     }
 
@@ -37,8 +37,8 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
 
-    @Column(columnDefinition = "datetime2")
-    private OffsetDateTime timestamp;
+//    @Column(columnDefinition = "datetime2")
+//    private OffsetDateTime timestamp;
 
     public OffsetDateTime getTimestamp() {
         return this.timestampNew;
@@ -75,11 +75,11 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
 
     @Override
     public int compareTo(RecordData o) {
-        return Equality.compare(this.timestamp, o == null ? null : o.timestamp, OffsetDateTime.class, false);
+        return Equality.compare(this.getTimestamp(), o == null ? null : o.getTimestamp(), OffsetDateTime.class, false);
     }
 
     public void updateTimestamp() {
-        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+//        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {
