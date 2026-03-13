@@ -111,6 +111,7 @@ public class CprBirthDateService {
         personQuery.setBirthTimeAfter(LocalDateTime.now().minusYears(18));
         personQuery.setParameter(PersonRecordQuery.KOMMUNEKODE, municipalitycodeNumbers);
         personQuery.setRecordAfter(offsetTimestampGTE);
+        System.out.println("PersonQuery: " + personQuery.toHql() + " - " + personQuery.getConditionParameters());
 
         try (Session session = sessionManager.getSessionFactory().openSession()) {
             Envelope envelope = new Envelope();
