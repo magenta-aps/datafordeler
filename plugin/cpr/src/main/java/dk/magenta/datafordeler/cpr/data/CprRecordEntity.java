@@ -69,12 +69,10 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-//        this.dafoUpdated = fixOffsetIn(dafoUpdated);
         this.dafoUpdatedNew = dafoUpdated;
     }
 
     public void updateTimestamp() {
-//        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     public static List<String> updateFields() {
