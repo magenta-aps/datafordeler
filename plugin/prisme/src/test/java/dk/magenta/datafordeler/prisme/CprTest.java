@@ -409,6 +409,7 @@ public class CprTest extends TestBase {
                 String.class
         );
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        System.out.println(response.getBody());
         Assertions.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
 
         this.cleanup();
