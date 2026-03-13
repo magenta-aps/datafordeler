@@ -885,7 +885,7 @@ public abstract class BaseQuery {
 
     private Map<String, String> allJoinHandles() {
         HashMap<String, String> map = new HashMap<>(this.joinHandles());
-        map.put("dafoUpdated", Nontemporal.DB_FIELD_UPDATED + "_new");
+        map.put("dafoUpdated", "dafoUpdatedNew");
         map.put("uuid", Entity.DB_FIELD_IDENTIFICATION + BaseQuery.separator + Identification.DB_FIELD_UUID);
         return map;
     }
