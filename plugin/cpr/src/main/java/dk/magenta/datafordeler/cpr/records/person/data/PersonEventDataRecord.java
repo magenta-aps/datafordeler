@@ -111,6 +111,6 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public static List<String> updateFields() {
-        return List.of(DB_FIELD_TIMESTAMP);
+        return List.of(DB_FIELD_TIMESTAMP, DB_FIELD_DAFO_UPDATED);
     }
 }
