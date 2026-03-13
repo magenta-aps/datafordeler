@@ -23,7 +23,7 @@ import java.util.*;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE + "," + RoadEntity.DB_FIELD_ROAD_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_ROAD_CODE, columnList = RoadEntity.DB_FIELD_ROAD_CODE),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_MUNIPALITY_CODE, columnList = RoadEntity.DB_FIELD_MUNIPALITY_CODE),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_DAFO_UPDATED, columnList = RoadEntity.DB_FIELD_DAFO_UPDATED)
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + RoadEntity.TABLE_NAME + RoadEntity.DB_FIELD_DAFO_UPDATED + "_new", columnList = RoadEntity.DB_FIELD_DAFO_UPDATED)
 })
 public class RoadEntity extends CprRecordEntity {
 
