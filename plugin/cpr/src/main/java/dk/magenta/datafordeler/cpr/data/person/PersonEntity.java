@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_entity", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_identification", columnList = PersonEntity.DB_FIELD_IDENTIFICATION, unique = true),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_personnummer", columnList = PersonEntity.DB_FIELD_CPR_NUMBER, unique = true),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED, columnList = PersonEntity.DB_FIELD_DAFO_UPDATED),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonEntity.TABLE_NAME + PersonEntity.DB_FIELD_DAFO_UPDATED+"_new", columnList = PersonEntity.DB_FIELD_DAFO_UPDATED+"_new")
 })
 public class PersonEntity extends CprRecordEntity {
