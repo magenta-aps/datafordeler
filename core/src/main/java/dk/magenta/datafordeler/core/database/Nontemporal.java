@@ -8,8 +8,8 @@ public interface Nontemporal {
     String FILTER_LASTUPDATED_BEFORE = "lastupdatedBeforeFilter";
     String FILTERPARAM_LASTUPDATED_AFTER = "lastupdatedAfterDate";
     String FILTERPARAM_LASTUPDATED_BEFORE = "lastupdatedBeforeDate";
-    String FILTERLOGIC_LASTUPDATED_AFTER = "(" + Nontemporal.DB_FIELD_UPDATED + " >= :" + Monotemporal.FILTERPARAM_LASTUPDATED_AFTER + ")";
-    String FILTERLOGIC_LASTUPDATED_BEFORE = "(" + Nontemporal.DB_FIELD_UPDATED + " < :" + Monotemporal.FILTERPARAM_LASTUPDATED_BEFORE + ")";
+    String FILTERLOGIC_LASTUPDATED_AFTER = "(" + Nontemporal.DB_FIELD_UPDATED + "_new >= :" + Monotemporal.FILTERPARAM_LASTUPDATED_AFTER + ")";
+    String FILTERLOGIC_LASTUPDATED_BEFORE = "(" + Nontemporal.DB_FIELD_UPDATED + "_new < :" + Monotemporal.FILTERPARAM_LASTUPDATED_BEFORE + ")";
 
     String DB_FIELD_UPDATED = "dafoUpdated";
     String IO_FIELD_UPDATED = "sidstOpdateret";
