@@ -369,7 +369,6 @@ public class CprTest extends TestBase {
 
     @Test
     public void testMaintainChildrenPrisme() throws Exception {
-        System.out.println("testMaintainChildrenPrisme");
         TestUserDetails testUserDetails = new TestUserDetails();
 
         HttpEntity<String> httpEntity = new HttpEntity<String>("", new HttpHeaders());
@@ -410,7 +409,6 @@ public class CprTest extends TestBase {
                 String.class
         );
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        System.out.println(response.getBody());
         Assertions.assertEquals(0, objectMapper.readTree(response.getBody()).get("results").size());
 
         this.cleanup();
@@ -555,7 +553,6 @@ public class CprTest extends TestBase {
         body.set("cprNumber", cprList);
         body.put("updatedSince", middle.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         httpEntity = new HttpEntity<>(body.toString(), new HttpHeaders());
-        System.out.println("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
         response = restTemplate.exchange(
                 "/prisme/cpr/1/",
                 HttpMethod.POST,
