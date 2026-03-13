@@ -32,7 +32,7 @@ public interface Monotemporal extends Nontemporal {
     String FILTERLOGIC_REGISTRATIONTO_BEFORE = "(" + Monotemporal.DB_FIELD_REGISTRATION_TO + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE + ")";
 
 
-    String DB_FIELD_REGISTRATION_FROM = "registrationFrom";
+    String DB_FIELD_REGISTRATION_FROM = "registrationFromNew";
     String IO_FIELD_REGISTRATION_FROM = "registreringFra";
 
     OffsetDateTime getRegistrationFrom();
@@ -40,7 +40,7 @@ public interface Monotemporal extends Nontemporal {
     void setRegistrationFrom(OffsetDateTime registrationFrom);
 
 
-    String DB_FIELD_REGISTRATION_TO = "registrationTo";
+    String DB_FIELD_REGISTRATION_TO = "registrationToNew";
     String IO_FIELD_REGISTRATION_TO = "registreringTil";
 
     OffsetDateTime getRegistrationTo();
