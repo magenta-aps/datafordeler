@@ -90,7 +90,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "registration")
     @Filters({
-            //@Filter(name = Effect.FILTER_EFFECT_FROM, condition="(effectTo >= :"+Effect.FILTERPARAM_EFFECT_FROM+" OR effectTo is null)"),
             @Filter(name = Effect.FILTER_EFFECT_TO, condition = "(effectFromNew < :" + Effect.FILTERPARAM_EFFECT_TO + " or effectFromNew is null)")
     })
     protected List<V> effects;
@@ -217,7 +216,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-//        this.registrationFrom = fixOffsetIn(registrationFrom);
         this.registrationFromNew = registrationFrom;
     }
 
@@ -239,7 +237,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-//        this.registrationTo = fixOffsetIn(registrationTo);
         this.registrationToNew = registrationTo;
     }
 
@@ -290,7 +287,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
     public void setLastImportTime(OffsetDateTime lastImportTime) {
-//        this.lastImportTime = fixOffsetIn(lastImportTime);
         this.lastImportTimeNew = lastImportTime;
     }
 
@@ -392,12 +388,6 @@ public abstract class Registration<E extends Entity, R extends Registration, V e
     }
 
     public void updateTimestamp() {
-//        this.lastImportTimeNew = Bitemporal.fixOffsetOut(this.lastImportTime);
-//        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
-//        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
-        for (V effect : this.effects) {
-            effect.updateTimestamp();
-        }
     }
 
     public static List<String> updateFields() {

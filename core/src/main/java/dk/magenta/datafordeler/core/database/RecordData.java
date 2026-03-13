@@ -21,7 +21,6 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
     public RecordData(OffsetDateTime timestamp) {
-//        this.timestamp = fixOffsetIn(timestamp);
         this.timestampNew = timestamp;
     }
 
@@ -79,7 +78,6 @@ public class RecordData extends DatabaseEntry implements Comparable<RecordData> 
     }
 
     public void updateTimestamp() {
-//        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {
