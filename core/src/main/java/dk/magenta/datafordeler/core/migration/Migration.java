@@ -67,7 +67,7 @@ public class Migration {
     }
 
     protected <T extends MigrateModel> void runForClass(Session session, Class<T> model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        System.out.println("Running migration for " + model.getCanonicalName());
+        /*System.out.println("Running migration for " + model.getCanonicalName());
         StringJoiner s = new StringJoiner(" or ");
         Method updateFields = model.getMethod("updateFields");
         List<String> fields = (List<String>) updateFields.invoke(null);
@@ -114,6 +114,6 @@ public class Migration {
                 break;
             }
             transaction.commit();
-        }
+        }*/
     }
 }
