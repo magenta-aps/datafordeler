@@ -129,7 +129,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-//        this.effectFrom = fixOffsetIn(effectFrom);
         this.effectFromNew = effectFrom;
     }
 
@@ -150,7 +149,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-//        this.effectTo = fixOffsetIn(effectTo);
         this.effectToNew = effectTo;
     }
 
@@ -287,8 +285,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void updateTimestamp() {
-//        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
-//        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public static List<String> updateFields() {
