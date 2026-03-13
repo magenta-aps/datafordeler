@@ -107,7 +107,7 @@ public class PersonEventDataRecord extends CprRecordEntity {
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.dafoUpdated = fixOffsetIn(this.getDafoUpdated());
+        this.setDafoUpdated(Bitemporal.fixOffsetOut(this.dafoUpdated));
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
