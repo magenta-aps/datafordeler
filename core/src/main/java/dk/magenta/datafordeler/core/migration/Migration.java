@@ -37,10 +37,10 @@ public class Migration {
     public void run() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         if (this.engine.isMigrateEnabled()) {
             this.runForPackage("dk.magenta.datafordeler.cpr");
-//            this.runForPackage("dk.magenta.datafordeler.cvr");
-//            this.runForPackage("dk.magenta.datafordeler.geo");
-//            this.runForPackage("dk.magenta.datafordeler.ger");
-//            this.runForPackage("dk.magenta.datafordeler.core");
+            this.runForPackage("dk.magenta.datafordeler.cvr");
+            this.runForPackage("dk.magenta.datafordeler.geo");
+            this.runForPackage("dk.magenta.datafordeler.ger");
+            this.runForPackage("dk.magenta.datafordeler.core");
         }
     }
 
@@ -53,19 +53,17 @@ public class Migration {
         handledClasses.retainAll(this.sessionManager.managedClasses());
         try (Session session = this.sessionManager.getSessionFactory().openSession()) {
             for (Class<? extends MigrateModel> clazz : handledClasses) {
-                if (clazz.getCanonicalName().equals("dk.magenta.datafordeler.cpr.records.person.data.PersonEventDataRecord")) {
-                    runForClass(session, clazz);
-                }
+                runForClass(session, clazz);
             }
         }
 
-        /*handledClasses = new HashSet<>(classes);
+        handledClasses = new HashSet<>(classes);
         handledClasses.retainAll(this.configurationSessionManager.managedClasses());
         try (Session session = this.configurationSessionManager.getSessionFactory().openSession()) {
             for (Class<? extends MigrateModel> clazz : handledClasses) {
                 runForClass(session, clazz);
             }
-        }*/
+        }
     }
 
     protected <T extends MigrateModel> void runForClass(Session session, Class<T> model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
