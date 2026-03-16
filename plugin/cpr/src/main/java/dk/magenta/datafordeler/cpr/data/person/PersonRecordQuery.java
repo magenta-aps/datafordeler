@@ -201,11 +201,11 @@ public class PersonRecordQuery extends BaseQuery {
         joinHandles.put("bnr_or_housenumber", PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_BUILDING_NUMBER + "," + PersonEntity.DB_FIELD_ADDRESS + BaseQuery.separator + AddressDataRecord.DB_FIELD_HOUSENUMBER);
         joinHandles.put("custodyPnr", PersonEntity.DB_FIELD_CUSTODY + BaseQuery.separator + CustodyDataRecord.DB_FIELD_RELATION_PNR);
         joinHandles.put("personevent", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_EVENT);
-        joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("personeventTime.LTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("personeventTime.GTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new");
+        joinHandles.put("personeventTime.LTE", PersonEntity.DB_FIELD_EVENT + BaseQuery.separator + PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new");
         joinHandles.put("persondataevent", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_FIELD);
-        joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
-        joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP);
+        joinHandles.put("persondataeventTime.GTE", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP+"_new");
+        joinHandles.put("persondataeventTime.LTE", PersonEntity.DB_FIELD_DATAEVENT + BaseQuery.separator + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP+"_new");
     }
 
     @Override
