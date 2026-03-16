@@ -38,8 +38,6 @@ public class PersonEventDataRecord extends CprRecordEntity {
         this.timestampNew = timestamp;
     }
 
-    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
-    private OffsetDateTime dafoUpdated;
 
     public static final String DB_FIELD_ENTITY = "entity";
 
@@ -107,7 +105,6 @@ public class PersonEventDataRecord extends CprRecordEntity {
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.setDafoUpdated(Bitemporal.fixOffsetOut(this.dafoUpdated));
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
