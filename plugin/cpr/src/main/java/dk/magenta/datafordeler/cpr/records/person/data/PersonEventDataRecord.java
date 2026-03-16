@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -103,10 +104,13 @@ public class PersonEventDataRecord extends CprRecordEntity {
     }
 
     public void updateTimestamp() {
+        super.updateTimestamp();
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {
-        return List.of(DB_FIELD_TIMESTAMP);
+        ArrayList<String> list = new ArrayList<>(CprRecordEntity.updateFields());
+        list.add(DB_FIELD_TIMESTAMP);
+        return list;
     }
 }
