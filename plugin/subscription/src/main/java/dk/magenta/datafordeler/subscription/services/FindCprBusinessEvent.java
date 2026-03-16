@@ -108,7 +108,7 @@ public class FindCprBusinessEvent {
                 if (!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
-                String hql = "SELECT max(event."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+") " +
+                String hql = "SELECT max(event."+"timestampNew"+") " +
                         "FROM " + PersonEventDataRecord.class.getCanonicalName() + " event ";
                 Query timestampQuery = session.createQuery(hql);
                 OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
@@ -146,9 +146,9 @@ public class FindCprBusinessEvent {
                         " INNER JOIN " + PersonEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                         " where (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.eventId=:eventId OR :eventId IS NULL) AND" +
-                        " (dataeventDataRecord."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+" IS NOT NULL) AND" +
-                        " (dataeventDataRecord."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+" >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+" <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                        " (dataeventDataRecord."+"timestampNew"+" IS NOT NULL) AND" +
+                        " (dataeventDataRecord."+"timestampNew"+" >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord."+"timestampNew"+" <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                 Query query = session.createQuery(queryString);
                 if (pageSize != null) {
