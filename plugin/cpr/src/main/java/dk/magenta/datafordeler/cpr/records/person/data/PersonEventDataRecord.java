@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.cpr.records.person.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.cpr.CprPlugin;
@@ -14,8 +13,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
 /**
  * Storage for data on a Person's eventhistory
@@ -37,7 +34,6 @@ public class PersonEventDataRecord extends CprRecordEntity {
         this.derived = derived;
         this.timestampNew = timestamp;
     }
-
 
     public static final String DB_FIELD_ENTITY = "entity";
 
