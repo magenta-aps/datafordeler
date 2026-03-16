@@ -95,7 +95,11 @@ public class FindCprBusinessEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
-            Query eventQuery = session.createQuery(" from " + BusinessEventSubscription.class.getName() + " where businessEventId = :businessEventId", BusinessEventSubscription.class);
+            Query eventQuery = session.createQuery(
+                    " from " + BusinessEventSubscription.class.getName() +
+                    " where businessEventId = :businessEventId",
+                    BusinessEventSubscription.class
+            );
             eventQuery.setParameter("businessEventId", businessEventId);
             if (eventQuery.getResultList().isEmpty()) {
                 return this.getErrorMessage("Subscription not found", HttpStatus.NOT_FOUND);
@@ -104,7 +108,8 @@ public class FindCprBusinessEvent {
                 if (!allowCallingOtherConsumersSubscriptions && !subscription.getSubscriber().getSubscriberId().equals(Optional.ofNullable(request.getHeader("uxp-client")).orElse(user.getIdentity()).replaceAll("/", "_"))) {
                     return this.getErrorMessage("No access", HttpStatus.FORBIDDEN);
                 }
-                String hql = "SELECT max(event.timestamp) FROM " + PersonEventDataRecord.class.getCanonicalName() + " event ";
+                String hql = "SELECT max(event."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+") " +
+                        "FROM " + PersonEventDataRecord.class.getCanonicalName() + " event ";
                 Query timestampQuery = session.createQuery(hql);
                 OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
                 OffsetDateTime offsetTimestampGTE;
@@ -141,9 +146,9 @@ public class FindCprBusinessEvent {
                         " INNER JOIN " + PersonEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                         " where (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.eventId=:eventId OR :eventId IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                        " (dataeventDataRecord.timestamp >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                        " (dataeventDataRecord."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+" IS NOT NULL) AND" +
+                        " (dataeventDataRecord."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+" >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord."+PersonEventDataRecord.DB_FIELD_TIMESTAMP+"_new"+" <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                 Query query = session.createQuery(queryString);
                 if (pageSize != null) {
