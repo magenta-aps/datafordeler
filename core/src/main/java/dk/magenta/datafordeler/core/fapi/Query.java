@@ -1,6 +1,5 @@
 package dk.magenta.datafordeler.core.fapi;
 
-import dk.magenta.datafordeler.core.database.DataItem;
 import dk.magenta.datafordeler.core.database.Entity;
 
 import java.time.OffsetDateTime;
@@ -36,13 +35,5 @@ public abstract class Query<E extends Entity> extends BaseQuery {
      * @return
      */
     public abstract Class<E> getEntityClass();
-
-
-    /**
-     * Subclasses should return the base Data class that the Query class pertains to
-     *
-     * @return
-     */
-    public abstract Class<? extends DataItem> getDataClass();
 
 }

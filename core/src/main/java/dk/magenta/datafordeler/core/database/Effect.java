@@ -37,7 +37,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     protected R registration;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Filter(name = DataItem.FILTER_RECORD_AFTER, condition = "(lastUpdated > :" + DataItem.FILTERPARAM_RECORD_AFTER + ")")
+    @Filter(name = DataItem.FILTER_RECORD_AFTER, condition = "(lastUpdatedNew > :" + DataItem.FILTERPARAM_RECORD_AFTER + ")")
     @JoinTable(
             joinColumns = @JoinColumn(name = "effects_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "dataitems_id", referencedColumnName = "id"),
@@ -116,9 +116,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_FROM = "effectFrom";
     public static final String IO_FIELD_EFFECT_FROM = "virkningFra";
 
-    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
-    private OffsetDateTime effectFrom;
+//    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
+//    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
+//    private OffsetDateTime effectFrom;
 
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_FROM+"_new", nullable = true, insertable = true, updatable = false)
@@ -129,7 +129,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = fixOffsetIn(effectFrom);
         this.effectFromNew = effectFrom;
     }
 
@@ -137,9 +136,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_TO = "effectTo";
     public static final String IO_FIELD_EFFECT_TO = "virkningTil";
 
-    @JsonProperty(value = IO_FIELD_EFFECT_TO)
-    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
-    private OffsetDateTime effectTo;
+//    @JsonProperty(value = IO_FIELD_EFFECT_TO)
+//    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
+//    private OffsetDateTime effectTo;
 
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_TO+"_new", nullable = true, insertable = true, updatable = false)
@@ -150,7 +149,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = fixOffsetIn(effectTo);
         this.effectToNew = effectTo;
     }
 
@@ -195,9 +193,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     public boolean equalData(V other) {
         return (
-                (this.effectFrom == null ? other.getEffectFrom() == null : this.getEffectFrom()
+                (this.getEffectFrom() == null ? other.getEffectFrom() == null : this.getEffectFrom()
                         .equals(other.getEffectFrom())) &&
-                        (this.effectTo == null ? other.getEffectTo() == null : this.getEffectTo()
+                        (this.getEffectTo() == null ? other.getEffectTo() == null : this.getEffectTo()
                                 .equals(other.getEffectTo()))
         );
     }
@@ -268,7 +266,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
 
     public String toCompactString() {
         R registration = this.registration;
-        return registration.registrationFrom + "|" + registration.registrationTo + "|" + this.getEffectFrom() + "|" + this.getEffectTo();
+        return registration.getRegistrationFrom() + "|" + registration.getRegistrationTo() + "|" + this.getEffectFrom() + "|" + this.getEffectTo();
     }
 
     public boolean compareRange(V other) {
@@ -287,8 +285,6 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void updateTimestamp() {
-        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
-        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public static List<String> updateFields() {

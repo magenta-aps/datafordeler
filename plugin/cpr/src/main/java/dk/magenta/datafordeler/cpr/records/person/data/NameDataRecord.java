@@ -20,9 +20,13 @@ import java.util.Objects;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + NameDataRecord.DB_FIELD_FIRST_NAMES, columnList = NameDataRecord.DB_FIELD_FIRST_NAMES),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + NameDataRecord.DB_FIELD_LAST_NAME, columnList = NameDataRecord.DB_FIELD_LAST_NAME),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO),
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_CORRECTION_OF, columnList = CprBitemporalRecord.DB_FIELD_CORRECTION_OF + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + NameDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF)
 })

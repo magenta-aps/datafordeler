@@ -22,14 +22,14 @@ public interface Monotemporal extends Nontemporal {
     String FILTERPARAM_REGISTRATIONTO_BEFORE = "registrationToBeforeDate";
 
     // True if the sought registration begins after our query
-    String FILTERLOGIC_REGISTRATIONFROM_AFTER = "(" + Monotemporal.DB_FIELD_REGISTRATION_FROM + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER + ")";
+    String FILTERLOGIC_REGISTRATIONFROM_AFTER = "(" + Monotemporal.DB_FIELD_REGISTRATION_FROM + "_new >= :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER + ")";
     // True if the sought registration begins before our query
-    String FILTERLOGIC_REGISTRATIONFROM_BEFORE = "(" + Monotemporal.DB_FIELD_REGISTRATION_FROM + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE + " OR " + Monotemporal.DB_FIELD_REGISTRATION_FROM + " is null)";
+    String FILTERLOGIC_REGISTRATIONFROM_BEFORE = "(" + Monotemporal.DB_FIELD_REGISTRATION_FROM + "_new < :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE + " OR " + Monotemporal.DB_FIELD_REGISTRATION_FROM + "_new is null)";
 
     // True if the sought registration ends after our query
-    String FILTERLOGIC_REGISTRATIONTO_AFTER = "(" + Monotemporal.DB_FIELD_REGISTRATION_TO + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER + " OR " + Monotemporal.DB_FIELD_REGISTRATION_TO + " is null)";
+    String FILTERLOGIC_REGISTRATIONTO_AFTER = "(" + Monotemporal.DB_FIELD_REGISTRATION_TO + "_new >= :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_AFTER + " OR " + Monotemporal.DB_FIELD_REGISTRATION_TO + "_new is null)";
     // True if the sought registration ends before our query
-    String FILTERLOGIC_REGISTRATIONTO_BEFORE = "(" + Monotemporal.DB_FIELD_REGISTRATION_TO + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE + ")";
+    String FILTERLOGIC_REGISTRATIONTO_BEFORE = "(" + Monotemporal.DB_FIELD_REGISTRATION_TO + "_new < :" + Monotemporal.FILTERPARAM_REGISTRATIONTO_BEFORE + ")";
 
 
     String DB_FIELD_REGISTRATION_FROM = "registrationFrom";
