@@ -36,7 +36,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
     protected Identification identification;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "entity")
-    @OrderBy("registrationFrom asc") // Refers to sequenceNumber in Registration class
+    @OrderBy("registrationFromNew asc") // Refers to sequenceNumber in Registration class
     @Filters({
             @Filter(name = Registration.FILTER_REGISTRATION_FROM, condition = "(registrationToBefore >= :" + Registration.FILTERPARAM_REGISTRATION_FROM + " OR registrationToBefore is null)"),
             @Filter(name = Registration.FILTER_REGISTRATION_TO, condition = "(registrationFromBefore < :" + Registration.FILTERPARAM_REGISTRATION_TO + ")")
@@ -203,7 +203,7 @@ public abstract class Entity<E extends Entity, R extends Registration> extends D
         HashSet<R> toDelete = new HashSet<>();
         for (R registration : orderedRegistrations) {
             if (last != null && last.equalTime(registration)) {
-                this.log.info("Registration collision on entity " + this.getId() + ": " + registration.registrationFrom + "|" + registration.registrationTo);
+                this.log.info("Registration collision on entity " + this.getId() + ": " + registration.getRegistrationFrom() + "|" + registration.getRegistrationTo());
                 if (!onlyDetect) {
                     registration.mergeInto(last);
                     toDelete.add(registration);
