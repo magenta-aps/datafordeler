@@ -17,6 +17,7 @@ import jakarta.persistence.*;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + LifecycleRecord.TABLE_NAME + "__participant_company_relation", columnList = LifecycleRecord.DB_FIELD_PARTICIPANT_COMPANY_RELATION + DatabaseEntry.REF),
 
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + LifecycleRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + LifecycleRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new", columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new"),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + LifecycleRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + LifecycleRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })

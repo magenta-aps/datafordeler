@@ -87,7 +87,7 @@ public class ParticipantRecordQuery extends BaseQuery {
         joinHandles.put("roadcode", ParticipantRecord.DB_FIELD_LOCATION_ADDRESS + BaseQuery.separator + AddressRecord.DB_FIELD_ROADCODE);
         joinHandles.put("businessKey", ParticipantRecord.DB_FIELD_BUSINESS_KEY);
         joinHandles.put("unitCode", ParticipantRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + CompanyParticipantRelationRecord.DB_FIELD_COMPANY_RELATION + BaseQuery.separator + RelationParticipantRecord.DB_FIELD_UNITNUMBER);
-        joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED);
+        joinHandles.put("lastUpdated", CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new");
     }
 
     @Override
