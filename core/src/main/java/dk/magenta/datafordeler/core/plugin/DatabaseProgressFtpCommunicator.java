@@ -70,7 +70,7 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         HashSet<String> existing = new HashSet<>();
         int chunkSize = 1000;
         for (int index = 0; index < filenames.size(); index+=chunkSize) {
-            List<String> chunk = filenames.subList(index, chunkSize);
+            List<String> chunk = filenames.subList(index, Math.min(index+chunkSize, filenames.size()));
             List<String> results = session.createQuery(
                     "select item."+FtpPulledFile.DB_FIELD_FILENAME+" from "+ FtpPulledFile.class.getCanonicalName()+" item where "+FtpPulledFile.DB_FIELD_TYPE+" = :type and "+FtpPulledFile.DB_FIELD_FILENAME+" in :list",
                     String.class
