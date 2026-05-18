@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__cvrnumber", columnList = CompanyLinkRecord.DB_FIELD_CVRNUMBER),
 
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new", columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new"),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
