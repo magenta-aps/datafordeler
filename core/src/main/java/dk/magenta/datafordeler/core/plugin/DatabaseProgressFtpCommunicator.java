@@ -72,12 +72,12 @@ public class DatabaseProgressFtpCommunicator extends FtpCommunicator {
         for (int index = 0; index < filenames.size(); index+=chunkSize) {
             List<String> chunk = filenames.subList(index, Math.min(index+chunkSize, filenames.size()));
             List<String> results = session.createQuery(
-                    "select item."+FtpPulledFile.DB_FIELD_FILENAME+" from "+ FtpPulledFile.class.getCanonicalName()+" item where "+FtpPulledFile.DB_FIELD_TYPE+" = :type and "+FtpPulledFile.DB_FIELD_FILENAME+" in :list",
-                    String.class
-            )
+                "select item."+FtpPulledFile.DB_FIELD_FILENAME+" from "+ FtpPulledFile.class.getCanonicalName()+" item where "+FtpPulledFile.DB_FIELD_TYPE+" = :type and "+FtpPulledFile.DB_FIELD_FILENAME+" in :list",
+                        String.class
+                )
             .setParameter("list", chunk)
-            .setParameter("type", type)
-            .list();
+                .setParameter("type", type)
+                .list();
             existing.addAll(results);
         }
         return existing;
