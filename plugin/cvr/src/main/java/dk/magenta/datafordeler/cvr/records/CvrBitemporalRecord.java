@@ -70,7 +70,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
+    // @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime lastUpdated;
 
     @JsonIgnore
@@ -100,7 +101,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_LOADED = "lastLoaded";
     public static final String IO_FIELD_LAST_LOADED = "sidstIndlaest";
 
-    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
+    // @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
+    @Transient
     @JsonProperty(value = IO_FIELD_LAST_LOADED)
     private OffsetDateTime lastLoaded;
 
@@ -451,9 +453,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.lastUpdatedNew = Bitemporal.fixOffsetOut(this.lastUpdated);
-        this.lastLoadedNew = Bitemporal.fixOffsetOut(this.lastLoaded);
-        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
+//        this.lastUpdatedNew = Bitemporal.fixOffsetOut(this.lastUpdated);
+//        this.lastLoadedNew = Bitemporal.fixOffsetOut(this.lastLoaded);
+//        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
     }
 
     public static List<String> updateFields() {

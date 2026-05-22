@@ -95,7 +95,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_EXIT_REGISTRATION = "emigrationRegistration";
     public static final String IO_FIELD_EXIT_REGISTRATION = "udrejseRegistrering";
-    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
+    // @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
+    @Transient
     @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
     private OffsetDateTime emigrationRegistration;
 
@@ -116,7 +117,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
-    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
+    // @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime immigrationRegistration;
 
     @JsonIgnore

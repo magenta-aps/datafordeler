@@ -69,7 +69,7 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+//        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     public static List<String> updateFields() {
