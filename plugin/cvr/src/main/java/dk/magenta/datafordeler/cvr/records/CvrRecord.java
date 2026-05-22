@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
@@ -31,6 +32,7 @@ public abstract class CvrRecord extends DatabaseEntry {
 
     @JsonIgnore
 //    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime dafoUpdated = null;
 
     @JsonIgnore
