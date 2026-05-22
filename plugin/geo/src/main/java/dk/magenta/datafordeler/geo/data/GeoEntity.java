@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import jakarta.persistence.*;
@@ -22,7 +23,7 @@ import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntity {
+public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntity, MigrateModel {
 
     public abstract boolean merge(GeoEntity other);
 

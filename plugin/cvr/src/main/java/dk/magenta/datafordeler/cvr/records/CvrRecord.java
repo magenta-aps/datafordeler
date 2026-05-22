@@ -103,7 +103,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+//        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     protected String debug_name() {
