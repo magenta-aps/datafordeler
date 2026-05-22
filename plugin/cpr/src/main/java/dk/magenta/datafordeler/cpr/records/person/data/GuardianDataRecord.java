@@ -25,9 +25,9 @@ import java.util.Objects;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new"),
 //        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new"),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new"),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + GuardianDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO+"_new"),
 })
 public class GuardianDataRecord extends CprBitemporalPersonRecord<GuardianDataRecord> {
