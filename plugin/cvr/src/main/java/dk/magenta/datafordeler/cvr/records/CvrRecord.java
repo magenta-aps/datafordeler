@@ -33,11 +33,11 @@ public abstract class CvrRecord extends DatabaseEntry {
     @JsonIgnore
 //    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     @Transient
-    private OffsetDateTime dafoUpdated = null;
+    protected OffsetDateTime dafoUpdated = null;
 
     @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
-    private OffsetDateTime dafoUpdatedNew = null;
+    protected OffsetDateTime dafoUpdatedNew = null;
 
     // @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     @JsonIgnore

@@ -135,8 +135,15 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord implements Migr
         return Objects.hash(super.hashCode(), field, text, oldItem, timestamp, getDafoUpdated());
     }
 
+
+    @JsonIgnore
+    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+    protected OffsetDateTime dafoUpdated = null;
+
+
     public void updateTimestamp() {
         super.updateTimestamp();
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 }
