@@ -22,7 +22,8 @@ import java.util.UUID;
                 name = GerPlugin.DEBUG_TABLE_PREFIX + ResponsibleEntity.TABLE_NAME + ResponsibleEntity.DB_FIELD_GERNR,
                 columnList = ResponsibleEntity.DB_FIELD_GERNR
         ),
-        @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + ResponsibleEntity.TABLE_NAME + ResponsibleEntity.DB_FIELD_DAFO_UPDATED, columnList = ResponsibleEntity.DB_FIELD_DAFO_UPDATED)
+//        @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + ResponsibleEntity.TABLE_NAME + ResponsibleEntity.DB_FIELD_DAFO_UPDATED, columnList = ResponsibleEntity.DB_FIELD_DAFO_UPDATED)
+        @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + ResponsibleEntity.TABLE_NAME + ResponsibleEntity.DB_FIELD_DAFO_UPDATED+"_new", columnList = ResponsibleEntity.DB_FIELD_DAFO_UPDATED+"_new")
 })
 public class ResponsibleEntity extends GerEntity implements IdentifiedEntity {
 

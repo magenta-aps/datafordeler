@@ -29,7 +29,8 @@ import java.util.function.Consumer;
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME, indexes = {
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME + "__pnumber", columnList = CompanyUnitRecord.DB_FIELD_P_NUMBER, unique = true),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME + "__unitnumber", columnList = CompanyUnitRecord.DB_FIELD_UNITNUMBER, unique = true),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME + "__" + CompanyUnitRecord.DB_FIELD_DAFO_UPDATED, columnList = CompanyUnitRecord.DB_FIELD_DAFO_UPDATED)
+//        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME + "__" + CompanyUnitRecord.DB_FIELD_DAFO_UPDATED, columnList = CompanyUnitRecord.DB_FIELD_DAFO_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME + "__" + CompanyUnitRecord.DB_FIELD_DAFO_UPDATED+"_new", columnList = CompanyUnitRecord.DB_FIELD_DAFO_UPDATED+"_new")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyUnitRecord extends CvrEntityRecord {

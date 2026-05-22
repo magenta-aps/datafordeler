@@ -40,7 +40,8 @@ public class GerEntity extends DatabaseEntry implements IdentifiedEntity {
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
-    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime dafoUpdated;
 
     @JsonIgnore

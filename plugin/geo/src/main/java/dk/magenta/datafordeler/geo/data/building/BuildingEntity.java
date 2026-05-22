@@ -32,9 +32,13 @@ import java.util.UUID;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + BuildingEntity.TABLE_NAME + BuildingEntity.DB_FIELD_BNR,
                 columnList = BuildingEntity.DB_FIELD_BNR
         ),
+//        @Index(
+//                name = GeoPlugin.DEBUG_TABLE_PREFIX + BuildingEntity.TABLE_NAME + BuildingEntity.DB_FIELD_DAFO_UPDATED,
+//                columnList = BuildingEntity.DB_FIELD_DAFO_UPDATED
+//        ),
         @Index(
-                name = GeoPlugin.DEBUG_TABLE_PREFIX + BuildingEntity.TABLE_NAME + BuildingEntity.DB_FIELD_DAFO_UPDATED,
-                columnList = BuildingEntity.DB_FIELD_DAFO_UPDATED
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + BuildingEntity.TABLE_NAME + BuildingEntity.DB_FIELD_DAFO_UPDATED+"_new",
+                columnList = BuildingEntity.DB_FIELD_DAFO_UPDATED+"_new"
         ),
 })
 public class BuildingEntity extends SumiffiikEntity implements IdentifiedEntity {
