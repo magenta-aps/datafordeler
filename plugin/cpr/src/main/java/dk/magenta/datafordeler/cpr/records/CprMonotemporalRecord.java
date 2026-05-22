@@ -52,7 +52,8 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
+    @Transient
     protected OffsetDateTime registrationTo;
 
     @JsonIgnore
