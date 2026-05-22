@@ -180,7 +180,7 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
 
     protected static HashMap<String, String> getBitemporalHandles(String handle, String path) {
         HashMap<String, String> joinHandles = new HashMap<>();
-        joinHandles.put(handle + "RegistrationFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM);
+        joinHandles.put(handle + "RegistrationFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new");
         joinHandles.put(handle + "RegistrationTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO);
         joinHandles.put(handle + "EffectFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_FROM);
         joinHandles.put(handle + "EffectTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_TO);
