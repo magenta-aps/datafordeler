@@ -21,8 +21,8 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__unit", columnList = CompanyYearlyNumbersRecord.DB_FIELD_COMPANYUNIT + DatabaseEntry.REF),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__year", columnList = CompanyYearlyNumbersRecord.DB_FIELD_YEAR),
 
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new", columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"new"),
+//        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new", columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new"),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyYearlyNumbersRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
