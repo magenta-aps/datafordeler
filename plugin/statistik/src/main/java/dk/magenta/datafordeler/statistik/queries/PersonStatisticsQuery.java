@@ -182,8 +182,8 @@ public class PersonStatisticsQuery extends PersonRecordQuery {
         HashMap<String, String> joinHandles = new HashMap<>();
         joinHandles.put(handle + "RegistrationFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"New");
         joinHandles.put(handle + "RegistrationTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"New");
-        joinHandles.put(handle + "EffectFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_FROM);
-        joinHandles.put(handle + "EffectTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_TO);
+        joinHandles.put(handle + "EffectFrom", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"New");
+        joinHandles.put(handle + "EffectTo", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_EFFECT_TO+"New");
         joinHandles.put(handle + "Origin", path + BaseQuery.separator + CprBitemporalRecord.DB_FIELD_ORIGIN_DATE);
         return joinHandles;
     }
