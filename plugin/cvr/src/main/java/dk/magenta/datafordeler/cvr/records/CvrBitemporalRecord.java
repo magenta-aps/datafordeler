@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
 
@@ -181,7 +182,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-    @Column(columnDefinition = "datetime2")
+//    @Column(columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationTo;
 
     @JsonIgnore
@@ -374,21 +376,21 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CvrBitemporalRecord that = (CvrBitemporalRecord) o;
-        return Equality.equal(lastUpdated, that.lastUpdated) &&
-                Equality.equal(lastLoaded, that.lastLoaded) &&
+        return Equality.equal(getLastUpdated(), that.getLastUpdated()) &&
+                Equality.equal(getLastLoaded(), that.getLastLoaded()) &&
                 Objects.equals(this.getValidFrom(), that.getValidFrom()) &&
                 Objects.equals(this.getValidTo(), that.getValidTo()) &&
-                Equality.equal(registrationTo, that.registrationTo);
+                Equality.equal(this.getRegistrationTo(), that.getRegistrationTo());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                lastUpdated != null ? lastUpdated.toEpochSecond() : null,
-                lastLoaded != null ? lastLoaded.toEpochSecond() : null,
+                this.getLastUpdated() != null ? this.getLastUpdated().toEpochSecond() : null,
+                this.getLastLoaded() != null ? this.getLastLoaded().toEpochSecond() : null,
                 this.getValidFrom(),
                 this.getValidTo(),
-                registrationTo != null ? registrationTo.toEpochSecond() : null
+                this.getRegistrationTo() != null ? this.getRegistrationTo().toEpochSecond() : null
         );
     }
 
