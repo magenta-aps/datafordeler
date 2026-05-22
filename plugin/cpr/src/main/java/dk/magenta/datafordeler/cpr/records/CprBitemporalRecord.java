@@ -243,13 +243,13 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         return effectFromUncertain == that.effectFromUncertain &&
                 effectToUncertain == that.effectToUncertain &&
                 historic == that.historic &&
-                Objects.equals(effectFrom, that.effectFrom) &&
-                Objects.equals(effectTo, that.effectTo);
+                Objects.equals(this.getEffectFrom(), that.getEffectFrom()) &&
+                Objects.equals(this.getEffectTo(), that.getEffectTo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), effectFrom, effectFromUncertain, effectTo, effectToUncertain);
+        return Objects.hash(super.hashCode(), this.getEffectFrom(), effectFromUncertain, this.getEffectTo(), effectToUncertain);
     }
 
     public void updateTimestamp() {
