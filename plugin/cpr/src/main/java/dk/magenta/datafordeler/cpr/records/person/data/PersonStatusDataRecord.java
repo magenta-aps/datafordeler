@@ -22,7 +22,7 @@ import java.util.Set;
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + PersonStatusDataRecord.DB_FIELD_STATUS, columnList = PersonStatusDataRecord.DB_FIELD_STATUS),
 //        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new"),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonStatusDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new"),
