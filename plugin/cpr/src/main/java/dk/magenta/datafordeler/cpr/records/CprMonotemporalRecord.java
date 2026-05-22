@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.persistence.MappedSuperclass;
 
 import java.time.OffsetDateTime;
@@ -28,7 +29,8 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
 
 
-    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
+    @Transient
     protected OffsetDateTime registrationFrom;
 
     @JsonIgnore

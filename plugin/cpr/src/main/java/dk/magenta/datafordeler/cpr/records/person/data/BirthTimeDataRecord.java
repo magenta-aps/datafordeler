@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + CprBitemporalPersonRecord.DB_FIELD_ENTITY, columnList = CprBitemporalPersonRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME, columnList = BirthTimeDataRecord.DB_FIELD_BIRTH_DATETIME),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + BirthTimeDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new"),
