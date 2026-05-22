@@ -101,13 +101,13 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
         if (o == null || getClass() != o.getClass()) return false;
         CprMonotemporalRecord that = (CprMonotemporalRecord) o;
         if (!this.equalData(that)) return false;
-        return Objects.equals(registrationFrom, that.registrationFrom) &&
-                Objects.equals(registrationTo, that.registrationTo);
+        return Objects.equals(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
+                Objects.equals(getRegistrationTo(), that.getRegistrationTo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.registrationFrom, this.registrationTo);
+        return Objects.hash(this.getRegistrationFrom(), this.getRegistrationTo());
     }
 
     protected static void copy(CprMonotemporalRecord from, CprMonotemporalRecord to) {
