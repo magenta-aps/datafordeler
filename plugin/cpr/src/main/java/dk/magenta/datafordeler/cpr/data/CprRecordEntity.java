@@ -14,7 +14,7 @@ import java.util.UUID;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
 @MappedSuperclass
-public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity, MigrateModel {
+public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity {
 
     public CprRecordEntity() {
     }
