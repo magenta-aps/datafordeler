@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
@@ -22,7 +23,7 @@ import java.util.List;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_event_record", indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + "cpr_person_event_record" + PersonEventDataRecord.DB_FIELD_ENTITY, columnList = PersonEventDataRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
 })
-public class PersonEventDataRecord extends CprRecordEntity {
+public class PersonEventDataRecord extends CprRecordEntity implements MigrateModel {
 
     public PersonEventDataRecord() {
     }
