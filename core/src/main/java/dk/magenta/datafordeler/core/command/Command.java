@@ -52,14 +52,14 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
     @JsonIgnore
     private String issuer;
 
-//    @Column(nullable = true, columnDefinition = "datetime2")
-//    private OffsetDateTime received;
+    @Column(nullable = true, columnDefinition = "datetime2")
+    private OffsetDateTime received;
 
     @Column(nullable = true)
     private OffsetDateTime receivedNew;
 
-//    @Column(nullable = true, columnDefinition = "datetime2")
-//    private OffsetDateTime handled;
+    @Column(nullable = true, columnDefinition = "datetime2")
+    private OffsetDateTime handled;
 
     @Column(nullable = true)
     private OffsetDateTime handledNew;
