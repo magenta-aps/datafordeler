@@ -8,6 +8,8 @@ import dk.magenta.datafordeler.cvr.CvrPlugin;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
@@ -138,5 +140,8 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord implements Migr
     public void updateTimestamp() {
         super.updateTimestamp();
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+    }
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_TIMESTAMP, DB_FIELD_DAFO_UPDATED);
     }
 }

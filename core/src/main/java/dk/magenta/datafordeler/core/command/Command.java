@@ -27,7 +27,7 @@ import java.util.List;
 @Entity
 @Table(name = "command", indexes = {@Index(name = "status", columnList = "status")})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class Command extends DatabaseEntry implements Configuration, MigrateModel {
+public final class Command extends DatabaseEntry implements Configuration {
 
     public enum Status {
         QUEUED(0),

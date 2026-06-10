@@ -18,7 +18,7 @@ import java.util.List;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
 @MappedSuperclass
-public abstract class GeoNontemporalRecord<E extends GeoEntity> extends DatabaseEntry implements Nontemporal, MigrateModel {
+public abstract class GeoNontemporalRecord<E extends GeoEntity> extends DatabaseEntry implements Nontemporal {
 
     public static final String DB_FIELD_ENTITY = "entity";
 

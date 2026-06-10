@@ -38,9 +38,9 @@ public class Migration {
         if (this.engine.isMigrateEnabled()) {
             this.runForPackage("dk.magenta.datafordeler.cpr");
             this.runForPackage("dk.magenta.datafordeler.cvr");
-//            this.runForPackage("dk.magenta.datafordeler.geo");
-//            this.runForPackage("dk.magenta.datafordeler.ger");
-//            this.runForPackage("dk.magenta.datafordeler.core");
+            this.runForPackage("dk.magenta.datafordeler.geo");
+            this.runForPackage("dk.magenta.datafordeler.ger");
+            this.runForPackage("dk.magenta.datafordeler.core");
         }
     }
 
@@ -68,7 +68,7 @@ public class Migration {
 
     protected <T extends MigrateModel> void runForClass(Session session, Class<T> model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         System.out.println("Running migration for " + model.getCanonicalName());
-        /*
+
         StringJoiner s = new StringJoiner(" or ");
         Method updateFields = model.getMethod("updateFields");
         List<String> fields = (List<String>) updateFields.invoke(null);
@@ -80,11 +80,12 @@ public class Migration {
         System.out.println(hql);
         long count = 0;
         HashSet<Long> seen = new HashSet<>();
-        for (int offset=0; offset<100000000; offset+=1000) {
-            Transaction transaction = session.beginTransaction();
-            try {
+        Transaction transaction = session.beginTransaction();
+        try {
+            for (int i=0; i<100000000; i++) {
                 Query<T> query = session.createQuery(hql, model);
-                query.setFirstResult(0);
+                query.setFirstResult(0);  // Always select the first 1000 items that match the query
+                // they will be updated, and other items will match in next iteration
                 query.setMaxResults(1000);
                 List<T> list = query.getResultList();
                 if (list.isEmpty()) {
@@ -105,16 +106,13 @@ public class Migration {
                 session.clear();
                 count += list.size();
                 System.out.println(count);
-            } catch (EndIteration e) {
-                System.out.println(e.getReason());
-                transaction.rollback();
-                break;
-            } catch (Exception e) {
-                e.printStackTrace();
-                transaction.rollback();
-                break;
             }
             transaction.commit();
-        }*/
+        } catch (EndIteration e) {
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+        }
     }
 }
