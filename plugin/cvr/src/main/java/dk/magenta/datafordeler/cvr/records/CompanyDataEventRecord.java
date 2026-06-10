@@ -3,10 +3,13 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
@@ -19,7 +22,7 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
             @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyDataEventRecord.TABLE_NAME + CompanyDataEventRecord.DB_FIELD_ENTITY, columnList = CompanyDataEventRecord.DB_FIELD_ENTITY + DatabaseEntry.REF)
         }
 )
-public class CompanyDataEventRecord extends CvrNontemporalRecord {
+public class CompanyDataEventRecord extends CvrNontemporalRecord implements MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_company_data_event_record";
     public static final String DB_FIELD_ENTITY = "companyRecord";
@@ -137,5 +140,8 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord {
     public void updateTimestamp() {
         super.updateTimestamp();
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+    }
+    public static List<String> updateFields() {
+        return Arrays.asList(DB_FIELD_TIMESTAMP, DB_FIELD_DAFO_UPDATED);
     }
 }
