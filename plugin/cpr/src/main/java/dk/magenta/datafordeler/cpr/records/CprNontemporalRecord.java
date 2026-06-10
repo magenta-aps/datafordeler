@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
 @MappedSuperclass
-public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal {
+public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends CprNontemporalRecord<E, S>> extends DatabaseEntry implements Nontemporal, MigrateModel {
 
     @Transient
     private final Logger log = LogManager.getLogger(this.getClass().getCanonicalName());
