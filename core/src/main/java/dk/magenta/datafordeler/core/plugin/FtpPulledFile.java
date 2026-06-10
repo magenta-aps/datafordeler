@@ -17,7 +17,7 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
         @Index(name = "ftp_pulled_file_filename", columnList = FtpPulledFile.DB_FIELD_FILENAME, unique = true),
         @Index(name = "ftp_pulled_file_type", columnList = FtpPulledFile.DB_FIELD_TYPE),
 })
-public class FtpPulledFile extends DatabaseEntry implements MigrateModel {
+public class FtpPulledFile extends DatabaseEntry/* implements MigrateModel*/ {
 
     public static final String DB_FIELD_TYPE = "type";
     public static final String DB_FIELD_FILENAME = "filename";
