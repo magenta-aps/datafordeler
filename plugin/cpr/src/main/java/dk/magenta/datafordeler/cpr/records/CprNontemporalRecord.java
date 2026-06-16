@@ -223,7 +223,7 @@ public abstract class CprNontemporalRecord<E extends CprRecordEntity, S extends 
 
     protected static void copy(CprNontemporalRecord from, CprNontemporalRecord to) {
         to.authority = from.authority;
-        to.dafoUpdated = from.dafoUpdated;
+        to.setDafoUpdated(from.getDafoUpdated());
     }
 
 
