@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.core.database;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -27,7 +28,8 @@ public class LastUpdated extends DatabaseEntry {
     private String schemaName;
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime timestamp;
 
     @Column(name = DB_FIELD_TIMESTAMP+"_new")

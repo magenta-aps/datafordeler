@@ -5,19 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.configuration.Configuration;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
-import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,13 +46,15 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
     @JsonIgnore
     private String issuer;
 
-    @Column(nullable = true, columnDefinition = "datetime2")
+//    @Column(nullable = true, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime received;
 
     @Column(nullable = true)
     private OffsetDateTime receivedNew;
 
-    @Column(nullable = true, columnDefinition = "datetime2")
+//    @Column(nullable = true, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime handled;
 
     @Column(nullable = true)

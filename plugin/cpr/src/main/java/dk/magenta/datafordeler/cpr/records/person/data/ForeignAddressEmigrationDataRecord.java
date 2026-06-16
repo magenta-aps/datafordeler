@@ -8,11 +8,7 @@ import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -96,8 +92,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_EXIT_REGISTRATION = "emigrationRegistration";
     public static final String IO_FIELD_EXIT_REGISTRATION = "udrejseRegistrering";
-    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
+//    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime emigrationRegistration;
 
     @JsonIgnore
@@ -117,7 +113,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
-    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime immigrationRegistration;
 
     @JsonIgnore
@@ -144,13 +141,13 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
         ForeignAddressEmigrationDataRecord that = (ForeignAddressEmigrationDataRecord) o;
         return immigrationCountryCode == that.immigrationCountryCode &&
                 emigrationCountryCode == that.emigrationCountryCode &&
-                Objects.equals(emigrationRegistration, that.emigrationRegistration) &&
-                Objects.equals(immigrationRegistration, that.immigrationRegistration);
+                Objects.equals(this.getEmigrationRegistration(), that.getEmigrationRegistration()) &&
+                Objects.equals(this.getImmigrationRegistration(), that.getImmigrationRegistration());
     }
 
     @Override
     public boolean hasData() {
-        return this.immigrationCountryCode != 0 || this.emigrationCountryCode != 0 || this.immigrationRegistration != null || this.emigrationRegistration != null;
+        return this.immigrationCountryCode != 0 || this.emigrationCountryCode != 0 || this.immigrationRegistrationNew != null || this.emigrationRegistrationNew != null;
     }
 
     @Override

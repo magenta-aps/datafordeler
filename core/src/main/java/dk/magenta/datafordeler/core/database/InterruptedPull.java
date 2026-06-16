@@ -55,7 +55,8 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-    @Column(columnDefinition = "datetime2")
+//    @Column(columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime startTime;
 
     @Column(name="startTime"+"_new")
@@ -71,7 +72,8 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-    @Column(columnDefinition = "datetime2")
+//    @Column(columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime interruptTime;
 
     @Column(name="interruptTime"+"_new")
