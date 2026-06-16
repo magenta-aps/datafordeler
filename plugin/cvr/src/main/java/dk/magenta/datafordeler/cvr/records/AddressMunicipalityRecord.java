@@ -17,10 +17,10 @@ import org.hibernate.Session;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__municipality", columnList = AddressMunicipalityRecord.DB_FIELD_MUNICIPALITY + DatabaseEntry.REF),
 //        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED, columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new", columnList = CvrBitemporalRecord.DB_FIELD_LAST_UPDATED+"_new"),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
-//        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM+"_new", columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM+"_new"),
-        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO),
-//        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO+"_new", columnList = CvrRecordPeriod.DB_FIELD_VALID_TO+"_new")
+//        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM+"_new", columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM+"_new"),
+//        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO),
+        @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO+"_new", columnList = CvrRecordPeriod.DB_FIELD_VALID_TO+"_new")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressMunicipalityRecord extends CvrBitemporalRecord implements Cloneable {

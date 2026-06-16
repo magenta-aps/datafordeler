@@ -70,8 +70,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
-//    @Transient
+//    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime lastUpdated;
 
     @JsonIgnore
@@ -101,8 +101,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_LOADED = "lastLoaded";
     public static final String IO_FIELD_LAST_LOADED = "sidstIndlaest";
 
-    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
-//    @Transient
+//    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
+    @Transient
     @JsonProperty(value = IO_FIELD_LAST_LOADED)
     private OffsetDateTime lastLoaded;
 
@@ -184,8 +184,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-    @Column(columnDefinition = "datetime2")
-//    @Transient
+//    @Column(columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationTo;
 
     @JsonIgnore
