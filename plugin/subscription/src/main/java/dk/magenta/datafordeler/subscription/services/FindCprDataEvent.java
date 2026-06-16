@@ -96,7 +96,7 @@ public class FindCprDataEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
-            String hql = "SELECT max(event.timestamp) FROM " + PersonDataEventDataRecord.class.getCanonicalName() + " event ";
+            String hql = "SELECT max(event.timestamp" + "New" + ") FROM " + PersonDataEventDataRecord.class.getCanonicalName() + " event ";
             Query<OffsetDateTime> timestampQuery = session.createQuery(hql, OffsetDateTime.class);
             OffsetDateTime newestEventTimestamp = timestampQuery.getResultList().get(0);
 

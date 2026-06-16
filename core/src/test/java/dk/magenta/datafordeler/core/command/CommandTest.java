@@ -172,6 +172,7 @@ public class CommandTest extends GapiTestBase {
         ResponseEntity<String> postResponse = this.restTemplate.exchange("/command/pull", HttpMethod.POST, httpPostEntity, String.class);
         Assertions.assertNotNull(postResponse);
         Assertions.assertEquals(200, postResponse.getStatusCodeValue());
+        System.out.println(postResponse.getBody());
         JsonNode postResponseNode = objectMapper.readTree(postResponse.getBody());
         Assertions.assertEquals("queued", postResponseNode.get("status").asText());
         Assertions.assertEquals("pull", postResponseNode.get("commandName").asText());
