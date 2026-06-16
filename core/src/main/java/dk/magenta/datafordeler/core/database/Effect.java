@@ -116,9 +116,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_FROM = "effectFrom";
     public static final String IO_FIELD_EFFECT_FROM = "virkningFra";
 
-//    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
-//    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
-//    private OffsetDateTime effectFrom;
+    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM)
+    private OffsetDateTime effectFrom;
 
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_FROM+"_new", nullable = true, insertable = true, updatable = false)
@@ -129,6 +129,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
+        this.effectFrom = fixOffsetIn(effectFrom);
         this.effectFromNew = effectFrom;
     }
 
@@ -136,9 +137,9 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_TO = "effectTo";
     public static final String IO_FIELD_EFFECT_TO = "virkningTil";
 
-//    @JsonProperty(value = IO_FIELD_EFFECT_TO)
-//    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
-//    private OffsetDateTime effectTo;
+    @JsonProperty(value = IO_FIELD_EFFECT_TO)
+    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
+    private OffsetDateTime effectTo;
 
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_TO+"_new", nullable = true, insertable = true, updatable = false)
@@ -149,6 +150,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
+        this.effectTo = fixOffsetIn(effectTo);
         this.effectToNew = effectTo;
     }
 
@@ -285,6 +287,8 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void updateTimestamp() {
+        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
+        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
     }
 
     public static List<String> updateFields() {

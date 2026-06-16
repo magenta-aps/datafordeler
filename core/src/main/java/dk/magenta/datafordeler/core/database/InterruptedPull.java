@@ -55,8 +55,8 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-//    @Column(columnDefinition = "datetime2")
-//    private OffsetDateTime startTime;
+    @Column(columnDefinition = "datetime2")
+    private OffsetDateTime startTime;
 
     @Column(name="startTime"+"_new")
     private OffsetDateTime startTimeNew;
@@ -66,12 +66,13 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
     public void setStartTime(OffsetDateTime startTime) {
+        this.startTime = fixOffsetIn(startTime);
         this.startTimeNew = startTime;
     }
 
 
-//    @Column(columnDefinition = "datetime2")
-//    private OffsetDateTime interruptTime;
+    @Column(columnDefinition = "datetime2")
+    private OffsetDateTime interruptTime;
 
     @Column(name="interruptTime"+"_new")
     private OffsetDateTime interruptTimeNew;
@@ -136,6 +137,8 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
+        this.startTimeNew = Bitemporal.fixOffsetOut(this.startTime);
+        this.interruptTimeNew = Bitemporal.fixOffsetOut(this.interruptTime);
     }
 
     public static List<String> updateFields() {
