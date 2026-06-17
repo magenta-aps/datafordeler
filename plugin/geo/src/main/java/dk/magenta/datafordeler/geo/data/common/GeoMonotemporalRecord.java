@@ -2,7 +2,6 @@ package dk.magenta.datafordeler.geo.data.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Monotemporality;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
@@ -140,14 +139,14 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
         if (o == null || getClass() != o.getClass()) return false;
         GeoMonotemporalRecord that = (GeoMonotemporalRecord) o;
         if (!this.equalData(that)) return false;
-        return Objects.equals(registrationFrom, that.registrationFrom) &&
-                Objects.equals(registrationTo, that.registrationTo) &&
-                Objects.equals(dafoUpdated, that.dafoUpdated);
+        return Objects.equals(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
+                Objects.equals(getRegistrationTo(), that.getRegistrationTo()) &&
+                Objects.equals(getDafoUpdated(), that.getDafoUpdated());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.registrationFrom, this.registrationTo);
+        return Objects.hash(this.getRegistrationFrom(), this.getRegistrationTo());
     }
 
     protected static void copy(GeoMonotemporalRecord from, GeoMonotemporalRecord to) {
@@ -164,7 +163,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
 
     @JsonIgnore
     public Monotemporality getMonotemporality() {
-        return new Monotemporality(this.registrationFrom, this.registrationTo);
+        return new Monotemporality(this.getRegistrationFrom(), this.getRegistrationTo());
     }
 
 
