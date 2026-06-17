@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import org.hibernate.Session;
 
 import java.time.Instant;
@@ -26,11 +27,12 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_FROM = Monotemporal.DB_FIELD_REGISTRATION_FROM;
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
-    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
+//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationFrom;
 
     @JsonIgnore
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
     private OffsetDateTime registrationFromNew;
 
@@ -54,11 +56,11 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
+//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationTo;
 
-    @JsonIgnore
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
     private OffsetDateTime registrationToNew;
 

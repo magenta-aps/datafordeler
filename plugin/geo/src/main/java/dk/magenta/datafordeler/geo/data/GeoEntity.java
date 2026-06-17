@@ -59,8 +59,10 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
 
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
-    @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime creationDate;
+
     @JsonIgnore
     @Column(name = DB_FIELD_CREATION_DATE+"_new")
     private OffsetDateTime creationDateNew;
@@ -81,8 +83,10 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public static final String DB_FIELD_EDIT_DATE = "editDate";
-    @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime editDate;
+
     @JsonIgnore
     @Column(name = DB_FIELD_EDIT_DATE+"_new")
     private OffsetDateTime editDateNew;
