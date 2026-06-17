@@ -36,11 +36,11 @@ public class Migration {
     @PostConstruct
     public void run() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         if (this.engine.isMigrateEnabled()) {
-            this.runForPackage("dk.magenta.datafordeler.cpr");
-            this.runForPackage("dk.magenta.datafordeler.cvr");
-//            this.runForPackage("dk.magenta.datafordeler.geo");
-//            this.runForPackage("dk.magenta.datafordeler.ger");
-//            this.runForPackage("dk.magenta.datafordeler.core");
+//            this.runForPackage("dk.magenta.datafordeler.cpr");
+//            this.runForPackage("dk.magenta.datafordeler.cvr");
+            this.runForPackage("dk.magenta.datafordeler.geo");
+            this.runForPackage("dk.magenta.datafordeler.ger");
+            this.runForPackage("dk.magenta.datafordeler.core");
         }
     }
 

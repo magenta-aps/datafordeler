@@ -10,6 +10,7 @@ import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
@@ -33,7 +34,7 @@ import java.util.*;
                 columnList = UnitAddressEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
-public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEntity {
+public class UnitAddressEntity extends SumiffiikEntity implements IdentifiedEntity, MigrateModel {
 
     public static final String TABLE_NAME = "geo_unit_address";
 

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.geo.GeoPlugin;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.MonotemporalSet;
@@ -36,7 +37,7 @@ import java.util.Set;
                 columnList = GeoRoadEntity.DB_FIELD_DAFO_UPDATED
         ),
 })
-public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity {
+public class GeoRoadEntity extends SumiffiikEntity implements IdentifiedEntity, MigrateModel {
 
     public static final String TABLE_NAME = "geo_road";
 
