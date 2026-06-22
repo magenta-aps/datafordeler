@@ -77,7 +77,8 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord implements Migr
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
+    @Transient
     @JsonIgnore
     private OffsetDateTime timestamp;
 
