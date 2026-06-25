@@ -2,13 +2,13 @@ package dk.magenta.datafordeler.geo.data.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.util.Monotemporality;
 import dk.magenta.datafordeler.geo.data.GeoEntity;
 import dk.magenta.datafordeler.geo.data.WireCache;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 import org.hibernate.Session;
 
 import java.time.Instant;
@@ -26,11 +26,12 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_FROM = Monotemporal.DB_FIELD_REGISTRATION_FROM;
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
-    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
+//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationFrom;
 
     @JsonIgnore
+    @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
     private OffsetDateTime registrationFromNew;
 
@@ -54,11 +55,11 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
+//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationTo;
 
-    @JsonIgnore
+    @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
     private OffsetDateTime registrationToNew;
 
@@ -138,14 +139,14 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
         if (o == null || getClass() != o.getClass()) return false;
         GeoMonotemporalRecord that = (GeoMonotemporalRecord) o;
         if (!this.equalData(that)) return false;
-        return Objects.equals(registrationFrom, that.registrationFrom) &&
-                Objects.equals(registrationTo, that.registrationTo) &&
-                Objects.equals(dafoUpdated, that.dafoUpdated);
+        return Objects.equals(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
+                Objects.equals(getRegistrationTo(), that.getRegistrationTo()) &&
+                Objects.equals(getDafoUpdated(), that.getDafoUpdated());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.registrationFrom, this.registrationTo);
+        return Objects.hash(this.getRegistrationFrom(), this.getRegistrationTo());
     }
 
     protected static void copy(GeoMonotemporalRecord from, GeoMonotemporalRecord to) {
@@ -162,14 +163,14 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
 
     @JsonIgnore
     public Monotemporality getMonotemporality() {
-        return new Monotemporality(this.registrationFrom, this.registrationTo);
+        return new Monotemporality(this.getRegistrationFrom(), this.getRegistrationTo());
     }
 
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
-        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
+//        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
+//        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
     }
 
     public static List<String> updateFields() {

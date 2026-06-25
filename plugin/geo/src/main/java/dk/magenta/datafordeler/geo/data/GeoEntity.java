@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.*;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.geo.data.common.GeoMonotemporalRecord;
 import jakarta.persistence.*;
@@ -22,7 +23,7 @@ import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntity {
+public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntity, MigrateModel {
 
     public abstract boolean merge(GeoEntity other);
 
@@ -58,8 +59,10 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
 
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
-    @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime creationDate;
+
     @JsonIgnore
     @Column(name = DB_FIELD_CREATION_DATE+"_new")
     private OffsetDateTime creationDateNew;
@@ -80,8 +83,10 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public static final String DB_FIELD_EDIT_DATE = "editDate";
-    @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime editDate;
+
     @JsonIgnore
     @Column(name = DB_FIELD_EDIT_DATE+"_new")
     private OffsetDateTime editDateNew;
@@ -104,7 +109,8 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
-    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime dafoUpdated = null;
 
     @JsonIgnore

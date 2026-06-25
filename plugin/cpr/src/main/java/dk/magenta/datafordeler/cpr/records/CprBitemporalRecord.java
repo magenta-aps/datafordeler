@@ -33,7 +33,8 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
-    @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime effectFrom;
 
     @JsonIgnore
@@ -66,7 +67,8 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public static final String DB_FIELD_EFFECT_TO = Bitemporal.DB_FIELD_EFFECT_TO;
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
-    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
+    @Transient
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
@@ -241,13 +243,13 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
         return effectFromUncertain == that.effectFromUncertain &&
                 effectToUncertain == that.effectToUncertain &&
                 historic == that.historic &&
-                Objects.equals(effectFrom, that.effectFrom) &&
-                Objects.equals(effectTo, that.effectTo);
+                Objects.equals(this.getEffectFrom(), that.getEffectFrom()) &&
+                Objects.equals(this.getEffectTo(), that.getEffectTo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), effectFrom, effectFromUncertain, effectTo, effectToUncertain);
+        return Objects.hash(super.hashCode(), this.getEffectFrom(), effectFromUncertain, this.getEffectTo(), effectToUncertain);
     }
 
     public void updateTimestamp() {

@@ -7,6 +7,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 
+import java.util.Arrays;
+import java.util.List;
+
 @MappedSuperclass
 public class CvrNontemporalDataRecord extends CvrRecord {
 
@@ -48,5 +51,6 @@ public class CvrNontemporalDataRecord extends CvrRecord {
     public void setParticipantRecord(ParticipantRecord participantRecordRecord) {
         this.participantRecord = participantRecordRecord;
     }
+
 
 }

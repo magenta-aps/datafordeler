@@ -98,7 +98,7 @@ public class FindCvrDataEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
-            String hql = "SELECT max(event.timestamp) FROM " + CompanyDataEventRecord.class.getCanonicalName() + " event ";
+            String hql = "SELECT max(event.timestampNew) FROM " + CompanyDataEventRecord.class.getCanonicalName() + " event ";
             Query timestampQuery = session.createQuery(hql);
             OffsetDateTime newestEventTimestamp = (OffsetDateTime) timestampQuery.getResultList().get(0);
 
@@ -153,9 +153,9 @@ public class FindCvrDataEvent {
                         " where" +
                         " (list.listId=:listId OR :listId IS NULL) AND" +
                         " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                        " (dataeventDataRecord.timestamp >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                        " (dataeventDataRecord.timestamp <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                        " (dataeventDataRecord.timestampNew IS NOT NULL) AND" +
+                        " (dataeventDataRecord.timestampNew >= :offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                        " (dataeventDataRecord.timestampNew <= :offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
 
                 Query<CompanyRecord> query = session.createQuery(queryString, CompanyRecord.class);
                 if (pageSize != null) {

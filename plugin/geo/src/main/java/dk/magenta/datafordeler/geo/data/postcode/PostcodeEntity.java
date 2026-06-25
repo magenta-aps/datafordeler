@@ -27,9 +27,13 @@ import java.util.*;
                 name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_CODE,
                 columnList = PostcodeEntity.DB_FIELD_CODE
         ),
+//        @Index(
+//                name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_DAFO_UPDATED,
+//                columnList = PostcodeEntity.DB_FIELD_DAFO_UPDATED
+//        ),
         @Index(
-                name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_DAFO_UPDATED,
-                columnList = PostcodeEntity.DB_FIELD_DAFO_UPDATED
+                name = GeoPlugin.DEBUG_TABLE_PREFIX + PostcodeEntity.TABLE_NAME + PostcodeEntity.DB_FIELD_DAFO_UPDATED+"_new",
+                columnList = PostcodeEntity.DB_FIELD_DAFO_UPDATED+"_new"
         ),
 })
 public class PostcodeEntity extends SumiffiikEntity implements IdentifiedEntity {

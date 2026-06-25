@@ -8,10 +8,7 @@ import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cpr.CprPlugin;
 import dk.magenta.datafordeler.cpr.records.CprBitemporalRecord;
 import dk.magenta.datafordeler.cpr.records.person.CprBitemporalPersonRecord;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -26,13 +23,13 @@ import java.util.Objects;
 @Entity
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalPersonRecord.DB_FIELD_ENTITY, columnList = CprBitemporalPersonRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_FROM+"_new"),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO, columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_REGISTRATION_TO+"_new"),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_FROM+"_new"),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO),
+//        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO, columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_EFFECT_TO+"_new", columnList = CprBitemporalRecord.DB_FIELD_EFFECT_TO+"_new"),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_CORRECTION_OF, columnList = CprBitemporalRecord.DB_FIELD_CORRECTION_OF + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + ForeignAddressEmigrationDataRecord.TABLE_NAME + CprBitemporalRecord.DB_FIELD_REPLACED_BY, columnList = CprBitemporalRecord.DB_FIELD_REPLACED_BY + DatabaseEntry.REF)
@@ -95,8 +92,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_EXIT_REGISTRATION = "emigrationRegistration";
     public static final String IO_FIELD_EXIT_REGISTRATION = "udrejseRegistrering";
-    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
-    @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
+//    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime emigrationRegistration;
 
     @JsonIgnore
@@ -116,7 +113,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
-    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime immigrationRegistration;
 
     @JsonIgnore
@@ -143,13 +141,13 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
         ForeignAddressEmigrationDataRecord that = (ForeignAddressEmigrationDataRecord) o;
         return immigrationCountryCode == that.immigrationCountryCode &&
                 emigrationCountryCode == that.emigrationCountryCode &&
-                Objects.equals(emigrationRegistration, that.emigrationRegistration) &&
-                Objects.equals(immigrationRegistration, that.immigrationRegistration);
+                Objects.equals(this.getEmigrationRegistration(), that.getEmigrationRegistration()) &&
+                Objects.equals(this.getImmigrationRegistration(), that.getImmigrationRegistration());
     }
 
     @Override
     public boolean hasData() {
-        return this.immigrationCountryCode != 0 || this.emigrationCountryCode != 0 || this.immigrationRegistration != null || this.emigrationRegistration != null;
+        return this.immigrationCountryCode != 0 || this.emigrationCountryCode != 0 || this.immigrationRegistrationNew != null || this.emigrationRegistrationNew != null;
     }
 
     @Override

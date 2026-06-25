@@ -13,8 +13,9 @@ import java.util.UUID;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
+
 @MappedSuperclass
-public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity, MigrateModel {
+public abstract class CprRecordEntity extends DatabaseEntry implements IdentifiedEntity {
 
     public CprRecordEntity() {
     }
@@ -57,7 +58,8 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
 //    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
-//    private OffsetDateTime dafoUpdated;
+    @Transient
+    private OffsetDateTime dafoUpdated;
 
     @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
@@ -69,10 +71,12 @@ public abstract class CprRecordEntity extends DatabaseEntry implements Identifie
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
+        this.dafoUpdated = fixOffsetIn(dafoUpdated);
         this.dafoUpdatedNew = dafoUpdated;
     }
 
     public void updateTimestamp() {
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     public static List<String> updateFields() {
