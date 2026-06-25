@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.geo.data.GeoEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -41,8 +42,10 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
     public static final String DB_FIELD_UPDATED = "dafoUpdated";
     public static final String IO_FIELD_UPDATED = "sidstOpdateret";
-    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
+    @Transient
     public OffsetDateTime dafoUpdated;
+
     @JsonIgnore
     @Column(name = DB_FIELD_UPDATED+"_new")
     public OffsetDateTime dafoUpdatedNew;
@@ -69,7 +72,7 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+//        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
     }
 
     public static List<String> updateFields() {

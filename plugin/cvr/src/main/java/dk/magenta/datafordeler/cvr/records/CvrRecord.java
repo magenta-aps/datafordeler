@@ -12,11 +12,13 @@ import org.hibernate.Session;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
+import static dk.magenta.datafordeler.core.database.Nontemporal.DB_FIELD_UPDATED;
 
 
 /**
@@ -33,11 +35,11 @@ public abstract class CvrRecord extends DatabaseEntry {
     @JsonIgnore
 //    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
     @Transient
-    private OffsetDateTime dafoUpdated = null;
+    protected OffsetDateTime dafoUpdated = null;
 
     @JsonIgnore
     @Column(name = DB_FIELD_DAFO_UPDATED+"_new")
-    private OffsetDateTime dafoUpdatedNew = null;
+    protected OffsetDateTime dafoUpdatedNew = null;
 
     // @JsonProperty(value = IO_FIELD_DAFO_UPDATED)
     @JsonIgnore
@@ -108,5 +110,10 @@ public abstract class CvrRecord extends DatabaseEntry {
 
     protected String debug_name() {
         return "";
+    }
+
+
+    public static List<String> updateFields() {
+        return List.of(DB_FIELD_UPDATED);
     }
 }

@@ -2,6 +2,7 @@ package dk.magenta.datafordeler.cpr.records.person.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.IdentifiedEntity;
 import dk.magenta.datafordeler.core.migration.MigrateModel;
@@ -14,6 +15,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
 /**
  * Storage for data on a Person's eventhistory
@@ -66,15 +69,16 @@ public class PersonEventDataRecord extends CprRecordEntity implements MigrateMod
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
 //    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
-//    @JsonIgnore
-//    private OffsetDateTime timestamp;
+    @Transient
+    @JsonIgnore
+    private OffsetDateTime timestamp;
 
     @JsonIgnore
     @Column(name = DB_FIELD_TIMESTAMP+"_new")
     private OffsetDateTime timestampNew;
 
     public void setTimestamp(OffsetDateTime timestamp) {
-//        this.timestamp = fixOffsetIn(timestamp);
+        this.timestamp = fixOffsetIn(timestamp);
         this.timestampNew = timestamp;
     }
 
@@ -102,7 +106,7 @@ public class PersonEventDataRecord extends CprRecordEntity implements MigrateMod
 
     public void updateTimestamp() {
         super.updateTimestamp();
-//        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
 
     public static List<String> updateFields() {

@@ -9,6 +9,7 @@ import dk.magenta.datafordeler.core.util.Bitemporality;
 import dk.magenta.datafordeler.core.util.Equality;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
 
@@ -22,7 +23,7 @@ import java.util.stream.Stream;
 import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 
 @MappedSuperclass
-public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord>, MigrateModel {
+public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implements Comparable<CvrBitemporalRecord> {
 
 //    public static final String FILTERLOGIC_REGISTRATIONFROM_AFTER = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " >= :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_AFTER + ")";
 //    public static final String FILTERLOGIC_REGISTRATIONFROM_BEFORE = "(" + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " < :" + Monotemporal.FILTERPARAM_REGISTRATIONFROM_BEFORE + " OR " + CvrBitemporalRecord.DB_FIELD_LAST_UPDATED + " is null)";
@@ -69,7 +70,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime lastUpdated;
 
     @JsonIgnore
@@ -99,7 +101,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_LOADED = "lastLoaded";
     public static final String IO_FIELD_LAST_LOADED = "sidstIndlaest";
 
-    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
+    @Transient
     @JsonProperty(value = IO_FIELD_LAST_LOADED)
     private OffsetDateTime lastLoaded;
 
@@ -181,7 +184,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-    @Column(columnDefinition = "datetime2")
+//    @Column(columnDefinition = "datetime2")
+    @Transient
     private OffsetDateTime registrationTo;
 
     @JsonIgnore
@@ -374,21 +378,21 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CvrBitemporalRecord that = (CvrBitemporalRecord) o;
-        return Equality.equal(lastUpdated, that.lastUpdated) &&
-                Equality.equal(lastLoaded, that.lastLoaded) &&
+        return Equality.equal(getLastUpdated(), that.getLastUpdated()) &&
+                Equality.equal(getLastLoaded(), that.getLastLoaded()) &&
                 Objects.equals(this.getValidFrom(), that.getValidFrom()) &&
                 Objects.equals(this.getValidTo(), that.getValidTo()) &&
-                Equality.equal(registrationTo, that.registrationTo);
+                Equality.equal(this.getRegistrationTo(), that.getRegistrationTo());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                lastUpdated != null ? lastUpdated.toEpochSecond() : null,
-                lastLoaded != null ? lastLoaded.toEpochSecond() : null,
+                this.getLastUpdated() != null ? this.getLastUpdated().toEpochSecond() : null,
+                this.getLastLoaded() != null ? this.getLastLoaded().toEpochSecond() : null,
                 this.getValidFrom(),
                 this.getValidTo(),
-                registrationTo != null ? registrationTo.toEpochSecond() : null
+                this.getRegistrationTo() != null ? this.getRegistrationTo().toEpochSecond() : null
         );
     }
 
@@ -455,6 +459,6 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public static List<String> updateFields() {
-        return Arrays.asList(DB_FIELD_LAST_LOADED, DB_FIELD_LAST_UPDATED, "registrationTo");
+        return Arrays.asList(DB_FIELD_LAST_LOADED, DB_FIELD_LAST_UPDATED);
     }
 }

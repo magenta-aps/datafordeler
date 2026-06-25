@@ -77,7 +77,8 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord implements Migr
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
+    @Transient
     @JsonIgnore
     private OffsetDateTime timestamp;
 
@@ -137,8 +138,15 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord implements Migr
         return Objects.hash(super.hashCode(), field, text, oldItem, timestamp, getDafoUpdated());
     }
 
+
+    @JsonIgnore
+    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+    protected OffsetDateTime dafoUpdated = null;
+
+
     public void updateTimestamp() {
         super.updateTimestamp();
+        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
         this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
     }
     public static List<String> updateFields() {

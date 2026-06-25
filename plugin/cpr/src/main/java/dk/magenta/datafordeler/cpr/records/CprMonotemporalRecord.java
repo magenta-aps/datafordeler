@@ -6,6 +6,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.cpr.data.CprRecordEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 import jakarta.persistence.MappedSuperclass;
 
 import java.time.OffsetDateTime;
@@ -28,7 +29,8 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
 
 
-    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
+    @Transient
     protected OffsetDateTime registrationFrom;
 
     @JsonIgnore
@@ -50,7 +52,8 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
+    @Transient
     protected OffsetDateTime registrationTo;
 
     @JsonIgnore
@@ -98,13 +101,13 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
         if (o == null || getClass() != o.getClass()) return false;
         CprMonotemporalRecord that = (CprMonotemporalRecord) o;
         if (!this.equalData(that)) return false;
-        return Objects.equals(registrationFrom, that.registrationFrom) &&
-                Objects.equals(registrationTo, that.registrationTo);
+        return Objects.equals(this.getRegistrationFrom(), that.getRegistrationFrom()) &&
+                Objects.equals(getRegistrationTo(), that.getRegistrationTo());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.registrationFrom, this.registrationTo);
+        return Objects.hash(this.getRegistrationFrom(), this.getRegistrationTo());
     }
 
     protected static void copy(CprMonotemporalRecord from, CprMonotemporalRecord to) {

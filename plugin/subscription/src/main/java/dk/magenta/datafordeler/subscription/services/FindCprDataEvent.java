@@ -96,7 +96,7 @@ public class FindCprDataEvent {
 
             this.checkAndLogAccess(loggerHelper);
 
-            String hql = "SELECT max(event.timestamp) FROM " + PersonDataEventDataRecord.class.getCanonicalName() + " event ";
+            String hql = "SELECT max(event.timestamp" + "New" + ") FROM " + PersonDataEventDataRecord.class.getCanonicalName() + " event ";
             Query<OffsetDateTime> timestampQuery = session.createQuery(hql, OffsetDateTime.class);
             OffsetDateTime newestEventTimestamp = timestampQuery.getResultList().get(0);
 
@@ -143,9 +143,9 @@ public class FindCprDataEvent {
                     queryString = "SELECT DISTINCT person from " + PersonEntity.class.getCanonicalName() + " person " +
                             "INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                             "WHERE (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) " +
-                            "AND (dataeventDataRecord.timestamp IS NOT NULL) " +
-                            "AND (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) " +
-                            "AND (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                            "AND (dataeventDataRecord.timestampNew IS NOT NULL) " +
+                            "AND (dataeventDataRecord.timestampNew >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) " +
+                            "AND (dataeventDataRecord.timestampNew <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
                 } else {
                     listId = cprList.getListId();
                     // This is manually joined and not as part of the std. query. The reason for this is that we need to join the data wrom subscription and data. This is not the purpose anywhere else
@@ -155,9 +155,9 @@ public class FindCprDataEvent {
                             " INNER JOIN " + PersonDataEventDataRecord.class.getCanonicalName() + " dataeventDataRecord ON (person = dataeventDataRecord.entity) " +
                             " where (list.listId=:listId OR :listId IS NULL) AND" +
                             " (dataeventDataRecord.field=:fieldEntity OR :fieldEntity IS NULL) AND" +
-                            " (dataeventDataRecord.timestamp IS NOT NULL) AND" +
-                            " (dataeventDataRecord.timestamp >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
-                            " (dataeventDataRecord.timestamp <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
+                            " (dataeventDataRecord.timestampNew IS NOT NULL) AND" +
+                            " (dataeventDataRecord.timestampNew >= : offsetTimestampGTE OR :offsetTimestampGTE IS NULL) AND" +
+                            " (dataeventDataRecord.timestampNew <= : offsetTimestampLTE OR :offsetTimestampLTE IS NULL)";
                 }
 
                 Query<PersonEntity> query = session.createQuery(queryString, PersonEntity.class);

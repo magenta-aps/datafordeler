@@ -26,7 +26,8 @@ import java.util.UUID;
                 name = GerPlugin.DEBUG_TABLE_PREFIX + UnitEntity.TABLE_NAME + UnitEntity.DB_FIELD_DEID,
                 columnList = UnitEntity.DB_FIELD_DEID
         ),
-        @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + UnitEntity.TABLE_NAME + UnitEntity.DB_FIELD_DAFO_UPDATED, columnList = UnitEntity.DB_FIELD_DAFO_UPDATED)
+//        @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + UnitEntity.TABLE_NAME + UnitEntity.DB_FIELD_DAFO_UPDATED, columnList = UnitEntity.DB_FIELD_DAFO_UPDATED)
+        @Index(name = GerPlugin.DEBUG_TABLE_PREFIX + UnitEntity.TABLE_NAME + UnitEntity.DB_FIELD_DAFO_UPDATED+"_new", columnList = UnitEntity.DB_FIELD_DAFO_UPDATED+"_new")
 })
 public class UnitEntity extends GerEntity implements IdentifiedEntity {
 
