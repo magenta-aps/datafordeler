@@ -140,7 +140,8 @@ public class CompanyDataEventRecord extends CvrNontemporalRecord implements Migr
 
 
     @JsonIgnore
-    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+//    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
+    @Transient
     protected OffsetDateTime dafoUpdated = null;
 
 
