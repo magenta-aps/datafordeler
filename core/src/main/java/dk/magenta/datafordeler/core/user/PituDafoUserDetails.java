@@ -58,7 +58,8 @@ public class PituDafoUserDetails extends DafoUserDetails {
         this.verify = headers.get(HEADER_SSL_CLIENT_VERIFY);
         this.pituClient = headers.get(HEADER_PITU_CLIENT);
 
-        String sslClientCertInfo = headers.get(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
+        String sslClientCertInfo = headers.get(HEADER_SSL_CLIENT_CERT_INFO);
+        System.out.println("headers: "+headers);
         if (sslClientCertInfo != null) {
             Map<String, String> parsedSSLClientCertInfo = PituDafoUserDetails.parseSSLClientCertInfo(sslClientCertInfo);
             clientSubject = parsedSSLClientCertInfo.get("Subject");
@@ -67,9 +68,11 @@ public class PituDafoUserDetails extends DafoUserDetails {
                 this.verify = "SUCCESS";
             }
         }
+        System.out.println("clientSubject: "+clientSubject);
 
         this.clientSubject = clientSubject;
         this.nameQualifier = nameQualifier;
+        System.out.println("this.clientSubject: "+this.clientSubject);
 
         Map<String, String> parameterMap = firstParameter(parameters);
 
@@ -182,6 +185,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
                 }
             }
         }
+        System.out.println("out: "+out);
         return out;
     }
 }
