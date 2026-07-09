@@ -20,6 +20,8 @@ public class PituDafoUserDetails extends DafoUserDetails {
     public static String PARAMETER_SERVICECODE = "serviceCode";
     public static String PARAMETER_SERVICEVERSION = "serviceVersion";
 
+    public static final String HEADER_SSL_CLIENT_CERT_INFO = "X-Forwarded-Tls-Client-Cert-Info";
+
     private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
     private final HashMap<String, ArrayList<UserProfile>> systemRoles = new HashMap<>();
 

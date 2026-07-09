@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Manages DAFO users that are created from incoming SAML tokens.
@@ -107,9 +109,34 @@ public class DafoUserManager {
         }
 
         if (!samlOnly) {
-            // If an SSL_CLIENT_S_DN header is provided, create a clientcertificate-based user
-            String sslClientSubjectDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN);
-            String sslClientIssuerDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_ISSUER_DN);
+
+            String sslClientCertInfo = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
+            String sslClientSubjectDN = null;
+            String sslClientIssuerDN = null;
+            if (sslClientCertInfo != null) {
+                Pattern certInfoPattern = Pattern.compile("^(\\w+)=\"([^\"]+)\"$");
+                for (String part : sslClientCertInfo.split(";")) {
+                    Matcher m = certInfoPattern.matcher(part);
+                    if (m.find()) {
+                        String key = m.group(1);
+                        String value = m.group(2);
+                        if (key.equals("Subject")) {
+                            sslClientSubjectDN = value;
+                        } else if (key.equals("Issuer")) {
+                            sslClientIssuerDN = value;
+                        }
+                    }
+                }
+
+            } else {
+                // If an SSL_CLIENT_S_DN header is provided, create a clientcertificate-based user
+                sslClientSubjectDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN);
+                sslClientIssuerDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_ISSUER_DN);
+            }
+
+            System.out.println("sslClientSubjectDN: "+sslClientSubjectDN);
+            System.out.println("sslClientIssuerDN: "+sslClientIssuerDN);
+
             if (sslClientSubjectDN != null && sslClientIssuerDN != null) {
                 if (!this.pituSDNWhitelist.contains(sslClientSubjectDN)) {
                     throw new InvalidCertificateException(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN + " \"" + sslClientSubjectDN + "\" is not whitelisted");
@@ -119,6 +146,7 @@ public class DafoUserManager {
                 }
                 return new PituDafoUserDetails(request);
             }
+
         }
 
         // Fall back to an anonymous user
