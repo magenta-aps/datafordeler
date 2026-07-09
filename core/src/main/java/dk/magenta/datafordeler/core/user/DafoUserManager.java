@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -117,27 +118,14 @@ public class DafoUserManager {
             }
 
             String sslClientCertInfo = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
-            if (sslClientCertInfo != null) {
-                sslClientCertInfo = URLDecoder.decode(sslClientCertInfo, StandardCharsets.UTF_8);
-            }
-            System.out.println("sslClientCertInfo: "+sslClientCertInfo);
 
-            String sslClientSubjectDN = null;
-            String sslClientIssuerDN = null;
+            String sslClientSubjectDN;
+            String sslClientIssuerDN;
+
             if (sslClientCertInfo != null) {
-                Pattern certInfoPattern = Pattern.compile("^(\\w+)=\"([^\"]+)\"$");
-                for (String part : sslClientCertInfo.split(";")) {
-                    Matcher m = certInfoPattern.matcher(part);
-                    if (m.find()) {
-                        String key = m.group(1);
-                        String value = m.group(2);
-                        if (key.equals("Subject")) {
-                            sslClientSubjectDN = value;
-                        } else if (key.equals("Issuer")) {
-                            sslClientIssuerDN = value;
-                        }
-                    }
-                }
+                Map<String, String> parsedSSLClientCertInfo = PituDafoUserDetails.parseSSLClientCertInfo(sslClientCertInfo);
+                sslClientSubjectDN = parsedSSLClientCertInfo.get("Subject");
+                sslClientIssuerDN = parsedSSLClientCertInfo.get("Issuer");
 
             } else {
                 // If an SSL_CLIENT_S_DN header is provided, create a clientcertificate-based user
