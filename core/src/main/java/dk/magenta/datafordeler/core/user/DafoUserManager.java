@@ -13,10 +13,7 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,7 +107,15 @@ public class DafoUserManager {
 
         if (!samlOnly) {
 
+            for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements();) {
+                String headerName = e.nextElement();
+                String headerValue = request.getHeader(headerName);
+                System.out.println(headerName+" = "+headerValue);
+            }
+
             String sslClientCertInfo = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
+            System.out.println("sslClientCertInfo: "+sslClientCertInfo);
+
             String sslClientSubjectDN = null;
             String sslClientIssuerDN = null;
             if (sslClientCertInfo != null) {
