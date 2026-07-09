@@ -111,12 +111,6 @@ public class DafoUserManager {
 
         if (!samlOnly) {
 
-            for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements();) {
-                String headerName = e.nextElement();
-                String headerValue = request.getHeader(headerName);
-                System.out.println(headerName+" = "+headerValue);
-            }
-
             String sslClientCertInfo = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
 
             String sslClientSubjectDN;
@@ -133,9 +127,6 @@ public class DafoUserManager {
                 sslClientIssuerDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_ISSUER_DN);
             }
 
-            System.out.println("sslClientSubjectDN: "+sslClientSubjectDN);
-            System.out.println("sslClientIssuerDN: "+sslClientIssuerDN);
-
             if (sslClientSubjectDN != null && sslClientIssuerDN != null) {
                 if (!this.pituSDNWhitelist.contains(sslClientSubjectDN)) {
                     throw new InvalidCertificateException(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN + " \"" + sslClientSubjectDN + "\" is not whitelisted");
@@ -145,7 +136,6 @@ public class DafoUserManager {
                 }
                 return new PituDafoUserDetails(request);
             }
-
         }
 
         // Fall back to an anonymous user
