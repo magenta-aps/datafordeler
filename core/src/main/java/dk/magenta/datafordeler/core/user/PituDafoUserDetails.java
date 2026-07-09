@@ -24,7 +24,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
     public static String PARAMETER_SERVICECODE = "serviceCode";
     public static String PARAMETER_SERVICEVERSION = "serviceVersion";
 
-    public static final String HEADER_SSL_CLIENT_CERT_INFO = "X-Forwarded-Tls-Client-Cert-Info";
+    public static final String HEADER_SSL_CLIENT_CERT_INFO = "x-forwarded-tls-client-cert-info";
 
     private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
     private final HashMap<String, ArrayList<UserProfile>> systemRoles = new HashMap<>();
@@ -60,6 +60,7 @@ public class PituDafoUserDetails extends DafoUserDetails {
 
         String sslClientCertInfo = headers.get(HEADER_SSL_CLIENT_CERT_INFO);
         System.out.println("headers: "+headers);
+        System.out.println("sslClientCertInfo: "+sslClientCertInfo);
         if (sslClientCertInfo != null) {
             Map<String, String> parsedSSLClientCertInfo = PituDafoUserDetails.parseSSLClientCertInfo(sslClientCertInfo);
             clientSubject = parsedSSLClientCertInfo.get("Subject");
