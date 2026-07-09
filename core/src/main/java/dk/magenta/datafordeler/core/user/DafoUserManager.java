@@ -13,10 +13,12 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.net.URLDecoder;
 /**
  * Manages DAFO users that are created from incoming SAML tokens.
  * This default implementation is not database backed and will not look up additional details
@@ -114,6 +116,9 @@ public class DafoUserManager {
             }
 
             String sslClientCertInfo = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
+            if (sslClientCertInfo != null) {
+                sslClientCertInfo = URLDecoder.decode(sslClientCertInfo, StandardCharsets.UTF_8);
+            }
             System.out.println("sslClientCertInfo: "+sslClientCertInfo);
 
             String sslClientSubjectDN = null;
