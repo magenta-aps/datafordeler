@@ -3,7 +3,11 @@ package dk.magenta.datafordeler.core.user;
 import dk.magenta.datafordeler.core.exception.InvalidCertificateException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PituDafoUserDetails extends DafoUserDetails {
 
@@ -19,6 +23,8 @@ public class PituDafoUserDetails extends DafoUserDetails {
     public static String PARAMETER_SUBSYSTEMCODE = "subsystemCode";
     public static String PARAMETER_SERVICECODE = "serviceCode";
     public static String PARAMETER_SERVICEVERSION = "serviceVersion";
+
+    public static final String HEADER_SSL_CLIENT_CERT_INFO = "x-forwarded-tls-client-cert-info";
 
     private final HashMap<String, UserProfile> userProfiles = new HashMap<>();
     private final HashMap<String, ArrayList<UserProfile>> systemRoles = new HashMap<>();
@@ -45,11 +51,24 @@ public class PituDafoUserDetails extends DafoUserDetails {
 
     private PituDafoUserDetails(Map<String, String> headers, Map<String, String[]> parameters) throws InvalidCertificateException {
         super();
-        this.clientSubject = headers.get(HEADER_SSL_CLIENT_SUBJECT_DN);
-        this.nameQualifier = headers.get(HEADER_SSL_CLIENT_ISSUER_DN);
+
+        String clientSubject = headers.get(HEADER_SSL_CLIENT_SUBJECT_DN);
+        String nameQualifier = headers.get(HEADER_SSL_CLIENT_ISSUER_DN);
         this.serverSubject = headers.get(HEADER_SSL_SERVER_SUBJECT_DN_OU);
         this.verify = headers.get(HEADER_SSL_CLIENT_VERIFY);
         this.pituClient = headers.get(HEADER_PITU_CLIENT);
+
+        String sslClientCertInfo = headers.get(HEADER_SSL_CLIENT_CERT_INFO);
+        if (sslClientCertInfo != null) {
+            Map<String, String> parsedSSLClientCertInfo = PituDafoUserDetails.parseSSLClientCertInfo(sslClientCertInfo);
+            clientSubject = parsedSSLClientCertInfo.get("Subject");
+            nameQualifier = parsedSSLClientCertInfo.get("Issuer");
+            if (clientSubject != null && nameQualifier != null) {
+                this.verify = "SUCCESS";
+            }
+        }
+        this.clientSubject = clientSubject;
+        this.nameQualifier = nameQualifier;
 
         Map<String, String> parameterMap = firstParameter(parameters);
 
@@ -143,5 +162,25 @@ public class PituDafoUserDetails extends DafoUserDetails {
     @Override
     public String toString() {
         return this.pituClient;
+    }
+
+
+    private static final Pattern certInfoPattern = Pattern.compile("^(\\w+)=\"([^\"]+)\"$");
+    public static Map<String, String> parseSSLClientCertInfo(String sslClientCertInfo) {
+        HashMap<String, String> out = new HashMap<>();
+        if (sslClientCertInfo != null) {
+            sslClientCertInfo = URLDecoder.decode(sslClientCertInfo, StandardCharsets.UTF_8);
+            for (String part : sslClientCertInfo.split(";")) {
+                Matcher m = certInfoPattern.matcher(part);
+                if (m.find()) {
+                    String key = m.group(1);
+                    String value = m.group(2);
+                    if (key != null && (key.equals("Subject") || key.equals("Issuer"))) {
+                        out.put(key, value);
+                    }
+                }
+            }
+        }
+        return out;
     }
 }
