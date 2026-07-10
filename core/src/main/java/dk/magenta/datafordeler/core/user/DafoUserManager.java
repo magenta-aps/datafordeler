@@ -13,11 +13,14 @@ import org.opensaml.saml.saml2.core.Assertion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
-
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  * Manages DAFO users that are created from incoming SAML tokens.
  * This default implementation is not database backed and will not look up additional details
@@ -107,9 +110,23 @@ public class DafoUserManager {
         }
 
         if (!samlOnly) {
-            // If an SSL_CLIENT_S_DN header is provided, create a clientcertificate-based user
-            String sslClientSubjectDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN);
-            String sslClientIssuerDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_ISSUER_DN);
+
+            String sslClientCertInfo = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_CERT_INFO);
+
+            String sslClientSubjectDN;
+            String sslClientIssuerDN;
+
+            if (sslClientCertInfo != null) {
+                Map<String, String> parsedSSLClientCertInfo = PituDafoUserDetails.parseSSLClientCertInfo(sslClientCertInfo);
+                sslClientSubjectDN = parsedSSLClientCertInfo.get("Subject");
+                sslClientIssuerDN = parsedSSLClientCertInfo.get("Issuer");
+
+            } else {
+                // If an SSL_CLIENT_S_DN header is provided, create a clientcertificate-based user
+                sslClientSubjectDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN);
+                sslClientIssuerDN = request.getHeader(PituDafoUserDetails.HEADER_SSL_CLIENT_ISSUER_DN);
+            }
+
             if (sslClientSubjectDN != null && sslClientIssuerDN != null) {
                 if (!this.pituSDNWhitelist.contains(sslClientSubjectDN)) {
                     throw new InvalidCertificateException(PituDafoUserDetails.HEADER_SSL_CLIENT_SUBJECT_DN + " \"" + sslClientSubjectDN + "\" is not whitelisted");
