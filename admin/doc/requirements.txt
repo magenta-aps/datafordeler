@@ -1,6 +1,6 @@
 pyopenssl==18.0.0
 pypiwin32==223; sys_platform == 'win32'
-cryptography==2.7
+cryptography==39.0.1
 Django>=2.2, <2.3
 django-markup==1.2
 #fork to support django-2-2
