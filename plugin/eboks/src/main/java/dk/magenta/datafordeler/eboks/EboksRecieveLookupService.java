@@ -245,6 +245,7 @@ public class EboksRecieveLookupService {
 
     public HashSet<CompanyEntity> gerCompanyLookup(Session session, Collection<String> cvrNumbers) {
         CompanyQuery query = new CompanyQuery();
+        query.setPageSize(Integer.MAX_VALUE);
         for (String cvrNumber : cvrNumbers) {
             query.addGerNr(cvrNumber);
         }

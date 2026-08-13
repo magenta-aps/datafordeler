@@ -54,6 +54,7 @@ public class CollectiveCvrLookup {
     public Collection<ParticipantRecord> participantLookup(Session session, Collection<String> unitNumbers) throws DataFordelerException {
         ParticipantRecordQuery query = new ParticipantRecordQuery();
         query.setParameter(ParticipantRecordQuery.UNITNUMBER, unitNumbers);
+        query.setPageSize(Integer.MAX_VALUE);
         Collection<ParticipantRecord> participantRecords = QueryManager.getAllEntities(session, query, ParticipantRecord.class);
 
         for (ParticipantRecord record : participantRecords) {
