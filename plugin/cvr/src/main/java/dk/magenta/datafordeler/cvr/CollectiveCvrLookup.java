@@ -35,6 +35,7 @@ public class CollectiveCvrLookup {
     public Collection<CompanyRecord> getCompanies(Session session, Collection<String> cvrNumbers) {
         CompanyRecordQuery query = new CompanyRecordQuery();
         query.setParameter(CompanyRecordQuery.CVRNUMMER, cvrNumbers);
+        query.setPageSize(Integer.MAX_VALUE);
 
         Collection<CompanyRecord> companyRecords = QueryManager.getAllEntitiesAsStream(session, query, CompanyRecord.class).collect(Collectors.toList());
 
