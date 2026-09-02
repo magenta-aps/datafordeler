@@ -54,9 +54,9 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String DB_FIELD_EFFECT_FROM_UNCERTAIN = "effectFromUncertain";
     public static final String IO_FIELD_EFFECT_FROM_UNCERTAIN = "virkningFraUsikker";
     @Column(name = DB_FIELD_EFFECT_FROM_UNCERTAIN)
-    @JsonProperty(value = IO_FIELD_EFFECT_FROM_UNCERTAIN)
     private boolean effectFromUncertain;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_FROM_UNCERTAIN)
     public boolean isEffectFromUncertain() {
         return this.effectFromUncertain;
     }
@@ -69,7 +69,6 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
 //    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
     @Transient
-    @JsonProperty(value = IO_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
     @JsonIgnore
@@ -89,9 +88,9 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     public static final String DB_FIELD_EFFECT_TO_UNCERTAIN = "effectToUncertain";
     public static final String IO_FIELD_EFFECT_TO_UNCERTAIN = "virkningTilUsikker";
     @Column(name = DB_FIELD_EFFECT_TO_UNCERTAIN)
-    @JsonProperty(value = IO_FIELD_EFFECT_TO_UNCERTAIN)
     private boolean effectToUncertain;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_TO_UNCERTAIN)
     public boolean isEffectToUncertain() {
         return this.effectToUncertain;
     }
