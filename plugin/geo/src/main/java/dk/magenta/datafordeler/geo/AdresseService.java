@@ -586,8 +586,7 @@ public class AdresseService {
                 }
                 String bnr = accessAddressEntity.getBnr();
 
-                String key = bnr + "|" + floorValue + "|" + unitNumberValue;
-
+                String key = bnr + "|" + floorValue + "|" + unitNumberValue + "|" + houseNumberValue;
                 if (!existing.contains(key)) {
                     existing.add(key);
 
