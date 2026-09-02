@@ -76,6 +76,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     @Column(name = DB_FIELD_EFFECT_TO+"_new")
     private OffsetDateTime effectToNew;
 
+    @JsonProperty(value = IO_FIELD_EFFECT_TO)
     public OffsetDateTime getEffectTo() {
         return this.effectToNew;
     }
