@@ -106,7 +106,7 @@ public class ResponsibleQuery extends GerQuery<ResponsibleEntity> {
         joinHandles.put("name", ResponsibleEntity.DB_FIELD_NAME);
         joinHandles.put("gernr", ResponsibleEntity.DB_FIELD_GERNR);
         joinHandles.put("guid", ResponsibleEntity.DB_FIELD_CVR_PARTICIPANT_GUID);
-        joinHandles.put("lastUpdated", ResponsibleEntity.DB_FIELD_LAST_UPDATED+"_new");
+        joinHandles.put("lastUpdated", ResponsibleEntity.DB_FIELD_LAST_UPDATED+"New");
     }
 
     @Override
