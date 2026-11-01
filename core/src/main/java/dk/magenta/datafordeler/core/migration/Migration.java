@@ -73,7 +73,7 @@ public class Migration {
         Method updateFields = model.getMethod("updateFields");
         List<String> fields = (List<String>) updateFields.invoke(null);
         for (String field : fields) {
-            s.add("(" + field + " is not null and " + field + "New is null)");
+            s.add("(" + field + " is null and " + field + "New is not null)");
         }
         Method updateTimestamp = model.getMethod("updateTimestamp");
         String hql = "from " + model.getCanonicalName() + " where " + s;
