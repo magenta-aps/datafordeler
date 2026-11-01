@@ -116,7 +116,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String DB_FIELD_EFFECT_FROM = "effectFrom";
     public static final String IO_FIELD_EFFECT_FROM = "virkningFra";
 
-    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
+    @Column(name = DB_FIELD_EFFECT_FROM, nullable = true, insertable = true, updatable = false)
     @JsonProperty(value = IO_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
@@ -129,7 +129,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = fixOffsetIn(effectFrom);
+        this.effectFrom = effectFrom;
         this.effectFromNew = effectFrom;
     }
 
@@ -138,7 +138,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     public static final String IO_FIELD_EFFECT_TO = "virkningTil";
 
     @JsonProperty(value = IO_FIELD_EFFECT_TO)
-    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false, columnDefinition = "datetime2")
+    @Column(name = DB_FIELD_EFFECT_TO, nullable = true, insertable = true, updatable = false)
     private OffsetDateTime effectTo;
 
     @JsonIgnore
@@ -150,7 +150,7 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = fixOffsetIn(effectTo);
+        this.effectTo = effectTo;
         this.effectToNew = effectTo;
     }
 
@@ -287,8 +287,8 @@ public abstract class Effect<R extends Registration, V extends Effect, D extends
     }
 
     public void updateTimestamp() {
-        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
-        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
+        this.effectFrom = this.effectFromNew;
+        this.effectTo = this.effectToNew;
     }
 
     public static List<String> updateFields() {

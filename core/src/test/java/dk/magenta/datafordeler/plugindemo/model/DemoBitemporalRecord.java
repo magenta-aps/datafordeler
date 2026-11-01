@@ -54,8 +54,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
 
 
-//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-//    private OffsetDateTime registrationFrom;
+    @Column(name = DB_FIELD_REGISTRATION_FROM)
+    private OffsetDateTime registrationFrom;
 
     @JsonIgnore
     @Column(name = DB_FIELD_REGISTRATION_FROM+"_new")
@@ -75,8 +75,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-//    private OffsetDateTime registrationTo;
+    @Column(name = DB_FIELD_REGISTRATION_TO)
+    private OffsetDateTime registrationTo;
     @JsonIgnore
     @Column(name = DB_FIELD_REGISTRATION_TO+"_new")
     private OffsetDateTime registrationToNew;
@@ -98,8 +98,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
-//    @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
-//    private OffsetDateTime effectFrom;
+    @Column(name = DB_FIELD_EFFECT_FROM)
+    private OffsetDateTime effectFrom;
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_FROM+"_new")
     private OffsetDateTime effectFromNew;
@@ -117,8 +117,8 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     public static final String DB_FIELD_EFFECT_TO = Bitemporal.DB_FIELD_EFFECT_TO;
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
-//    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
-//    private OffsetDateTime effectTo;
+    @Column(name = DB_FIELD_EFFECT_TO)
+    private OffsetDateTime effectTo;
     @JsonIgnore
     @Column(name = DB_FIELD_EFFECT_TO+"_new")
     private OffsetDateTime effectToNew;
@@ -143,7 +143,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
 
     public static final String DB_FIELD_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_UPDATED = Nontemporal.IO_FIELD_UPDATED;
-    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
+    @Column(name = DB_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
     @JsonIgnore
     @Column(name = DB_FIELD_UPDATED+"_new")
@@ -157,7 +157,7 @@ public abstract class DemoBitemporalRecord extends DatabaseEntry implements Mono
     @Override
     @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = Bitemporal.fixOffsetIn(dafoUpdated);
+        this.dafoUpdated = dafoUpdated;
         this.dafoUpdatedNew = dafoUpdated;
     }
 

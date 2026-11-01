@@ -33,8 +33,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public static final String DB_FIELD_EFFECT_FROM = Bitemporal.DB_FIELD_EFFECT_FROM;
     public static final String IO_FIELD_EFFECT_FROM = Bitemporal.IO_FIELD_EFFECT_FROM;
-//    @Column(name = DB_FIELD_EFFECT_FROM, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_EFFECT_FROM)
     private OffsetDateTime effectFrom;
 
     @JsonIgnore
@@ -47,7 +46,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     }
 
     public void setEffectFrom(OffsetDateTime effectFrom) {
-        this.effectFrom = Bitemporal.fixOffsetIn(effectFrom);
+        this.effectFrom = effectFrom;
         this.effectFromNew = effectFrom;
     }
 
@@ -67,8 +66,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public static final String DB_FIELD_EFFECT_TO = Bitemporal.DB_FIELD_EFFECT_TO;
     public static final String IO_FIELD_EFFECT_TO = Bitemporal.IO_FIELD_EFFECT_TO;
-//    @Column(name = DB_FIELD_EFFECT_TO, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_EFFECT_TO)
     private OffsetDateTime effectTo;
 
     @JsonIgnore
@@ -81,7 +79,7 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
     }
 
     public void setEffectTo(OffsetDateTime effectTo) {
-        this.effectTo = Bitemporal.fixOffsetIn(effectTo);
+        this.effectTo = effectTo;
         this.effectToNew = effectTo;
     }
 
@@ -254,8 +252,8 @@ public abstract class CprBitemporalRecord<E extends CprRecordEntity, S extends C
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.effectFromNew = Bitemporal.fixOffsetOut(this.effectFrom);
-        this.effectToNew = Bitemporal.fixOffsetOut(this.effectTo);
+        this.effectFrom = this.effectFromNew;
+        this.effectTo = this.effectToNew;
     }
 
     public static List<String> updateFields() {

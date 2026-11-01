@@ -29,8 +29,7 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
 
 
-//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_REGISTRATION_FROM)
     protected OffsetDateTime registrationFrom;
 
     @JsonIgnore
@@ -44,7 +43,7 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_FROM)
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = fixOffsetIn(registrationFrom);
+        this.registrationFrom = registrationFrom;
         this.registrationFromNew = registrationFrom;
     }
 
@@ -52,8 +51,7 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_REGISTRATION_TO)
     protected OffsetDateTime registrationTo;
 
     @JsonIgnore
@@ -67,7 +65,7 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationTo = registrationTo;
         this.registrationToNew = registrationTo;
     }
 
@@ -120,8 +118,8 @@ public abstract class CprMonotemporalRecord<E extends CprRecordEntity, S extends
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
-        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
+        this.registrationFrom = this.registrationFromNew;
+        this.registrationTo = this.registrationToNew;
     }
 
     public static List<String> updateFields() {

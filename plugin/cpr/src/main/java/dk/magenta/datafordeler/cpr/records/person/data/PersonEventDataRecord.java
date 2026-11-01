@@ -33,7 +33,7 @@ public class PersonEventDataRecord extends CprRecordEntity implements MigrateMod
 
     public PersonEventDataRecord(OffsetDateTime timestamp, String eventId, String derived) {
         this.setDafoUpdated(OffsetDateTime.now());
-//        this.timestamp = fixOffsetIn(timestamp);
+        this.timestamp = timestamp;
         this.eventId = eventId;
         this.derived = derived;
         this.timestampNew = timestamp;
@@ -68,8 +68,7 @@ public class PersonEventDataRecord extends CprRecordEntity implements MigrateMod
     }
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-//    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_TIMESTAMP)
     @JsonIgnore
     private OffsetDateTime timestamp;
 
@@ -78,7 +77,7 @@ public class PersonEventDataRecord extends CprRecordEntity implements MigrateMod
     private OffsetDateTime timestampNew;
 
     public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = fixOffsetIn(timestamp);
+        this.timestamp = timestamp;
         this.timestampNew = timestamp;
     }
 
@@ -106,7 +105,7 @@ public class PersonEventDataRecord extends CprRecordEntity implements MigrateMod
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+        this.timestamp = this.timestampNew;
     }
 
     public static List<String> updateFields() {

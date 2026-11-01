@@ -42,8 +42,7 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
     public static final String DB_FIELD_UPDATED = "dafoUpdated";
     public static final String IO_FIELD_UPDATED = "sidstOpdateret";
-//    @Column(name = DB_FIELD_UPDATED, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_UPDATED)
     public OffsetDateTime dafoUpdated;
 
     @JsonIgnore
@@ -57,7 +56,7 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
     @JsonProperty(value = IO_FIELD_UPDATED)
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdated = dafoUpdated;
         this.dafoUpdatedNew = dafoUpdated;
     }
 
@@ -73,6 +72,7 @@ public abstract class GeoNontemporalRecord<E extends GeoEntity> extends Database
 
     public void updateTimestamp() {
 //        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+        this.dafoUpdated = this.dafoUpdatedNew;
     }
 
     public static List<String> updateFields() {

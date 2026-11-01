@@ -59,8 +59,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
 
     public static final String DB_FIELD_CREATION_DATE = "creationDate";
-//    @Column(name = DB_FIELD_CREATION_DATE, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_CREATION_DATE)
     private OffsetDateTime creationDate;
 
     @JsonIgnore
@@ -73,7 +72,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
     @JsonProperty(value = "CreationDate")
     public void setCreationDate(OffsetDateTime creationDate) {
-        this.creationDate = fixOffsetIn(creationDate);
+        this.creationDate = creationDate;
         this.creationDateNew = creationDate;
     }
 
@@ -83,8 +82,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public static final String DB_FIELD_EDIT_DATE = "editDate";
-//    @Column(name = DB_FIELD_EDIT_DATE, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_EDIT_DATE)
     private OffsetDateTime editDate;
 
     @JsonIgnore
@@ -97,7 +95,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
     @JsonProperty(value = "EditDate")
     public void setEditDate(OffsetDateTime editDate) {
-        this.editDate = fixOffsetIn(editDate);
+        this.editDate = editDate;
         this.editDateNew = editDate;
     }
 
@@ -109,8 +107,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     public static final String DB_FIELD_DAFO_UPDATED = Nontemporal.DB_FIELD_UPDATED;
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
-//    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_DAFO_UPDATED)
     private OffsetDateTime dafoUpdated = null;
 
     @JsonIgnore
@@ -123,7 +120,7 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdated = dafoUpdated;
         this.dafoUpdatedNew = dafoUpdated;
     }
 
@@ -168,9 +165,9 @@ public abstract class GeoEntity extends DatabaseEntry implements IdentifiedEntit
 
 
     public void updateTimestamp() {
-        this.creationDateNew = Bitemporal.fixOffsetOut(this.creationDate);
-        this.editDateNew = Bitemporal.fixOffsetOut(this.editDate);
-        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+        this.creationDate = this.creationDateNew;
+        this.editDate = this.editDateNew;
+        this.dafoUpdated = this.dafoUpdatedNew;
     }
 
     public static List<String> updateFields() {

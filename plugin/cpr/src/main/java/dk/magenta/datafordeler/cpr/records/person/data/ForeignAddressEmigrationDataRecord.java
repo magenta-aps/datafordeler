@@ -92,8 +92,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_EXIT_REGISTRATION = "emigrationRegistration";
     public static final String IO_FIELD_EXIT_REGISTRATION = "udrejseRegistrering";
-//    @Column(name = DB_FIELD_EXIT_REGISTRATION, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_EXIT_REGISTRATION)
     private OffsetDateTime emigrationRegistration;
 
     @JsonIgnore
@@ -102,7 +101,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     @JsonProperty(value = IO_FIELD_EXIT_REGISTRATION)
     public void setEmigrationRegistration(OffsetDateTime emigrationRegistration) {
-        this.emigrationRegistration = Bitemporal.fixOffsetIn(emigrationRegistration);
+        this.emigrationRegistration = emigrationRegistration;
         this.emigrationRegistrationNew = emigrationRegistration;
     }
     public OffsetDateTime getEmigrationRegistration() {
@@ -113,8 +112,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public static final String DB_FIELD_RETURN_REGISTRATION = "immigrationRegistration";
     public static final String IO_FIELD_RETURN_REGISTRATION = "indrejseRegistrering";
-//    @Column(name = DB_FIELD_RETURN_REGISTRATION, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_RETURN_REGISTRATION)
     private OffsetDateTime immigrationRegistration;
 
     @JsonIgnore
@@ -128,7 +126,7 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     @JsonProperty(value = IO_FIELD_RETURN_REGISTRATION)
     public void setImmigrationRegistration(OffsetDateTime immigrationRegistration) {
-        this.immigrationRegistration = Bitemporal.fixOffsetIn(immigrationRegistration);
+        this.immigrationRegistration = immigrationRegistration;
         this.immigrationRegistrationNew = immigrationRegistration;
     }
 
@@ -166,8 +164,8 @@ public class ForeignAddressEmigrationDataRecord extends CprBitemporalPersonRecor
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.emigrationRegistrationNew = Bitemporal.fixOffsetOut(this.emigrationRegistration);
-        this.immigrationRegistrationNew = Bitemporal.fixOffsetOut(this.immigrationRegistration);
+        this.emigrationRegistration = this.emigrationRegistrationNew;
+        this.immigrationRegistration = this.immigrationRegistrationNew;
     }
 
     public static List<String> updateFields() {
