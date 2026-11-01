@@ -22,7 +22,7 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
 @Table(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME, indexes = {
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME + PersonDataEventDataRecord.DB_FIELD_ENTITY, columnList = PersonDataEventDataRecord.DB_FIELD_ENTITY + DatabaseEntry.REF),
         @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME + PersonDataEventDataRecord.DB_FIELD_FIELD, columnList = PersonDataEventDataRecord.DB_FIELD_FIELD),
-        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP, columnList = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP)
+        @Index(name = CprPlugin.DEBUG_TABLE_PREFIX + PersonDataEventDataRecord.TABLE_NAME + PersonDataEventDataRecord.DB_FIELD_TIMESTAMP, columnList = PersonDataEventDataRecord.DB_FIELD_TIMESTAMP+"_new")
 })
 public class PersonDataEventDataRecord extends CprRecordEntity {
 
