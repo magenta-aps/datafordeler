@@ -70,8 +70,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_UPDATED = "lastUpdated";
     public static final String IO_FIELD_LAST_UPDATED = "sidstOpdateret";
 
-//    @Column(name = DB_FIELD_LAST_UPDATED, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_LAST_UPDATED)
     private OffsetDateTime lastUpdated;
 
     @JsonIgnore
@@ -93,7 +92,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
         // igen fungerer.
         // Hvis vi går væk fra datetime2 skal vi ændre tilbage til at der bare står
         // this.lastUpdated = lastUpdated
-        this.lastUpdated = fixOffsetIn(lastUpdated);
+        this.lastUpdated = lastUpdated;
         this.lastUpdatedNew = lastUpdated;
     }
 
@@ -101,8 +100,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     public static final String DB_FIELD_LAST_LOADED = "lastLoaded";
     public static final String IO_FIELD_LAST_LOADED = "sidstIndlaest";
 
-//    @Column(name = DB_FIELD_LAST_LOADED, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_LAST_LOADED)
     @JsonProperty(value = IO_FIELD_LAST_LOADED)
     private OffsetDateTime lastLoaded;
 
@@ -117,7 +115,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public void setLastLoaded(OffsetDateTime lastLoaded) {
         // Samme som setLastUpdated
-        this.lastLoaded = fixOffsetIn(lastLoaded);
+        this.lastLoaded = lastLoaded;
         this.lastLoadedNew = lastLoaded;
     }
 
@@ -184,8 +182,8 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
-//    @Column(columnDefinition = "datetime2")
-    @Transient
+    @Column
+    @JsonIgnore
     private OffsetDateTime registrationTo;
 
     @JsonIgnore
@@ -199,7 +197,7 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationTo = registrationTo;
         this.registrationToNew = registrationTo;
     }
 
@@ -453,9 +451,9 @@ public abstract class CvrBitemporalRecord extends CvrNontemporalRecord implement
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.lastUpdatedNew = Bitemporal.fixOffsetOut(this.lastUpdated);
-        this.lastLoadedNew = Bitemporal.fixOffsetOut(this.lastLoaded);
-        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
+        this.lastUpdated = this.lastUpdatedNew;
+        this.lastLoaded = this.lastLoadedNew;
+        this.registrationTo = this.registrationToNew;
     }
 
     public static List<String> updateFields() {

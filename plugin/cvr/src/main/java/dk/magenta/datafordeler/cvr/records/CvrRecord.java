@@ -33,8 +33,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     public static final String IO_FIELD_DAFO_UPDATED = "dafoOpdateret";
 
     @JsonIgnore
-//    @Column(name = DB_FIELD_DAFO_UPDATED, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_DAFO_UPDATED)
     protected OffsetDateTime dafoUpdated = null;
 
     @JsonIgnore
@@ -48,7 +47,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     }
 
     public void setDafoUpdated(OffsetDateTime dafoUpdated) {
-        this.dafoUpdated = fixOffsetIn(dafoUpdated);
+        this.dafoUpdated = dafoUpdated;
         this.dafoUpdatedNew = dafoUpdated;
     }
 
@@ -105,7 +104,7 @@ public abstract class CvrRecord extends DatabaseEntry {
     }
 
     public void updateTimestamp() {
-        this.dafoUpdatedNew = Bitemporal.fixOffsetOut(this.dafoUpdated);
+        this.dafoUpdated = this.dafoUpdatedNew;
     }
 
     protected String debug_name() {

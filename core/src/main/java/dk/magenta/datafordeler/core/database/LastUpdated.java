@@ -28,8 +28,7 @@ public class LastUpdated extends DatabaseEntry {
     private String schemaName;
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-//    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_TIMESTAMP)
     private OffsetDateTime timestamp;
 
     @Column(name = DB_FIELD_TIMESTAMP+"_new")
@@ -56,12 +55,12 @@ public class LastUpdated extends DatabaseEntry {
     }
 
     public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = fixOffsetIn(timestamp);
+        this.timestamp = timestamp;
         this.timestampNew = timestamp;
     }
 
     public void updateTimestamp() {
-        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+        this.timestamp = this.timestampNew;
     }
 
     public static List<String> updateFields() {

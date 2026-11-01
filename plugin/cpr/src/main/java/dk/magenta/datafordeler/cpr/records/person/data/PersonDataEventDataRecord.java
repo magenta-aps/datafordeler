@@ -35,7 +35,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
     public PersonDataEventDataRecord(OffsetDateTime timestamp, String field, Long oldItem, String text) {
         this.setDafoUpdated(OffsetDateTime.now());
-        this.timestamp = fixOffsetIn(timestamp);
+        this.timestamp = timestamp;
         this.timestampNew = timestamp;
         this.field = field;
         this.oldItem = oldItem;
@@ -86,8 +86,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
 
     public static final String DB_FIELD_TIMESTAMP = "timestamp";
-//    @Column(name = DB_FIELD_TIMESTAMP, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_TIMESTAMP)
     @JsonIgnore
     private OffsetDateTime timestamp;
 
@@ -118,7 +117,7 @@ public class PersonDataEventDataRecord extends CprRecordEntity {
 
     public void updateTimestamp() {
         super.updateTimestamp();
-        this.timestampNew = Bitemporal.fixOffsetOut(this.timestamp);
+        this.timestamp = this.timestampNew;
     }
 
     public static List<String> updateFields() {

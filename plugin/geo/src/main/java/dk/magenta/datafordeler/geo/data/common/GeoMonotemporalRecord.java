@@ -26,8 +26,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_FROM = Monotemporal.DB_FIELD_REGISTRATION_FROM;
     public static final String IO_FIELD_REGISTRATION_FROM = Monotemporal.IO_FIELD_REGISTRATION_FROM;
-//    @Column(name = DB_FIELD_REGISTRATION_FROM, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_REGISTRATION_FROM)
     private OffsetDateTime registrationFrom;
 
     @JsonIgnore
@@ -41,7 +40,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     }
 
     public void setRegistrationFrom(OffsetDateTime registrationFrom) {
-        this.registrationFrom = fixOffsetIn(registrationFrom);
+        this.registrationFrom = registrationFrom;
         this.registrationFromNew = registrationFrom;
     }
 
@@ -55,8 +54,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     // For storing the calculated endRegistration time, ie. when the next registration "overrides" us
     public static final String DB_FIELD_REGISTRATION_TO = Monotemporal.DB_FIELD_REGISTRATION_TO;
     public static final String IO_FIELD_REGISTRATION_TO = Monotemporal.IO_FIELD_REGISTRATION_TO;
-//    @Column(name = DB_FIELD_REGISTRATION_TO, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_REGISTRATION_TO)
     private OffsetDateTime registrationTo;
 
     @JsonProperty(value = IO_FIELD_REGISTRATION_TO)
@@ -68,7 +66,7 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
     }
 
     public void setRegistrationTo(OffsetDateTime registrationTo) {
-        this.registrationTo = fixOffsetIn(registrationTo);
+        this.registrationTo = registrationTo;
         this.registrationToNew = registrationTo;
     }
 
@@ -171,6 +169,8 @@ public class GeoMonotemporalRecord<E extends GeoEntity> extends GeoNontemporalRe
         super.updateTimestamp();
 //        this.registrationFromNew = Bitemporal.fixOffsetOut(this.registrationFrom);
 //        this.registrationToNew = Bitemporal.fixOffsetOut(this.registrationTo);
+        this.registrationFrom = this.registrationFromNew;
+        this.registrationTo = this.registrationToNew;
     }
 
     public static List<String> updateFields() {

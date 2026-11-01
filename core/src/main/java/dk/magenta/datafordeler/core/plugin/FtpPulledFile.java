@@ -29,7 +29,7 @@ public class FtpPulledFile extends DatabaseEntry implements MigrateModel {
     public FtpPulledFile(String type, String filename) {
         this.type = type;
         this.filename = filename;
-        this.timestamp = fixOffsetIn(OffsetDateTime.now());
+        this.timestamp = OffsetDateTime.now();
         this.timestampNew = OffsetDateTime.now();
     }
 
@@ -39,15 +39,14 @@ public class FtpPulledFile extends DatabaseEntry implements MigrateModel {
     @Column(name = DB_FIELD_FILENAME)
     private String filename;
 
-//    @Column(name = DB_FIELD_TIMESTAMP, nullable = false, updatable = false, columnDefinition = "datetime2")
-    @Transient
+    @Column(name = DB_FIELD_TIMESTAMP, nullable = false, updatable = false)
     private OffsetDateTime timestamp;
 
     @Column(name = DB_FIELD_TIMESTAMP+"_new", nullable = true, updatable = true)
     private OffsetDateTime timestampNew;
 
     public void updateTimestamp() {
-        this.timestampNew = this.timestamp;
+        this.timestamp = this.timestampNew;
     }
 
     public static List<String> updateFields() {

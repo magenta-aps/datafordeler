@@ -46,16 +46,14 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
     @JsonIgnore
     private String issuer;
 
-//    @Column(nullable = true, columnDefinition = "datetime2")
-    @Transient
+    @Column(nullable = true)
     private OffsetDateTime received;
 
     @Column(nullable = true)
     @JsonProperty("received")
     private OffsetDateTime receivedNew;
 
-//    @Column(nullable = true, columnDefinition = "datetime2")
-    @Transient
+    @Column(nullable = true)
     private OffsetDateTime handled;
 
     @Column(nullable = true)
@@ -198,6 +196,8 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
 
 
     public void updateTimestamp() {
+        this.handled = this.handledNew;
+        this.received = this.receivedNew;
     }
 
     public static List<String> updateFields() {
