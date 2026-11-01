@@ -39,7 +39,7 @@ public class FtpPulledFile extends DatabaseEntry implements MigrateModel {
     @Column(name = DB_FIELD_FILENAME)
     private String filename;
 
-    @Column(name = DB_FIELD_TIMESTAMP, nullable = false, updatable = false)
+    @Column(name = DB_FIELD_TIMESTAMP, nullable = true, updatable = false)
     private OffsetDateTime timestamp;
 
     @Column(name = DB_FIELD_TIMESTAMP+"_new", nullable = true, updatable = true)
