@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.geo.AdresseService;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
+import dk.magenta.datafordeler.geo.data.locality.LocalityTypeRecord;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
@@ -262,7 +263,9 @@ public class GenericUnitAddressService {
                 }
                 if (localityRecord != null) {
                     output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
-                    output.setLokalitet_type(localityRecord.getType().stream().findFirst().orElse(null).getType());
+
+                    LocalityTypeRecord localityTypeRecord = localityRecord.getType().current();
+                    output.setLokalitet_type(localityTypeRecord != null ? localityTypeRecord.getType() : null);
                 }
                 if (postcodeRecord != null) {
                     output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());

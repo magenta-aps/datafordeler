@@ -111,13 +111,10 @@ SELECT *  FROM
 
             Assertions.assertTrue(query.getResultList().size() > 0);
 
-            System.out.println(query.getResultList().size());
-
-            for (Object item : query.getResultList()) {
-                {
-                    System.out.println(objectMapper.writeValueAsString(item));
-                }
-            }
+//            System.out.println(query.getResultList().size());
+//            for (Object item : query.getResultList()) {
+//                System.out.println(objectMapper.writeValueAsString(item));
+//            }
         }
     }
 
