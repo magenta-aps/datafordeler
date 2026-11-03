@@ -177,9 +177,6 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals("IRKS", entity.getCreator());
             Assertions.assertEquals("{69231C66-F37A-4F78-80C1-E379BFEE165D}", entity.getSumiffiikId());
             Assertions.assertEquals(1, entity.getShape().size());
-            Assertions.assertEquals(1, entity.getSource().size());
-            Assertions.assertEquals(Integer.valueOf(1), entity.getSource().iterator().next().getSource());
-            Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getSource().iterator().next().getRegistrationFrom()));
             Assertions.assertEquals(1, entity.getHouseNumber().size());
             Assertions.assertEquals("18", entity.getHouseNumber().iterator().next().getNumber());
             Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getHouseNumber().iterator().next().getRegistrationFrom()));
@@ -225,8 +222,6 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals(Integer.valueOf(1), entity.getUsage().iterator().next().getUsage());
             Assertions.assertEquals(1, entity.getNumber().size());
             Assertions.assertEquals("5678", entity.getNumber().iterator().next().getNumber());
-            Assertions.assertEquals(1, entity.getSource().size());
-            Assertions.assertEquals(Integer.valueOf(1), entity.getSource().iterator().next().getSource());
             Assertions.assertEquals(1, entity.getStatus().size());
             Assertions.assertEquals(Integer.valueOf(2), entity.getStatus().iterator().next().getStatus());
         } finally {

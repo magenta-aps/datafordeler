@@ -43,9 +43,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
             }
         }
 
-        @JsonProperty("DataKilde")
-        public Integer dataSource;
-
         @JsonProperty("bygning_id")
         public String buildingId;
 
@@ -90,10 +87,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
 
         records.add(
                 new AccessAddressStatusRecord(this.properties.objectStatus)
-        );
-
-        records.add(
-                new AccessAddressSourceRecord(this.properties.dataSource)
         );
 
         if (this.shape instanceof Point) {
