@@ -330,7 +330,7 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assertions.assertEquals(0, responseContent.get("results").size());*/
 
-        response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
+        /*response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
         Assertions.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assertions.assertEquals(2, responseContent.get("results").size());
@@ -351,6 +351,30 @@ public class TestGenericServices extends GeoTest {
         Assertions.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assertions.assertEquals(2, responseContent.get("results").size());
+        Assertions.assertNotNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
+        Assertions.assertNotNull(responseContent.get("results").get(0).get("unitAddress_objectId"));*/
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=5678");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=other");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(0, responseContent.get("results").size());
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=5678");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(1, responseContent.get("results").size());
+        Assertions.assertNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
+        Assertions.assertNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=5678&debug=1");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(1, responseContent.get("results").size());
         Assertions.assertNotNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
         Assertions.assertNotNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
 

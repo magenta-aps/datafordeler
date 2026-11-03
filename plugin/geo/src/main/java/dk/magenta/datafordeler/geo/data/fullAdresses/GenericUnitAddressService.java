@@ -58,7 +58,8 @@ public class GenericUnitAddressService {
         post_kode("postcodeEntity.code", true),
         post_navn("postcodeName.name", false),
         vej_kode("roadEntity.code", true),
-        vej_navn("roadName.name", false);
+        vej_navn("roadName.name", false),
+        enhedsnummer("unitAddressNumber.number", false);
 
         private final String searchString;
         private final boolean numberType;
@@ -91,6 +92,7 @@ public class GenericUnitAddressService {
         parameterMappings.put("post_navn", ParameterType.post_navn);
         parameterMappings.put("vej_kode", ParameterType.vej_kode);
         parameterMappings.put("vej_navn", ParameterType.vej_navn);
+        parameterMappings.put("enhedsnummer", ParameterType.enhedsnummer);
     }
 
 
@@ -130,6 +132,7 @@ public class GenericUnitAddressService {
                     "\nFROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
                     "\nLEFT JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
                     "\nLEFT JOIN " + UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor." + UnitAddressFloorRecord.DB_FIELD_ENTITY + "=unitAddressEntity" + " " +
+                    "\nLEFT JOIN " + UnitAddressNumberRecord.class.getCanonicalName() + " unitAddressNumber ON unitAddressNumber." + UnitAddressNumberRecord.DB_FIELD_ENTITY + "=unitAddressEntity" + " " +
 
                     "\nLEFT JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
