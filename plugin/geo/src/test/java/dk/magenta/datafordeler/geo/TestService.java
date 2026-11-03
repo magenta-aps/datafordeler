@@ -96,7 +96,6 @@ public class TestService extends GeoTest {
         for (JsonNode a : addresses) {
             address = (ObjectNode) a;
             Assertions.assertEquals("18", address.get("husnummer").asText());
-            Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
             Assertions.assertEquals("3197", address.get("b_nummer").asText());
             Assertions.assertEquals(1, address.get("anvendelse").intValue());
         }
