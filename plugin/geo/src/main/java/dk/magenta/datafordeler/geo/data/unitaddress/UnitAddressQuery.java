@@ -144,9 +144,6 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
 
 
-
-
-
     public static final String UNIT_NUMBER = UnitAddressEntity.IO_FIELD_NUMBER;
 
     @QueryField(type = QueryField.FieldType.STRING, queryName = UNIT_NUMBER)
