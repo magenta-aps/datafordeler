@@ -105,7 +105,7 @@ public class TestService extends GeoTest {
         ObjectNode address = (ObjectNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals("1b3ac64b-c28d-40b2-a106-16cee7c188b8", address.get("uuid").asText());
         Assertions.assertEquals("18", address.get("husnummer").asText());
-        Assertions.assertEquals("kld", address.get("etage").asText());
+        Assertions.assertEquals("5678", address.get("enhedsnummer").asText());
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
         Assertions.assertEquals(254, address.get("vejkode").intValue());
         Assertions.assertEquals("Qarsaalik", address.get("vejnavn").asText());

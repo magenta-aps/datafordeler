@@ -129,9 +129,9 @@ public class GeoLookupService extends CprLookupService {
         }
     }
     public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber) throws InvalidClientInputException {
-        return this.doLookup(municipalityCode, roadCode, houseNumber, bNumber, null, null, false);
+        return this.doLookup(municipalityCode, roadCode, houseNumber, bNumber, null, null, null, false);
     }
-    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber, String floor, String door, boolean includeGlobalIds) throws InvalidClientInputException {
+    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber, String floor, String door, String unitNumber, boolean includeGlobalIds) throws InvalidClientInputException {
         if (municipalityCode < 950) {
             return new GeoLookupDTO(super.doLookup(municipalityCode, roadCode, houseNumber));
         } else {
@@ -204,6 +204,9 @@ public class GeoLookupService extends CprLookupService {
                         }
                         if (door != null) {
                             unitAddressQuery.addDoor(door);
+                        }
+                        if (unitNumber != null) {
+                            unitAddressQuery.addUnitNumber(unitNumber);
                         }
 
                         List<UnitAddressEntity> unitAddresses = QueryManager.getAllEntities(session, unitAddressQuery, UnitAddressEntity.class);
