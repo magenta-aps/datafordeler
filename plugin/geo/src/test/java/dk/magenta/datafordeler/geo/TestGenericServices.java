@@ -371,7 +371,7 @@ public class TestGenericServices extends GeoTest {
             if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b8")) {
                 Assertions.assertEquals("5678", o.get("nummer").get(0).asText());
             } else if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b9")) {
-                Assertions.assertEquals("5678", o.get("nummer").get(0).asText());
+                Assertions.assertEquals("5679", o.get("nummer").get(0).asText());
             } else {
                 Assertions.fail();
             }
