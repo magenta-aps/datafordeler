@@ -20,6 +20,7 @@ import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressNumberRecord;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -245,10 +246,14 @@ public class GenericUnitAddressService {
                 output.setStatus(accessAddressEntity.getStatus().stream().findFirst().orElse(null).getStatus());
                 //output.mabeysomething(accessAddressEntity.getBuilding().stream().findFirst().orElse(null).);
                 if (unitAddressEntity != null) {
-                    output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
-                    output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
-                    //output.mabeysomething(unitAddressEntity.getUsage().stream().findFirst().orElse(null).getUsage());
-                    output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+                    UnitAddressNumberRecord numberRecord = unitAddressEntity.getNumber().current();
+                    output.setEnhed(numberRecord != null ? numberRecord.getNumber() : null);
+                    output.setNummer(numberRecord != null ? numberRecord.getNumber() : null);
+//                    output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+//                    output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+                    UnitAddressFloorRecord floor = unitAddressEntity.getFloor().current();
+                    output.setEtage(floor != null ? floor.getFloor() : null);
+//                    output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
                 }
                 if (localityRecord != null) {
                     output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
