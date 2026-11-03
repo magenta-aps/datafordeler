@@ -53,7 +53,6 @@ public class TestGenericServices extends GeoTest {
         Assertions.assertEquals(200, response.getStatusCode().value());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode postcode = (ObjectNode) responseContent.get("results").get(0);
-        System.out.println(postcode);
         Assertions.assertEquals("c8d54254-0086-3554-a4ce-424e4ebfd072", postcode.get("uuid").textValue());
         Assertions.assertNull(postcode.get("registreringFra"));
 

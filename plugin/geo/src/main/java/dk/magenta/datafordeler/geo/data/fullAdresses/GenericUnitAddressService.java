@@ -244,7 +244,10 @@ public class GenericUnitAddressService {
 
                 output.setLokalitet_kode(accessAddressEntity.getLocality().stream().findFirst().orElse(null).getCode());
                 output.setPost_kode(accessAddressEntity.getPostcode().stream().findFirst().orElse(null).getPostcode());
-                output.setSource(accessAddressEntity.getSource().stream().findFirst().orElse(null).getSource());
+
+                AccessAddressSourceRecord accessAddressSourceRecord = accessAddressEntity.getSource().current();
+                output.setSource(accessAddressSourceRecord != null ? accessAddressSourceRecord.getSource() : null);
+
                 output.setStatus(accessAddressEntity.getStatus().stream().findFirst().orElse(null).getStatus());
                 //output.mabeysomething(accessAddressEntity.getBuilding().stream().findFirst().orElse(null).);
                 if (unitAddressEntity != null) {

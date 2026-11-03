@@ -70,9 +70,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch(GeoMunicipalityEntity.generateUUID(956).toString(), "municipality");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -104,9 +104,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("F0966470-F09F-474D-A820-E8A46ED6FCC7", "locality");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -131,9 +131,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("E1274F15-9E2B-4B6E-8B7D-C8078DF65AA2", "road");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
 
     }
 
@@ -159,9 +159,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("AF3550F5-2998-404D-B784-A70C4DEB2A18", "building");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -202,9 +202,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("2E3776BF-05C2-433C-ADB9-8A07DF6B3E8F", "accessaddress");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -230,9 +230,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("1B3AC64B-C28D-40B2-A106-16CEE7C188B8", "unitaddress");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
     @Test
@@ -250,9 +250,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch(PostcodeEntity.generateUUID(3900).toString(), "postcode");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 }
