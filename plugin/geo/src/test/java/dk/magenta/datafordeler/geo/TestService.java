@@ -86,7 +86,10 @@ public class TestService extends GeoTest {
         Assertions.assertEquals(2, addresses.size());
         ObjectNode address = null;
         for (JsonNode a : addresses) {
+            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a));
             ObjectNode b = (ObjectNode) a;
+            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(b));
+
             if (b.get("enhedsnummer").asText().equals("5678")) {
                 address = b;
                 break;
