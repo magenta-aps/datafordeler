@@ -1,9 +1,9 @@
 package dk.magenta.datafordeler.geo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.JsonNode;
 import dk.magenta.datafordeler.core.Application;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
