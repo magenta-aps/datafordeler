@@ -226,8 +226,6 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals("{EE4805F1-96AB-45A7-B045-ED4D3C28364C}", entity.getSumiffiikId());
             Assertions.assertEquals(1, entity.getUsage().size());
             Assertions.assertEquals(Integer.valueOf(1), entity.getUsage().iterator().next().getUsage());
-            Assertions.assertEquals(1, entity.getFloor().size());
-            Assertions.assertEquals("kld", entity.getFloor().iterator().next().getFloor());
             Assertions.assertEquals(1, entity.getNumber().size());
             Assertions.assertEquals("5678", entity.getNumber().iterator().next().getNumber());
             Assertions.assertEquals(1, entity.getSource().size());

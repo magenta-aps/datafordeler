@@ -78,9 +78,11 @@ public class TestService extends GeoTest {
         response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2");
         Assertions.assertEquals(200, response.getStatusCode().value());
         ArrayNode addresses = (ArrayNode) objectMapper.readTree(response.getBody());
+
+        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(addresses));
+
         Assertions.assertEquals(1, addresses.size());
         ObjectNode address = (ObjectNode) addresses.get(0);
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address));
         Assertions.assertEquals("18", address.get("husnummer").asText());
         Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
