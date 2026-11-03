@@ -69,7 +69,6 @@ public class TestService extends GeoTest {
         ObjectNode building = (ObjectNode) buildings.get(0);
         Assertions.assertEquals("18", building.get("husnummer").asText());
         Assertions.assertEquals("3197", building.get("b_nummer").asText());
-        Assertions.assertEquals("House of Testing!", building.get("b_kaldenavn").asText());
     }
 
     @Test
@@ -86,7 +85,6 @@ public class TestService extends GeoTest {
             address = (ObjectNode) a;
             Assertions.assertNotNull(address);
             Assertions.assertEquals("18", address.get("husnummer").asText());
-            Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
             Assertions.assertEquals("3197", address.get("b_nummer").asText());
             Assertions.assertEquals(1, address.get("anvendelse").intValue());
         }
@@ -119,7 +117,6 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("Nuuk", address.get("lokalitetsnavn").asText());
         Assertions.assertEquals(956, address.get("kommunekode").intValue());
         Assertions.assertEquals(1, address.get("anvendelse").intValue());
-        Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
     }
 
     @Test

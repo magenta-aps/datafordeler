@@ -50,7 +50,6 @@ public class GenericUnitAddressService {
         bnr("accessAddressEntity.bnr", false),
         husNummer("accessAddressNumberRecord.number", false),
         etage("unitAddressFloor.floor", false),
-        bloknavn("accessAddressBlockNameRecord.name", false),
         kommune_kode("geoMunicipalityEntity.code", true),
         kommune_navn("municipalityNameRecord.name", false),
         lokalitet_kode("localityRecord.code", false),
@@ -83,7 +82,6 @@ public class GenericUnitAddressService {
         parameterMappings.put("bnr", ParameterType.bnr);
         parameterMappings.put("husNummer", ParameterType.husNummer);
         parameterMappings.put("etage", ParameterType.etage);
-        parameterMappings.put("bloknavn", ParameterType.bloknavn);
         parameterMappings.put("kommune_kode", ParameterType.kommune_kode);
         parameterMappings.put("kommune_navn", ParameterType.kommune_navn);
         parameterMappings.put("lokalitet_kode", ParameterType.lokalitet_kode);
@@ -139,8 +137,6 @@ public class GenericUnitAddressService {
                     "\nLEFT JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "\nLEFT JOIN " + GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_CODE + "=localityRecord." + GeoLocalityEntity.DB_FIELD_CODE + " " +
                     "\nLEFT JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord" + " " +
-
-                    "\nLEFT JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
                     "\nLEFT JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "\nLEFT JOIN " + PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_CODE + "=postcodeEntity." + PostcodeEntity.DB_FIELD_CODE + " " +
@@ -242,7 +238,10 @@ public class GenericUnitAddressService {
                 output.setHusNummer(accessAddressEntity.getHouseNumber().stream().findFirst().orElse(null).getNumber());
                 output.setVej_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getRoadCode());
                 output.setKommune_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getMunicipalityCode());
-                output.setBlokNavn(accessAddressEntity.getBlockName().stream().findFirst().orElse(null).getName());
+
+                AccessAddressBlockNameRecord blockNameRecord = accessAddressEntity.getBlockName().current();
+                output.setBlokNavn(blockNameRecord != null ? blockNameRecord.getName() : null);
+
                 output.setLokalitet_kode(accessAddressEntity.getLocality().stream().findFirst().orElse(null).getCode());
                 output.setPost_kode(accessAddressEntity.getPostcode().stream().findFirst().orElse(null).getPostcode());
                 output.setSource(accessAddressEntity.getSource().stream().findFirst().orElse(null).getSource());

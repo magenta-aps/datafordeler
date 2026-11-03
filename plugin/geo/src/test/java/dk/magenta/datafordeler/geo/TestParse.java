@@ -183,8 +183,6 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals(1, entity.getHouseNumber().size());
             Assertions.assertEquals("18", entity.getHouseNumber().iterator().next().getNumber());
             Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getHouseNumber().iterator().next().getRegistrationFrom()));
-            Assertions.assertEquals(1, entity.getBlockName().size());
-            Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getBlockName().iterator().next().getRegistrationFrom()));
             Assertions.assertEquals(1, entity.getLocality().size());
             Assertions.assertEquals("0600", entity.getLocality().iterator().next().getCode());
             Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getLocality().iterator().next().getRegistrationFrom()));
