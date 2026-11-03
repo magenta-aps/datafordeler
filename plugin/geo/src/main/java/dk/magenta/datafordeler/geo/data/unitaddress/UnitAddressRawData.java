@@ -37,12 +37,12 @@ public class UnitAddressRawData extends SumiffiikRawData {
         @JsonProperty("Enhedsanvendelse")
         public String usage;
 
-        @JsonProperty("Etage")
-        public String floor;
+//        @JsonProperty("Etage")
+//        public String floor;
 
         //This attribute is becomming deprecated
-        @JsonProperty("Dor_lejlighedsnummer")
-        public String door;
+//        @JsonProperty("Dor_lejlighedsnummer")
+//        public String door;
 
         @JsonProperty("Objektstatus")
         public Integer objectStatus;
@@ -72,12 +72,12 @@ public class UnitAddressRawData extends SumiffiikRawData {
     @Override
     public List<GeoMonotemporalRecord> getMonotemporalRecords() {
         ArrayList<GeoMonotemporalRecord> records = new ArrayList<>();
-        records.add(
-                new UnitAddressFloorRecord(this.properties.floor)
-        );
-        records.add(
-                new UnitAddressDoorRecord(this.properties.door)
-        );
+//        records.add(
+//                new UnitAddressFloorRecord(this.properties.floor)
+//        );
+//        records.add(
+//                new UnitAddressDoorRecord(this.properties.door)
+//        );
         if (usageMap.containsKey(this.properties.usage)) {
             records.add(
                     new UnitAddressUsageRecord(usageMap.get(this.properties.usage))
