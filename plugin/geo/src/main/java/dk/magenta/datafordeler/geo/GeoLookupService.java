@@ -26,6 +26,7 @@ import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GeoLookupService extends CprLookupService {
 
@@ -206,7 +207,16 @@ public class GeoLookupService extends CprLookupService {
                             unitAddressQuery.addDoor(door);
                         }
                         if (unitNumber != null) {
+                            System.out.println("Adding unit number "+unitNumber);
                             unitAddressQuery.addUnitNumber(unitNumber);
+                        }
+
+                        System.out.println("QUERY: "+unitAddressQuery.toHql());
+                        Map<String, Object> extraParameters = unitAddressQuery.getConditionParameters();
+
+                        for (String key : extraParameters.keySet()) {
+                            Object value = extraParameters.get(key);
+                            System.out.println(key + " = " + value);
                         }
 
                         List<UnitAddressEntity> unitAddresses = QueryManager.getAllEntities(session, unitAddressQuery, UnitAddressEntity.class);
