@@ -37,7 +37,7 @@ public class TestGeoLookupDTOService extends GeoTest {
 
         System.out.println("TESTING HERE !!!!!!!!!!!!!!!!!!!!!");
         lookupService.doLookup(956, 254, "18", "B-3197", "kld", "tv", null, true);
-        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197", "kld", "tv", "5678", true);
+        GeoLookupDTO geoLookupDTO = lookupService.doLookup(956, 254, "18", "B-3197", null, null, "5678", true);
 
         Assertions.assertEquals("Kommuneqarfik Sermersooq", geoLookupDTO.getMunicipalityName());
         Assertions.assertEquals("B-3197", geoLookupDTO.getbNumber());
