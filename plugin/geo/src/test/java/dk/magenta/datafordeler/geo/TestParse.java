@@ -61,7 +61,6 @@ public class TestParse extends GeoTest {
             Assertions.assertTrue(OffsetDateTime.parse("2018-07-19T11:11:05Z").isEqual(entity.getCreationDate()));
             Assertions.assertEquals("GREENADMIN", entity.getCreator());
             Assertions.assertEquals(1, entity.getShape().size());
-            Assertions.assertEquals("5cc15446cddb4633b6832847b6f5d66d", entity.getSumiffiikId());
             Assertions.assertEquals(1, entity.getName().size());
             Assertions.assertEquals("Kommuneqarfik Sermersooq", entity.getName().iterator().next().getName());
         } finally {

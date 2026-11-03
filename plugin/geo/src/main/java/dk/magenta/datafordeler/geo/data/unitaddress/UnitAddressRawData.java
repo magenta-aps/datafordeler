@@ -37,9 +37,6 @@ public class UnitAddressRawData extends SumiffiikRawData {
         @JsonProperty("Enhedsanvendelse")
         public String usage;
 
-        @JsonProperty("Objektstatus")
-        public Integer objectStatus;
-
         public UUID getAccessAddressSumiffiikAsUUID() {
             return SumiffiikRawData.getSumiffiikAsUUID(this.accessAddressSumiffiik);
         }
@@ -73,9 +70,6 @@ public class UnitAddressRawData extends SumiffiikRawData {
         }
         records.add(
                 new UnitAddressNumberRecord(this.properties.unitNumber)
-        );
-        records.add(
-                new UnitAddressStatusRecord(this.properties.objectStatus)
         );
 
         for (GeoMonotemporalRecord record : records) {

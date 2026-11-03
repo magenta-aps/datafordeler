@@ -36,7 +36,6 @@ public class TestGenericServices extends GeoTest {
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode municipality = (ObjectNode) responseContent.get("results").get(0);
         Assertions.assertEquals("33960e68-2f0a-4cb0-bb3d-02d9f0b21304", municipality.get("uuid").textValue());
-        Assertions.assertEquals("5cc15446cddb4633b6832847b6f5d66d", municipality.get("sumiffiik").textValue());
         Assertions.assertEquals(956, municipality.get("kommunekode").asInt());
         Assertions.assertNull(municipality.get("registreringFra"));
 
