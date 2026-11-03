@@ -17,6 +17,7 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadQuery;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressNumberRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -221,6 +222,13 @@ public class GeoLookupService extends CprLookupService {
 
                         List<UnitAddressEntity> unitAddresses = QueryManager.getAllEntities(session, unitAddressQuery, UnitAddressEntity.class);
                         if (!unitAddresses.isEmpty()) {
+
+                            System.out.println("Found unit address");
+                            for (UnitAddressNumberRecord r : unitAddresses.get(0).getNumber()) {
+                                System.out.println("    "+r.getNumber());
+                            }
+
+
                             geoLookupDTO.setUnitAddressGlobalId(unitAddresses.get(0).getGlobalId());
                         } else {
                             /*
