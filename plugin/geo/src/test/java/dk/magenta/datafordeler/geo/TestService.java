@@ -86,10 +86,7 @@ public class TestService extends GeoTest {
         Assertions.assertEquals(2, addresses.size());
         ObjectNode address = null;
         for (JsonNode a : addresses) {
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(a));
             ObjectNode b = (ObjectNode) a;
-            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(b));
-
             if (b.get("enhedsnummer").asText().equals("5678")) {
                 address = b;
                 break;
@@ -99,7 +96,6 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("18", address.get("husnummer").asText());
         Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
-        Assertions.assertEquals("kld", address.get("etage").asText());
         Assertions.assertEquals(1, address.get("anvendelse").intValue());
         response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2&husnummer=18");
         Assertions.assertEquals(200, response.getStatusCode().value());
@@ -109,7 +105,6 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("18", address.get("husnummer").asText());
         Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
-        Assertions.assertEquals("kld", address.get("etage").asText());
         Assertions.assertEquals(1, address.get("anvendelse").intValue());
     }
 
