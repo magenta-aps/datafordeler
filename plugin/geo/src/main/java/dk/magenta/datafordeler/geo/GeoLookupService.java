@@ -198,7 +198,7 @@ public class GeoLookupService extends CprLookupService {
                     AccessAddressEntity accessAddressEntity = accessAddresses.get(0);
                     geoLookupDTO.setAccessAddressGlobalId(accessAddressEntity.getGlobalId());
 
-                    if (floor != null || door != null) {
+                    if (floor != null || door != null || unitNumber != null) {
                         UnitAddressQuery unitAddressQuery = new UnitAddressQuery();
                         unitAddressQuery.addAccessAddress(accessAddressEntity);
                         if (floor != null) {
