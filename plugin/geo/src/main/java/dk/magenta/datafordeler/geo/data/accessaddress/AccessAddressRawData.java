@@ -24,9 +24,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
         @JsonProperty("KommuneKode")
         public Integer municipality;
 
-        @JsonProperty("BlokNavn")
-        public String blockName;
-
         @JsonProperty("ObjektStatus")
         public Integer objectStatus;
 
@@ -77,10 +74,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
 
         records.add(
                 new AccessAddressHouseNumberRecord(this.properties.houseNumber)
-        );
-
-        records.add(
-                new AccessAddressBlockNameRecord(this.properties.blockName)
         );
 
         records.add(

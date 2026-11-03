@@ -136,7 +136,6 @@ public class TestGenericServices extends GeoTest {
         ObjectNode accessAdress1 = (ObjectNode) responseContent.get("results").get(0);
         Assertions.assertEquals("2e3776bf-05c2-433c-adb9-8a07df6b3e8f", accessAdress1.get("uuid").textValue());
         Assertions.assertEquals("{69231C66-F37A-4F78-80C1-E379BFEE165D}", accessAdress1.get("sumiffiik").textValue());
-        Assertions.assertEquals("House of Testing!", accessAdress1.get("blokNavn").get(0).textValue());
         Assertions.assertNull(accessAdress1.get("registreringFra"));
 
 
@@ -162,7 +161,7 @@ public class TestGenericServices extends GeoTest {
         JsonNode responseContent;
 
         System.out.println("testGenericService");
-        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&husNummer=18&bloknavn=House of Testing!" +
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&husNummer=18" +
                 "&kommune_kode=956&lokalitet_kode=0600&post_kode=3900");
         Assertions.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
