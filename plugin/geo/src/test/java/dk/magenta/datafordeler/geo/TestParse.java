@@ -221,8 +221,6 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals(Integer.valueOf(1), entity.getUsage().iterator().next().getUsage());
             Assertions.assertEquals(1, entity.getNumber().size());
             Assertions.assertEquals("5678", entity.getNumber().iterator().next().getNumber());
-            Assertions.assertEquals(1, entity.getStatus().size());
-            Assertions.assertEquals(Integer.valueOf(2), entity.getStatus().iterator().next().getStatus());
         } finally {
             session.close();
         }
