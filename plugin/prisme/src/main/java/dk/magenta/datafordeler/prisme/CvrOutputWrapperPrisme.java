@@ -359,6 +359,7 @@ public class CvrOutputWrapperPrisme extends OutputWrapper<CompanyRecord> {
                             null,
                             addressRecord.getFloor(),
                             addressRecord.getDoor(),
+                            null,  // TODO: enhedsnummer fra CVR
                             true
                     );
                     root.put("husnummer", houseNumber);

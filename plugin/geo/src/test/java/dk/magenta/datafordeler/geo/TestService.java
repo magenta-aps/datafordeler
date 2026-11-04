@@ -1,6 +1,7 @@
 package dk.magenta.datafordeler.geo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.magenta.datafordeler.core.Application;
@@ -68,7 +69,6 @@ public class TestService extends GeoTest {
         ObjectNode building = (ObjectNode) buildings.get(0);
         Assertions.assertEquals("18", building.get("husnummer").asText());
         Assertions.assertEquals("3197", building.get("b_nummer").asText());
-        Assertions.assertEquals("House of Testing!", building.get("b_kaldenavn").asText());
     }
 
     @Test
@@ -78,24 +78,27 @@ public class TestService extends GeoTest {
         response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2");
         Assertions.assertEquals(200, response.getStatusCode().value());
         ArrayNode addresses = (ArrayNode) objectMapper.readTree(response.getBody());
-        Assertions.assertEquals(1, addresses.size());
-        ObjectNode address = (ObjectNode) addresses.get(0);
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(address));
-        Assertions.assertEquals("18", address.get("husnummer").asText());
-        Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
-        Assertions.assertEquals("3197", address.get("b_nummer").asText());
-        Assertions.assertEquals("kld", address.get("etage").asText());
-        Assertions.assertEquals(1, address.get("anvendelse").intValue());
+        Assertions.assertEquals(2, addresses.size());
+
+        ObjectNode address = null;
+        for (JsonNode a : addresses) {
+            address = (ObjectNode) a;
+            Assertions.assertNotNull(address);
+            Assertions.assertEquals("18", address.get("husnummer").asText());
+            Assertions.assertEquals("3197", address.get("b_nummer").asText());
+            Assertions.assertEquals(1, address.get("anvendelse").intValue());
+        }
+
         response = this.lookup("/geo/adresse/adresse?vej=e1274f15-9e2b-4b6e-8b7d-c8078df65aa2&husnummer=18");
         Assertions.assertEquals(200, response.getStatusCode().value());
         addresses = (ArrayNode) objectMapper.readTree(response.getBody());
-        Assertions.assertEquals(1, addresses.size());
-        address = (ObjectNode) addresses.get(0);
-        Assertions.assertEquals("18", address.get("husnummer").asText());
-        Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
-        Assertions.assertEquals("3197", address.get("b_nummer").asText());
-        Assertions.assertEquals("kld", address.get("etage").asText());
-        Assertions.assertEquals(1, address.get("anvendelse").intValue());
+        Assertions.assertEquals(2, addresses.size());
+        for (JsonNode a : addresses) {
+            address = (ObjectNode) a;
+            Assertions.assertEquals("18", address.get("husnummer").asText());
+            Assertions.assertEquals("3197", address.get("b_nummer").asText());
+            Assertions.assertEquals(1, address.get("anvendelse").intValue());
+        }
     }
 
     @Test
@@ -105,7 +108,7 @@ public class TestService extends GeoTest {
         ObjectNode address = (ObjectNode) objectMapper.readTree(response.getBody());
         Assertions.assertEquals("1b3ac64b-c28d-40b2-a106-16cee7c188b8", address.get("uuid").asText());
         Assertions.assertEquals("18", address.get("husnummer").asText());
-        Assertions.assertEquals("kld", address.get("etage").asText());
+        Assertions.assertEquals("5678", address.get("enhedsnummer").asText());
         Assertions.assertEquals("3197", address.get("b_nummer").asText());
         Assertions.assertEquals(254, address.get("vejkode").intValue());
         Assertions.assertEquals("Qarsaalik", address.get("vejnavn").asText());
@@ -113,7 +116,6 @@ public class TestService extends GeoTest {
         Assertions.assertEquals("Nuuk", address.get("lokalitetsnavn").asText());
         Assertions.assertEquals(956, address.get("kommunekode").intValue());
         Assertions.assertEquals(1, address.get("anvendelse").intValue());
-        Assertions.assertEquals("House of Testing!", address.get("b_kaldenavn").asText());
     }
 
     @Test

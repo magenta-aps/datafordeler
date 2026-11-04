@@ -8,11 +8,8 @@
     "CreationDate": "CreationDate",
     "Editor": "Editor",
     "EditDate": "EditDate",
-    "Datakilde": "Datakilde",
     "Enhedsanvendelse": "Enhedsanvendelse",
     "Etage": "Etage",
-    "Objektstatus": "Objektstatus",
-    "Dor_lejlighedsnummer": "Dør-/lejlighedsnummer",
     "EnhedsadresseSumiffik": "EnhedsadresseSumiffik",
     "GlobalID": "GlobalID"
   },
@@ -59,11 +56,6 @@
       "length": 8
     },
     {
-      "name": "Datakilde",
-      "type": "esriFieldTypeSmallInteger",
-      "alias": "Datakilde"
-    },
-    {
       "name": "Enhedsanvendelse",
       "type": "esriFieldTypeSmallInteger",
       "alias": "Enhedsanvendelse"
@@ -72,17 +64,6 @@
       "name": "Etage",
       "type": "esriFieldTypeSmallInteger",
       "alias": "Etage"
-    },
-    {
-      "name": "Objektstatus",
-      "type": "esriFieldTypeSmallInteger",
-      "alias": "Objektstatus"
-    },
-    {
-      "name": "Dor_lejlighedsnummer",
-      "type": "esriFieldTypeString",
-      "alias": "Dør-/lejlighedsnummer",
-      "length": 30
     },
     {
       "name": "EnhedsadresseSumiffik",
@@ -107,11 +88,7 @@
         "CreationDate": 1535538077000,
         "Editor": "TELDWST",
         "EditDate": 1535538077000,
-        "Datakilde": 1,
         "Enhedsanvendelse": "Boligenhed",
-        "Etage": "1",
-        "Objektstatus": 2,
-        "Dor_lejlighedsnummer": "tv",
         "EnhedsadresseSumiffik": "{EE4805F1-96AB-45A7-B045-ED4D3C28364C}",
         "GlobalID": "{1B3AC64B-C28D-40B2-A106-16CEE7C188B8}"
       }
@@ -125,11 +102,7 @@
         "CreationDate": 1535538077000,
         "Editor": "TELDWST",
         "EditDate": 1535538077000,
-        "Datakilde": 1,
         "Enhedsanvendelse": "Boligenhed",
-        "Etage": "1",
-        "Objektstatus": 2,
-        "Dor_lejlighedsnummer": "th",
         "EnhedsadresseSumiffik": "{EE4805F1-96AB-45A7-B045-ED4D3C28364D}",
         "GlobalID": "{1B3AC64B-C28D-40B2-A106-16CEE7C188B9}"
       }

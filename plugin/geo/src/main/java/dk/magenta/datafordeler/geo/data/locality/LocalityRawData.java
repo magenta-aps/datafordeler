@@ -34,9 +34,6 @@ public class LocalityRawData extends SumiffiikRawData {
         @JsonProperty("Status")
         public Integer status;
 
-        @JsonProperty("Location_type")
-        public Integer type;
-
         @JsonProperty("Lokalitetsbetegnelse")
         public Integer betegnelse;
     }
@@ -59,10 +56,6 @@ public class LocalityRawData extends SumiffiikRawData {
 
         records.add(
                 new LocalityAbbreviationRecord(this.properties.abbreviation)
-        );
-
-        records.add(
-                new LocalityTypeRecord(this.properties.type)
         );
 
         records.add(

@@ -24,9 +24,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
         @JsonProperty("KommuneKode")
         public Integer municipality;
 
-        @JsonProperty("BlokNavn")
-        public String blockName;
-
         @JsonProperty("ObjektStatus")
         public Integer objectStatus;
 
@@ -45,9 +42,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
             } catch (NumberFormatException | NullPointerException e) {
             }
         }
-
-        @JsonProperty("DataKilde")
-        public Integer dataSource;
 
         @JsonProperty("bygning_id")
         public String buildingId;
@@ -80,10 +74,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
         );
 
         records.add(
-                new AccessAddressBlockNameRecord(this.properties.blockName)
-        );
-
-        records.add(
                 new AccessAddressBuildingReferenceRecord(SumiffiikRawData.getSumiffiikAsUUID(this.properties.buildingId))
         );
 
@@ -97,10 +87,6 @@ public class AccessAddressRawData extends SumiffiikRawData {
 
         records.add(
                 new AccessAddressStatusRecord(this.properties.objectStatus)
-        );
-
-        records.add(
-                new AccessAddressSourceRecord(this.properties.dataSource)
         );
 
         if (this.shape instanceof Point) {

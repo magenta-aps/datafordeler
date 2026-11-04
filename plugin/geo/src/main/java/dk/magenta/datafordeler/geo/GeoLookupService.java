@@ -17,6 +17,7 @@ import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
 import dk.magenta.datafordeler.geo.data.road.GeoRoadEntity;
 import dk.magenta.datafordeler.geo.data.road.RoadQuery;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressNumberRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,7 @@ import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GeoLookupService extends CprLookupService {
 
@@ -129,9 +131,9 @@ public class GeoLookupService extends CprLookupService {
         }
     }
     public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber) throws InvalidClientInputException {
-        return this.doLookup(municipalityCode, roadCode, houseNumber, bNumber, null, null, false);
+        return this.doLookup(municipalityCode, roadCode, houseNumber, bNumber, null, null, null, false);
     }
-    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber, String floor, String door, boolean includeGlobalIds) throws InvalidClientInputException {
+    public GeoLookupDTO doLookup(int municipalityCode, int roadCode, String houseNumber, String bNumber, String floor, String door, String unitNumber, boolean includeGlobalIds) throws InvalidClientInputException {
         if (municipalityCode < 950) {
             return new GeoLookupDTO(super.doLookup(municipalityCode, roadCode, houseNumber));
         } else {
@@ -196,7 +198,7 @@ public class GeoLookupService extends CprLookupService {
                     AccessAddressEntity accessAddressEntity = accessAddresses.get(0);
                     geoLookupDTO.setAccessAddressGlobalId(accessAddressEntity.getGlobalId());
 
-                    if (floor != null || door != null) {
+                    if (floor != null || door != null || unitNumber != null) {
                         UnitAddressQuery unitAddressQuery = new UnitAddressQuery();
                         unitAddressQuery.addAccessAddress(accessAddressEntity);
                         if (floor != null) {
@@ -204,6 +206,9 @@ public class GeoLookupService extends CprLookupService {
                         }
                         if (door != null) {
                             unitAddressQuery.addDoor(door);
+                        }
+                        if (unitNumber != null) {
+                            unitAddressQuery.addUnitNumber(unitNumber);
                         }
 
                         List<UnitAddressEntity> unitAddresses = QueryManager.getAllEntities(session, unitAddressQuery, UnitAddressEntity.class);

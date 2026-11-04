@@ -160,7 +160,16 @@ public class PersonOutputWrapper extends OutputWrapper<PersonEntity> {
 
                     GeoLookupDTO lookup = null;
                     try {
-                        lookup = lookupService.doLookup(municipalityCode, roadCode, houseNumber, personBuildingNumber, personFloor, personDoor, includeGlobalIds);
+                        lookup = lookupService.doLookup(
+                                municipalityCode,
+                                roadCode,
+                                houseNumber,
+                                personBuildingNumber,
+                                personFloor,
+                                personDoor,
+                                null,  // TODO: enhedsnummer fra CPR-data?
+                                includeGlobalIds
+                        );
                     } catch (InvalidClientInputException e) {
                         throw new RuntimeException(e);
                     }
