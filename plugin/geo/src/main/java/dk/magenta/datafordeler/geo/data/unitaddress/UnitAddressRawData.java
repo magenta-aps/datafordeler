@@ -58,7 +58,7 @@ public class UnitAddressRawData extends SumiffiikRawData {
 
     @Override
     public List<GeoMonotemporalRecord> getMonotemporalRecords() {
-        System.out.println("unitNumber: "+this.properties.unitNumber);
+
         ArrayList<GeoMonotemporalRecord> records = new ArrayList<>();
 
         if (usageMap.containsKey(this.properties.usage)) {
