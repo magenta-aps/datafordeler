@@ -37,19 +37,6 @@ public class UnitAddressRawData extends SumiffiikRawData {
         @JsonProperty("Enhedsanvendelse")
         public String usage;
 
-        @JsonProperty("Etage")
-        public String floor;
-
-        //This attribute is becomming deprecated
-        @JsonProperty("Dor_lejlighedsnummer")
-        public String door;
-
-        @JsonProperty("Objektstatus")
-        public Integer objectStatus;
-
-        @JsonProperty("Datakilde")
-        public Integer source;
-
         public UUID getAccessAddressSumiffiikAsUUID() {
             return SumiffiikRawData.getSumiffiikAsUUID(this.accessAddressSumiffiik);
         }
@@ -71,13 +58,9 @@ public class UnitAddressRawData extends SumiffiikRawData {
 
     @Override
     public List<GeoMonotemporalRecord> getMonotemporalRecords() {
+        System.out.println("unitNumber: "+this.properties.unitNumber);
         ArrayList<GeoMonotemporalRecord> records = new ArrayList<>();
-        records.add(
-                new UnitAddressFloorRecord(this.properties.floor)
-        );
-        records.add(
-                new UnitAddressDoorRecord(this.properties.door)
-        );
+
         if (usageMap.containsKey(this.properties.usage)) {
             records.add(
                     new UnitAddressUsageRecord(usageMap.get(this.properties.usage))
@@ -87,15 +70,6 @@ public class UnitAddressRawData extends SumiffiikRawData {
         }
         records.add(
                 new UnitAddressNumberRecord(this.properties.unitNumber)
-        );
-        records.add(
-                new UnitAddressStatusRecord(this.properties.objectStatus)
-        );
-        /*records.add(
-                new UnitAddressImportRecord(this.properties.importComplete)
-        );*/
-        records.add(
-                new UnitAddressSourceRecord(this.properties.source)
         );
 
         for (GeoMonotemporalRecord record : records) {

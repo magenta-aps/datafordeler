@@ -39,14 +39,14 @@
       },
       "properties": {
         "OBJECTID": 11851,
-        "B_nummer": "B-3197",
+        "b_number": "B-3197",
         "Creator": "thard_nukissiorfiit",
         "CreationDate": 1506701556000,
         "Editor": "TELDWST",
         "EditDate": 1535538676000,
-        "a_nummer": null,
+        "a_number": null,
         "BygningSumiffik": "{DC2CAE1B-1F98-44FF-AE8F-6A52556B13FD}",
-        "Lokalitetskode": "0600",
+        "locality": "0600",
         "GlobalID": "{AF3550F5-2998-404D-B784-A70C4DEB2A18}",
         "SHAPE.STArea()": 1.178636921395082e-08,
         "SHAPE.STLength()": 0.00051423889574690588

@@ -126,7 +126,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
 
 
     public List<String> getDoor() {
-        return floor;
+        return door;
     }
 
     public void setDoor(String door) {
@@ -143,6 +143,30 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     }
 
 
+
+    public static final String UNIT_NUMBER = UnitAddressEntity.IO_FIELD_NUMBER;
+
+    @QueryField(type = QueryField.FieldType.STRING, queryName = UNIT_NUMBER)
+    private final List<String> unitNumber = new ArrayList<>();
+
+
+    public List<String> getUnitNumber() {
+        return this.unitNumber;
+    }
+
+    public void setUnitNumber(String unitNumber) {
+        this.unitNumber.clear();
+        this.updatedParameters();
+        this.addUnitNumber(unitNumber);
+    }
+
+    public void addUnitNumber(String unitNumber) {
+        if (unitNumber != null) {
+            this.unitNumber.add(unitNumber);
+            this.updatedParameters();
+        }
+    }
+
     @Override
     public Map<String, Object> getSearchParameters() {
         HashMap<String, Object> map = new HashMap<>(super.getSearchParameters());
@@ -151,6 +175,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         map.put(HOUSE_NUMBER, this.houseNumber);
         map.put(FLOOR, this.floor);
         map.put(DOOR, this.door);
+        map.put(UNIT_NUMBER, this.unitNumber);
         map.put(ACCESSADDRESS_ID, this.accessAddress);
         return map;
     }
@@ -182,6 +207,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
     static {
         joinHandles.put("floor", UnitAddressEntity.DB_FIELD_FLOOR + BaseQuery.separator + UnitAddressFloorRecord.DB_FIELD_FLOOR);
         joinHandles.put("door", UnitAddressEntity.DB_FIELD_DOOR + BaseQuery.separator + UnitAddressDoorRecord.DB_FIELD_DOOR);
+        joinHandles.put("unit_number", UnitAddressEntity.DB_FIELD_NUMBER + BaseQuery.separator + UnitAddressNumberRecord.DB_FIELD_NUMBER);
         joinHandles.put(HANDLE_ACCESSADDRESS, UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS);
     }
 
@@ -198,6 +224,7 @@ public class UnitAddressQuery extends SumiffiikQuery<UnitAddressEntity> {
         super.setupConditions();
         this.addCondition("floor", this.floor);
         this.addCondition("door", this.door);
+        this.addCondition("unit_number", this.unitNumber);
         this.addCondition(HANDLE_ACCESSADDRESS, this.accessAddress, Identification.class);
     }
 

@@ -11,6 +11,7 @@ import dk.magenta.datafordeler.geo.AdresseService;
 import dk.magenta.datafordeler.geo.data.accessaddress.*;
 import dk.magenta.datafordeler.geo.data.locality.GeoLocalityEntity;
 import dk.magenta.datafordeler.geo.data.locality.LocalityNameRecord;
+import dk.magenta.datafordeler.geo.data.locality.LocalityTypeRecord;
 import dk.magenta.datafordeler.geo.data.municipality.GeoMunicipalityEntity;
 import dk.magenta.datafordeler.geo.data.municipality.MunicipalityNameRecord;
 import dk.magenta.datafordeler.geo.data.postcode.PostcodeEntity;
@@ -20,6 +21,7 @@ import dk.magenta.datafordeler.geo.data.road.RoadMunicipalityRecord;
 import dk.magenta.datafordeler.geo.data.road.RoadNameRecord;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressEntity;
 import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressFloorRecord;
+import dk.magenta.datafordeler.geo.data.unitaddress.UnitAddressNumberRecord;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -49,7 +51,6 @@ public class GenericUnitAddressService {
         bnr("accessAddressEntity.bnr", false),
         husNummer("accessAddressNumberRecord.number", false),
         etage("unitAddressFloor.floor", false),
-        bloknavn("accessAddressBlockNameRecord.name", false),
         kommune_kode("geoMunicipalityEntity.code", true),
         kommune_navn("municipalityNameRecord.name", false),
         lokalitet_kode("localityRecord.code", false),
@@ -57,7 +58,8 @@ public class GenericUnitAddressService {
         post_kode("postcodeEntity.code", true),
         post_navn("postcodeName.name", false),
         vej_kode("roadEntity.code", true),
-        vej_navn("roadName.name", false);
+        vej_navn("roadName.name", false),
+        enhedsnummer("unitAddressNumber.number", false);
 
         private final String searchString;
         private final boolean numberType;
@@ -81,7 +83,6 @@ public class GenericUnitAddressService {
         parameterMappings.put("bnr", ParameterType.bnr);
         parameterMappings.put("husNummer", ParameterType.husNummer);
         parameterMappings.put("etage", ParameterType.etage);
-        parameterMappings.put("bloknavn", ParameterType.bloknavn);
         parameterMappings.put("kommune_kode", ParameterType.kommune_kode);
         parameterMappings.put("kommune_navn", ParameterType.kommune_navn);
         parameterMappings.put("lokalitet_kode", ParameterType.lokalitet_kode);
@@ -90,6 +91,7 @@ public class GenericUnitAddressService {
         parameterMappings.put("post_navn", ParameterType.post_navn);
         parameterMappings.put("vej_kode", ParameterType.vej_kode);
         parameterMappings.put("vej_navn", ParameterType.vej_navn);
+        parameterMappings.put("enhedsnummer", ParameterType.enhedsnummer);
     }
 
 
@@ -129,14 +131,13 @@ public class GenericUnitAddressService {
                     "\nFROM " + AccessAddressEntity.class.getCanonicalName() + " accessAddressEntity " +
                     "\nLEFT JOIN " + UnitAddressEntity.class.getCanonicalName() + " unitAddressEntity ON unitAddressEntity." + UnitAddressEntity.DB_FIELD_ACCESS_ADDRESS + "=accessAddressEntity." + AccessAddressEntity.DB_FIELD_IDENTIFICATION + " " +
                     "\nLEFT JOIN " + UnitAddressFloorRecord.class.getCanonicalName() + " unitAddressFloor ON unitAddressFloor." + UnitAddressFloorRecord.DB_FIELD_ENTITY + "=unitAddressEntity" + " " +
+                    "\nLEFT JOIN " + UnitAddressNumberRecord.class.getCanonicalName() + " unitAddressNumber ON unitAddressNumber." + UnitAddressNumberRecord.DB_FIELD_ENTITY + "=unitAddressEntity" + " " +
 
                     "\nLEFT JOIN " + AccessAddressHouseNumberRecord.class.getCanonicalName() + " accessAddressNumberRecord ON accessAddressNumberRecord." + AccessAddressHouseNumberRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
                     "\nLEFT JOIN " + AccessAddressLocalityRecord.class.getCanonicalName() + " accessAddressLocalityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "\nLEFT JOIN " + GeoLocalityEntity.class.getCanonicalName() + " localityRecord ON accessAddressLocalityRecord." + AccessAddressLocalityRecord.DB_FIELD_CODE + "=localityRecord." + GeoLocalityEntity.DB_FIELD_CODE + " " +
                     "\nLEFT JOIN " + LocalityNameRecord.class.getCanonicalName() + " localityName ON localityName." + LocalityNameRecord.DB_FIELD_ENTITY + "=localityRecord" + " " +
-
-                    "\nLEFT JOIN " + AccessAddressBlockNameRecord.class.getCanonicalName() + " accessAddressBlockNameRecord ON accessAddressBlockNameRecord." + AccessAddressBlockNameRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
 
                     "\nLEFT JOIN " + AccessAddressPostcodeRecord.class.getCanonicalName() + " accessAddressPostcodeRecord ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_ENTITY + "=accessAddressEntity" + " " +
                     "\nLEFT JOIN " + PostcodeEntity.class.getCanonicalName() + " postcodeEntity ON accessAddressPostcodeRecord." + AccessAddressPostcodeRecord.DB_FIELD_CODE + "=postcodeEntity." + PostcodeEntity.DB_FIELD_CODE + " " +
@@ -238,21 +239,33 @@ public class GenericUnitAddressService {
                 output.setHusNummer(accessAddressEntity.getHouseNumber().stream().findFirst().orElse(null).getNumber());
                 output.setVej_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getRoadCode());
                 output.setKommune_kode(accessAddressEntity.getRoad().stream().findFirst().orElse(null).getMunicipalityCode());
-                output.setBlokNavn(accessAddressEntity.getBlockName().stream().findFirst().orElse(null).getName());
+
+                AccessAddressBlockNameRecord blockNameRecord = accessAddressEntity.getBlockName().current();
+                output.setBlokNavn(blockNameRecord != null ? blockNameRecord.getName() : null);
+
                 output.setLokalitet_kode(accessAddressEntity.getLocality().stream().findFirst().orElse(null).getCode());
                 output.setPost_kode(accessAddressEntity.getPostcode().stream().findFirst().orElse(null).getPostcode());
-                output.setSource(accessAddressEntity.getSource().stream().findFirst().orElse(null).getSource());
+
+                AccessAddressSourceRecord accessAddressSourceRecord = accessAddressEntity.getSource().current();
+                output.setSource(accessAddressSourceRecord != null ? accessAddressSourceRecord.getSource() : null);
+
                 output.setStatus(accessAddressEntity.getStatus().stream().findFirst().orElse(null).getStatus());
                 //output.mabeysomething(accessAddressEntity.getBuilding().stream().findFirst().orElse(null).);
                 if (unitAddressEntity != null) {
-                    output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
-                    output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
-                    //output.mabeysomething(unitAddressEntity.getUsage().stream().findFirst().orElse(null).getUsage());
-                    output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+                    UnitAddressNumberRecord numberRecord = unitAddressEntity.getNumber().current();
+                    output.setEnhed(numberRecord != null ? numberRecord.getNumber() : null);
+                    output.setNummer(numberRecord != null ? numberRecord.getNumber() : null);
+//                    output.setEnhed(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+//                    output.setNummer(unitAddressEntity.getNumber().stream().findFirst().orElse(null).getNumber());
+                    UnitAddressFloorRecord floor = unitAddressEntity.getFloor().current();
+                    output.setEtage(floor != null ? floor.getFloor() : null);
+//                    output.setEtage(unitAddressEntity.getFloor().stream().findFirst().orElse(null).getFloor());
                 }
                 if (localityRecord != null) {
                     output.setLokalitet_navn(localityRecord.getName().stream().findFirst().orElse(null).getName());
-                    output.setLokalitet_type(localityRecord.getType().stream().findFirst().orElse(null).getType());
+
+                    LocalityTypeRecord localityTypeRecord = localityRecord.getType().current();
+                    output.setLokalitet_type(localityTypeRecord != null ? localityTypeRecord.getType() : null);
                 }
                 if (postcodeRecord != null) {
                     output.setPost_navn(postcodeRecord.getName().stream().findFirst().orElse(null).getName());

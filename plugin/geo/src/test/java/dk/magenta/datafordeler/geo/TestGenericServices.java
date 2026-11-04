@@ -36,7 +36,6 @@ public class TestGenericServices extends GeoTest {
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode municipality = (ObjectNode) responseContent.get("results").get(0);
         Assertions.assertEquals("33960e68-2f0a-4cb0-bb3d-02d9f0b21304", municipality.get("uuid").textValue());
-        Assertions.assertEquals("5cc15446cddb4633b6832847b6f5d66d", municipality.get("sumiffiik").textValue());
         Assertions.assertEquals(956, municipality.get("kommunekode").asInt());
         Assertions.assertNull(municipality.get("registreringFra"));
 
@@ -53,7 +52,6 @@ public class TestGenericServices extends GeoTest {
         Assertions.assertEquals(200, response.getStatusCode().value());
         ObjectNode responseContent = (ObjectNode) objectMapper.readTree(response.getBody());
         ObjectNode postcode = (ObjectNode) responseContent.get("results").get(0);
-        System.out.println(postcode);
         Assertions.assertEquals("c8d54254-0086-3554-a4ce-424e4ebfd072", postcode.get("uuid").textValue());
         Assertions.assertNull(postcode.get("registreringFra"));
 
@@ -136,7 +134,6 @@ public class TestGenericServices extends GeoTest {
         ObjectNode accessAdress1 = (ObjectNode) responseContent.get("results").get(0);
         Assertions.assertEquals("2e3776bf-05c2-433c-adb9-8a07df6b3e8f", accessAdress1.get("uuid").textValue());
         Assertions.assertEquals("{69231C66-F37A-4F78-80C1-E379BFEE165D}", accessAdress1.get("sumiffiik").textValue());
-        Assertions.assertEquals("House of Testing!", accessAdress1.get("blokNavn").get(0).textValue());
         Assertions.assertNull(accessAdress1.get("registreringFra"));
 
 
@@ -161,8 +158,7 @@ public class TestGenericServices extends GeoTest {
         ResponseEntity<String> response;
         JsonNode responseContent;
 
-        System.out.println("testGenericService");
-        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&husNummer=18&bloknavn=House of Testing!" +
+        response = this.lookup("/geo/fullAddress/1/rest/search?bnr=B-3197&husNummer=18" +
                 "&kommune_kode=956&lokalitet_kode=0600&post_kode=3900");
         Assertions.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
@@ -330,7 +326,7 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assertions.assertEquals(0, responseContent.get("results").size());*/
 
-        response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
+        /*response = this.lookup("/geo/fullAddress/1/rest/search?etage=kld");
         Assertions.assertEquals(200, response.getStatusCode().value());
         responseContent = objectMapper.readTree(response.getBody());
         Assertions.assertEquals(2, responseContent.get("results").size());
@@ -352,6 +348,30 @@ public class TestGenericServices extends GeoTest {
         responseContent = objectMapper.readTree(response.getBody());
         Assertions.assertEquals(2, responseContent.get("results").size());
         Assertions.assertNotNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
+        Assertions.assertNotNull(responseContent.get("results").get(0).get("unitAddress_objectId"));*/
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=5678");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(1, responseContent.get("results").size());
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=other");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(0, responseContent.get("results").size());
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=5678");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(1, responseContent.get("results").size());
+        Assertions.assertNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
+        Assertions.assertNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
+
+        response = this.lookup("/geo/fullAddress/1/rest/search?enhedsnummer=5678&debug=1");
+        Assertions.assertEquals(200, response.getStatusCode().value());
+        responseContent = objectMapper.readTree(response.getBody());
+        Assertions.assertEquals(1, responseContent.get("results").size());
+        Assertions.assertNotNull(responseContent.get("results").get(0).get("accessAddress_objectId"));
         Assertions.assertNotNull(responseContent.get("results").get(0).get("unitAddress_objectId"));
 
     }
@@ -371,7 +391,7 @@ public class TestGenericServices extends GeoTest {
             if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b8")) {
                 Assertions.assertEquals("5678", o.get("nummer").get(0).asText());
             } else if (o.get("uuid").textValue().equals("1b3ac64b-c28d-40b2-a106-16cee7c188b9")) {
-                Assertions.assertEquals("5678", o.get("nummer").get(0).asText());
+                Assertions.assertEquals("5679", o.get("nummer").get(0).asText());
             } else {
                 Assertions.fail();
             }

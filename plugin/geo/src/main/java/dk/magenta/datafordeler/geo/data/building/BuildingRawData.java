@@ -16,13 +16,13 @@ public class BuildingRawData extends SumiffiikRawData {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class BuildingRawProperties extends RawAreaProperties {
 
-        @JsonProperty("a_nummer")
+        @JsonProperty("a_number")
         public String anr;
 
-        @JsonProperty("B_nummer")
+        @JsonProperty("b_number")
         public String bnr;
 
-        @JsonProperty("Lokalitetskode")
+        @JsonProperty("locality")
         public String locality;
 
         @JsonProperty("BygningSumiffik")

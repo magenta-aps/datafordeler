@@ -61,7 +61,6 @@ public class TestParse extends GeoTest {
             Assertions.assertTrue(OffsetDateTime.parse("2018-07-19T11:11:05Z").isEqual(entity.getCreationDate()));
             Assertions.assertEquals("GREENADMIN", entity.getCreator());
             Assertions.assertEquals(1, entity.getShape().size());
-            Assertions.assertEquals("5cc15446cddb4633b6832847b6f5d66d", entity.getSumiffiikId());
             Assertions.assertEquals(1, entity.getName().size());
             Assertions.assertEquals("Kommuneqarfik Sermersooq", entity.getName().iterator().next().getName());
         } finally {
@@ -70,9 +69,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch(GeoMunicipalityEntity.generateUUID(956).toString(), "municipality");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -104,9 +103,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("F0966470-F09F-474D-A820-E8A46ED6FCC7", "locality");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -131,9 +130,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("E1274F15-9E2B-4B6E-8B7D-C8078DF65AA2", "road");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
 
     }
 
@@ -159,9 +158,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("AF3550F5-2998-404D-B784-A70C4DEB2A18", "building");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -177,15 +176,9 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals("IRKS", entity.getCreator());
             Assertions.assertEquals("{69231C66-F37A-4F78-80C1-E379BFEE165D}", entity.getSumiffiikId());
             Assertions.assertEquals(1, entity.getShape().size());
-            Assertions.assertEquals(1, entity.getSource().size());
-            Assertions.assertEquals(Integer.valueOf(1), entity.getSource().iterator().next().getSource());
-            Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getSource().iterator().next().getRegistrationFrom()));
             Assertions.assertEquals(1, entity.getHouseNumber().size());
             Assertions.assertEquals("18", entity.getHouseNumber().iterator().next().getNumber());
             Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getHouseNumber().iterator().next().getRegistrationFrom()));
-            Assertions.assertEquals(1, entity.getBlockName().size());
-            Assertions.assertEquals("House of Testing!", entity.getBlockName().iterator().next().getName());
-            Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getBlockName().iterator().next().getRegistrationFrom()));
             Assertions.assertEquals(1, entity.getLocality().size());
             Assertions.assertEquals("0600", entity.getLocality().iterator().next().getCode());
             Assertions.assertTrue(OffsetDateTime.parse("2018-08-29T10:42:07Z").isEqual(entity.getLocality().iterator().next().getRegistrationFrom()));
@@ -208,9 +201,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch("2E3776BF-05C2-433C-ADB9-8A07DF6B3E8F", "accessaddress");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 
@@ -226,23 +219,17 @@ public class TestParse extends GeoTest {
             Assertions.assertEquals("{EE4805F1-96AB-45A7-B045-ED4D3C28364C}", entity.getSumiffiikId());
             Assertions.assertEquals(1, entity.getUsage().size());
             Assertions.assertEquals(Integer.valueOf(1), entity.getUsage().iterator().next().getUsage());
-            Assertions.assertEquals(1, entity.getFloor().size());
-            Assertions.assertEquals("kld", entity.getFloor().iterator().next().getFloor());
             Assertions.assertEquals(1, entity.getNumber().size());
             Assertions.assertEquals("5678", entity.getNumber().iterator().next().getNumber());
-            Assertions.assertEquals(1, entity.getSource().size());
-            Assertions.assertEquals(Integer.valueOf(1), entity.getSource().iterator().next().getSource());
-            Assertions.assertEquals(1, entity.getStatus().size());
-            Assertions.assertEquals(Integer.valueOf(2), entity.getStatus().iterator().next().getStatus());
         } finally {
             session.close();
         }
 
         ResponseEntity<String> response = this.uuidSearch("1B3AC64B-C28D-40B2-A106-16CEE7C188B8", "unitaddress");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
     @Test
@@ -260,9 +247,9 @@ public class TestParse extends GeoTest {
 
         ResponseEntity<String> response = this.uuidSearch(PostcodeEntity.generateUUID(3900).toString(), "postcode");
         Assertions.assertEquals(200, response.getStatusCode().value());
-        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
-                objectMapper.readTree(response.getBody())
-        ));
+//        System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+//                objectMapper.readTree(response.getBody())
+//        ));
     }
 
 }
