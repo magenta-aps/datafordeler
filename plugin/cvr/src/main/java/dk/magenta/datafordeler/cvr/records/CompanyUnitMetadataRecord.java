@@ -5,6 +5,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitMetadataRecord.TABLE_NAME + "__unit", columnList = MetadataRecord.DB_FIELD_COMPANYUNIT + DatabaseEntry.REF, unique = true),
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyUnitMetadataRecord extends MetadataRecord {
+public class CompanyUnitMetadataRecord extends MetadataRecord implements MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_unit_metadata";
 

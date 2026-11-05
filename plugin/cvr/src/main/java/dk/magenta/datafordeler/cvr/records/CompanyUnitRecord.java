@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.BitemporalSetGroup;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
@@ -33,7 +34,7 @@ import java.util.function.Consumer;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyUnitRecord.TABLE_NAME + "__" + CompanyUnitRecord.DB_FIELD_DAFO_UPDATED+"_new", columnList = CompanyUnitRecord.DB_FIELD_DAFO_UPDATED+"_new")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyUnitRecord extends CvrEntityRecord {
+public class CompanyUnitRecord extends CvrEntityRecord implements MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_unit";
 

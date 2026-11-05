@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +25,7 @@ import jakarta.persistence.Table;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyLinkRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyLinkRecord extends CvrBitemporalDataRecord implements Cloneable {
+public class CompanyLinkRecord extends CvrBitemporalDataRecord implements Cloneable, MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_unit_link_company";
 

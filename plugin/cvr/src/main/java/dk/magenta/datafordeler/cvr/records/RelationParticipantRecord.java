@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -15,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
+import java.beans.Transient;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;
@@ -26,7 +28,7 @@ import java.util.function.Consumer;
 @Table(name = CvrPlugin.DEBUG_TABLE_PREFIX + RelationParticipantRecord.TABLE_NAME)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonFilter("ParticipantRecordFilter")  // Keeps businessKey from being outputted in normal outputwrappers
-public class RelationParticipantRecord extends CvrBitemporalRecord {
+public class RelationParticipantRecord extends CvrBitemporalRecord implements MigrateModel {
 
     public static final String TABLE_NAME = CompanyParticipantRelationRecord.TABLE_NAME + "_participant";
 
