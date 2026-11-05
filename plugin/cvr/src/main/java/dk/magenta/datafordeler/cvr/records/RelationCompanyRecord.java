@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -27,7 +28,7 @@ import java.util.function.Consumer;
         }
 )
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RelationCompanyRecord extends CvrBitemporalRecord {
+public class RelationCompanyRecord extends CvrBitemporalRecord implements MigrateModel {
 
     public static final String TABLE_NAME = CompanyParticipantRelationRecord.TABLE_NAME + "_company";
 

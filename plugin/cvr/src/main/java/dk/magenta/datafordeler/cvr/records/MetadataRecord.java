@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
 
 @MappedSuperclass
 @JsonIgnoreProperties(ignoreUnknown = true)
-public abstract class MetadataRecord extends CvrBitemporalDataRecord {
+public abstract class MetadataRecord extends CvrBitemporalDataRecord implements MigrateModel {
 
     public static final String DB_FIELD_AGGREGATE_STATUS = "aggregateStatus";
     public static final String IO_FIELD_AGGREGATE_STATUS = "sammensatStatus";

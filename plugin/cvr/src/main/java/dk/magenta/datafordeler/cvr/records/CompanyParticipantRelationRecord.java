@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Identification;
 import dk.magenta.datafordeler.core.database.QueryManager;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
 import dk.magenta.datafordeler.cvr.service.ParticipantRecordService;
@@ -31,7 +32,7 @@ import java.util.function.Consumer;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyParticipantRelationRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord {
+public class CompanyParticipantRelationRecord extends CvrBitemporalDataRecord implements MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_company_participant_relation";
 

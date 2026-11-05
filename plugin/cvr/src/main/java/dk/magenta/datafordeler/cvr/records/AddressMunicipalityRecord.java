@@ -23,7 +23,7 @@ import org.hibernate.Session;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + AddressMunicipalityRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO+"_new", columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressMunicipalityRecord extends CvrBitemporalRecord implements Cloneable {
+public class AddressMunicipalityRecord extends CvrBitemporalRecord implements Cloneable, MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_address_municipality";
 

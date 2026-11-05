@@ -8,6 +8,7 @@ import dk.magenta.datafordeler.core.database.Bitemporal;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.database.Monotemporal;
 import dk.magenta.datafordeler.core.database.Nontemporal;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.BitemporalSet;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -34,7 +35,7 @@ import java.util.function.Consumer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonFilter("ParticipantRecordFilter")  // Keeps businessKey from being outputted in normal outputwrappers
-public class ParticipantRecord extends CvrEntityRecord {
+public class ParticipantRecord extends CvrEntityRecord implements MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_participant";
 

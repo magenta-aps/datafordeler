@@ -3,6 +3,7 @@ package dk.magenta.datafordeler.cvr.records;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +27,7 @@ import java.util.Objects;
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyQuarterlyNumbersRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_FROM, columnList = CvrRecordPeriod.DB_FIELD_VALID_FROM),
         @Index(name = CvrPlugin.DEBUG_TABLE_PREFIX + CompanyQuarterlyNumbersRecord.TABLE_NAME + "__" + CvrRecordPeriod.DB_FIELD_VALID_TO, columnList = CvrRecordPeriod.DB_FIELD_VALID_TO)
 })
-public class CompanyQuarterlyNumbersRecord extends CompanyNumbersRecord {
+public class CompanyQuarterlyNumbersRecord extends CompanyNumbersRecord implements MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_quarterly_numbers";
 

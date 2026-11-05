@@ -7,6 +7,7 @@ import dk.magenta.datafordeler.core.PluginManager;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
 import dk.magenta.datafordeler.core.exception.InvalidClientInputException;
 import dk.magenta.datafordeler.core.fapi.BaseQuery;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import dk.magenta.datafordeler.cvr.CvrPlugin;
 import dk.magenta.datafordeler.cvr.RecordSet;
@@ -46,7 +47,7 @@ import java.util.function.Consumer;
 
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AddressRecord extends CvrBitemporalDataMetaRecord implements Cloneable {
+public class AddressRecord extends CvrBitemporalDataMetaRecord implements Cloneable, MigrateModel {
 
     public static final String TABLE_NAME = "cvr_record_address";
 
