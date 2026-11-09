@@ -2,14 +2,17 @@ package dk.magenta.datafordeler.core.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.engine.spi.PersistenceContext;
 import org.hibernate.engine.spi.EntityKey;
 import org.hibernate.engine.spi.EntityHolder;
+import org.hibernate.engine.spi.EntityEntry;
 import org.hibernate.engine.StatefulPersistenceContext;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Comparator;
 
 public class Debugging {
