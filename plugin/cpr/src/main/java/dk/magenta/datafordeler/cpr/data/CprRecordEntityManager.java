@@ -13,6 +13,7 @@ import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.WrappedInputStream;
 import dk.magenta.datafordeler.core.plugin.*;
+import dk.magenta.datafordeler.core.util.Debugging;
 import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.core.util.Stopwatch;
@@ -291,9 +292,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                                 List<T> records = recordMap.get(entity);
                                 session.persist(entity);
                                 this.parseAlternate(entity, records, importMetadata);
-                                for (T record : records) {
-                                    session.persist(record);
-                                }
                                 session.persist(entity);
                             }
 
@@ -309,6 +307,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                             throw e;
                         }
 
+                        Debugging.dumpHibernateSession(session);
                         session.flush();
                         session.clear();
 
