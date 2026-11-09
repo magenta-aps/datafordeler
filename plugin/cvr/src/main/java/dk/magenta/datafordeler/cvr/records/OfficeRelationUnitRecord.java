@@ -87,6 +87,7 @@ public class OfficeRelationUnitRecord extends CvrBitemporalRecord implements Mig
     //This field is null for every single input
     public static final String IO_FIELD_ORGANIZATION_TYPE = "organisationstype";
 
+    @Transient
     @JsonProperty(value = IO_FIELD_ORGANIZATION_TYPE)
     public Integer organizationType;
 
