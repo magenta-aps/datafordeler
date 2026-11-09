@@ -195,8 +195,9 @@ public abstract class FtpCommunicator implements Communicator {
             ArrayList<File> currentFiles = new ArrayList<>();
             for (String path : downloadPaths) {
                 String fileName = path.substring(path.lastIndexOf('/') + 1);
-                File outputFile = Files.createFile(Paths.get(localCopyFolder.toString(), fileName)).toFile();
-                log.info("Downloading " + path + " to " + outputFile.getAbsolutePath());
+                Path outputPath = Paths.get(localCopyFolder.toString(), fileName);
+                log.info("Downloading " + path + " to " + outputPath);
+                File outputFile = Files.createFile(outputPath).toFile();
                 ftpClient.download(path, outputFile);
                 currentFiles.add(outputFile);
             }

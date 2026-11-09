@@ -20,10 +20,15 @@ public class FileProgressFtpCommunicator extends FtpCommunicator {
     @Override
     protected List<String> filterFilesToDownload(List<String> paths) throws IOException {
         Set<String> knownFiles = getLocalFilenameList();
+        System.out.println("Known files:");
+        for (String s : knownFiles) {
+            System.out.println("    "+s);
+        }
         List<String> result = new ArrayList<>();
         for (String path : paths) {
             String fileName = path.substring(path.lastIndexOf('/') + 1);
             if (!knownFiles.contains(fileName) && !knownFiles.contains(fileName + DONE_FILE_ENDING)) {
+                System.out.println(path+" is not in knownFiles, adding to list of files to be downloaded");
                 result.add(path);
             }
         }
