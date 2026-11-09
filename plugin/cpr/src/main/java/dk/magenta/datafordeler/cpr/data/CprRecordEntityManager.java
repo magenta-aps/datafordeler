@@ -291,6 +291,9 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                                 List<T> records = recordMap.get(entity);
                                 session.persist(entity);
                                 this.parseAlternate(entity, records, importMetadata);
+                                for (T record : records) {
+                                    session.persist(record);
+                                }
                                 session.persist(entity);
                             }
 
