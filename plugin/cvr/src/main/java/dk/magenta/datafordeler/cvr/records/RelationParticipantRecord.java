@@ -16,7 +16,6 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.Filters;
 
-import java.beans.Transient;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Consumer;
