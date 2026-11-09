@@ -10,7 +10,6 @@ import dk.magenta.datafordeler.cvr.RecordSet;
 import jakarta.persistence.*;
 import org.hibernate.Session;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
