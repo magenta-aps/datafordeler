@@ -810,6 +810,9 @@ public class PersonEntity extends CprRecordEntity {
 
 
     public void addBitemporalRecord(CprBitemporalPersonRecord record, Session session) {
+        if (record instanceof AddressConameDataRecord) {
+            System.out.println("Add conamerecord "+record.getId()+" to "+this.getId());
+        }
         this.addBitemporalRecord(record, session, true);
     }
 

@@ -19,7 +19,7 @@ public class Debugging {
 
     private static Logger log = LogManager.getLogger("Debugging");
 
-    public static void dumpHibernateSession(Session s) {
+    public static void dumpHibernateSession(Session s, Class filterClass) {
         try {
             SessionImplementor sessionImpl = (SessionImplementor) s;
             PersistenceContext persistenceContext = sessionImpl.getPersistenceContext();
@@ -31,7 +31,9 @@ public class Debugging {
             for (EntityKey key : keys) {
                 EntityHolder holder = map.get(key);
                 EntityEntry entry = holder.getEntityEntry();
-                System.out.println(key.getEntityName()+"#"+key.getIdentifier() + ": " + holder.getEntity().getClass().getSimpleName()+" (initialized: "+holder.isInitialized()+", detached: "+holder.isDetached()+", isDeletedOrGone: "+entry.getStatus().isDeletedOrGone()+")");
+                if (filterClass == null || (holder.getEntity() != null && holder.getEntity().getClass() == filterClass)) {
+                    System.out.println(key.getEntityName() + "#" + key.getIdentifier() + ": " + holder.getEntity().getClass().getSimpleName() + " (initialized: " + holder.isInitialized() + ", detached: " + holder.isDetached() + ", isDeletedOrGone: " + entry.getStatus().isDeletedOrGone() + ")");
+                }
             }
         } catch (Exception e) {
             log.error(e);
