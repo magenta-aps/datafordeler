@@ -190,7 +190,9 @@ public abstract class FtpCommunicator implements Communicator {
             String[] list = ftpClient.listNames();
             List<String> remotePaths = Arrays.asList(list);
             remotePaths.sort(Comparator.naturalOrder());
+            System.out.println("Found "+remotePaths.size()+" files");
             List<String> downloadPaths = this.filterFilesToDownload(remotePaths);
+            System.out.println("Found "+downloadPaths.size()+" files to download");
 
             ArrayList<File> currentFiles = new ArrayList<>();
             for (String path : downloadPaths) {

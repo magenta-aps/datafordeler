@@ -24,6 +24,7 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.records.CprDataRecord;
+import dk.magenta.datafordeler.cpr.records.person.data.AddressConameDataRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -307,7 +308,7 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                             throw e;
                         }
 
-                        Debugging.dumpHibernateSession(session);
+                        Debugging.dumpHibernateSession(session, AddressConameDataRecord.class);
                         session.flush();
                         session.clear();
 
