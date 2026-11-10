@@ -13,7 +13,6 @@ import dk.magenta.datafordeler.core.io.ImportInputStream;
 import dk.magenta.datafordeler.core.io.ImportMetadata;
 import dk.magenta.datafordeler.core.io.WrappedInputStream;
 import dk.magenta.datafordeler.core.plugin.*;
-import dk.magenta.datafordeler.core.util.Debugging;
 import dk.magenta.datafordeler.core.util.LabeledSequenceInputStream;
 import dk.magenta.datafordeler.core.util.ListHashMap;
 import dk.magenta.datafordeler.core.util.Stopwatch;
@@ -24,7 +23,6 @@ import dk.magenta.datafordeler.cpr.data.person.PersonEntity;
 import dk.magenta.datafordeler.cpr.data.person.PersonEntityManager;
 import dk.magenta.datafordeler.cpr.parsers.CprSubParser;
 import dk.magenta.datafordeler.cpr.records.CprDataRecord;
-import dk.magenta.datafordeler.cpr.records.person.data.AddressConameDataRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -294,8 +292,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                                 session.persist(entity);
                                 this.parseAlternate(entity, records, importMetadata);
                                 session.persist(entity);
-                                System.out.println("Persist entity "+entity.getClass().getSimpleName()+" "+entity.getId());
-                                session.flush();
                             }
 
                             this.checkInterrupt(importMetadata);
@@ -310,7 +306,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                             throw e;
                         }
 
-                        Debugging.dumpHibernateSession(session, AddressConameDataRecord.class);
                         session.flush();
                         session.clear();
 
