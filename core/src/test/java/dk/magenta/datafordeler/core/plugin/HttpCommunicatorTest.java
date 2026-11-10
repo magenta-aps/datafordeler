@@ -18,7 +18,7 @@ public class HttpCommunicatorTest {
     @Test
     public void testFetchOk() throws URISyntaxException, HttpStatusException, DataStreamException, IOException {
         Communicator communicator = new HttpCommunicator();
-        InputStream data = communicator.fetch(new URI("https://data.gl"));
+        InputStream data = communicator.fetch(new URI("https://magenta.dk"));
         Assertions.assertNotNull(data);
         Assertions.assertNotNull(data.read(new byte[10]));
     }
@@ -33,7 +33,7 @@ public class HttpCommunicatorTest {
     public void testFetchFail2() {
         Communicator communicator = new HttpCommunicator();
         HttpStatusException thrown = Assertions.assertThrows(HttpStatusException.class, () -> {
-                communicator.fetch(new URI("https://data.gl/foo"));
+                communicator.fetch(new URI("https://magenta.dk/foo"));
         });
     }
 }
