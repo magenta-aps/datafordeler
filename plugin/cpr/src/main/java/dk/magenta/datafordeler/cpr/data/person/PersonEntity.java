@@ -951,6 +951,10 @@ public class PersonEntity extends CprRecordEntity {
                 return false;
             }
 
+            if (set.stream().anyMatch(item -> item.hashCode() == newItem.hashCode())) {
+                return false;
+            }
+
             E correctedRecord = null;
             E correctingRecord = null;
             ArrayList<E> items = new ArrayList<>(set);
