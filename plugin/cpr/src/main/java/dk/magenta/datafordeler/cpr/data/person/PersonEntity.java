@@ -956,12 +956,20 @@ public class PersonEntity extends CprRecordEntity {
             if (newItem.line == null || set.stream().anyMatch(item -> StringUtils.equals(newItem.line, item.line))) {
                 //If this specific line with excatcly the same information has allready been read it should be ignored
                 if (newItem instanceof AddressConameDataRecord) {
-                    System.out.println("skipped");
+                    System.out.println("skipped due to matching line");
+                }
+                return false;
+            }
+
+            if (set.stream().anyMatch(item -> item.hashCode() == newItem.hashCode())) {
+                if (newItem instanceof AddressConameDataRecord) {
+                    System.out.println("skipped due to matching hashcode");
                 }
                 return false;
             } else if (newItem instanceof AddressConameDataRecord) {
                 System.out.println("not skipped");
             }
+
 
             E correctedRecord = null;
             E correctingRecord = null;
