@@ -294,6 +294,8 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                                 session.persist(entity);
                                 this.parseAlternate(entity, records, importMetadata);
                                 session.persist(entity);
+                                System.out.println("Persist entity "+entity.getClass().getSimpleName()+" "+entity.getId());
+                                session.flush();
                             }
 
                             this.checkInterrupt(importMetadata);
@@ -313,7 +315,12 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                         session.clear();
 
                         if (!wrappedInTransaction) {
-                            session.getTransaction().commit();
+                            //session.getTransaction().commit();
+
+
+                            session.getTransaction().rollback();
+
+
                             importMetadata.setTransactionInProgress(false);
                         }
                     }
