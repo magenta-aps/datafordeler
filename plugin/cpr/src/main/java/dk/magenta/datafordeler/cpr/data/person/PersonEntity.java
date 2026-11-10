@@ -811,7 +811,11 @@ public class PersonEntity extends CprRecordEntity {
 
     public void addBitemporalRecord(CprBitemporalPersonRecord record, Session session) {
         if (record instanceof AddressConameDataRecord) {
-            System.out.println("Add conamerecord "+record.getId()+" to "+this.getId());
+            System.out.println("Add conamerecord "+record.getId()+" ("+record.hashCode()+") to "+this.getId());
+            System.out.println(record.line);
+            for (AddressConameDataRecord other : this.getConame()) {
+                System.out.println(other.hashCode()+"    "+other.line);
+            }
         }
         this.addBitemporalRecord(record, session, true);
     }
@@ -951,7 +955,12 @@ public class PersonEntity extends CprRecordEntity {
 
             if (newItem.line == null || set.stream().anyMatch(item -> StringUtils.equals(newItem.line, item.line))) {
                 //If this specific line with excatcly the same information has allready been read it should be ignored
+                if (newItem instanceof AddressConameDataRecord) {
+                    System.out.println("skipped");
+                }
                 return false;
+            } else if (newItem instanceof AddressConameDataRecord) {
+                System.out.println("not skipped");
             }
 
             E correctedRecord = null;
