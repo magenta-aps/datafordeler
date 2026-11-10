@@ -951,7 +951,8 @@ public class PersonEntity extends CprRecordEntity {
                 return false;
             }
 
-            if (set.stream().anyMatch(item -> item.hashCode() == newItem.hashCode())) {
+            int newItemHashcode = newItem.hashCode();
+            if (set.stream().anyMatch(item -> item.hashCode() == newItemHashcode)) {
                 return false;
             }
 
