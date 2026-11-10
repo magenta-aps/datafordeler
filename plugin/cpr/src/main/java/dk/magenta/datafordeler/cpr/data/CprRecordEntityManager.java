@@ -295,7 +295,6 @@ public abstract class CprRecordEntityManager<T extends CprDataRecord, E extends 
                                 this.parseAlternate(entity, records, importMetadata);
                                 session.persist(entity);
                                 System.out.println("Persist entity "+entity.getClass().getSimpleName()+" "+entity.getId());
-                                session.flush();
                             }
 
                             this.checkInterrupt(importMetadata);
