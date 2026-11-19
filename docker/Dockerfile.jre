@@ -47,6 +47,7 @@ CMD [ \
     "-Xms4g", "-Xmx8g", \
     "-XX:+HeapDumpOnOutOfMemoryError", "-XX:HeapDumpPath=/app/log", \
     "-XX:+UseShenandoahGC", "-XX:+UnlockExperimentalVMOptions", "-XX:ShenandoahUncommitDelay=1000", "-XX:ShenandoahGuaranteedGCInterval=10000", \
+    "-XX:-UseBASE64Intrinsics", \
     "-Djava.rmi.server.hostname=127.0.0.1", "-Dcom.sun.management.jmxremote.rmi.port=7012", "-Dcom.sun.management.jmxremote.port=7012", "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", \
     "-cp", "/app/core/datafordeler-core-exec.jar", "org.springframework.boot.loader.launch.PropertiesLauncher" \
 ]
