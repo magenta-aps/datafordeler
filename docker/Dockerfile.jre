@@ -24,7 +24,7 @@ COPY plugin plugin
 RUN mvn install -DskipTests --batch-mode --show-version
 
 
-FROM eclipse-temurin:23-jre-alpine
+FROM eclipse-temurin:25-jre-noble
 
 ARG COMMIT_TAG
 ENV COMMIT_TAG=${COMMIT_TAG:-HEAD}
