@@ -46,14 +46,14 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
     @JsonIgnore
     private String issuer;
 
-    @Transient
+    @Column
     private OffsetDateTime received;
 
     @Column(nullable = true)
     @JsonProperty("received")
     private OffsetDateTime receivedNew;
 
-    @Transient
+    @Column
     private OffsetDateTime handled;
 
     @Column(nullable = true)
