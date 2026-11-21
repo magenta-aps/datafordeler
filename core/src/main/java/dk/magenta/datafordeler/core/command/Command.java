@@ -46,7 +46,7 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
     @JsonIgnore
     private String issuer;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime received;
 
     @Column(nullable = true)
