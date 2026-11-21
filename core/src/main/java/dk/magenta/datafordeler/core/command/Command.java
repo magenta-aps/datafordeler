@@ -53,7 +53,7 @@ public final class Command extends DatabaseEntry implements Configuration/*, Mig
     @JsonProperty("received")
     private OffsetDateTime receivedNew;
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "datetime2")
     private OffsetDateTime handled;
 
     @Column(nullable = true)
