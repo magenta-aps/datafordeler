@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.magenta.datafordeler.core.configuration.Configuration;
 import dk.magenta.datafordeler.core.database.DatabaseEntry;
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.user.DafoUserDetails;
 import jakarta.persistence.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ import java.util.List;
 @Entity
 @Table(name = "command", indexes = {@Index(name = "status", columnList = "status")})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class Command extends DatabaseEntry implements Configuration/*, MigrateModel*/ {
+public final class Command extends DatabaseEntry implements Configuration, MigrateModel {
 
     public enum Status {
         QUEUED(0),

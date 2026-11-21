@@ -1,5 +1,6 @@
 package dk.magenta.datafordeler.core.database;
 
+import dk.magenta.datafordeler.core.migration.MigrateModel;
 import dk.magenta.datafordeler.core.plugin.Plugin;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
@@ -24,7 +25,7 @@ import static dk.magenta.datafordeler.core.database.Bitemporal.fixOffsetIn;
  */
 @Entity
 @Table(name = "interrupted_pull")
-public class InterruptedPull extends DatabaseEntry {
+public class InterruptedPull extends DatabaseEntry implements MigrateModel {
 
 
     @Column
