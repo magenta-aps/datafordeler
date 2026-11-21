@@ -55,7 +55,7 @@ public class InterruptedPull extends DatabaseEntry {
     }
 
 
-    @Column()
+    @Transient
     private OffsetDateTime startTime;
 
     @Column(name="startTime"+"_new")
